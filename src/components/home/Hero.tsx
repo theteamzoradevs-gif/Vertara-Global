@@ -1,0 +1,282 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { CheckCircle2, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { MetricCounter } from "@/components/ui/MetricCounter";
+import type { Metric } from "@/data/seed-content";
+
+const rotatingLines = [
+  { label: "Hire talent", detail: "Leadership and specialist pipelines for India GCCs" },
+  { label: "Secure workspace", detail: "Ready floors timed to your hiring waves" },
+  { label: "Run operations", detail: "EOR bridge, HR, payroll, captive transfer" },
+  { label: "Plan strategy", detail: "Location, org design, board-ready business cases" },
+  { label: "Build a full GCC", detail: "One connected path from intent to steady state" },
+];
+
+type Props = {
+  tagline: string;
+  headline: string;
+  subheadline: string;
+  metrics: Metric[];
+  phone?: string;
+  backgroundImage?: string;
+};
+
+export function Hero({
+  tagline,
+  headline,
+  subheadline,
+  metrics,
+  phone = "+91 80 4000 1200",
+  backgroundImage = "/images/gcc-floor.webp",
+}: Props) {
+  const [index, setIndex] = useState(0);
+  const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">(
+    "idle",
+  );
+  const reduce = useReducedMotion();
+
+  useEffect(() => {
+    if (reduce) return;
+    const id = window.setInterval(() => {
+      setIndex((i) => (i + 1) % rotatingLines.length);
+    }, 3200);
+    return () => window.clearInterval(id);
+  }, [reduce]);
+
+  const current = rotatingLines[index];
+
+  async function onEnquiry(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus("loading");
+    const form = new FormData(e.currentTarget);
+    const email = String(form.get("email") || "").trim();
+    const phoneVal = String(form.get("phone") || "").trim();
+    if (!email && !phoneVal) {
+      setStatus("error");
+      return;
+    }
+    try {
+      const res = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.get("name"),
+          company: "—",
+          email: email || undefined,
+          phone: phoneVal || undefined,
+          intent: "quick_call",
+          message: phoneVal && !email ? `Phone callback requested: ${phoneVal}` : undefined,
+          source: "hero_quick_call",
+        }),
+      });
+      if (!res.ok) throw new Error("fail");
+      setStatus("done");
+      e.currentTarget.reset();
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  return (
+    <section className="relative overflow-hidden border-b border-border">
+      <div className="absolute inset-0">
+        <Image
+          src={backgroundImage}
+          alt=""
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        {/* Lighter overlays so office photo reads more clearly */}
+        <div className="absolute inset-0 bg-[#0b1f3a]/28" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#061526]/58 via-[#061526]/32 to-[#061526]/18" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#061526]/55 via-transparent to-[#061526]/15" />
+      </div>
+
+      <svg
+        className="pointer-events-none absolute inset-0 h-full w-full opacity-70"
+        aria-hidden
+        preserveAspectRatio="none"
+        viewBox="0 0 1200 640"
+      >
+        <path d="M0 80 H1200" stroke="#5eead4" strokeWidth="1" opacity="0.45" />
+        <path d="M0 160 H1200" stroke="#14b8a6" strokeWidth="1" opacity="0.5" />
+        <path d="M0 240 H1200" stroke="#5eead4" strokeWidth="1" opacity="0.4" />
+        <path d="M0 320 H1200" stroke="#14b8a6" strokeWidth="1" opacity="0.48" />
+        <path d="M0 400 H1200" stroke="#5eead4" strokeWidth="1" opacity="0.4" />
+        <path d="M0 480 H1200" stroke="#14b8a6" strokeWidth="1" opacity="0.45" />
+        <path d="M0 560 H1200" stroke="#5eead4" strokeWidth="1" opacity="0.35" />
+        <path d="M100 0 V640" stroke="#14b8a6" strokeWidth="1" opacity="0.32" />
+        <path d="M250 0 V640" stroke="#5eead4" strokeWidth="1" opacity="0.36" />
+        <path d="M400 0 V640" stroke="#14b8a6" strokeWidth="1" opacity="0.32" />
+        <path d="M550 0 V640" stroke="#5eead4" strokeWidth="1" opacity="0.38" />
+        <path d="M700 0 V640" stroke="#14b8a6" strokeWidth="1" opacity="0.32" />
+        <path d="M850 0 V640" stroke="#5eead4" strokeWidth="1" opacity="0.36" />
+        <path d="M1000 0 V640" stroke="#14b8a6" strokeWidth="1" opacity="0.32" />
+        <path d="M1150 0 V640" stroke="#5eead4" strokeWidth="1" opacity="0.28" />
+        <path d="M0 640 L600 0" stroke="#ea580c" strokeWidth="0.8" opacity="0.22" />
+        <path d="M600 640 L1200 0" stroke="#ea580c" strokeWidth="0.8" opacity="0.22" />
+        <circle cx="250" cy="160" r="3" fill="#5eead4" />
+        <circle cx="400" cy="320" r="2.5" fill="#14b8a6" />
+        <circle cx="550" cy="240" r="3.5" fill="#5eead4" />
+        <circle cx="700" cy="400" r="2.5" fill="#14b8a6" />
+        <circle cx="850" cy="320" r="3" fill="#5eead4" />
+        <circle cx="1000" cy="480" r="2.5" fill="#14b8a6" />
+      </svg>
+
+      <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-10 sm:px-6 md:grid-cols-[minmax(0,1.2fr)_minmax(280px,0.72fr)] md:gap-12 md:py-14 lg:gap-16 lg:px-8 lg:py-16">
+        <div className="min-w-0 md:pr-2">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#5eead4]">
+            {tagline}
+          </p>
+          <h1 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-[2.75rem] lg:leading-[1.12]">
+            {headline}
+          </h1>
+          <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/85 md:text-base">
+            {subheadline}
+          </p>
+
+          {/* Fade / slide text only — no dots */}
+          <div className="mt-6 max-w-md overflow-hidden rounded-2xl border border-white/15 bg-white/10 px-4 py-3.5 shadow-lg backdrop-blur-md">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/55">
+              Right now we can help you
+            </p>
+            <div className="relative mt-1.5 min-h-[3.5rem]">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={current.label}
+                  initial={false}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={
+                    reduce
+                      ? undefined
+                      : { opacity: 0, x: -24 }
+                  }
+                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                  className="absolute inset-x-0 top-0"
+                >
+                  <p className="text-lg font-bold text-white">{current.label}</p>
+                  <p className="text-sm text-white/75">{current.detail}</p>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Button href="#hero-enquiry" size="lg">
+              Get a quick call
+            </Button>
+            <Button
+              href="/#why-us"
+              variant="outline"
+              size="lg"
+              className="border-white/35 bg-white/10 text-white hover:border-white hover:bg-white/20 hover:text-white"
+            >
+              Why enterprises choose us
+            </Button>
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2">
+            {metrics.slice(0, 3).map((m) => (
+              <div key={m.label} className="flex items-center gap-2 text-sm text-white/85">
+                <CheckCircle2 className="h-4 w-4 shrink-0 text-[#fb923c]" />
+                <span>
+                  <MetricCounter
+                    value={m.value}
+                    suffix={m.suffix}
+                    prefix={m.prefix}
+                    className="font-semibold text-white"
+                  />{" "}
+                  {m.label.toLowerCase()}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <aside
+          id="hero-enquiry"
+          className="min-w-0 justify-self-stretch overflow-hidden rounded-2xl border border-white/20 bg-white p-5 shadow-2xl shadow-black/30 md:justify-self-end md:w-full md:max-w-[340px] md:p-6"
+        >
+          <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-accent">
+            Start a conversation
+          </p>
+          <h2 className="mt-1 text-lg font-bold text-navy">
+            Get a quick call
+          </h2>
+          <p className="mt-1.5 text-xs leading-relaxed text-muted">
+            Name + email or phone. A partner replies within one business day.
+          </p>
+
+          {status === "done" ? (
+            <div className="mt-4 rounded-xl bg-accent-soft p-4 text-sm text-navy">
+              <p className="font-semibold">Got it — we&apos;ll call you soon.</p>
+              <button
+                type="button"
+                className="mt-3 text-sm font-semibold text-accent"
+                onClick={() => setStatus("idle")}
+              >
+                Submit another
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={onEnquiry} className="mt-4 grid min-w-0 gap-2.5">
+              <input
+                name="name"
+                required
+                placeholder="Your name"
+                className="min-w-0 w-full rounded-lg border border-border px-3 py-2.5 text-sm outline-none ring-accent focus:ring-2"
+              />
+              <input
+                name="email"
+                type="email"
+                placeholder="Work email"
+                className="min-w-0 w-full rounded-lg border border-border px-3 py-2.5 text-sm outline-none ring-accent focus:ring-2"
+              />
+              <input
+                name="phone"
+                type="tel"
+                placeholder="Phone"
+                className="min-w-0 w-full rounded-lg border border-border px-3 py-2.5 text-sm outline-none ring-accent focus:ring-2"
+              />
+              {status === "error" ? (
+                <p className="text-xs text-danger">
+                  Add an email or phone so we can reach you.
+                </p>
+              ) : null}
+              <Button
+                type="submit"
+                size="lg"
+                className="w-full !bg-navy hover:!bg-navy-soft"
+                disabled={status === "loading"}
+              >
+                {status === "loading" ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" /> Sending…
+                  </>
+                ) : (
+                  "Get a quick call"
+                )}
+              </Button>
+              <p className="text-center text-[11px] text-muted">
+                Or{" "}
+                <a
+                  href={`tel:${phone.replace(/\s/g, "")}`}
+                  className="font-semibold text-accent hover:underline"
+                >
+                  call {phone}
+                </a>
+              </p>
+            </form>
+          )}
+        </aside>
+      </div>
+    </section>
+  );
+}
