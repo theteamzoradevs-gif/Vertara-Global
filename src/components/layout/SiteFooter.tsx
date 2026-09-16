@@ -29,7 +29,7 @@ const columns = [
 ];
 
 export function SiteFooter({
-  brandName = "GCC Advisor",
+  brandName = "Veratara Global",
   email = "hello@gccadvisor.com",
   phone = "+91 80 4000 1200",
 }: {

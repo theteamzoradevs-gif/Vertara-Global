@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   Plus,
@@ -14,6 +14,8 @@ import {
   FileText,
   AlertCircle,
   Loader2,
+  Check,
+  ChevronDown,
 } from "lucide-react";
 import {
   createInsightAction,
@@ -60,9 +62,36 @@ export function InsightsManager({ initialInsights }: { initialInsights: InsightI
   // Form states
   const [formTitle, setFormTitle] = useState("");
   const [formSlug, setFormSlug] = useState("");
+  const [formPublished, setFormPublished] = useState(true);
+  const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false);
+  const statusDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Table row status dropdown state
+  const [openTableStatusId, setOpenTableStatusId] = useState<string | null>(null);
+  const tableStatusRef = useRef<HTMLDivElement>(null);
+
+  // Category States
+  const [customCategories, setCustomCategories] = useState<string[]>([]);
+  const [formCategory, setFormCategory] = useState("GCC Strategy");
+  const [isCustomCategory, setIsCustomCategory] = useState(false);
+  const [customCategoryInput, setCustomCategoryInput] = useState("");
 
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
+  // Close dropdowns on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (statusDropdownRef.current && !statusDropdownRef.current.contains(e.target as Node)) {
+        setIsStatusDropdownOpen(false);
+      }
+      if (tableStatusRef.current && !tableStatusRef.current.contains(e.target as Node)) {
+        setOpenTableStatusId(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // Sync state when props update
   if (initialInsights !== insights && !isModalOpen) {
@@ -73,6 +102,7 @@ export function InsightsManager({ initialInsights }: { initialInsights: InsightI
   const dynamicCategories = Array.from(
     new Set([
       ...DEFAULT_CATEGORIES,
+      ...customCategories,
       ...insights.map((i) => i.category).filter(Boolean) as string[],
     ])
   );
@@ -104,6 +134,12 @@ export function InsightsManager({ initialInsights }: { initialInsights: InsightI
     setEditingItem(null);
     setFormTitle("");
     setFormSlug("");
+    const defaultCat = dynamicCategories[0] || "GCC Strategy";
+    setFormCategory(defaultCat);
+    setIsCustomCategory(false);
+    setCustomCategoryInput("");
+    setFormPublished(true);
+    setIsStatusDropdownOpen(false);
     setMessage(null);
     setIsModalOpen(true);
   };
@@ -112,6 +148,11 @@ export function InsightsManager({ initialInsights }: { initialInsights: InsightI
     setEditingItem(item);
     setFormTitle(item.title);
     setFormSlug(item.slug);
+    setFormCategory(item.category || dynamicCategories[0] || "GCC Strategy");
+    setIsCustomCategory(false);
+    setCustomCategoryInput("");
+    setFormPublished(item.published);
+    setIsStatusDropdownOpen(false);
     setMessage(null);
     setIsModalOpen(true);
   };
@@ -163,12 +204,20 @@ export function InsightsManager({ initialInsights }: { initialInsights: InsightI
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
+    const finalCat = isCustomCategory ? customCategoryInput.trim() : formCategory;
+    if (finalCat) {
+      formData.set("category", finalCat);
+    }
+
     startTransition(async () => {
       const res = editingItem
         ? await updateInsightAction(formData)
         : await createInsightAction(formData);
 
       if (res.success) {
+        if (isCustomCategory && finalCat && !dynamicCategories.includes(finalCat)) {
+          setCustomCategories((prev) => [...prev, finalCat]);
+        }
         setMessage({ type: "success", text: res.message || "Saved successfully!" });
         setIsModalOpen(false);
       } else {
@@ -355,30 +404,82 @@ export function InsightsManager({ initialInsights }: { initialInsights: InsightI
                     {item.readTime || "5 min read"}
                   </td>
 
-                  {/* Status Toggle Pill */}
+                  {/* Status Dropdown Selector */}
                   <td className="px-5 py-4 whitespace-nowrap">
-                    <button
-                      onClick={() => handleToggleStatus(item._id, item.published)}
-                      disabled={isPending}
-                      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-medium transition ${
-                        item.published
-                          ? "bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100"
-                          : "bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100"
-                      }`}
-                      title="Click to toggle Draft / Published status"
+                    <div
+                      className="relative inline-block"
+                      ref={openTableStatusId === item._id ? tableStatusRef : undefined}
                     >
-                      {item.published ? (
-                        <>
-                          <CheckCircle2 className="h-3 w-3 text-emerald-600" />
-                          <span>Published</span>
-                        </>
-                      ) : (
-                        <>
-                          <Clock className="h-3 w-3 text-amber-600" />
-                          <span>Draft</span>
-                        </>
+                      <button
+                        onClick={() =>
+                          setOpenTableStatusId(openTableStatusId === item._id ? null : item._id)
+                        }
+                        disabled={isPending}
+                        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-medium transition cursor-pointer ${
+                          item.published
+                            ? "bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100"
+                            : "bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100"
+                        }`}
+                        title="Change Status"
+                      >
+                        {item.published ? (
+                          <>
+                            <CheckCircle2 className="h-3 w-3 text-emerald-600 shrink-0" />
+                            <span>Published</span>
+                          </>
+                        ) : (
+                          <>
+                            <Clock className="h-3 w-3 text-amber-600 shrink-0" />
+                            <span>Draft</span>
+                          </>
+                        )}
+                        <ChevronDown className="h-3 w-3 text-slate-400 shrink-0 ml-0.5" />
+                      </button>
+
+                      {openTableStatusId === item._id && (
+                        <div className="absolute top-full left-0 mt-1 z-30 w-36 rounded-xl border border-border bg-surface-elevated p-1 shadow-xl space-y-0.5">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (item.published) {
+                                handleToggleStatus(item._id, item.published);
+                              }
+                              setOpenTableStatusId(null);
+                            }}
+                            className={`w-full flex items-center gap-2 px-2.5 py-1.5 text-xs font-medium rounded-lg text-left transition cursor-pointer ${
+                              !item.published
+                                ? "bg-surface text-navy font-semibold"
+                                : "text-slate-600 hover:bg-surface/80"
+                            }`}
+                          >
+                            <div className="w-3.5 flex items-center justify-center shrink-0">
+                              {!item.published && <Check className="h-3.5 w-3.5 text-navy" />}
+                            </div>
+                            <span>Draft</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (!item.published) {
+                                handleToggleStatus(item._id, item.published);
+                              }
+                              setOpenTableStatusId(null);
+                            }}
+                            className={`w-full flex items-center gap-2 px-2.5 py-1.5 text-xs font-medium rounded-lg text-left transition cursor-pointer ${
+                              item.published
+                                ? "bg-surface text-navy font-semibold"
+                                : "text-slate-600 hover:bg-surface/80"
+                            }`}
+                          >
+                            <div className="w-3.5 flex items-center justify-center shrink-0">
+                              {item.published && <Check className="h-3.5 w-3.5 text-navy" />}
+                            </div>
+                            <span>Published</span>
+                          </button>
+                        </div>
                       )}
-                    </button>
+                    </div>
                   </td>
 
                   {/* Action Buttons */}
@@ -467,22 +568,67 @@ export function InsightsManager({ initialInsights }: { initialInsights: InsightI
                 />
               </div>
 
-              {/* Category & Read Time */}
-              <div className="grid gap-3 sm:grid-cols-2">
+              {/* Category, Read Time & Status Grid */}
+              <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="block text-xs font-semibold text-navy mb-1">Category</label>
-                  <select
-                    name="category"
-                    defaultValue={editingItem?.category || "GCC Strategy"}
-                    className="w-full rounded-xl border border-border px-3.5 py-2 text-xs text-navy focus:border-accent focus:outline-none bg-surface-elevated"
-                  >
-                    {dynamicCategories.map((cat) => (
-                      <option key={cat} value={cat}>
-                        {cat}
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-xs font-semibold text-navy">Category</label>
+                    {isCustomCategory && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsCustomCategory(false);
+                          setCustomCategoryInput("");
+                        }}
+                        className="text-[11px] font-medium text-accent hover:underline cursor-pointer"
+                      >
+                        ← Select existing
+                      </button>
+                    )}
+                  </div>
+
+                  {!isCustomCategory ? (
+                    <select
+                      name="category"
+                      value={formCategory}
+                      onChange={(e) => {
+                        if (e.target.value === "__add_custom__") {
+                          setIsCustomCategory(true);
+                          setCustomCategoryInput("");
+                        } else {
+                          setFormCategory(e.target.value);
+                        }
+                      }}
+                      className="w-full rounded-xl border border-border px-3.5 py-2 text-xs text-navy focus:border-accent focus:outline-none bg-surface-elevated cursor-pointer font-medium"
+                    >
+                      {dynamicCategories.map((cat) => (
+                        <option key={cat} value={cat}>
+                          {cat}
+                        </option>
+                      ))}
+                      <option value="__add_custom__" className="font-semibold text-accent">
+                        + Add Custom Category...
                       </option>
-                    ))}
-                  </select>
+                    </select>
+                  ) : (
+                    <div>
+                      <input
+                        type="text"
+                        name="category"
+                        required
+                        autoFocus
+                        value={customCategoryInput}
+                        onChange={(e) => {
+                          setCustomCategoryInput(e.target.value);
+                          setFormCategory(e.target.value);
+                        }}
+                        placeholder="Type new category..."
+                        className="w-full rounded-xl border border-accent px-3.5 py-2 text-xs text-navy focus:border-accent focus:outline-none bg-surface font-medium"
+                      />
+                    </div>
+                  )}
                 </div>
+
                 <div>
                   <label className="block text-xs font-semibold text-navy mb-1">Read Time</label>
                   <input
@@ -493,6 +639,83 @@ export function InsightsManager({ initialInsights }: { initialInsights: InsightI
                     className="w-full rounded-xl border border-border px-3.5 py-2 text-xs text-navy focus:border-accent focus:outline-none"
                   />
                 </div>
+              </div>
+
+              {/* Status Selector Dropdown */}
+              <div className="relative" ref={statusDropdownRef}>
+                <label className="block text-xs font-semibold text-navy mb-1.5">Status</label>
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setIsStatusDropdownOpen(!isStatusDropdownOpen)}
+                    className="w-full flex items-center justify-between rounded-xl border border-border bg-surface px-3.5 py-2.5 text-xs text-navy font-medium text-left focus:border-accent focus:outline-none transition shadow-xs hover:border-slate-400 cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 font-medium">
+                      {formPublished ? (
+                        <>
+                          <Check className="h-4 w-4 text-emerald-600 shrink-0" />
+                          <span className="font-semibold text-navy">Published</span>
+                        </>
+                      ) : (
+                        <>
+                          <Check className="h-4 w-4 text-slate-500 shrink-0" />
+                          <span className="font-semibold text-navy">Draft</span>
+                        </>
+                      )}
+                    </div>
+                    <ChevronDown
+                      className={`h-4 w-4 text-slate-400 transition-transform duration-200 ${
+                        isStatusDropdownOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {isStatusDropdownOpen && (
+                    <div className="absolute top-full left-0 right-0 mt-1 z-50 rounded-xl border border-border bg-surface-elevated p-1.5 shadow-xl space-y-0.5 border-slate-200">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormPublished(false);
+                          setIsStatusDropdownOpen(false);
+                        }}
+                        className={`w-full flex items-center gap-2 px-3 py-2 text-xs font-medium rounded-lg text-left transition cursor-pointer ${
+                          !formPublished
+                            ? "bg-slate-100 text-navy font-semibold"
+                            : "text-slate-600 hover:bg-surface/80"
+                        }`}
+                      >
+                        <div className="w-4 flex items-center justify-center shrink-0">
+                          {!formPublished && <Check className="h-4 w-4 text-navy" />}
+                        </div>
+                        <span>Draft</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormPublished(true);
+                          setIsStatusDropdownOpen(false);
+                        }}
+                        className={`w-full flex items-center gap-2 px-3 py-2 text-xs font-medium rounded-lg text-left transition cursor-pointer ${
+                          formPublished
+                            ? "bg-slate-100 text-navy font-semibold"
+                            : "text-slate-600 hover:bg-surface/80"
+                        }`}
+                      >
+                        <div className="w-4 flex items-center justify-center shrink-0">
+                          {formPublished && <Check className="h-4 w-4 text-navy" />}
+                        </div>
+                        <span>Published</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                <input type="hidden" name="published" value={formPublished ? "true" : "false"} />
+
+                <p className="mt-1.5 text-[11px] text-muted">
+                  Draft stays hidden, Published goes live on the website.
+                </p>
               </div>
 
               {/* Cover Image */}
@@ -524,36 +747,11 @@ export function InsightsManager({ initialInsights }: { initialInsights: InsightI
                 <label className="block text-xs font-semibold text-navy mb-1">Article Body</label>
                 <textarea
                   name="body"
-                  rows={6}
+                  rows={5}
                   defaultValue={editingItem?.body || ""}
                   placeholder="Write full article here..."
                   className="w-full rounded-xl border border-border px-3.5 py-2 text-xs text-navy focus:border-accent focus:outline-none font-sans"
                 />
-              </div>
-
-              {/* Status Selector */}
-              <div className="flex items-center gap-6 rounded-xl border border-border bg-surface p-3">
-                <span className="text-xs font-semibold text-navy">Status:</span>
-                <label className="flex items-center gap-2 text-xs text-navy cursor-pointer font-medium">
-                  <input
-                    type="radio"
-                    name="published"
-                    value="true"
-                    defaultChecked={editingItem ? editingItem.published : true}
-                    className="text-accent focus:ring-accent"
-                  />
-                  <span>Published (Live)</span>
-                </label>
-                <label className="flex items-center gap-2 text-xs text-navy cursor-pointer font-medium">
-                  <input
-                    type="radio"
-                    name="published"
-                    value="false"
-                    defaultChecked={editingItem ? !editingItem.published : false}
-                    className="text-accent focus:ring-accent"
-                  />
-                  <span>Draft</span>
-                </label>
               </div>
 
               {/* Submit Buttons */}

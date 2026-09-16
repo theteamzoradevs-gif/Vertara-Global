@@ -7,7 +7,6 @@ import {
   LayoutDashboard,
   Inbox,
   MessageSquare,
-  Briefcase,
   FileText,
   HelpCircle,
   Quote,
@@ -49,7 +48,6 @@ const navGroups: NavGroup[] = [
   {
     title: "CMS Content",
     items: [
-      { href: "/admin/services", label: "Services", icon: Briefcase },
       { href: "/admin/insights", label: "Insights", icon: FileText },
       { href: "/admin/faqs", label: "FAQs", icon: HelpCircle },
       { href: "/admin/testimonials", label: "Testimonials", icon: Quote },
@@ -83,7 +81,7 @@ export function AdminSidebar({ userEmail, signOutAction }: AdminSidebarProps) {
               <Shield className="h-5 w-5" />
             </div>
             <div>
-              <span className="font-bold tracking-tight text-white text-base">GCC Advisor</span>
+              <span className="font-bold tracking-tight text-white text-base">Veratara Global</span>
               <p className="text-[11px] text-white/50">Admin Panel</p>
             </div>
           </Link>
@@ -177,7 +175,7 @@ export function AdminSidebar({ userEmail, signOutAction }: AdminSidebarProps) {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-white">
             <Shield className="h-4 w-4" />
           </div>
-          <span className="font-bold text-sm tracking-tight">GCC Advisor Admin</span>
+          <span className="font-bold text-sm tracking-tight">Veratara Global Admin</span>
         </Link>
         <button
           onClick={() => setMobileOpen(true)}

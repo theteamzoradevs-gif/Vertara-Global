@@ -43,7 +43,17 @@ async function withDB<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
 export async function getSettings(): Promise<Settings> {
   return withDB(async () => {
     const doc = await SiteSettings.findOne().lean();
-    return doc ? (JSON.parse(JSON.stringify(doc)) as Settings) : seedSettings;
+    const settings = doc ? (JSON.parse(JSON.stringify(doc)) as Settings) : seedSettings;
+    if (settings.brandName === "GCC Advisor") {
+      settings.brandName = "Veratara Global";
+    }
+    if (settings.contactEmail === "hello@gccadvisor.com") {
+      settings.contactEmail = "hello@verataraglobal.com";
+    }
+    if (settings.aboutStory?.includes("GCC Advisor")) {
+      settings.aboutStory = settings.aboutStory.replace(/GCC Advisor/g, "Veratara Global");
+    }
+    return settings;
   }, seedSettings);
 }
 

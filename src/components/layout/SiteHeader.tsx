@@ -67,7 +67,7 @@ const simpleLinks = [
   { href: "/faq", label: "FAQ" },
 ];
 
-export function SiteHeader({ brandName = "GCC Advisor" }: { brandName?: string }) {
+export function SiteHeader({ brandName = "Veratara Global" }: { brandName?: string }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [menu, setMenu] = useState<"services" | "insights" | null>(null);
