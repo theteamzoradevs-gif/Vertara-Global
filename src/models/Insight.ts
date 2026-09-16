@@ -8,6 +8,7 @@ const InsightSchema = new Schema(
     body: String,
     coverImage: String,
     category: String,
+    readTime: String,
     published: { type: Boolean, default: true },
     publishedAt: { type: Date, default: Date.now },
   },

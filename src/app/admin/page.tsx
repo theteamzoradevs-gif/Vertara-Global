@@ -35,9 +35,7 @@ export default async function AdminDashboard() {
     <div>
       <h1 className="text-2xl font-bold text-navy">Dashboard</h1>
       <p className="mt-1 text-sm text-muted">
-        {conn
-          ? "Connected to MongoDB."
-          : "MongoDB unavailable — site still serves seed content; leads may use memory fallback."}
+        Overview of leads, content, and system metrics.
       </p>
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map((c) => (

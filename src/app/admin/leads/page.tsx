@@ -31,7 +31,7 @@ export default async function AdminLeadsPage() {
             {leads.length === 0 ? (
               <tr>
                 <td colSpan={7} className="px-4 py-8 text-center text-muted">
-                  No leads yet{conn ? "" : " (database offline)"}.
+                  No leads found.
                 </td>
               </tr>
             ) : (

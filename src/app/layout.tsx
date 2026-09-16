@@ -11,8 +11,8 @@ const jakarta = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "GCC Advisor — Build & scale Global Capability Centers in India",
-    template: "%s · GCC Advisor",
+    default: "Veratara Global — Build & scale Global Capability Centers in India",
+    template: "%s · Veratara Global",
   },
   description:
     "Enterprise GCC advisory and services: talent, workspace, business operations, and research & advisory — one connected system for India capability centers.",

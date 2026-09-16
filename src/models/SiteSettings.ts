@@ -12,7 +12,7 @@ const MetricSchema = new Schema(
 
 const SiteSettingsSchema = new Schema(
   {
-    brandName: { type: String, default: "GCC Advisor" },
+    brandName: { type: String, default: "Veratara Global" },
     tagline: String,
     heroHeadline: String,
     heroSubheadline: String,
