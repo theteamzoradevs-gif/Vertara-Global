@@ -1,0 +1,169 @@
+@import "tailwindcss";
+
+:root {
+  --navy: #0b1f3a;
+  --navy-deep: #061526;
+  --navy-soft: #143056;
+  --slate: #334155;
+  --muted: #64748b;
+  --surface: #f7f9fc;
+  --surface-elevated: #ffffff;
+  --border: #e2e8f0;
+  --accent: #0d9488;
+  --accent-hover: #0f766e;
+  --accent-soft: #ccfbf1;
+  --highlight: #14b8a6;
+  --danger: #b91c1c;
+  --chat: #ea580c;
+  --chat-hover: #c2410c;
+  --chat-soft: #ffedd5;
+  --background: var(--surface);
+  --foreground: var(--navy);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-navy: var(--navy);
+  --color-navy-deep: var(--navy-deep);
+  --color-navy-soft: var(--navy-soft);
+  --color-slate: var(--slate);
+  --color-muted: var(--muted);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-highlight: var(--highlight);
+  --color-danger: var(--danger);
+  --color-chat: var(--chat);
+  --color-chat-hover: var(--chat-hover);
+  --color-chat-soft: var(--chat-soft);
+  --font-sans: var(--font-jakarta);
+  --font-display: var(--font-jakarta);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-jakarta), system-ui, sans-serif;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--navy);
+}
+
+.metric-number {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+}
+
+.prose-insight h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose-insight p,
+.prose-insight li {
+  color: var(--slate);
+  line-height: 1.75;
+  margin-bottom: 1rem;
+}
+
+.prose-insight ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+
+@keyframes marquee-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-marquee-left {
+  animation: marquee-left 45s linear infinite;
+}
+
+.animate-marquee-right {
+  animation: marquee-right 45s linear infinite;
+}
+
+@keyframes online-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  70% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+@keyframes online-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.85);
+    filter: brightness(1);
+  }
+  50% {
+    box-shadow: 0 0 10px 3px rgba(52, 211, 153, 0.95);
+    filter: brightness(1.35);
+  }
+}
+
+.online-ping {
+  animation: online-ping 1.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.online-glow {
+  animation: online-glow 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee-left,
+  .animate-marquee-right {
+    animation: none;
+  }
+
+  .online-ping,
+  .online-glow {
+    animation: none;
+  }
+}
