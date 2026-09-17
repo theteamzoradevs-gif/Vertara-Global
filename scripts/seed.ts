@@ -1,6 +1,13 @@
 import "dotenv/config";
+import dns from "node:dns";
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
+
+try {
+  dns.setServers(["8.8.8.8", "1.1.1.1"]);
+} catch {
+  // fallback if DNS setting unsupported
+}
 import { SiteSettings } from "../src/models/SiteSettings";
 import { Service } from "../src/models/Service";
 import { EngagementModel } from "../src/models/EngagementModel";

@@ -1,28 +1,42 @@
-import { getCaseStudies } from "@/lib/content";
-import Link from "next/link";
+import { connectDB } from "@/lib/db";
+import { CaseStudy } from "@/models/CaseStudy";
+import { seedCaseStudies } from "@/data/seed-content";
+import {
+  CaseStudiesManager,
+  CaseStudyItemData,
+} from "@/components/admin/CaseStudiesManager";
+
+export const metadata = {
+  title: "Case Studies Management | Veratara Global Admin",
+};
 
 export default async function AdminCaseStudiesPage() {
-  const cases = await getCaseStudies();
+  const conn = await connectDB();
+  let cases: CaseStudyItemData[] = [];
 
-  return (
-    <div>
-      <h1 className="text-2xl font-bold text-navy">Case studies</h1>
-      <p className="mt-1 text-sm text-muted">
-        Seeded case studies appear on the customers page. Re-seed or edit via MongoDB for full CMS edits.
-      </p>
-      <ul className="mt-6 space-y-3">
-        {cases.map((c: { title: string; client: string; industry: string }) => (
-          <li key={c.title} className="rounded-xl border border-border bg-surface-elevated px-4 py-3">
-            <p className="font-semibold text-navy">{c.title}</p>
-            <p className="text-sm text-muted">
-              {c.client} · {c.industry}
-            </p>
-          </li>
-        ))}
-      </ul>
-      <Link href="/customers" className="mt-6 inline-block text-sm font-semibold text-accent">
-        View on site →
-      </Link>
-    </div>
-  );
+  if (conn) {
+    try {
+      const docs = await CaseStudy.find().lean();
+      if (docs.length > 0) {
+        cases = JSON.parse(JSON.stringify(docs));
+      } else {
+        cases = seedCaseStudies.map((s, idx) => ({
+          _id: `seed-${idx}`,
+          ...s,
+        }));
+      }
+    } catch {
+      cases = seedCaseStudies.map((s, idx) => ({
+        _id: `seed-${idx}`,
+        ...s,
+      }));
+    }
+  } else {
+    cases = seedCaseStudies.map((s, idx) => ({
+      _id: `seed-${idx}`,
+      ...s,
+    }));
+  }
+
+  return <CaseStudiesManager initialCaseStudies={cases} isDbConnected={!!conn} />;
 }
