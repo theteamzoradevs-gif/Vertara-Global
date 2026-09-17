@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { connectDB } from "@/lib/db";
 import { Lead } from "@/models/Lead";
@@ -40,6 +41,7 @@ export async function POST(req: Request) {
     }
 
     const lead = await Lead.create(parsed.data);
+    revalidatePath("/admin/leads");
     return NextResponse.json({ ok: true, id: lead._id });
   } catch (err) {
     console.error(err);

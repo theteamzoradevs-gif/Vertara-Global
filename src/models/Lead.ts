@@ -10,8 +10,7 @@ const LeadSchema = new Schema(
     message: String,
     source: {
       type: String,
-      enum: ["contact", "trust_pop", "chat", "engagement_selector"],
-      required: true,
+      default: "contact",
     },
     status: {
       type: String,
@@ -23,4 +22,8 @@ const LeadSchema = new Schema(
   { timestamps: true },
 );
 
-export const Lead = models.Lead || model("Lead", LeadSchema);
+if (models.Lead) {
+  delete (models as Record<string, unknown>).Lead;
+}
+
+export const Lead = model("Lead", LeadSchema);
