@@ -7,6 +7,7 @@ import { ContactForm } from "@/components/leads/ContactForm";
 import { FlowThreads } from "@/components/ui/FlowThreads";
 import { OurVision } from "@/components/home/OurVision";
 import { WhoAreWe } from "@/components/home/WhoAreWe";
+import { PractitionersTeam } from "@/components/home/PractitionersTeam";
 import { getSettings } from "@/lib/content";
 
 export const metadata = {
@@ -50,53 +51,7 @@ export default async function AboutPage() {
 
       <WhoAreWe />
 
-      <Section>
-        <SectionHeader eyebrow="Story" title="Operators first, advisors second" />
-        <p className="max-w-3xl text-base leading-relaxed text-slate md:text-lg">
-          {settings.aboutStory}
-        </p>
-        <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
-          {settings.metrics.map((m: { label: string; value: number; suffix?: string; prefix?: string }) => (
-            <div key={m.label} className="rounded-2xl border border-border bg-surface-elevated p-4">
-              <MetricCounter
-                value={m.value}
-                suffix={m.suffix}
-                prefix={m.prefix}
-                className="text-2xl font-bold text-accent sm:text-3xl"
-              />
-              <p className="mt-1 text-xs text-muted">{m.label}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      <Section tone="muted">
-        <SectionHeader eyebrow="Leadership" title="Partners who have run centres" />
-        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
-          {settings.leadership.map((person: {
-            name: string;
-            role: string;
-            bio: string;
-            image: string;
-          }) => (
-            <Reveal key={person.name}>
-              <article className="overflow-hidden rounded-2xl border border-border bg-surface-elevated">
-                <div className="relative h-52 sm:h-56">
-                  <Image src={person.image} alt={person.name} fill className="object-cover" sizes="33vw" />
-                </div>
-                <div className="p-5">
-                  <h3 className="text-lg font-bold text-navy">{person.name}</h3>
-                  <p className="text-sm font-medium text-accent">{person.role}</p>
-                  <p className="mt-2 text-sm text-muted">{person.bio}</p>
-                </div>
-              </article>
-            </Reveal>
-          ))}
-        </div>
-        <div className="mt-12">
-          <CTABand title="Meet the team on a consultation call" />
-        </div>
-      </Section>
+      <PractitionersTeam />
 
       <Section>
         <SectionHeader
