@@ -4,6 +4,10 @@ import { Section, SectionHeader } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
 import { CTABand } from "@/components/ui/CTABand";
 import { Accordion } from "@/components/ui/Accordion";
+import { OurVision } from "@/components/home/OurVision";
+import { WhoAreWe } from "@/components/home/WhoAreWe";
+import { OurExpertise } from "@/components/home/OurExpertise";
+import { WhereWereStrongest } from "@/components/home/WhereWereStrongest";
 import { ConnectedModules } from "@/components/home/ConnectedModules";
 import { ServiceCard } from "@/components/home/ServiceCard";
 import { Hero } from "@/components/home/Hero";
@@ -49,6 +53,14 @@ export default async function HomePage() {
         phone={settings.contactPhone}
         backgroundImage="/images/gcc-floor.webp"
       />
+
+      <OurVision />
+
+      <WhoAreWe />
+
+      <OurExpertise />
+
+      <WhereWereStrongest />
 
       <Section id="how-it-connects" threads="strong">
         <SectionHeader
