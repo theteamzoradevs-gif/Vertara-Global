@@ -38,6 +38,7 @@ export function Hero({
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">(
     "idle",
   );
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const reduce = useReducedMotion();
 
   useEffect(() => {
@@ -53,10 +54,12 @@ export function Hero({
   async function onEnquiry(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("loading");
+    setErrorMessage("");
     const form = new FormData(e.currentTarget);
     const email = String(form.get("email") || "").trim();
     const phoneVal = String(form.get("phone") || "").trim();
     if (!email && !phoneVal) {
+      setErrorMessage("Add an email or phone so we can reach you.");
       setStatus("error");
       return;
     }
@@ -74,10 +77,11 @@ export function Hero({
           source: "hero_quick_call",
         }),
       });
-      if (!res.ok) throw new Error("fail");
+      if (!res.ok) throw new Error("Could not save lead.");
       setStatus("done");
       e.currentTarget.reset();
     } catch {
+      setErrorMessage("Could not send. Please try again.");
       setStatus("error");
     }
   }
@@ -247,7 +251,7 @@ export function Hero({
               />
               {status === "error" ? (
                 <p className="text-xs text-danger">
-                  Add an email or phone so we can reach you.
+                  {errorMessage || "Add an email or phone so we can reach you."}
                 </p>
               ) : null}
               <Button
