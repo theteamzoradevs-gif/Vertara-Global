@@ -5,6 +5,8 @@ import { CTABand } from "@/components/ui/CTABand";
 import { MetricCounter } from "@/components/ui/MetricCounter";
 import { ContactForm } from "@/components/leads/ContactForm";
 import { FlowThreads } from "@/components/ui/FlowThreads";
+import { OurVision } from "@/components/home/OurVision";
+import { WhoAreWe } from "@/components/home/WhoAreWe";
 import { getSettings } from "@/lib/content";
 
 export const metadata = {
@@ -43,6 +45,10 @@ export default async function AboutPage() {
           </p>
         </div>
       </section>
+
+      <OurVision />
+
+      <WhoAreWe />
 
       <Section>
         <SectionHeader eyebrow="Story" title="Operators first, advisors second" />
