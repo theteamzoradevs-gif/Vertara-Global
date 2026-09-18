@@ -4,7 +4,7 @@ import { Reveal } from "@/components/ui/Reveal";
 
 export function CTABand({
   title = "Ready to talk through your GCC plans?",
-  description = "Share a short brief — a partner will map fit, timeline, and next steps. No sales theatre.",
+  description = "Share a short brief a partner will map fit, timeline, and next steps. No sales theatre.",
   primaryHref = "/contact",
   primaryLabel = "Get a quick call",
   secondaryHref = "/engagement-models",
@@ -42,7 +42,7 @@ export function CTABand({
             {description}
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Button href={primaryHref} size="lg">
+            <Button href={primaryHref} variant="gold" size="lg">
               {primaryLabel}
             </Button>
             <Button

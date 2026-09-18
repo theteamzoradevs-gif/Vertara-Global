@@ -84,11 +84,10 @@ export function AdminSettingsManager({
       {/* Alert Notification */}
       {message && (
         <div
-          className={`flex items-center justify-between rounded-2xl px-5 py-3.5 text-xs font-medium border shadow-xs ${
-            message.type === "success"
+          className={`flex items-center justify-between rounded-2xl px-5 py-3.5 text-xs font-medium border shadow-xs ${message.type === "success"
               ? "border-emerald-200 bg-emerald-50 text-emerald-800"
               : "border-red-200 bg-red-50 text-red-800"
-          }`}
+            }`}
         >
           <div className="flex items-center gap-2.5">
             {message.type === "success" ? (
@@ -184,7 +183,7 @@ export function AdminSettingsManager({
                 name="heroHeadline"
                 rows={2}
                 defaultValue={initialSettings.heroHeadline || ""}
-                placeholder="Your GCC in India — designed, staffed, and scaled with clarity"
+                placeholder="Your GCC in India designed, staffed, and scaled with clarity"
                 className="w-full rounded-xl border border-border px-4 py-2.5 text-xs text-navy font-medium focus:border-accent focus:outline-none transition"
               />
             </div>

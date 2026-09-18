@@ -98,9 +98,7 @@ export function TestimonialMarquee({ items }: { items: Item[] }) {
     <div className="space-y-4">
       <Row items={pad(rowA)} direction="right" />
       <Row items={pad(rowB)} direction="left" />
-      <p className="text-center text-xs text-muted">
-        Hover a row to pause and read
-      </p>
+
     </div>
   );
 }

@@ -91,8 +91,8 @@ export function SiteHeader({ brandName = "Veratara Global" }: { brandName?: stri
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-white shadow-sm shadow-navy/5">
       <div className="mx-auto flex h-[4.25rem] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="shrink-0 text-lg font-bold tracking-tight text-navy">
-          {brandName}
+        <Link href="/" className="shrink-0 text-base sm:text-lg font-bold uppercase tracking-[0.2em] text-navy">
+          VERTARA <span className="text-[#b49339]">GLOBAL</span>
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">
@@ -124,13 +124,13 @@ export function SiteHeader({ brandName = "Veratara Global" }: { brandName?: stri
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
-          <Button href="/contact" size="sm" className="hidden sm:inline-flex">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          <Button href="/contact" size="sm" className="hidden sm:inline-flex shrink-0 whitespace-nowrap">
             Book a consultation
           </Button>
           <button
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border text-navy lg:hidden"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border text-navy lg:hidden"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             onClick={() => setMobileOpen((v) => !v)}
           >
@@ -155,11 +155,11 @@ export function SiteHeader({ brandName = "Veratara Global" }: { brandName?: stri
                       <Link
                         key={s.href}
                         href={s.href}
-                        className="group flex gap-3 rounded-xl border border-transparent p-3 transition hover:border-accent/30 hover:bg-accent-soft/60"
+                        className="group flex gap-3 rounded-xl border border-transparent p-3 transition hover:border-[#b49339]/30 hover:bg-[#e5ebe6]/60"
                         onClick={() => setMenu(null)}
                       >
-                        <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-navy text-highlight">
-                          <Icon className="h-4 w-4" />
+                        <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#2e3f33] text-[#b49339] shadow-sm">
+                          <Icon className="h-5 w-5 stroke-[2.2] text-[#b49339]" />
                         </span>
                         <span>
                           <span className="block text-sm font-semibold text-navy group-hover:text-accent">
@@ -171,8 +171,8 @@ export function SiteHeader({ brandName = "Veratara Global" }: { brandName?: stri
                     );
                   })}
                 </div>
-                <div className="rounded-2xl bg-navy p-5 text-white">
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-highlight">
+                <div className="rounded-2xl bg-[#2e3f33] p-5 text-white shadow-sm">
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#b49339]">
                     Connected platform
                   </p>
                   <p className="mt-2 text-lg font-bold">One operating system for your GCC</p>
@@ -181,7 +181,7 @@ export function SiteHeader({ brandName = "Veratara Global" }: { brandName?: stri
                   </p>
                   <Link
                     href="/#how-it-connects"
-                    className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-highlight hover:text-white"
+                    className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#b49339] hover:text-white"
                     onClick={() => setMenu(null)}
                   >
                     See how it connects <ArrowRight className="h-3.5 w-3.5" />

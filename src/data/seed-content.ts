@@ -8,9 +8,9 @@ export type Metric = {
 export const seedSettings = {
   brandName: "Veratara Global",
   tagline: "Build, staff, and scale Global Capability Centers in India",
-  heroHeadline: "Your GCC in India — designed, staffed, and scaled with clarity",
+  heroHeadline: "Your GCC in India designed, staffed, and scaled with clarity",
   heroSubheadline:
-    "We help CHROs, COOs, and Heads of Global Operations set up high-performing Global Capability Centers — talent, workspace, operations, and advisory — as one connected system.",
+    "We help CHROs, COOs, and Heads of Global Operations set up high-performing Global Capability Centers — talent, workspace, operations, and advisory as one connected system.",
   contactEmail: "hello@gccadvisor.com",
   contactPhone: "+91 80 4000 1200",
   metrics: [
@@ -31,21 +31,21 @@ export const seedSettings = {
       role: "Managing Partner",
       bio: "Former GCC head for a Fortune 200 financial services firm; 15+ years building offshore capability.",
       image:
-          "/images/talent-team.webp",
+        "/images/talent-team.webp",
     },
     {
       name: "Rohan Kapoor",
       role: "Partner, Talent & Operations",
       bio: "Scaled hiring and HR ops across Tier-1 Indian cities for multiple captive centers.",
       image:
-          "/images/workspace-collab.jpg",
+        "/images/workspace-collab.jpg",
     },
     {
       name: "Priya Nair",
       role: "Partner, Advisory",
       bio: "Location strategy, org design, and board-ready business cases for GCC investments.",
       image:
-          "/images/gcc-floor.webp",
+        "/images/gcc-floor.webp",
     },
   ],
 };
