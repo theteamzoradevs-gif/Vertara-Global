@@ -51,7 +51,16 @@ export default async function HomePage() {
         subheadline={settings.heroSubheadline}
         metrics={settings.metrics}
         phone={settings.contactPhone}
-        backgroundImage="/images/gcc-floor.webp"
+        backgroundImage={settings.heroBackgroundImage}
+        rotatingEyebrow={settings.heroRotatingEyebrow}
+        rotatingLines={settings.heroRotatingLines}
+        primaryCta={settings.heroPrimaryCta}
+        secondaryCta={settings.heroSecondaryCta}
+        formEyebrow={settings.heroFormEyebrow}
+        formTitle={settings.heroFormTitle}
+        formDescription={settings.heroFormDescription}
+        formButton={settings.heroFormButton}
+        formSuccess={settings.heroFormSuccess}
       />
 
       <TrustMetricsBanner metrics={settings.metrics} />

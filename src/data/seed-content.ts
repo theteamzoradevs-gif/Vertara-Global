@@ -5,12 +5,36 @@ export type Metric = {
   prefix?: string;
 };
 
+export type HeroRotatingLine = {
+  label: string;
+  detail: string;
+};
+
+export const seedHeroRotatingLines: HeroRotatingLine[] = [
+  { label: "Hire talent", detail: "Leadership and specialist pipelines for India GCCs" },
+  { label: "Secure workspace", detail: "Ready floors timed to your hiring waves" },
+  { label: "Run operations", detail: "EOR bridge, HR, payroll, captive transfer" },
+  { label: "Plan strategy", detail: "Location, org design, board-ready business cases" },
+  { label: "Build a full GCC", detail: "One connected path from intent to steady state" },
+];
+
 export const seedSettings = {
   brandName: "Veratara Global",
   tagline: "Build, staff, and scale Global Capability Centers in India",
   heroHeadline: "Your GCC in India designed, staffed, and scaled with clarity",
   heroSubheadline:
-    "We help CHROs, COOs, and Heads of Global Operations set up high-performing Global Capability Centers — talent, workspace, operations, and advisory as one connected system.",
+    "We help CHROs, COOs, and Heads of Global Operations set up high-performing Global Capability Centers — talent, workspace, operations, and advisory — as one connected system.",
+  heroBackgroundImage: "/images/gcc-floor.webp",
+  heroRotatingEyebrow: "Right now we can help you",
+  heroRotatingLines: seedHeroRotatingLines,
+  heroPrimaryCta: "Get a quick call",
+  heroSecondaryCta: "Why enterprises choose us",
+  heroFormEyebrow: "Start a conversation",
+  heroFormTitle: "Get a quick call",
+  heroFormDescription:
+    "Name + email or phone. A partner replies within one business day.",
+  heroFormButton: "Get a quick call",
+  heroFormSuccess: "Got it — we'll call you soon.",
   contactEmail: "hello@gccadvisor.com",
   contactPhone: "+91 80 4000 1200",
   metrics: [

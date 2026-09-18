@@ -8,6 +8,7 @@ const pathMap: Record<string, string> = {
   "/admin": "Dashboard Overview",
   "/admin/leads": "Leads Inbox",
   "/admin/chat-sessions": "Live Chat Sessions",
+  "/admin/hero": "Hero Section",
   "/admin/insights": "Insights",
   "/admin/faqs": "FAQs Manager",
   "/admin/testimonials": "Testimonials Manager",

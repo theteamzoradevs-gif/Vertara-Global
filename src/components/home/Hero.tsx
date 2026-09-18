@@ -1,21 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { MetricCounter } from "@/components/ui/MetricCounter";
 import type { Metric } from "@/data/seed-content";
-
-const rotatingLines = [
-  { label: "Hire talent", detail: "Leadership and specialist pipelines for India GCCs" },
-  { label: "Secure workspace", detail: "Ready floors timed to your hiring waves" },
-  { label: "Run operations", detail: "EOR bridge, HR, payroll, captive transfer" },
-  { label: "Plan strategy", detail: "Location, org design, board-ready business cases" },
-  { label: "Build a full GCC", detail: "One connected path from intent to steady state" },
-];
+import { seedSettings } from "@/data/seed-content";
 
 type Props = {
   tagline: string;
@@ -24,6 +16,15 @@ type Props = {
   metrics: Metric[];
   phone?: string;
   backgroundImage?: string;
+  rotatingEyebrow?: string;
+  rotatingLines?: { label: string; detail: string }[];
+  primaryCta?: string;
+  secondaryCta?: string;
+  formEyebrow?: string;
+  formTitle?: string;
+  formDescription?: string;
+  formButton?: string;
+  formSuccess?: string;
 };
 
 export function Hero({
@@ -32,8 +33,18 @@ export function Hero({
   subheadline,
   metrics,
   phone = "+91 80 4000 1200",
-  backgroundImage = "/images/gcc-floor.webp",
+  backgroundImage = seedSettings.heroBackgroundImage,
+  rotatingEyebrow = seedSettings.heroRotatingEyebrow,
+  rotatingLines = seedSettings.heroRotatingLines,
+  primaryCta = seedSettings.heroPrimaryCta,
+  secondaryCta = seedSettings.heroSecondaryCta,
+  formEyebrow = seedSettings.heroFormEyebrow,
+  formTitle = seedSettings.heroFormTitle,
+  formDescription = seedSettings.heroFormDescription,
+  formButton = seedSettings.heroFormButton,
+  formSuccess = seedSettings.heroFormSuccess,
 }: Props) {
+  const lines = rotatingLines.length ? rotatingLines : seedSettings.heroRotatingLines;
   const [index, setIndex] = useState(0);
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">(
     "idle",
@@ -44,18 +55,19 @@ export function Hero({
   useEffect(() => {
     if (reduce) return;
     const id = window.setInterval(() => {
-      setIndex((i) => (i + 1) % rotatingLines.length);
+      setIndex((i) => (i + 1) % lines.length);
     }, 3200);
     return () => window.clearInterval(id);
-  }, [reduce]);
+  }, [reduce, lines.length]);
 
-  const current = rotatingLines[index];
+  const current = lines[index % lines.length];
 
   async function onEnquiry(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const formEl = e.currentTarget;
     setStatus("loading");
     setErrorMessage("");
-    const form = new FormData(e.currentTarget);
+    const form = new FormData(formEl);
     const email = String(form.get("email") || "").trim();
     const phoneVal = String(form.get("phone") || "").trim();
     if (!email && !phoneVal) {
@@ -74,12 +86,15 @@ export function Hero({
           phone: phoneVal || undefined,
           intent: "quick_call",
           message: phoneVal && !email ? `Phone callback requested: ${phoneVal}` : undefined,
-          source: "hero_quick_call",
+          source: "contact",
         }),
       });
-      if (!res.ok) throw new Error("Could not save lead.");
+      const data = await res.json().catch(() => null);
+      if (!res.ok && !data?.ok) {
+        throw new Error(data?.error || "Could not save lead.");
+      }
+      formEl.reset();
       setStatus("done");
-      e.currentTarget.reset();
     } catch {
       setErrorMessage("Could not send. Please try again.");
       setStatus("error");
@@ -89,14 +104,23 @@ export function Hero({
   return (
     <section className="relative overflow-hidden border-b border-border">
       <div className="absolute inset-0">
-        <Image
-          src={backgroundImage}
-          alt=""
-          fill
-          priority
-          className="object-cover object-center"
-          sizes="100vw"
-        />
+        {backgroundImage.startsWith("http") ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={backgroundImage}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+        ) : (
+          <Image
+            src={backgroundImage}
+            alt=""
+            fill
+            priority
+            className="object-cover object-center"
+            sizes="100vw"
+          />
+        )}
         {/* Lighter overlays so office photo reads more clearly */}
         <div className="absolute inset-0 bg-[#0b1f3a]/28" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#061526]/58 via-[#061526]/32 to-[#061526]/18" />
@@ -149,7 +173,7 @@ export function Hero({
           {/* Fade / slide text only — no dots */}
           <div className="mt-6 max-w-md overflow-hidden rounded-2xl border border-white/15 bg-white/10 px-4 py-3.5 shadow-lg backdrop-blur-md">
             <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/55">
-              Right now we can help you
+              {rotatingEyebrow}
             </p>
             <div className="relative mt-1.5 min-h-[3.5rem]">
               <AnimatePresence mode="wait">
@@ -174,14 +198,14 @@ export function Hero({
 
           <div className="mt-6 flex flex-wrap gap-3">
             <Button href="#hero-enquiry" size="lg">
-              Get a quick call
+              {primaryCta}
             </Button>
             <Button
               href="/#why-us"
               variant="gold"
               size="lg"
             >
-              Why enterprises choose us
+              {secondaryCta}
             </Button>
           </div>
         </div>
@@ -191,18 +215,18 @@ export function Hero({
           className="min-w-0 justify-self-stretch overflow-hidden rounded-2xl border border-white/20 bg-white p-5 shadow-2xl shadow-black/30 md:justify-self-end md:w-full md:max-w-[340px] md:p-6"
         >
           <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-accent">
-            Start a conversation
+            {formEyebrow}
           </p>
           <h2 className="mt-1 text-lg font-bold text-navy">
-            Get a quick call
+            {formTitle}
           </h2>
           <p className="mt-1.5 text-xs leading-relaxed text-muted">
-            Name + email or phone. A partner replies within one business day.
+            {formDescription}
           </p>
 
           {status === "done" ? (
             <div className="mt-4 rounded-xl bg-accent-soft p-4 text-sm text-navy">
-              <p className="font-semibold">Got it — we&apos;ll call you soon.</p>
+              <p className="font-semibold">{formSuccess}</p>
               <button
                 type="button"
                 className="mt-3 text-sm font-semibold text-accent"
@@ -247,7 +271,7 @@ export function Hero({
                     <Loader2 className="h-4 w-4 animate-spin" /> Sending…
                   </>
                 ) : (
-                  "Get a quick call"
+                  formButton
                 )}
               </Button>
               <p className="text-center text-[11px] text-muted">

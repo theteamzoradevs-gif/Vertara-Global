@@ -11,6 +11,7 @@ import {
   HelpCircle,
   Quote,
   FolderGit2,
+  PanelTop,
   Settings,
   ExternalLink,
   LogOut,
@@ -48,6 +49,7 @@ const navGroups: NavGroup[] = [
   {
     title: "CMS Content",
     items: [
+      { href: "/admin/hero", label: "Hero", icon: PanelTop },
       { href: "/admin/insights", label: "Insights", icon: FileText },
       { href: "/admin/faqs", label: "FAQs", icon: HelpCircle },
       { href: "/admin/testimonials", label: "Testimonials", icon: Quote },

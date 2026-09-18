@@ -12,28 +12,16 @@ export async function saveSiteSettingsAction(formData: FormData) {
     const conn = await connectDB();
 
     const brandName = String(formData.get("brandName") || "Veratara Global").trim();
-    const tagline = String(formData.get("tagline") || "").trim();
-    const heroHeadline = String(formData.get("heroHeadline") || "").trim();
-    const heroSubheadline = String(formData.get("heroSubheadline") || "").trim();
     const contactEmail = String(formData.get("contactEmail") || "hello@verataraglobal.com").trim();
     const contactPhone = String(formData.get("contactPhone") || "+91 80 4000 1200").trim();
-    const trustPopHeadline = String(formData.get("trustPopHeadline") || "").trim();
-    const aboutStory = String(formData.get("aboutStory") || "").trim();
-    const aboutMission = String(formData.get("aboutMission") || "").trim();
 
     if (conn) {
       await SiteSettings.findOneAndUpdate(
         {},
         {
           brandName,
-          tagline,
-          heroHeadline,
-          heroSubheadline,
           contactEmail,
           contactPhone,
-          trustPopHeadline,
-          aboutStory,
-          aboutMission,
         },
         { upsert: true }
       );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import {
   Save,
   KeyRound,
@@ -116,6 +117,9 @@ export function AdminSettingsManager({
                 <Building2 className="h-5 w-5 text-accent" />
                 <span>Site Information</span>
               </h2>
+              <Link href="/admin/hero" className="text-[11px] font-semibold text-accent hover:underline">
+                Edit homepage hero →
+              </Link>
             </div>
 
             {/* Brand Name */}
@@ -162,30 +166,6 @@ export function AdminSettingsManager({
                   className="w-full rounded-xl border border-border px-4 py-2.5 text-xs text-navy font-medium focus:border-accent focus:outline-none transition"
                 />
               </div>
-            </div>
-
-            {/* Tagline */}
-            <div>
-              <label className="block text-xs font-semibold text-navy mb-1.5">Tagline</label>
-              <input
-                type="text"
-                name="tagline"
-                defaultValue={initialSettings.tagline || ""}
-                placeholder="Build, staff, and scale Global Capability Centers in India"
-                className="w-full rounded-xl border border-border px-4 py-2.5 text-xs text-navy font-medium focus:border-accent focus:outline-none transition"
-              />
-            </div>
-
-            {/* Hero Headline */}
-            <div>
-              <label className="block text-xs font-semibold text-navy mb-1.5">Hero Headline</label>
-              <textarea
-                name="heroHeadline"
-                rows={2}
-                defaultValue={initialSettings.heroHeadline || ""}
-                placeholder="Your GCC in India designed, staffed, and scaled with clarity"
-                className="w-full rounded-xl border border-border px-4 py-2.5 text-xs text-navy font-medium focus:border-accent focus:outline-none transition"
-              />
             </div>
           </div>
 

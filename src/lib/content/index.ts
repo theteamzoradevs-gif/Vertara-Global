@@ -40,20 +40,54 @@ async function withDB<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
   }
 }
 
+function mergeSettings(doc: Partial<Settings> | null): Settings {
+  const settings: Settings = {
+    ...seedSettings,
+    ...(doc || {}),
+    metrics: doc?.metrics?.length ? doc.metrics : seedSettings.metrics,
+    leadership: doc?.leadership?.length ? doc.leadership : seedSettings.leadership,
+    heroRotatingLines: doc?.heroRotatingLines?.length
+      ? doc.heroRotatingLines
+      : seedSettings.heroRotatingLines,
+  };
+
+  if (!settings.heroBackgroundImage) {
+    settings.heroBackgroundImage = seedSettings.heroBackgroundImage;
+  }
+  if (!settings.heroRotatingEyebrow) {
+    settings.heroRotatingEyebrow = seedSettings.heroRotatingEyebrow;
+  }
+  if (!settings.heroPrimaryCta) settings.heroPrimaryCta = seedSettings.heroPrimaryCta;
+  if (!settings.heroSecondaryCta) {
+    settings.heroSecondaryCta = seedSettings.heroSecondaryCta;
+  }
+  if (!settings.heroFormEyebrow) settings.heroFormEyebrow = seedSettings.heroFormEyebrow;
+  if (!settings.heroFormTitle) settings.heroFormTitle = seedSettings.heroFormTitle;
+  if (!settings.heroFormDescription) {
+    settings.heroFormDescription = seedSettings.heroFormDescription;
+  }
+  if (!settings.heroFormButton) settings.heroFormButton = seedSettings.heroFormButton;
+  if (!settings.heroFormSuccess) settings.heroFormSuccess = seedSettings.heroFormSuccess;
+
+  if (settings.brandName === "GCC Advisor") {
+    settings.brandName = "Veratara Global";
+  }
+  if (settings.contactEmail === "hello@gccadvisor.com") {
+    settings.contactEmail = "hello@verataraglobal.com";
+  }
+  if (settings.aboutStory?.includes("GCC Advisor")) {
+    settings.aboutStory = settings.aboutStory.replace(/GCC Advisor/g, "Veratara Global");
+  }
+  return settings;
+}
+
 export async function getSettings(): Promise<Settings> {
   return withDB(async () => {
     const doc = await SiteSettings.findOne().lean();
-    const settings = doc ? (JSON.parse(JSON.stringify(doc)) as Settings) : seedSettings;
-    if (settings.brandName === "GCC Advisor") {
-      settings.brandName = "Veratara Global";
-    }
-    if (settings.contactEmail === "hello@gccadvisor.com") {
-      settings.contactEmail = "hello@verataraglobal.com";
-    }
-    if (settings.aboutStory?.includes("GCC Advisor")) {
-      settings.aboutStory = settings.aboutStory.replace(/GCC Advisor/g, "Veratara Global");
-    }
-    return settings;
+    const parsed = doc
+      ? (JSON.parse(JSON.stringify(doc)) as Partial<Settings>)
+      : null;
+    return mergeSettings(parsed);
   }, seedSettings);
 }
 
