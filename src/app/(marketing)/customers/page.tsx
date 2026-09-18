@@ -115,11 +115,11 @@ export default async function CustomersPage() {
                   </dl>
                   <div className="mt-6 grid grid-cols-3 gap-3">
                     {cs.metrics.map((m) => (
-                      <div key={m.label} className="rounded-xl bg-surface p-3">
-                        <p className="metric-number text-xl font-bold text-accent">
+                      <div key={m.label} className="rounded-2xl bg-[#e5ebe6] p-3.5 sm:p-4">
+                        <p className="metric-number text-lg font-bold text-accent sm:text-xl md:text-2xl">
                           {m.value}
                         </p>
-                        <p className="text-xs text-muted">{m.label}</p>
+                        <p className="mt-1 text-[11px] leading-snug text-muted sm:text-xs">{m.label}</p>
                       </div>
                     ))}
                   </div>

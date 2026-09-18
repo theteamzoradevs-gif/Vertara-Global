@@ -158,9 +158,9 @@ export function Hero({
         <circle cx="1000" cy="480" r="2.5" fill="#14b8a6" />
       </svg>
 
-      <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-10 sm:px-6 md:grid-cols-[minmax(0,1.2fr)_minmax(280px,0.72fr)] md:gap-12 md:py-14 lg:gap-16 lg:px-8 lg:py-16">
+      <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 pt-10 pb-6 sm:px-6 md:grid-cols-[minmax(0,1.2fr)_minmax(280px,0.72fr)] md:gap-12 md:pt-14 md:pb-6 lg:gap-16 lg:px-8 lg:pt-16 lg:pb-8">
         <div className="min-w-0 md:pr-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#5eead4]">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
             {tagline}
           </p>
           <h1 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-[2.75rem] lg:leading-[1.12]">
@@ -202,29 +202,11 @@ export function Hero({
             </Button>
             <Button
               href="/#why-us"
-              variant="outline"
+              variant="gold"
               size="lg"
-              className="border-white/35 bg-white/10 text-white hover:border-white hover:bg-white/20 hover:text-white"
             >
               {secondaryCta}
             </Button>
-          </div>
-
-          <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2">
-            {metrics.slice(0, 3).map((m) => (
-              <div key={m.label} className="flex items-center gap-2 text-sm text-white/85">
-                <CheckCircle2 className="h-4 w-4 shrink-0 text-[#fb923c]" />
-                <span>
-                  <MetricCounter
-                    value={m.value}
-                    suffix={m.suffix}
-                    prefix={m.prefix}
-                    className="font-semibold text-white"
-                  />{" "}
-                  {m.label.toLowerCase()}
-                </span>
-              </div>
-            ))}
           </div>
         </div>
 

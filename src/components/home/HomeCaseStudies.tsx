@@ -53,14 +53,18 @@ export function HomeCaseStudies({ cases }: { cases: CaseItem[] }) {
                 Result
               </p>
               <p className="mt-1 text-sm leading-relaxed text-slate">{cs.result}</p>
-              <div className="mt-5 grid grid-cols-3 gap-2">
+              <div className="mt-5 grid grid-cols-3 gap-2.5 sm:gap-3">
                 {cs.metrics.map((m) => (
                   <div
                     key={m.label}
-                    className="rounded-xl bg-surface p-3 transition group-hover:bg-accent-soft"
+                    className="rounded-2xl bg-[#e5ebe6] p-3.5 sm:p-4"
                   >
-                    <p className="metric-number text-lg font-bold text-accent">{m.value}</p>
-                    <p className="text-[10px] leading-tight text-muted">{m.label}</p>
+                    <p className="metric-number text-lg font-bold text-accent sm:text-xl md:text-2xl">
+                      {m.value}
+                    </p>
+                    <p className="mt-1 text-[11px] leading-snug text-muted sm:text-xs">
+                      {m.label}
+                    </p>
                   </div>
                 ))}
               </div>

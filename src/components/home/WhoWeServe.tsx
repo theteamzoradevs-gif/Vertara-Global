@@ -1,21 +1,88 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import {
+  Cpu,
+  ShoppingBag,
+  FlaskConical,
+  Bed,
+  ShieldCheck,
+  Factory,
   Building2,
-  Brain,
-  Globe2,
   Landmark,
-  Rocket,
+  Mountain,
+  Brain,
   UsersRound,
+  Globe2,
   ArrowRight,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const audiences = [
+const allCards = [
+  // Page 1: Sector Verticals (Cards 1–6)
+  {
+    id: "engineering",
+    category: "sector",
+    title: "Engineering & ER&D",
+    blurb: "Product engineering, R&D, software simulation, AI, Architectural Design",
+    detail:
+      "Specialized engineering and R&D pipelines, software simulation capabilities, and architectural design CoEs built for high-precision global engineering mandates.",
+    icon: Cpu,
+  },
+  {
+    id: "fmcg",
+    category: "sector",
+    title: "FMCG & Retail",
+    blurb: "Consumer analytics, merchandising, supply chain, marketing, e-commerce",
+    detail:
+      "Data-driven retail and FMCG operations, consumer analytics hubs, end-to-end supply chain optimization, merchandising systems, and omnichannel digital commerce.",
+    icon: ShoppingBag,
+  },
+  {
+    id: "healthcare",
+    category: "sector",
+    title: "Healthcare & Life Sciences",
+    blurb: "R&D, regulatory, clinical, medical affairs, patient analytics AI, cyber",
+    detail:
+      "Compliant life sciences hubs with rigorous regulatory data handling, clinical trials support, medical affairs operations, and patient analytics AI with zero compliance drift.",
+    icon: FlaskConical,
+  },
+  {
+    id: "hospitality",
+    category: "sector",
+    title: "Travel, Leisure, Hospitality",
+    blurb: "Reservations, loyalty platforms, guest analytics, revenue reporting",
+    detail:
+      "High-availability guest reservation engines, multi-tier loyalty platforms, predictive customer analytics, and real-time revenue management operations.",
+    icon: Bed,
+  },
+  {
+    id: "wealth",
+    category: "sector",
+    title: "Wealth Management, PE, Insurance",
+    blurb: "Fund, portfolio ops, actuarial, client reporting, compliance, research, ops",
+    detail:
+      "Institutional-grade fund and portfolio accounting, actuarial modeling, investor reporting, statutory audit compliance, and equity research support.",
+    icon: ShieldCheck,
+  },
+  {
+    id: "manufacturing",
+    category: "sector",
+    title: "Manufacturing",
+    blurb: "Supply chain & procurement, plant ops analytics, industrial IoT, quality",
+    detail:
+      "Global procurement towers, smart factory and plant operations analytics, industrial IoT integration, quality engineering, and supply chain visibility.",
+    icon: Factory,
+  },
+
+  // Page 2: Buyer Archetypes (Cards 7–12)
   {
     id: "enterprise",
+    category: "buyer",
     title: "Global enterprises",
     blurb: "Standing up or scaling a captive India centre with clear ownership.",
     detail:
@@ -24,6 +91,7 @@ const audiences = [
   },
   {
     id: "bfsi",
+    category: "buyer",
     title: "BFSI & regulated firms",
     blurb: "Controls, audit trails, and leadership that survive scrutiny.",
     detail:
@@ -31,15 +99,17 @@ const audiences = [
     icon: Landmark,
   },
   {
-    id: "product",
-    title: "Product & digital orgs",
-    blurb: "Engineering and product GCCs that stay culturally close to HQ.",
+    id: "mining-metals",
+    category: "buyer",
+    title: "Mining & Metals",
+    blurb: "Asset analytics • engineering • procurement • ESG/HSE data",
     detail:
-      "Leadership-first hiring, workspace timed to waves, and delivery rhythm that feels like an extension of your core product org.",
-    icon: Rocket,
+      "Asset performance analytics, engineering & operational design CoEs, strategic global procurement hubs, and ESG/HSE compliance data systems.",
+    icon: Mountain,
   },
   {
     id: "ai",
+    category: "buyer",
     title: "AI / data-heavy teams",
     blurb: "Specialist pipelines in India’s deep tech talent markets.",
     detail:
@@ -48,6 +118,7 @@ const audiences = [
   },
   {
     id: "scaleup",
+    category: "buyer",
     title: "Scaling mid-market firms",
     blurb: "First India capability without overbuilding entity too early.",
     detail:
@@ -56,6 +127,7 @@ const audiences = [
   },
   {
     id: "global-ops",
+    category: "buyer",
     title: "Global operations leaders",
     blurb: "CHROs, COOs, and centre heads who own the outcome.",
     detail:
@@ -65,65 +137,164 @@ const audiences = [
 ];
 
 export function WhoWeServe() {
-  const [active, setActive] = useState(audiences[0].id);
-  const current = audiences.find((a) => a.id === active) ?? audiences[0];
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { amount: 0.25 });
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const page = Math.floor(activeIndex / 6);
+  const current = allCards[activeIndex] ?? allCards[0];
   const Icon = current.icon;
 
+  const currentBatch = page === 0 ? allCards.slice(0, 6) : allCards.slice(6, 12);
+
+  const totalPages = Math.ceil(allCards.length / 6);
+
+  const goToPage = (newPage: number) => {
+    const clamped = Math.max(0, Math.min(totalPages - 1, newPage));
+    setActiveIndex(clamped * 6);
+  };
+
+  // Auto-cycle through all 12 cards every 1 second when in viewport and not hovered
+  useEffect(() => {
+    if (!isInView || isHovered) return;
+
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % allCards.length);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isInView, isHovered, activeIndex]);
+
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_1.05fr] lg:items-stretch">
-      <div className="grid gap-3 sm:grid-cols-2">
-        {audiences.map((a) => {
-          const I = a.icon;
-          const isOn = active === a.id;
-          return (
-            <button
-              key={a.id}
-              type="button"
-              onMouseEnter={() => setActive(a.id)}
-              onFocus={() => setActive(a.id)}
-              onClick={() => setActive(a.id)}
-              className={cn(
-                "rounded-2xl border p-4 text-left transition-all duration-300",
-                isOn
-                  ? "border-accent bg-accent-soft shadow-md shadow-accent/10"
-                  : "border-border bg-white hover:border-accent/40",
-              )}
+    <div ref={containerRef} className="space-y-4">
+      <div className="grid gap-6 lg:grid-cols-[1.1fr_0.95fr] lg:items-stretch">
+        {/* Left Column: 6 Cards per page with smooth auto-cycle transitions across all 12 */}
+        <div
+          className="relative h-full"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={page}
+              initial={{ opacity: 0, x: page === 1 ? 20 : -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: page === 1 ? -20 : 20 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="grid h-full gap-3 sm:grid-cols-2 sm:grid-rows-3"
             >
-              <span
-                className={cn(
-                  "inline-flex h-9 w-9 items-center justify-center rounded-lg transition",
-                  isOn ? "bg-navy text-highlight" : "bg-accent-soft text-accent",
-                )}
+              {currentBatch.map((card, idx) => {
+                const globalIndex = page * 6 + idx;
+                const CardIcon = card.icon;
+                const isOn = activeIndex === globalIndex;
+
+                return (
+                  <button
+                    key={card.id}
+                    type="button"
+                    onMouseEnter={() => setActiveIndex(globalIndex)}
+                    onFocus={() => setActiveIndex(globalIndex)}
+                    onClick={() => setActiveIndex(globalIndex)}
+                    className={cn(
+                      "group relative flex flex-col justify-between overflow-hidden rounded-2xl border p-4 text-left transition-all duration-300",
+                      isOn
+                        ? "border-[#2e3f33] bg-[#e5ebe6] shadow-md shadow-[#2e3f33]/10"
+                        : "border-border bg-white hover:border-[#2e3f33]/40",
+                    )}
+                  >
+                    <div>
+                      <span
+                        className={cn(
+                          "inline-flex h-9 w-9 items-center justify-center rounded-lg transition-colors duration-300",
+                          isOn
+                            ? "bg-[#2e3f33] text-[#b49339]"
+                            : "bg-[#e5ebe6] text-[#2e3f33] group-hover:bg-[#2e3f33] group-hover:text-[#b49339]",
+                        )}
+                      >
+                        <CardIcon className="h-4 w-4 stroke-[2.2]" />
+                      </span>
+
+                      <p className="mt-3 text-sm font-bold text-navy">{card.title}</p>
+                      <p className="mt-1 text-xs leading-relaxed text-muted line-clamp-2">
+                        {card.blurb}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Right Column: Active Card Detail Panel */}
+        <div className="relative flex h-full flex-col justify-between overflow-hidden rounded-3xl bg-[#2e3f33] p-6 text-white shadow-xl sm:p-8">
+          {/* Ambient Glows */}
+          <div className="pointer-events-none absolute -right-10 -top-10 h-48 w-48 rounded-full bg-[#b49339]/15 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-8 left-10 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
+
+          <div className="relative z-[1]">
+            <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-[#b49339] shadow-inner">
+              <Icon className="h-6 w-6 stroke-[2.2]" />
+            </span>
+
+            <p className="mt-5 text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
+              {current.category === "sector" ? "Sector Vertical" : "Buyer Archetype"}
+            </p>
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={current.id}
+                initial={{ opacity: 0, x: 12 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -12 }}
+                transition={{ duration: 0.28, ease: "easeOut" }}
               >
-                <I className="h-4 w-4" />
-              </span>
-              <p className="mt-3 text-sm font-bold text-navy">{a.title}</p>
-              <p className="mt-1 text-xs leading-relaxed text-muted">{a.blurb}</p>
-            </button>
-          );
-        })}
+                <h3 className="mt-2 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                  {current.title}
+                </h3>
+                <p className="mt-4 text-sm leading-relaxed text-[#d1e0d7] sm:text-base sm:leading-relaxed">
+                  {current.detail}
+                </p>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          <div className="relative z-[1] mt-8 pt-4 border-t border-white/10">
+            <Link
+              href="/contact"
+              className="inline-flex w-fit items-center gap-2 rounded-full bg-[#b49339] px-6 py-3 text-sm font-bold text-[#0b1f3a] shadow-md transition hover:bg-white hover:text-[#2e3f33]"
+            >
+              Talk through your case
+            </Link>
+          </div>
+        </div>
       </div>
 
-      <div className="relative flex min-h-[280px] flex-col overflow-hidden rounded-2xl bg-navy p-6 text-white shadow-xl sm:p-8">
-        <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-accent/20 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-8 left-10 h-32 w-32 rounded-full bg-highlight/15 blur-2xl" />
-        <span className="relative inline-flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 text-highlight">
-          <Icon className="h-6 w-6" />
-        </span>
-        <p className="relative mt-4 text-xs font-semibold uppercase tracking-[0.18em] text-highlight">
-          Who this is for
-        </p>
-        <h3 className="relative mt-2 text-2xl font-bold">{current.title}</h3>
-        <p className="relative mt-4 flex-1 text-sm leading-relaxed text-white/80 md:text-base">
-          {current.detail}
-        </p>
-        <Link
-          href="/contact"
-          className="relative mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-highlight px-5 py-2.5 text-sm font-semibold text-navy transition hover:bg-white"
-        >
-          Talk through your case
-          <ArrowRight className="h-4 w-4" />
-        </Link>
+      {/* Navigation arrows aligned under left column */}
+      <div className="grid lg:grid-cols-[1.1fr_0.95fr] lg:gap-6">
+        <div className="flex items-center justify-center gap-3">
+          <button
+            type="button"
+            disabled={page === 0}
+            onClick={() => goToPage(page - 1)}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-white text-navy shadow-sm transition hover:border-[#2e3f33] hover:bg-[#e5ebe6] disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-border disabled:hover:bg-white"
+            aria-label="Previous page"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+
+          <button
+            type="button"
+            disabled={page === totalPages - 1}
+            onClick={() => goToPage(page + 1)}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-white text-navy shadow-sm transition hover:border-[#2e3f33] hover:bg-[#e5ebe6] disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-border disabled:hover:bg-white"
+            aria-label="Next page"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="hidden lg:block" />
       </div>
     </div>
   );
