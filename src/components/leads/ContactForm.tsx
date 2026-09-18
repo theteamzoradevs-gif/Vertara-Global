@@ -19,8 +19,9 @@ export function ContactForm({
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const formEl = e.currentTarget;
     setStatus("loading");
-    const form = new FormData(e.currentTarget);
+    const form = new FormData(formEl);
     try {
       const res = await fetch("/api/leads", {
         method: "POST",
@@ -36,8 +37,8 @@ export function ContactForm({
         }),
       });
       if (!res.ok) throw new Error("fail");
+      formEl.reset();
       setStatus("done");
-      e.currentTarget.reset();
     } catch {
       setStatus("error");
     }

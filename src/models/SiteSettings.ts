@@ -10,12 +10,30 @@ const MetricSchema = new Schema(
   { _id: false },
 );
 
+const HeroRotatingLineSchema = new Schema(
+  {
+    label: String,
+    detail: String,
+  },
+  { _id: false },
+);
+
 const SiteSettingsSchema = new Schema(
   {
     brandName: { type: String, default: "Veratara Global" },
     tagline: String,
     heroHeadline: String,
     heroSubheadline: String,
+    heroBackgroundImage: String,
+    heroRotatingEyebrow: String,
+    heroRotatingLines: [HeroRotatingLineSchema],
+    heroPrimaryCta: String,
+    heroSecondaryCta: String,
+    heroFormEyebrow: String,
+    heroFormTitle: String,
+    heroFormDescription: String,
+    heroFormButton: String,
+    heroFormSuccess: String,
     contactEmail: String,
     contactPhone: String,
     metrics: [MetricSchema],
@@ -39,5 +57,8 @@ export type SiteSettingsDoc = mongoose.InferSchemaType<typeof SiteSettingsSchema
   _id: mongoose.Types.ObjectId;
 };
 
-export const SiteSettings =
-  models.SiteSettings || model("SiteSettings", SiteSettingsSchema);
+if (models.SiteSettings) {
+  delete (models as Record<string, unknown>).SiteSettings;
+}
+
+export const SiteSettings = model("SiteSettings", SiteSettingsSchema);
