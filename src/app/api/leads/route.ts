@@ -41,8 +41,12 @@ export async function POST(req: Request) {
     }
 
     const lead = await Lead.create(parsed.data);
-    revalidatePath("/admin/leads");
-    return NextResponse.json({ ok: true, id: lead._id });
+    try {
+      revalidatePath("/admin/leads");
+    } catch (revalErr) {
+      console.warn("Revalidation warning:", revalErr);
+    }
+    return NextResponse.json({ ok: true, id: String(lead._id) });
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
