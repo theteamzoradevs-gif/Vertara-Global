@@ -24,7 +24,7 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#f7f9fc]">
+    <div className="flex flex-col md:flex-row min-h-screen bg-[#f7f9fc]">
       {/* Sidebar Navigation */}
       <AdminSidebar
         userEmail={session.user.email}

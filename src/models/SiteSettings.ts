@@ -20,7 +20,7 @@ const HeroRotatingLineSchema = new Schema(
 
 const SiteSettingsSchema = new Schema(
   {
-    brandName: { type: String, default: "Veratara Global" },
+    brandName: { type: String, default: "Vertara Global" },
     tagline: String,
     heroHeadline: String,
     heroSubheadline: String,

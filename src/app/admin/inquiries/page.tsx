@@ -5,7 +5,7 @@ import { LeadsManager, LeadItemData } from "@/components/admin/LeadsManager";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Inquiries | Veratara Global Admin",
+  title: "Inquiries | Vertara Global Admin",
 };
 
 export default async function AdminInquiriesPage() {

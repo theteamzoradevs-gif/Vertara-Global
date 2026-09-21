@@ -7,7 +7,7 @@ import {
 } from "@/components/admin/TestimonialsManager";
 
 export const metadata = {
-  title: "Testimonials Management | Veratara Global Admin",
+  title: "Testimonials Management | Vertara Global Admin",
 };
 
 export default async function AdminTestimonialsPage() {

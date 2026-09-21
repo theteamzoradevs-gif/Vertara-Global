@@ -6,7 +6,7 @@ import { CHAT_SESSION_PAGE_SIZE } from "@/app/admin/chat-sessions/constants";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Chat Sessions | Veratara Global Admin",
+  title: "Chat Sessions | Vertara Global Admin",
 };
 
 export default async function ChatSessionsPage() {

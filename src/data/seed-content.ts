@@ -19,7 +19,7 @@ export const seedHeroRotatingLines: HeroRotatingLine[] = [
 ];
 
 export const seedSettings = {
-  brandName: "Veratara Global",
+  brandName: "Vertara Global",
   tagline: "Build, staff, and scale Global Capability Centers in India",
   heroHeadline: "Your GCC in India designed, staffed, and scaled with clarity",
   heroSubheadline:
@@ -46,7 +46,7 @@ export const seedSettings = {
   trustPopImage: "/images/workspace-blue.webp",
   trustPopHeadline: "Trusted by enterprises building lasting India capability",
   aboutStory:
-    "Veratara Global was founded by operators who have built and scaled India capability centers from the inside — not decks, but delivery. We combine talent, workspace, business operations, and strategic advisory into one accountable partnership so enterprises can move from intent to a live, high-performing GCC without stitching together a dozen vendors.",
+    "Vertara Global was founded by operators who have built and scaled India capability centers from the inside — not decks, but delivery. We combine talent, workspace, business operations, and strategic advisory into one accountable partnership so enterprises can move from intent to a live, high-performing GCC without stitching together a dozen vendors.",
   aboutMission:
     "Make India GCC setup predictable for enterprise buyers: clear ownership, honest timelines, and a single operating rhythm from first hire to steady-state scale.",
   leadership: [

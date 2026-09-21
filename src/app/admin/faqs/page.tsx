@@ -4,7 +4,7 @@ import { seedFaqs } from "@/data/seed-content";
 import { FaqsManager } from "@/components/admin/FaqsManager";
 
 export const metadata = {
-  title: "FAQs Management | Veratara Global Admin",
+  title: "FAQs Management | Vertara Global Admin",
 };
 
 export default async function AdminFaqsPage() {

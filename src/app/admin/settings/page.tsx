@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth";
 import { AdminSettingsManager } from "@/components/admin/AdminSettingsManager";
 
 export const metadata = {
-  title: "Settings & Security | Veratara Global Admin",
+  title: "Settings & Security | Vertara Global Admin",
 };
 
 export default async function AdminSettingsPage() {
@@ -14,13 +14,13 @@ export default async function AdminSettingsPage() {
 
   // Ensure default brand name & contact email are sanitized if DB has old seed defaults
   if (settings.brandName === "GCC Advisor") {
-    settings.brandName = "Veratara Global";
+    settings.brandName = "Vertara Global";
   }
   if (settings.contactEmail === "hello@gccadvisor.com") {
     settings.contactEmail = "hello@verataraglobal.com";
   }
   if (settings.aboutStory?.includes("GCC Advisor")) {
-    settings.aboutStory = settings.aboutStory.replace(/GCC Advisor/g, "Veratara Global");
+    settings.aboutStory = settings.aboutStory.replace(/GCC Advisor/g, "Vertara Global");
   }
 
   return (

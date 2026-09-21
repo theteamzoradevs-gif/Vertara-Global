@@ -70,13 +70,13 @@ function mergeSettings(doc: Partial<Settings> | null): Settings {
   if (!settings.heroFormSuccess) settings.heroFormSuccess = seedSettings.heroFormSuccess;
 
   if (settings.brandName === "GCC Advisor") {
-    settings.brandName = "Veratara Global";
+    settings.brandName = "Vertara Global";
   }
   if (settings.contactEmail === "hello@gccadvisor.com") {
     settings.contactEmail = "hello@verataraglobal.com";
   }
   if (settings.aboutStory?.includes("GCC Advisor")) {
-    settings.aboutStory = settings.aboutStory.replace(/GCC Advisor/g, "Veratara Global");
+    settings.aboutStory = settings.aboutStory.replace(/GCC Advisor/g, "Vertara Global");
   }
   return settings;
 }
