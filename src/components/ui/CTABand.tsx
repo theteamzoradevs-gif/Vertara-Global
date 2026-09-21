@@ -41,15 +41,15 @@ export function CTABand({
           <p className="mt-3 text-sm leading-relaxed text-white/75 md:text-base">
             {description}
           </p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Button href={primaryHref} variant="gold" size="lg">
+          <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-start">
+            <Button href={primaryHref} variant="gold" size="lg" className="w-full text-center sm:w-auto">
               {primaryLabel}
             </Button>
             <Button
               href={secondaryHref}
               variant="outline"
               size="lg"
-              className="border-white/25 bg-transparent text-white hover:border-white hover:bg-white/10 hover:text-white"
+              className="w-full text-center border-white/25 bg-transparent text-white hover:border-white hover:bg-white/10 hover:text-white sm:w-auto"
             >
               {secondaryLabel}
             </Button>

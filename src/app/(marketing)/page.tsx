@@ -8,7 +8,7 @@ import { OurVision } from "@/components/home/OurVision";
 import { WhoAreWe } from "@/components/home/WhoAreWe";
 import { WhereWereStrongest } from "@/components/home/WhereWereStrongest";
 import { ConnectedModules } from "@/components/home/ConnectedModules";
-import { ServiceCard } from "@/components/home/ServiceCard";
+import { ServicesCarousel } from "@/components/home/ServicesCarousel";
 import { Hero } from "@/components/home/Hero";
 import { TrustMetricsBanner } from "@/components/home/TrustMetricsBanner";
 import { CompetitiveComparison } from "@/components/home/CompetitiveComparison";
@@ -63,8 +63,6 @@ export default async function HomePage() {
         formSuccess={settings.heroFormSuccess}
       />
 
-      <TrustMetricsBanner metrics={settings.metrics} />
-
       <WhoAreWe />
 
       <Section tone="muted" threads="light">
@@ -73,19 +71,7 @@ export default async function HomePage() {
           title="Four modules. One accountable plan."
           description="From talent and workspace to operations and advisory, four capabilities working together under one accountable partner."
         />
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {services.map((s) => (
-            <ServiceCard
-              key={s.slug}
-              slug={s.slug}
-              name={s.name}
-              shortDescription={s.shortDescription}
-              valueProposition={s.valueProposition}
-              icon={s.icon}
-              image={s.image}
-            />
-          ))}
-        </div>
+        <ServicesCarousel services={services} />
         <div className="mt-12">
           <CTABand
             title="Not sure which modules to start with?"
@@ -135,7 +121,7 @@ export default async function HomePage() {
           title="Why enterprises build GCCs"
           description="Cost, talent, speed, and control presented as signals leadership teams already measure. Hover any card for the operating implication."
         />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           {whyGccCards.map((card, i) => (
             <Reveal key={card.title} delay={i * 0.05}>
               <HoverStatCard
@@ -205,7 +191,7 @@ export default async function HomePage() {
           description="Challenge → result with metric callouts — same storytelling language as our customers page."
         />
         <HomeCaseStudies cases={featuredCases.length ? featuredCases : cases.slice(0, 2)} />
-        <div className="mt-8">
+        <div className="mt-8 flex justify-center sm:justify-start">
           <Button href="/customers" variant="primary">
             View all customer stories
           </Button>
@@ -218,11 +204,11 @@ export default async function HomePage() {
           title="Enterprises building lasting India capability"
           description="The capabilities we deliver, backed by the experiences of leaders building and scaling in India."
         />
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
+        <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-6">
           {logos.map((logo) => (
             <div
               key={logo.name}
-              className="flex h-20 items-center justify-center rounded-xl border border-border bg-surface-elevated px-3 text-center text-sm font-semibold text-navy/70 transition hover:-translate-y-0.5 hover:border-accent hover:bg-accent-soft/40 hover:text-navy hover:shadow-md"
+              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2e3f33]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
             >
               {logo.logoText}
             </div>
@@ -246,7 +232,7 @@ export default async function HomePage() {
             content: f.answer,
           }))}
         />
-        <div className="mt-6">
+        <div className="mt-6 flex justify-center sm:justify-start">
           <Button href="/faq" variant="primary">
             View full FAQ
           </Button>

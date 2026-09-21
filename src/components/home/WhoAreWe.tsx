@@ -1,9 +1,11 @@
 "use client";
 
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { Reveal } from "@/components/ui/Reveal";
 import { Layers, Wrench, LayoutGrid, Compass } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const credibilityPoints = [
   {
@@ -58,6 +60,36 @@ export function WhoAreWe({
 }: {
   image?: string;
 }) {
+  const [activePillar, setActivePillar] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(trackRef, { amount: 0.2 });
+
+  // Auto-slide every 1 second on mobile when in view and not hovered
+  useEffect(() => {
+    if (!isInView || isHovered) return;
+
+    const timer = setInterval(() => {
+      setActivePillar((prev) => (prev + 1) % pillars.length);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isInView, isHovered]);
+
+  // Keep active card centered in horizontal scroll on mobile
+  useEffect(() => {
+    if (trackRef.current && window.innerWidth < 640) {
+      const card = trackRef.current.children[activePillar] as HTMLElement;
+      if (card) {
+        card.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "center",
+        });
+      }
+    }
+  }, [activePillar]);
+
   return (
     <section id="who-are-we" className="relative overflow-hidden bg-surface-elevated py-16 md:py-20 border-t border-border">
       <div className="relative z-[1] mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -164,29 +196,64 @@ export function WhoAreWe({
           </div>
         </Reveal>
 
-        {/* Bottom 4 Pillar Cards */}
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {pillars.map((pillar, i) => {
-            const Icon = pillar.icon;
-            return (
-              <Reveal key={pillar.title} delay={0.15 + i * 0.06}>
-                <div className="flex h-full flex-col rounded-2xl border border-[#cddcd1] bg-[#e5ebe6] p-5 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-[#2e3f33]/40 hover:shadow-md">
-                  {/* Circular Dark Green Icon Container */}
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#2e3f33] text-white shadow-xs">
-                    <Icon className="h-5 w-5 text-white stroke-[2.2]" />
+        {/* Bottom 4 Pillar Cards - Horizontal Slide on Mobile, 4-Col Grid on Desktop */}
+        <div
+          className="mt-8"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          <div
+            ref={trackRef}
+            className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-3 scrollbar-none sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible lg:grid-cols-4"
+          >
+            {pillars.map((pillar, i) => {
+              const Icon = pillar.icon;
+              const isActive = activePillar === i;
+              return (
+                <div
+                  key={pillar.title}
+                  onClick={() => setActivePillar(i)}
+                  className={cn(
+                    "flex w-[80vw] max-w-[290px] shrink-0 snap-start flex-col justify-between rounded-2xl border p-5 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-[#2e3f33]/40 hover:shadow-md sm:w-auto sm:max-w-none",
+                    isActive
+                      ? "border-[#2e3f33] bg-[#e5ebe6] shadow-sm"
+                      : "border-[#cddcd1] bg-[#e5ebe6]"
+                  )}
+                >
+                  <div>
+                    {/* Circular Dark Green Icon Container */}
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#2e3f33] text-white shadow-xs">
+                      <Icon className="h-5 w-5 text-white stroke-[2.2]" />
+                    </div>
+
+                    <h4 className="mt-4 text-base font-bold text-navy">
+                      {pillar.title}
+                    </h4>
+
+                    <p className="mt-2 text-xs leading-relaxed text-muted sm:text-sm">
+                      {pillar.description}
+                    </p>
                   </div>
-
-                  <h4 className="mt-4 text-base font-bold text-navy">
-                    {pillar.title}
-                  </h4>
-
-                  <p className="mt-2 text-xs leading-relaxed text-muted sm:text-sm">
-                    {pillar.description}
-                  </p>
                 </div>
-              </Reveal>
-            );
-          })}
+              );
+            })}
+          </div>
+
+          {/* Mobile Pagination Indicator Dots */}
+          <div className="mt-3 flex justify-center gap-1.5 sm:hidden">
+            {pillars.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => setActivePillar(idx)}
+                className={cn(
+                  "h-1.5 rounded-full transition-all duration-300",
+                  activePillar === idx ? "w-6 bg-[#2e3f33]" : "w-1.5 bg-[#cddcd1]"
+                )}
+                aria-label={`Go to slide ${idx + 1}`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

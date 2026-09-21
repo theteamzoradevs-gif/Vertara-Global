@@ -89,9 +89,12 @@ export function SiteHeader({ brandName = "Veratara Global" }: { brandName?: stri
   }, [pathname]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-white shadow-sm shadow-navy/5">
-      <div className="mx-auto flex h-[4.25rem] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="shrink-0 text-base sm:text-lg font-bold uppercase tracking-[0.2em] text-navy">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-white shadow-sm shadow-navy/5">
+      <div className="mx-auto flex h-[4.25rem] w-full max-w-6xl items-center justify-between gap-2 px-3 sm:gap-4 sm:px-6 lg:px-8">
+        <Link
+          href="/"
+          className="shrink-0 text-sm sm:text-base md:text-lg font-bold uppercase tracking-[0.14em] sm:tracking-[0.2em] text-navy transition hover:opacity-90"
+        >
           VERTARA <span className="text-[#b49339]">GLOBAL</span>
         </Link>
 
@@ -125,12 +128,16 @@ export function SiteHeader({ brandName = "Veratara Global" }: { brandName?: stri
         </nav>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-          <Button href="/contact" size="sm" className="hidden sm:inline-flex shrink-0 whitespace-nowrap">
+          <Button
+            href="/contact"
+            size="sm"
+            className="hidden sm:inline-flex shrink-0 whitespace-nowrap text-xs sm:text-sm px-3 sm:px-3.5 py-1.5 sm:py-2"
+          >
             Book a consultation
           </Button>
           <button
             type="button"
-            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border text-navy lg:hidden"
+            className="inline-flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-lg border border-border text-navy transition hover:bg-surface hover:border-accent/40 lg:hidden"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             onClick={() => setMobileOpen((v) => !v)}
           >
@@ -225,22 +232,48 @@ export function SiteHeader({ brandName = "Veratara Global" }: { brandName?: stri
       ) : null}
 
       {mobileOpen ? (
-        <div className="max-h-[80vh] overflow-y-auto border-t border-border bg-white px-4 py-4 lg:hidden">
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted">Services</p>
-          <div className="mt-2 space-y-1">
-            {services.map((s) => (
-              <Link
-                key={s.href}
-                href={s.href}
-                className="block rounded-lg px-3 py-2 text-sm font-medium text-navy hover:bg-accent-soft"
-                onClick={() => setMobileOpen(false)}
-              >
-                {s.label}
-              </Link>
-            ))}
+        <div className="max-h-[85vh] w-full overflow-y-auto overflow-x-hidden border-t border-border bg-white px-4 py-5 shadow-lg lg:hidden">
+          {/* Prominent CTA on mobile */}
+          <div className="mb-4">
+            <Button
+              href="/contact"
+              size="md"
+              className="w-full justify-center"
+              onClick={() => setMobileOpen(false)}
+            >
+              Book a consultation
+            </Button>
           </div>
-          <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-muted">Explore</p>
+
+          <p className="text-[11px] font-bold uppercase tracking-wider text-[#b49339]">
+            Services
+          </p>
           <div className="mt-2 space-y-1">
+            {services.map((s) => {
+              const Icon = s.icon;
+              return (
+                <Link
+                  key={s.href}
+                  href={s.href}
+                  className="flex items-center gap-3 rounded-xl p-2 text-sm font-semibold text-navy transition hover:bg-[#e5ebe6]"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#2e3f33] text-[#b49339]">
+                    <Icon className="h-4 w-4 stroke-[2.2]" />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-navy leading-tight">{s.label}</p>
+                    <p className="text-xs font-normal text-muted truncate">{s.desc}</p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+
+          <p className="mt-5 text-[11px] font-bold uppercase tracking-wider text-[#b49339]">
+            Explore
+          </p>
+          <div className="mt-2 grid grid-cols-2 gap-1.5">
             {[
               ...simpleLinks,
               { href: "/insights", label: "Insights" },
@@ -249,7 +282,12 @@ export function SiteHeader({ brandName = "Veratara Global" }: { brandName?: stri
               <Link
                 key={link.href}
                 href={link.href}
-                className="block rounded-lg px-3 py-2 text-sm font-medium text-navy hover:bg-accent-soft"
+                className={cn(
+                  "block rounded-xl px-3 py-2 text-sm font-medium transition",
+                  pathname.startsWith(link.href)
+                    ? "bg-accent-soft text-accent font-semibold"
+                    : "text-navy hover:bg-surface",
+                )}
                 onClick={() => setMobileOpen(false)}
               >
                 {link.label}
