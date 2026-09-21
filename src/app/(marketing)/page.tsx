@@ -6,11 +6,11 @@ import { CTABand } from "@/components/ui/CTABand";
 import { Accordion } from "@/components/ui/Accordion";
 import { OurVision } from "@/components/home/OurVision";
 import { WhoAreWe } from "@/components/home/WhoAreWe";
-import { OurExpertise } from "@/components/home/OurExpertise";
 import { WhereWereStrongest } from "@/components/home/WhereWereStrongest";
 import { ConnectedModules } from "@/components/home/ConnectedModules";
-import { ServiceCard } from "@/components/home/ServiceCard";
+import { ServicesCarousel } from "@/components/home/ServicesCarousel";
 import { Hero } from "@/components/home/Hero";
+import { TrustMetricsBanner } from "@/components/home/TrustMetricsBanner";
 import { CompetitiveComparison } from "@/components/home/CompetitiveComparison";
 import { ImageStoryStrip } from "@/components/home/ImageStoryStrip";
 import { HoverStatCard } from "@/components/home/HoverStatCard";
@@ -49,7 +49,7 @@ export default async function HomePage() {
   const homepageCases = [
     ...cases.filter((c: { featured?: boolean }) => c.featured === true),
     ...cases.filter((c: { featured?: boolean }) => c.featured !== true),
-  ];
+  ].slice(0, 2);
   const homepageInsights = [
     ...insights.filter((i: { featured?: boolean }) => i.featured === true),
     ...insights.filter((i: { featured?: boolean }) => i.featured !== true),
@@ -75,11 +75,37 @@ export default async function HomePage() {
         formSuccess={settings.heroFormSuccess}
       />
 
-      <OurVision />
-
       <WhoAreWe />
 
-      <OurExpertise />
+      <Section tone="muted" threads="light">
+        <SectionHeader
+          eyebrow="Services"
+          title="Four modules. One accountable plan."
+          description="From talent and workspace to operations and advisory, four capabilities working together under one accountable partner."
+        />
+        <ServicesCarousel services={services} />
+        <div className="mt-12">
+          <CTABand
+            title="Not sure which modules to start with?"
+            description="Most programmes begin with a short discovery call timeline, ownership, and the first 90 days."
+            primaryLabel="Start a conversation"
+            primaryHref="/contact"
+          />
+        </div>
+      </Section>
+
+      <OurVision />
+
+      <Section id="who-we-serve" threads="light">
+        <div className="mb-10 flex flex-col gap-4 md:mb-14 md:flex-row md:items-end md:justify-between">
+          <SectionHeader
+            eyebrow="Who needs us"
+            title="Built around how enterprise teams actually buy"
+            description="Match your pattern, then explore the detail in the panel. Original framing for GCC buyers, not a generic industry grid."
+          />
+        </div>
+        <WhoWeServe />
+      </Section>
 
       <WhereWereStrongest />
 
@@ -96,29 +122,18 @@ export default async function HomePage() {
         <SectionHeader
           eyebrow="On the ground"
           title="Real floors. Real teams. Real operating rhythm."
-          description="Infrastructure and environments that make a GCC feel like part of the parent enterprise — not a distant vendor site."
+          description="Infrastructure and environments that make a GCC feel like part of the parent enterprise not a distant vendor site."
         />
         <ImageStoryStrip />
-      </Section>
-
-      <Section id="who-we-serve" threads="light">
-        <div className="mb-10 flex flex-col gap-4 md:mb-14 md:flex-row md:items-end md:justify-between">
-          <SectionHeader
-            eyebrow="Who needs us"
-            title="Built around how enterprise teams actually buy"
-            description="Match your pattern — then explore the detail in the panel. Original framing for GCC buyers, not a generic industry grid."
-          />
-        </div>
-        <WhoWeServe />
       </Section>
 
       <Section id="why-gcc" tone="muted" threads="light">
         <SectionHeader
           eyebrow="Strategic case"
           title="Why enterprises build GCCs"
-          description="Cost, talent, speed, and control — presented as signals leadership teams already measure. Hover any card for the operating implication."
+          description="Cost, talent, speed, and control presented as signals leadership teams already measure. Hover any card for the operating implication."
         />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           {whyGccCards.map((card, i) => (
             <Reveal key={card.title} delay={i * 0.05}>
               <HoverStatCard
@@ -135,38 +150,9 @@ export default async function HomePage() {
         <SectionHeader
           eyebrow="Why GCC Advisor"
           title="Built to beat multi-vendor chaos"
-          description="How we stack up against stitching vendors yourself — or staying in a classic offshore model. Scan the table — no taps required."
+          description="How we stack up against stitching vendors yourself or staying in a classic offshore model. Scan the table no taps required."
         />
         <CompetitiveComparison />
-      </Section>
-
-      <Section tone="muted" threads="light">
-        <SectionHeader
-          eyebrow="Services"
-          title="Four modules. One accountable plan."
-          description="Hover or tap a card to flip — description and CTAs on the back, without pushing the page layout down."
-        />
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {services.map((s) => (
-            <ServiceCard
-              key={s.slug}
-              slug={s.slug}
-              name={s.name}
-              shortDescription={s.shortDescription}
-              valueProposition={s.valueProposition}
-              icon={s.icon}
-              image={s.image}
-            />
-          ))}
-        </div>
-        <div className="mt-12">
-          <CTABand
-            title="Not sure which modules to start with?"
-            description="Most programmes begin with a short discovery call — timeline, ownership, and the first 90 days."
-            primaryLabel="Start a conversation"
-            primaryHref="/contact"
-          />
-        </div>
       </Section>
 
       <JourneySteps />
@@ -175,7 +161,7 @@ export default async function HomePage() {
         <SectionHeader
           eyebrow="Engagement"
           title="Ways of working that match how you buy"
-          description="Flexible partnership, build-and-transfer, or managed team — compare side by side."
+          description="Flexible partnership, build and transfer, or managed team compare side by side."
           light
         />
         <div className="grid gap-4 md:grid-cols-3">
@@ -183,7 +169,7 @@ export default async function HomePage() {
             <Reveal key={m.slug}>
               <Link
                 href="/engagement-models"
-                className="group relative block h-full overflow-hidden rounded-2xl border border-white/15 bg-white/5 p-5 transition hover:-translate-y-1 hover:border-highlight/50"
+                className="group relative block h-full overflow-hidden rounded-2xl border border-white/15 bg-white/5 p-5 transition hover:-translate-y-1 hover:border-[#b49339]/60"
               >
                 <div
                   aria-hidden
@@ -195,7 +181,7 @@ export default async function HomePage() {
                   <p className="mt-3 text-sm text-white/55 opacity-0 transition group-hover:opacity-100">
                     Best fit: {m.bestFit}
                   </p>
-                  <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-highlight">
+                  <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-[#b49339]">
                     Setup · {m.setupTime}
                   </p>
                 </div>
@@ -204,7 +190,7 @@ export default async function HomePage() {
           ))}
         </div>
         <div className="mt-8">
-          <Button href="/engagement-models" size="lg">
+          <Button href="/engagement-models" variant="gold" size="lg">
             Compare models & take the selector
           </Button>
         </div>
@@ -217,7 +203,7 @@ export default async function HomePage() {
           description="Challenge → result with metric callouts — same storytelling language as our case studies page."
         />
         <HomeCaseStudies cases={homepageCases} />
-        <div className="mt-8">
+        <div className="mt-8 flex justify-center sm:justify-start">
           <Button href="/case-studies" variant="outline">
             View all case studies
           </Button>
@@ -244,13 +230,13 @@ export default async function HomePage() {
         <SectionHeader
           eyebrow="Trust"
           title="Enterprises building lasting India capability"
-          description="Capability areas we support — and voices from operators who needed clarity, not decks. Hover a testimonial row to pause."
+          description="The capabilities we deliver, backed by the experiences of leaders building and scaling in India."
         />
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
+        <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-6">
           {logos.map((logo) => (
             <div
               key={logo.name}
-              className="flex h-20 items-center justify-center rounded-xl border border-border bg-surface-elevated px-3 text-center text-sm font-semibold text-navy/70 transition hover:-translate-y-0.5 hover:border-accent hover:bg-accent-soft/40 hover:text-navy hover:shadow-md"
+              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2e3f33]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
             >
               {logo.logoText}
             </div>
@@ -265,7 +251,7 @@ export default async function HomePage() {
         <SectionHeader
           eyebrow="FAQ"
           title="Questions enterprise buyers ask before the first call"
-          description="Timelines, ownership, cost, cities, and roles — answered without the runaround."
+          description="Timelines, ownership, cost, cities, and roles answered without the runaround."
         />
         <Accordion
           items={faqs.slice(0, 5).map((f) => ({
@@ -274,8 +260,8 @@ export default async function HomePage() {
             content: f.answer,
           }))}
         />
-        <div className="mt-6">
-          <Button href="/faq" variant="outline">
+        <div className="mt-6 flex justify-center sm:justify-start">
+          <Button href="/faq" variant="primary">
             View full FAQ
           </Button>
         </div>

@@ -25,8 +25,8 @@ export function HomeCaseStudies({ cases }: { cases: CaseItem[] }) {
           <article className="group overflow-hidden rounded-2xl border border-border bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-xl hover:shadow-navy/10 md:grid md:grid-cols-2">
             <div className="relative min-h-[220px] overflow-hidden bg-surface sm:min-h-[260px]">
               <CmsImage
-                src={cs.image}
-                alt=""
+                src={cs.image?.trim() || "/images/gcc-floor.webp"}
+                alt={cs.title || "Case study"}
                 fill
                 className="object-cover transition duration-700 group-hover:scale-105"
                 sizes="(max-width:768px) 100vw, 50vw"
@@ -53,14 +53,18 @@ export function HomeCaseStudies({ cases }: { cases: CaseItem[] }) {
                 Result
               </p>
               <p className="mt-1 text-sm leading-relaxed text-slate">{cs.result}</p>
-              <div className="mt-5 grid grid-cols-3 gap-2">
+              <div className="mt-5 grid grid-cols-3 gap-2.5 sm:gap-3">
                 {cs.metrics.map((m) => (
                   <div
                     key={m.label}
-                    className="rounded-xl bg-surface p-3 transition group-hover:bg-accent-soft"
+                    className="rounded-2xl bg-[#e5ebe6] p-3.5 sm:p-4"
                   >
-                    <p className="metric-number text-lg font-bold text-accent">{m.value}</p>
-                    <p className="text-[10px] leading-tight text-muted">{m.label}</p>
+                    <p className="metric-number text-lg font-bold text-accent sm:text-xl md:text-2xl">
+                      {m.value}
+                    </p>
+                    <p className="mt-1 text-[11px] leading-snug text-muted sm:text-xs">
+                      {m.label}
+                    </p>
                   </div>
                 ))}
               </div>

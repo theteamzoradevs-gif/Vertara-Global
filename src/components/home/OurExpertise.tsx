@@ -138,7 +138,7 @@ export function OurExpertise() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
-                className="group flex flex-col justify-between rounded-2xl border border-[#ded8cb] bg-[#ece8de] p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#c8923a]/50 hover:shadow-md"
+                className="group flex flex-col justify-between rounded-2xl border border-[#ded8cb] bg-[#ece8de] p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#b49339]/50 hover:shadow-md"
               >
                 <div>
                   {/* Top Header inside Card with dark circular icon badge */}

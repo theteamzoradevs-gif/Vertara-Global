@@ -59,8 +59,8 @@ export default async function InsightArticlePage({
       <section className="relative bg-navy text-white">
         <div className="absolute inset-0 opacity-25">
           <CmsImage
-            src={insight.coverImage}
-            alt=""
+            src={insight.coverImage?.trim() || "/images/gcc-ops.png"}
+            alt={insight.title || "Insight"}
             fill
             className="object-cover"
             priority

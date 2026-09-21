@@ -48,7 +48,7 @@ function Row({
           return (
             <blockquote
               key={`${t.name}-${i}`}
-              className="group/card w-[min(85vw,340px)] shrink-0 overflow-hidden rounded-2xl border border-border bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-lg sm:w-[360px]"
+              className="group/card w-[min(85vw,340px)] shrink-0 overflow-hidden rounded-2xl border border-border bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#2e3f33]/40 hover:shadow-lg sm:w-[380px]"
             >
               <div className={cn("relative h-16 bg-gradient-to-br", tone)}>
                 <div className="absolute -bottom-6 left-5">
@@ -85,22 +85,26 @@ function Row({
   );
 }
 
+function ensureMinItems(list: Item[], minCount = 4): Item[] {
+  if (!list.length) return [];
+  let result = [...list];
+  while (result.length < minCount) {
+    result = [...result, ...list];
+  }
+  return result;
+}
+
 export function TestimonialMarquee({ items }: { items: Item[] }) {
   if (!items.length) return null;
 
   const mid = Math.ceil(items.length / 2);
   const rowA = items.length > 2 ? items.slice(0, mid) : items;
   const rowB = items.length > 2 ? items.slice(mid) : [...items].reverse();
-  const pad = (row: Item[]) =>
-    row.length >= 3 ? row : [...row, ...row, ...row].slice(0, 4);
 
   return (
-    <div className="space-y-4">
-      <Row items={pad(rowA)} direction="right" />
-      <Row items={pad(rowB)} direction="left" />
-      <p className="text-center text-xs text-muted">
-        Hover a row to pause and read
-      </p>
+    <div className="space-y-4 w-full overflow-hidden">
+      <Row items={ensureMinItems(rowA)} direction="right" />
+      <Row items={ensureMinItems(rowB)} direction="left" />
     </div>
   );
 }

@@ -85,11 +85,10 @@ export function AdminSettingsManager({
       {/* Alert Notification */}
       {message && (
         <div
-          className={`flex items-center justify-between rounded-2xl px-5 py-3.5 text-xs font-medium border shadow-xs ${
-            message.type === "success"
+          className={`flex items-center justify-between rounded-2xl px-5 py-3.5 text-xs font-medium border shadow-xs ${message.type === "success"
               ? "border-emerald-200 bg-emerald-50 text-emerald-800"
               : "border-red-200 bg-red-50 text-red-800"
-          }`}
+            }`}
         >
           <div className="flex items-center gap-2.5">
             {message.type === "success" ? (

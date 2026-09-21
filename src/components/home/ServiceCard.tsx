@@ -48,7 +48,7 @@ export function ServiceCard({
           )}
         >
           {/* Front */}
-          <div className="absolute inset-0 flex flex-col overflow-hidden rounded-2xl border border-border bg-white shadow-sm [backface-visibility:hidden]">
+          <div className="absolute inset-0 flex flex-col overflow-hidden rounded-2xl border border-[#cddcd1] bg-[#e5ebe6] shadow-sm [backface-visibility:hidden]">
             <div className="relative h-44 shrink-0 overflow-hidden sm:h-48">
               <Image
                 src={image}

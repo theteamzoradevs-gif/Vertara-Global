@@ -159,7 +159,7 @@ export function ModelSelector({ models }: { models: Model[] }) {
         ) : null}
       </div>
 
-      <div className="overflow-x-auto rounded-2xl border border-border bg-surface-elevated">
+      <div className="hidden md:block overflow-x-auto rounded-2xl border border-border bg-surface-elevated">
         <table className="min-w-[720px] w-full text-left text-sm">
           <thead className="bg-navy text-white">
             <tr>

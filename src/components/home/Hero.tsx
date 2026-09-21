@@ -102,7 +102,7 @@ export function Hero({
   }
 
   return (
-    <section className="relative overflow-hidden border-b border-border">
+    <section className="relative flex flex-col justify-between overflow-hidden border-b border-border min-h-[calc(100svh-68px)]">
       <div className="absolute inset-0">
         {backgroundImage.startsWith("http") ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -158,24 +158,24 @@ export function Hero({
         <circle cx="1000" cy="480" r="2.5" fill="#14b8a6" />
       </svg>
 
-      <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-10 sm:px-6 md:grid-cols-[minmax(0,1.2fr)_minmax(280px,0.72fr)] md:gap-12 md:py-14 lg:gap-16 lg:px-8 lg:py-16">
-        <div className="min-w-0 md:pr-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#5eead4]">
+      <div className="relative mx-auto my-auto grid w-full max-w-6xl items-center gap-6 px-4 py-6 sm:gap-8 sm:px-6 sm:py-8 md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.75fr)] md:gap-10 md:py-6 lg:gap-14 lg:px-8 lg:py-6">
+        <div className="w-full min-w-0 md:pr-2">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
             {tagline}
           </p>
-          <h1 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-[2.75rem] lg:leading-[1.12]">
+          <h1 className="mt-3 text-2xl font-bold tracking-tight text-white sm:text-4xl lg:text-[2.65rem] lg:leading-[1.12]">
             {headline}
           </h1>
-          <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/85 md:text-base">
+          <p className="mt-2.5 max-w-xl text-sm leading-relaxed text-white/85 sm:mt-3.5 md:text-base">
             {subheadline}
           </p>
 
           {/* Fade / slide text only — no dots */}
-          <div className="mt-6 max-w-md overflow-hidden rounded-2xl border border-white/15 bg-white/10 px-4 py-3.5 shadow-lg backdrop-blur-md">
+          <div className="mt-4 w-full max-w-md min-w-0 overflow-hidden rounded-2xl border border-white/15 bg-white/10 px-4 py-3 shadow-lg backdrop-blur-md sm:mt-5">
             <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/55">
               {rotatingEyebrow}
             </p>
-            <div className="relative mt-1.5 min-h-[3.5rem]">
+            <div className="relative mt-1 min-h-[3rem]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={current.label}
@@ -187,50 +187,33 @@ export function Hero({
                       : { opacity: 0, x: -24 }
                   }
                   transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                  className="absolute inset-x-0 top-0"
+                  className="absolute inset-x-0 top-0 w-full min-w-0"
                 >
-                  <p className="text-lg font-bold text-white">{current.label}</p>
-                  <p className="text-sm text-white/75">{current.detail}</p>
+                  <p className="text-base font-bold text-white sm:text-lg">{current.label}</p>
+                  <p className="text-xs text-white/75 sm:text-sm">{current.detail}</p>
                 </motion.div>
               </AnimatePresence>
             </div>
           </div>
 
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Button href="#hero-enquiry" size="lg">
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Button href="#hero-enquiry" size="lg" className="w-full sm:w-auto">
               {primaryCta}
             </Button>
             <Button
               href="/#why-us"
-              variant="outline"
+              variant="gold"
               size="lg"
-              className="border-white/35 bg-white/10 text-white hover:border-white hover:bg-white/20 hover:text-white"
+              className="w-full sm:w-auto"
             >
               {secondaryCta}
             </Button>
-          </div>
-
-          <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2">
-            {metrics.slice(0, 3).map((m) => (
-              <div key={m.label} className="flex items-center gap-2 text-sm text-white/85">
-                <CheckCircle2 className="h-4 w-4 shrink-0 text-[#fb923c]" />
-                <span>
-                  <MetricCounter
-                    value={m.value}
-                    suffix={m.suffix}
-                    prefix={m.prefix}
-                    className="font-semibold text-white"
-                  />{" "}
-                  {m.label.toLowerCase()}
-                </span>
-              </div>
-            ))}
           </div>
         </div>
 
         <aside
           id="hero-enquiry"
-          className="min-w-0 justify-self-stretch overflow-hidden rounded-2xl border border-white/20 bg-white p-5 shadow-2xl shadow-black/30 md:justify-self-end md:w-full md:max-w-[340px] md:p-6"
+          className="w-full min-w-0 justify-self-stretch overflow-hidden rounded-2xl border border-white/20 bg-white p-5 shadow-2xl shadow-black/30 md:justify-self-end md:w-full md:max-w-[340px] md:p-5"
         >
           <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-accent">
             {formEyebrow}
@@ -238,7 +221,7 @@ export function Hero({
           <h2 className="mt-1 text-lg font-bold text-navy">
             {formTitle}
           </h2>
-          <p className="mt-1.5 text-xs leading-relaxed text-muted">
+          <p className="mt-1 text-xs leading-relaxed text-muted">
             {formDescription}
           </p>
 
@@ -254,24 +237,24 @@ export function Hero({
               </button>
             </div>
           ) : (
-            <form onSubmit={onEnquiry} className="mt-4 grid min-w-0 gap-2.5">
+            <form onSubmit={onEnquiry} className="mt-3.5 grid min-w-0 gap-2.5">
               <input
                 name="name"
                 required
                 placeholder="Your name"
-                className="min-w-0 w-full rounded-lg border border-border px-3 py-2.5 text-sm outline-none ring-accent focus:ring-2"
+                className="min-w-0 w-full rounded-lg border border-border px-3 py-2 text-sm outline-none ring-accent focus:ring-2"
               />
               <input
                 name="email"
                 type="email"
                 placeholder="Work email"
-                className="min-w-0 w-full rounded-lg border border-border px-3 py-2.5 text-sm outline-none ring-accent focus:ring-2"
+                className="min-w-0 w-full rounded-lg border border-border px-3 py-2 text-sm outline-none ring-accent focus:ring-2"
               />
               <input
                 name="phone"
                 type="tel"
                 placeholder="Phone"
-                className="min-w-0 w-full rounded-lg border border-border px-3 py-2.5 text-sm outline-none ring-accent focus:ring-2"
+                className="min-w-0 w-full rounded-lg border border-border px-3 py-2 text-sm outline-none ring-accent focus:ring-2"
               />
               {status === "error" ? (
                 <p className="text-xs text-danger">
@@ -305,6 +288,32 @@ export function Hero({
           )}
         </aside>
       </div>
+
+      {/* Docked Trust Metrics Banner on First Fold */}
+      {metrics && metrics.length > 0 && (
+        <div className="relative z-10 w-full border-t border-[#254d3e] bg-[#2e3f33] pt-3 pb-3.5 shadow-sm text-white">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-2.5 sm:gap-x-8 md:grid-cols-4 md:gap-x-10">
+              {metrics.slice(0, 4).map((m) => (
+                <div key={m.label} className="flex items-start gap-2 sm:gap-2.5">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#b49339] sm:h-4.5 sm:w-4.5" />
+                  <div className="flex flex-col">
+                    <MetricCounter
+                      value={m.value}
+                      suffix={m.suffix}
+                      prefix={m.prefix}
+                      className="text-base sm:text-lg md:text-xl font-bold tracking-tight text-white leading-tight"
+                    />
+                    <span className="mt-0.5 text-xs sm:text-[13px] font-medium text-[#d1e0d7] leading-tight">
+                      {m.label}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

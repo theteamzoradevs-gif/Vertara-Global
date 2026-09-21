@@ -13,49 +13,49 @@ const rows: {
   multiVendor: Cell;
   pureVendor: Cell;
 }[] = [
-  {
-    criterion: "Connected talent + workspace + ops",
-    us: true,
-    multiVendor: false,
-    pureVendor: false,
-  },
-  {
-    criterion: "Captive ownership path",
-    us: true,
-    multiVendor: "Varies",
-    pureVendor: false,
-  },
-  {
-    criterion: "EOR bridge while entity forms",
-    us: true,
-    multiVendor: "Sometimes",
-    pureVendor: false,
-  },
-  {
-    criterion: "Single accountable partner",
-    us: true,
-    multiVendor: false,
-    pureVendor: true,
-  },
-  {
-    criterion: "Board-ready advisory included",
-    us: true,
-    multiVendor: "Extra fee",
-    pureVendor: false,
-  },
-  {
-    criterion: "Typical time to seed team",
-    us: "2–8 weeks",
-    multiVendor: "3–6 months",
-    pureVendor: "2–6 weeks",
-  },
-  {
-    criterion: "IP & culture control",
-    us: "High",
-    multiVendor: "Medium",
-    pureVendor: "Low–Med",
-  },
-];
+    {
+      criterion: "Connected talent + workspace + ops",
+      us: true,
+      multiVendor: false,
+      pureVendor: false,
+    },
+    {
+      criterion: "Captive ownership path",
+      us: true,
+      multiVendor: "Varies",
+      pureVendor: false,
+    },
+    {
+      criterion: "EOR bridge while entity forms",
+      us: true,
+      multiVendor: "Sometimes",
+      pureVendor: false,
+    },
+    {
+      criterion: "Single accountable partner",
+      us: true,
+      multiVendor: false,
+      pureVendor: true,
+    },
+    {
+      criterion: "Board-ready advisory included",
+      us: true,
+      multiVendor: "Extra fee",
+      pureVendor: false,
+    },
+    {
+      criterion: "Typical time to seed team",
+      us: "2–8 weeks",
+      multiVendor: "3–6 months",
+      pureVendor: "2–6 weeks",
+    },
+    {
+      criterion: "IP & culture control",
+      us: "High",
+      multiVendor: "Medium",
+      pureVendor: "Low–Med",
+    },
+  ];
 
 const columns = [
   { key: "us" as const, label: "GCC Advisor", short: "Us", ours: true },
@@ -88,7 +88,7 @@ function CellView({
         className={cn(
           "inline-flex items-center justify-center rounded-full",
           compact ? "h-5 w-5" : "h-7 w-7",
-          ours ? "bg-accent text-white" : "bg-emerald-50 text-emerald-700",
+          ours ? "bg-accent text-white" : "bg-slate-100 text-slate-600",
         )}
       >
         <Check className={compact ? "h-3 w-3" : "h-3.5 w-3.5"} strokeWidth={2.5} />
@@ -256,16 +256,12 @@ export function CompetitiveComparison() {
             </tbody>
           </table>
         </div>
+      </div>
 
-        <div className="flex flex-col items-center justify-between gap-3 border-t border-border bg-surface px-4 py-3 sm:flex-row sm:px-5 sm:py-4">
-          <p className="text-center text-xs text-muted sm:text-left sm:text-sm">
-            One accountable plan vs stitching vendors — or staying in a classic
-            offshore model.
-          </p>
-          <Button href="/contact" size="sm" className="shrink-0">
-            Talk through your fit
-          </Button>
-        </div>
+      <div className="mt-8 flex justify-center">
+        <Button href="/contact" size="md">
+          Talk through your fit
+        </Button>
       </div>
     </Reveal>
   );
