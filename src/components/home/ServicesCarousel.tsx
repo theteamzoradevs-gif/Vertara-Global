@@ -31,15 +31,17 @@ export function ServicesCarousel({ services }: { services: ServiceItem[] }) {
     return () => clearInterval(timer);
   }, [isInView, isHovered, services.length]);
 
-  // Keep active card centered in horizontal scroll on mobile
+  // Keep active card centered in horizontal scroll on mobile without affecting window scroll
   useEffect(() => {
     if (trackRef.current && window.innerWidth < 640) {
-      const card = trackRef.current.children[activeIndex] as HTMLElement;
+      const container = trackRef.current;
+      const card = container.children[activeIndex] as HTMLElement;
       if (card) {
-        card.scrollIntoView({
+        const targetLeft =
+          card.offsetLeft - (container.clientWidth - card.clientWidth) / 2;
+        container.scrollTo({
+          left: Math.max(0, targetLeft),
           behavior: "smooth",
-          block: "nearest",
-          inline: "center",
         });
       }
     }

@@ -51,7 +51,7 @@ export function OurVision({
               </Reveal>
 
               <Reveal delay={0.18}>
-                <div className="pt-2 flex justify-center">
+                <div className="pt-2 flex justify-center sm:justify-start">
                   <Button href="/about" size="md">
                     Read more
                     <ArrowRight className="h-4 w-4 ml-1" />
