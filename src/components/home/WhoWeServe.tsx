@@ -137,44 +137,174 @@ const allCards = [
 ];
 
 export function WhoWeServe() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(containerRef, { amount: 0.25 });
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const page = Math.floor(activeIndex / 6);
   const current = allCards[activeIndex] ?? allCards[0];
   const Icon = current.icon;
 
   const currentBatch = page === 0 ? allCards.slice(0, 6) : allCards.slice(6, 12);
-
   const totalPages = Math.ceil(allCards.length / 6);
+
+  const resetAutoSlide = () => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % allCards.length);
+    }, 1500);
+  };
+
+  // Continuous auto-slide timer that starts on mount and resets gracefully on manual clicks
+  useEffect(() => {
+    resetAutoSlide();
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, []);
 
   const goToPage = (newPage: number) => {
     const clamped = Math.max(0, Math.min(totalPages - 1, newPage));
     setActiveIndex(clamped * 6);
+    resetAutoSlide();
   };
 
-  // Auto-cycle through all 12 cards every 1 second when in viewport and not hovered
-  useEffect(() => {
-    if (!isInView || isHovered) return;
+  const goToCard = (index: number) => {
+    const wrapped = (index + allCards.length) % allCards.length;
+    setActiveIndex(wrapped);
+    resetAutoSlide();
+  };
 
-    const timer = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % allCards.length);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [isInView, isHovered, activeIndex]);
+  const selectCard = (index: number) => {
+    setActiveIndex(index);
+    resetAutoSlide();
+  };
 
   return (
-    <div ref={containerRef} className="space-y-4">
-      <div className="grid gap-6 lg:grid-cols-[1.1fr_0.95fr] lg:items-stretch">
+    <div className="space-y-4">
+      {/* ============================================================ */}
+      {/* MOBILE VIEW (< lg): Top Card + Dots Nav + Bottom Detail Card  */}
+      {/* ============================================================ */}
+      <div className="flex flex-col space-y-4 lg:hidden">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
+          SECTOR DEPTH
+        </p>
+
+        {/* Top Active Sector / Archetype Card */}
+        <div className="relative overflow-hidden rounded-2xl border border-[#2e3f33] bg-[#e5ebe6] p-5 shadow-sm">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={current.id}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#2e3f33] text-[#b49339] shadow-xs">
+                <Icon className="h-5 w-5 stroke-[2.2]" />
+              </span>
+
+              <h4 className="mt-3.5 text-base font-bold text-navy">
+                {current.title}
+              </h4>
+
+              <p className="mt-1.5 text-xs leading-relaxed text-muted">
+                {current.blurb}
+              </p>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Middle Navigation Controls: Left Arrow + Indicator Dots + Right Arrow */}
+        <div className="flex items-center justify-center gap-3 py-1">
+          <button
+            type="button"
+            onClick={() => goToCard(activeIndex - 1)}
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-white text-navy shadow-xs transition hover:border-[#2e3f33] hover:bg-[#e5ebe6]"
+            aria-label="Previous card"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+
+          {/* Dots corresponding to the 6 items in current batch */}
+          <div className="flex items-center gap-1.5">
+            {currentBatch.map((card, idx) => {
+              const globalIndex = page * 6 + idx;
+              const isOn = activeIndex === globalIndex;
+              return (
+                <button
+                  key={card.id}
+                  type="button"
+                  onClick={() => selectCard(globalIndex)}
+                  className={cn(
+                    "h-1.5 rounded-full transition-all duration-300",
+                    isOn ? "w-5 bg-[#2e3f33]" : "w-1.5 bg-[#cddcd1]"
+                  )}
+                  aria-label={`Go to ${card.title}`}
+                />
+              );
+            })}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => goToCard(activeIndex + 1)}
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-white text-navy shadow-xs transition hover:border-[#2e3f33] hover:bg-[#e5ebe6]"
+            aria-label="Next card"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+
+        {/* Bottom Detailed Green Card */}
+        <div className="relative flex flex-col justify-between overflow-hidden rounded-3xl bg-[#2e3f33] p-6 text-white shadow-xl">
+          {/* Ambient Glows */}
+          <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[#b49339]/15 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-8 left-10 h-32 w-32 rounded-full bg-white/10 blur-2xl" />
+
+          <div className="relative z-[1]">
+            <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-[#b49339] shadow-inner">
+              <Icon className="h-5 w-5 stroke-[2.2]" />
+            </span>
+
+            <p className="mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#b49339]">
+              {current.category === "sector" ? "Sector Vertical" : "Buyer Archetype"}
+            </p>
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={current.id}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <h3 className="mt-1.5 text-xl font-bold tracking-tight text-white">
+                  {current.title}
+                </h3>
+                <p className="mt-3 text-xs leading-relaxed text-[#d1e0d7] sm:text-sm">
+                  {current.detail}
+                </p>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          <div className="relative z-[1] mt-6 pt-4 border-t border-white/10">
+            <Link
+              href="/contact"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#b49339] px-6 py-3 text-sm font-bold text-[#0b1f3a] shadow-md transition hover:bg-white hover:text-[#2e3f33]"
+            >
+              Talk through your case
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* ============================================================ */}
+      {/* DESKTOP VIEW (lg+): 2-Column Grid (Left: 6 Cards, Right: Detail) */}
+      {/* ============================================================ */}
+      <div className="hidden lg:grid lg:grid-cols-[1.1fr_0.95fr] lg:gap-6 lg:items-stretch">
         {/* Left Column: 6 Cards per page with smooth auto-cycle transitions across all 12 */}
-        <div
-          className="relative h-full"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
+        <div className="relative h-full">
           <AnimatePresence mode="wait">
             <motion.div
               key={page}
@@ -193,9 +323,9 @@ export function WhoWeServe() {
                   <button
                     key={card.id}
                     type="button"
-                    onMouseEnter={() => setActiveIndex(globalIndex)}
-                    onFocus={() => setActiveIndex(globalIndex)}
-                    onClick={() => setActiveIndex(globalIndex)}
+                    onMouseEnter={() => selectCard(globalIndex)}
+                    onFocus={() => selectCard(globalIndex)}
+                    onClick={() => selectCard(globalIndex)}
                     className={cn(
                       "group relative flex flex-col justify-between overflow-hidden rounded-2xl border p-4 text-left transition-all duration-300",
                       isOn
@@ -271,8 +401,8 @@ export function WhoWeServe() {
         </div>
       </div>
 
-      {/* Navigation arrows aligned under left column */}
-      <div className="grid lg:grid-cols-[1.1fr_0.95fr] lg:gap-6">
+      {/* Navigation arrows aligned under left column on Desktop */}
+      <div className="hidden lg:grid lg:grid-cols-[1.1fr_0.95fr] lg:gap-6">
         <div className="flex items-center justify-center gap-3">
           <button
             type="button"
@@ -294,7 +424,7 @@ export function WhoWeServe() {
             <ChevronRight className="h-4 w-4" />
           </button>
         </div>
-        <div className="hidden lg:block" />
+        <div />
       </div>
     </div>
   );

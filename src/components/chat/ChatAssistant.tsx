@@ -62,7 +62,7 @@ function AlexAvatar({ size = 56, ring = true }: { size?: number; ring?: boolean 
 }
 
 export function ChatAssistant() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   /** Soft-dismiss of bubble only; returns when chat is closed again */
   const [bubbleSoftHidden, setBubbleSoftHidden] = useState(false);
   const [nodeId, setNodeId] = useState("start");

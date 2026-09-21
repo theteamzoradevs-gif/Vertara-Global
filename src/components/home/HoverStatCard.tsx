@@ -21,8 +21,8 @@ export function HoverStatCard({
   return (
     <div
       className={cn(
-        "group relative h-full overflow-hidden rounded-2xl border border-border bg-white p-5 transition-all duration-350 sm:p-6",
-        "hover:-translate-y-1 hover:border-accent hover:shadow-lg hover:shadow-accent/10",
+        "group relative h-full overflow-hidden rounded-2xl border border-[#cddcd1] bg-[#e5ebe6] p-4 sm:p-6 transition-all duration-350",
+        "hover:-translate-y-1 hover:border-[#2e3f33]/50 hover:shadow-md",
         className,
       )}
     >
@@ -30,13 +30,15 @@ export function HoverStatCard({
         aria-hidden
         className="pointer-events-none absolute inset-0 origin-bottom scale-y-0 bg-gradient-to-br from-accent-soft via-accent-soft/70 to-white transition-transform duration-500 ease-out group-hover:scale-y-100"
       />
-      <div className="relative">
-        <p className="metric-number text-3xl font-bold text-accent transition duration-300 group-hover:scale-[1.03] group-hover:text-accent-hover sm:text-4xl">
-          {stat}
-        </p>
-        <h3 className="mt-3 text-base font-bold text-navy sm:text-lg">{title}</h3>
-        <p className="mt-2 text-sm leading-relaxed text-muted">{detail}</p>
-        <p className="mt-3 max-h-0 overflow-hidden text-sm text-slate opacity-0 transition-all duration-400 group-hover:max-h-28 group-hover:opacity-100">
+      <div className="relative flex h-full flex-col justify-between">
+        <div>
+          <p className="metric-number text-2xl font-bold text-accent transition duration-300 group-hover:scale-[1.03] group-hover:text-accent-hover sm:text-4xl">
+            {stat}
+          </p>
+          <h3 className="mt-2 text-sm font-bold text-navy sm:mt-3 sm:text-lg leading-snug">{title}</h3>
+          <p className="mt-1.5 text-xs leading-relaxed text-muted sm:mt-2 sm:text-sm">{detail}</p>
+        </div>
+        <p className="mt-2 max-h-0 overflow-hidden text-xs text-slate opacity-0 transition-all duration-400 group-hover:max-h-28 group-hover:opacity-100 sm:mt-3 sm:text-sm">
           {hint}
         </p>
       </div>

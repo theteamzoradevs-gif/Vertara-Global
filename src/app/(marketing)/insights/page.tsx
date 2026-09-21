@@ -35,8 +35,8 @@ export default async function InsightsPage() {
               >
                 <div className="relative h-44">
                   <Image
-                    src={insight.coverImage}
-                    alt=""
+                    src={insight.coverImage?.trim() || "/images/gcc-ops.png"}
+                    alt={insight.title || "Insight cover"}
                     fill
                     className="object-cover transition duration-500 group-hover:scale-105"
                     sizes="33vw"

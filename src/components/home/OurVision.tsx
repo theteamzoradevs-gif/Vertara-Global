@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/ui/Reveal";
+import { Button } from "@/components/ui/Button";
 
 export function OurVision({
   image = "/images/About Us.jpeg",
@@ -45,6 +47,15 @@ export function OurVision({
                   <p className="text-sm leading-relaxed text-muted md:text-base">
                     Together: The guiding summit, a partner that leads organizations to the peak of their GCC ambition.
                   </p>
+                </div>
+              </Reveal>
+
+              <Reveal delay={0.18}>
+                <div className="pt-2 flex justify-center">
+                  <Button href="/about" size="md">
+                    Read more
+                    <ArrowRight className="h-4 w-4 ml-1" />
+                  </Button>
                 </div>
               </Reveal>
             </div>

@@ -38,7 +38,7 @@ export default async function CustomersPage() {
           {logos.map((logo: { name: string; logoText: string }) => (
             <div
               key={logo.name}
-              className="flex h-24 items-center justify-center rounded-xl border border-border bg-surface-elevated px-3 text-center text-sm font-semibold text-navy/70 transition hover:border-accent hover:text-navy hover:shadow-md"
+              className="flex h-20 items-center justify-center rounded-2xl border border-[#cddcd1] bg-[#e5ebe6] px-3 text-center text-sm font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2e3f33]/40 hover:shadow-md"
             >
               {logo.logoText}
             </div>
@@ -91,7 +91,13 @@ export default async function CustomersPage() {
             <Reveal key={cs.title}>
               <article className="overflow-hidden rounded-2xl border border-border bg-surface-elevated md:grid md:grid-cols-2">
                 <div className="relative min-h-[240px]">
-                  <Image src={cs.image} alt="" fill className="object-cover" sizes="50vw" />
+                  <Image
+                    src={cs.image?.trim() || "/images/gcc-floor.webp"}
+                    alt={cs.title || "Case study"}
+                    fill
+                    className="object-cover"
+                    sizes="50vw"
+                  />
                 </div>
                 <div className="p-6 md:p-8">
                   <p className="text-xs font-semibold uppercase tracking-wider text-accent">

@@ -25,8 +25,8 @@ export function HomeCaseStudies({ cases }: { cases: CaseItem[] }) {
           <article className="group overflow-hidden rounded-2xl border border-border bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-xl hover:shadow-navy/10 md:grid md:grid-cols-2">
             <div className="relative min-h-[220px] overflow-hidden sm:min-h-[260px]">
               <Image
-                src={cs.image}
-                alt=""
+                src={cs.image?.trim() || "/images/gcc-floor.webp"}
+                alt={cs.title || "Case study"}
                 fill
                 className="object-cover transition duration-700 group-hover:scale-105"
                 sizes="(max-width:768px) 100vw, 50vw"
