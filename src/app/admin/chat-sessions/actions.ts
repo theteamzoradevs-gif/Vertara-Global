@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import type { FilterQuery } from "mongoose";
+import type { QueryFilter } from "mongoose";
 import { connectDB } from "@/lib/db";
 import { ChatSession } from "@/models/ChatSession";
 import {
@@ -39,7 +39,7 @@ export async function listChatSessionsAction(filters: ChatSessionListFilters = {
     const pageSize = CHAT_SESSION_PAGE_SIZE;
     const search = (filters.search || "").trim();
 
-    const query: FilterQuery<unknown> = {
+    const query: QueryFilter<Record<string, unknown>> = {
       ...dateFilter(filters.datePreset),
     };
 
