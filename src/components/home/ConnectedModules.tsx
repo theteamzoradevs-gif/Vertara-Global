@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { Building2, Compass, Settings2, Users, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -31,15 +31,114 @@ type Module = {
 
 export function ConnectedModules({ modules }: { modules: Module[] }) {
   const [active, setActive] = useState<string | null>(modules[0]?.slug ?? null);
-  const current = modules.find((m) => m.slug === active) ?? modules[0];
+  const containerRef = useRef<HTMLDivElement>(null);
+  const pillsRef = useRef<HTMLDivElement>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const isTouchingRef = useRef(false);
+  const isInView = useInView(containerRef, { amount: 0.15 });
+
+  const activeIndex = modules.findIndex((m) => m.slug === (active ?? modules[0]?.slug));
+  const current = modules[activeIndex >= 0 ? activeIndex : 0] ?? modules[0];
   const detailImage =
     current?.image ||
     fallbackImages[current?.slug ?? ""] ||
     "/images/gcc-floor.webp";
 
+  const resetAutoSlide = () => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
+      if (isTouchingRef.current) return;
+      setActive((prev) => {
+        const idx = modules.findIndex((m) => m.slug === (prev ?? modules[0]?.slug));
+        const nextIdx = (idx + 1) % modules.length;
+        return modules[nextIdx].slug;
+      });
+    }, 2000);
+  };
+
+  // Continuous auto-slide timer that runs every 2s when in view
+  useEffect(() => {
+    if (!isInView) {
+      if (timerRef.current) clearInterval(timerRef.current);
+      return;
+    }
+    resetAutoSlide();
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [isInView, modules]);
+
+  // Center active pill horizontally on mobile without affecting page vertical scroll
+  useEffect(() => {
+    if (pillsRef.current && activeIndex >= 0) {
+      const container = pillsRef.current;
+      const activeBtn = container.children[activeIndex] as HTMLElement;
+      if (activeBtn) {
+        const targetLeft =
+          activeBtn.offsetLeft - (container.clientWidth - activeBtn.clientWidth) / 2;
+        container.scrollTo({
+          left: Math.max(0, targetLeft),
+          behavior: "smooth",
+        });
+      }
+    }
+  }, [activeIndex]);
+
+  const selectModule = (slug: string) => {
+    setActive(slug);
+    resetAutoSlide();
+  };
+
+  const handleTouchStart = () => {
+    isTouchingRef.current = true;
+  };
+
+  const handleTouchEnd = () => {
+    setTimeout(() => {
+      isTouchingRef.current = false;
+    }, 2500);
+  };
+
   // Solid white card — no thread overlay on content (threads stay on section only)
   return (
-    <div className="relative z-[1] overflow-hidden rounded-3xl border border-border bg-white px-3 py-6 shadow-sm sm:px-6 sm:py-8 lg:px-8">
+    <div
+      ref={containerRef}
+      className="relative z-[1] overflow-visible rounded-3xl border-0 bg-transparent p-0 shadow-none sm:overflow-hidden sm:border sm:border-border sm:bg-white sm:px-6 sm:py-8 lg:px-8 sm:shadow-sm"
+    >
+      {/* Mobile-only horizontal module selector pills */}
+      <div
+        ref={pillsRef}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        className="flex gap-2.5 overflow-x-auto pb-3.5 pt-1 px-1 scrollbar-none sm:hidden"
+      >
+        {modules.map((mod) => {
+          const Icon = icons[mod.icon as keyof typeof icons] ?? Users;
+          const isActive = (active ?? modules[0]?.slug) === mod.slug;
+          return (
+            <button
+              key={mod.slug}
+              type="button"
+              onClick={() => selectModule(mod.slug)}
+              className={cn(
+                "inline-flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition-all duration-200",
+                isActive
+                  ? "bg-[#2e3f33] text-white shadow-sm"
+                  : "border border-border bg-white text-navy hover:border-[#2e3f33]/40"
+              )}
+            >
+              <Icon
+                className={cn(
+                  "h-3.5 w-3.5 shrink-0",
+                  isActive ? "text-[#b49339]" : "text-[#2e3f33]"
+                )}
+              />
+              <span>{mod.name}</span>
+            </button>
+          );
+        })}
+      </div>
+
       <div className="relative grid items-center gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1fr)] lg:gap-16 xl:gap-20">
         <div className="relative mx-auto hidden aspect-square w-full max-w-[420px] sm:block lg:max-w-[460px]">
           <div className="absolute inset-[20%] rounded-full border border-dashed border-accent/40" />
@@ -59,7 +158,7 @@ export function ConnectedModules({ modules }: { modules: Module[] }) {
             const x = 50 + radius * Math.cos(angle);
             const y = 50 + radius * Math.sin(angle);
             const Icon = icons[mod.icon as keyof typeof icons] ?? Users;
-            const isActive = active === mod.slug;
+            const isActive = (active ?? modules[0]?.slug) === mod.slug;
             return (
               <button
                 key={mod.slug}
@@ -71,9 +170,9 @@ export function ConnectedModules({ modules }: { modules: Module[] }) {
                     ? "z-10 border-accent shadow-accent/20 ring-2 ring-accent/30"
                     : "border-border hover:border-accent/50",
                 )}
-                onMouseEnter={() => setActive(mod.slug)}
-                onFocus={() => setActive(mod.slug)}
-                onClick={() => setActive(mod.slug)}
+                onMouseEnter={() => selectModule(mod.slug)}
+                onFocus={() => selectModule(mod.slug)}
+                onClick={() => selectModule(mod.slug)}
               >
                 <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-accent-soft text-accent">
                   <Icon className="h-4 w-4" />
@@ -137,24 +236,6 @@ export function ConnectedModules({ modules }: { modules: Module[] }) {
               </motion.div>
             ) : null}
           </AnimatePresence>
-
-          <div className="grid gap-2 border-t border-border p-3 sm:hidden">
-            {modules.map((mod) => (
-              <button
-                key={mod.slug}
-                type="button"
-                onClick={() => setActive(mod.slug)}
-                className={cn(
-                  "rounded-xl border px-4 py-3 text-left text-sm font-medium transition-colors",
-                  active === mod.slug
-                    ? "border-accent bg-accent-soft text-navy"
-                    : "border-border text-slate",
-                )}
-              >
-                {mod.name}
-              </button>
-            ))}
-          </div>
         </div>
       </div>
     </div>

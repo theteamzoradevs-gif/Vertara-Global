@@ -88,7 +88,7 @@ function CellView({
         className={cn(
           "inline-flex items-center justify-center rounded-full",
           compact ? "h-5 w-5" : "h-7 w-7",
-          ours ? "bg-accent text-white" : "bg-emerald-50 text-emerald-700",
+          ours ? "bg-accent text-white" : "bg-slate-100 text-slate-600",
         )}
       >
         <Check className={compact ? "h-3 w-3" : "h-3.5 w-3.5"} strokeWidth={2.5} />

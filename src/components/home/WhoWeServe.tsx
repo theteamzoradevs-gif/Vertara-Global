@@ -139,6 +139,10 @@ const allCards = [
 export function WhoWeServe() {
   const [activeIndex, setActiveIndex] = useState(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const mobileTrackRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { amount: 0.1 });
+  const isTouchingRef = useRef(false);
 
   const page = Math.floor(activeIndex / 6);
   const current = allCards[activeIndex] ?? allCards[0];
@@ -150,17 +154,70 @@ export function WhoWeServe() {
   const resetAutoSlide = () => {
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => {
+      if (isTouchingRef.current) return;
       setActiveIndex((prev) => (prev + 1) % allCards.length);
-    }, 1500);
+    }, 2000);
   };
 
-  // Continuous auto-slide timer that starts on mount and resets gracefully on manual clicks
+  // Continuous auto-slide timer that runs when in view and resets gracefully on interaction
   useEffect(() => {
+    if (!isInView) {
+      if (timerRef.current) clearInterval(timerRef.current);
+      return;
+    }
     resetAutoSlide();
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, []);
+  }, [isInView]);
+
+  // Center active card horizontally strictly within its container (never touches window scroll)
+  useEffect(() => {
+    if (mobileTrackRef.current) {
+      const container = mobileTrackRef.current;
+      const cardEl = container.children[activeIndex] as HTMLElement;
+      if (cardEl) {
+        const targetLeft =
+          cardEl.offsetLeft - (container.clientWidth - cardEl.clientWidth) / 2;
+        container.scrollTo({
+          left: Math.max(0, targetLeft),
+          behavior: "smooth",
+        });
+      }
+    }
+  }, [activeIndex]);
+
+  const handleTouchStart = () => {
+    isTouchingRef.current = true;
+  };
+
+  const handleTouchEnd = () => {
+    setTimeout(() => {
+      isTouchingRef.current = false;
+    }, 2500);
+  };
+
+  const handleScroll = () => {
+    if (!isTouchingRef.current || !mobileTrackRef.current) return;
+    const container = mobileTrackRef.current;
+    const scrollCenter = container.scrollLeft + container.clientWidth / 2;
+    const children = Array.from(container.children) as HTMLElement[];
+
+    let closestIndex = 0;
+    let minDistance = Infinity;
+    children.forEach((child, index) => {
+      const childCenter = child.offsetLeft + child.clientWidth / 2;
+      const distance = Math.abs(scrollCenter - childCenter);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestIndex = index;
+      }
+    });
+
+    if (closestIndex !== activeIndex && minDistance < 50) {
+      setActiveIndex(closestIndex);
+    }
+  };
 
   const goToPage = (newPage: number) => {
     const clamped = Math.max(0, Math.min(totalPages - 1, newPage));
@@ -180,38 +237,62 @@ export function WhoWeServe() {
   };
 
   return (
-    <div className="space-y-4">
+    <div ref={containerRef} className="space-y-4">
       {/* ============================================================ */}
-      {/* MOBILE VIEW (< lg): Top Card + Dots Nav + Bottom Detail Card  */}
+      {/* MOBILE VIEW (< lg): All Cards Carousel + Controls + Detail   */}
       {/* ============================================================ */}
       <div className="flex flex-col space-y-4 lg:hidden">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
-          SECTOR DEPTH
+          SECTOR DEPTH & BUYER ARCHETYPES
         </p>
 
-        {/* Top Active Sector / Archetype Card */}
-        <div className="relative overflow-hidden rounded-2xl border border-[#2e3f33] bg-[#e5ebe6] p-5 shadow-sm">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={current.id}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#2e3f33] text-[#b49339] shadow-xs">
-                <Icon className="h-5 w-5 stroke-[2.2]" />
-              </span>
+        {/* All Cards Horizontal Scroll Track */}
+        <div
+          ref={mobileTrackRef}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          onScroll={handleScroll}
+          className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-none -mx-4 px-4"
+        >
+          {allCards.map((card, idx) => {
+            const CardIcon = card.icon;
+            const isOn = activeIndex === idx;
 
-              <h4 className="mt-3.5 text-base font-bold text-navy">
-                {current.title}
-              </h4>
+            return (
+              <button
+                key={card.id}
+                type="button"
+                onClick={() => selectCard(idx)}
+                className={cn(
+                  "w-[75vw] max-w-[270px] shrink-0 snap-center rounded-2xl border p-4 text-left transition-all duration-300 flex flex-col justify-between",
+                  isOn
+                    ? "border-[#2e3f33] bg-[#e5ebe6] shadow-md shadow-[#2e3f33]/10"
+                    : "border-border bg-white text-navy hover:border-[#2e3f33]/40"
+                )}
+              >
+                <div>
+                  <span
+                    className={cn(
+                      "inline-flex h-9 w-9 items-center justify-center rounded-xl transition-colors duration-300",
+                      isOn
+                        ? "bg-[#2e3f33] text-[#b49339] shadow-xs"
+                        : "bg-[#e5ebe6] text-[#2e3f33]"
+                    )}
+                  >
+                    <CardIcon className="h-4 w-4 stroke-[2.2]" />
+                  </span>
 
-              <p className="mt-1.5 text-xs leading-relaxed text-muted">
-                {current.blurb}
-              </p>
-            </motion.div>
-          </AnimatePresence>
+                  <h4 className="mt-3 text-sm font-bold text-navy line-clamp-1">
+                    {card.title}
+                  </h4>
+
+                  <p className="mt-1 text-xs leading-relaxed text-muted line-clamp-2">
+                    {card.blurb}
+                  </p>
+                </div>
+              </button>
+            );
+          })}
         </div>
 
         {/* Middle Navigation Controls: Left Arrow + Indicator Dots + Right Arrow */}
@@ -219,22 +300,21 @@ export function WhoWeServe() {
           <button
             type="button"
             onClick={() => goToCard(activeIndex - 1)}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-white text-navy shadow-xs transition hover:border-[#2e3f33] hover:bg-[#e5ebe6]"
+            className="p-1 text-[#2e3f33] transition-colors hover:text-[#b49339] active:scale-90"
             aria-label="Previous card"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-5 w-5 stroke-[2.5]" />
           </button>
 
-          {/* Dots corresponding to the 6 items in current batch */}
-          <div className="flex items-center gap-1.5">
-            {currentBatch.map((card, idx) => {
-              const globalIndex = page * 6 + idx;
-              const isOn = activeIndex === globalIndex;
+          {/* Dots corresponding to all 12 cards */}
+          <div className="flex items-center gap-1.5 flex-wrap justify-center max-w-[220px]">
+            {allCards.map((card, idx) => {
+              const isOn = activeIndex === idx;
               return (
                 <button
                   key={card.id}
                   type="button"
-                  onClick={() => selectCard(globalIndex)}
+                  onClick={() => selectCard(idx)}
                   className={cn(
                     "h-1.5 rounded-full transition-all duration-300",
                     isOn ? "w-5 bg-[#2e3f33]" : "w-1.5 bg-[#cddcd1]"
@@ -248,10 +328,10 @@ export function WhoWeServe() {
           <button
             type="button"
             onClick={() => goToCard(activeIndex + 1)}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-white text-navy shadow-xs transition hover:border-[#2e3f33] hover:bg-[#e5ebe6]"
+            className="p-1 text-[#2e3f33] transition-colors hover:text-[#b49339] active:scale-90"
             aria-label="Next card"
           >
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-5 w-5 stroke-[2.5]" />
           </button>
         </div>
 

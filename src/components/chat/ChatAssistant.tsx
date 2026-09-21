@@ -62,7 +62,7 @@ function AlexAvatar({ size = 56, ring = true }: { size?: number; ring?: boolean 
 }
 
 export function ChatAssistant() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   /** Soft-dismiss of bubble only; returns when chat is closed again */
   const [bubbleSoftHidden, setBubbleSoftHidden] = useState(false);
   const [nodeId, setNodeId] = useState("start");
@@ -132,65 +132,83 @@ export function ChatAssistant() {
     }
   }
 
-  function applyNode(nextId: string, userLabel: string) {
-    const next = chatNodes[nextId] ?? chatNodes.fallback;
-    setTyping(true);
-    const withUser: Msg[] = [...messages, { role: "user", text: userLabel }];
-    setMessages(withUser);
+  function goTo(nextNodeId: string, label: string) {
+    const userMsg: Msg = { role: "user", text: label };
+    const target = chatNodes[nextNodeId];
+    const botText = target?.bot ?? "Thanks! Connecting you with our team.";
+    const botMsg: Msg = { role: "bot", text: botText };
+    const nextMessages = [...messages, userMsg, botMsg];
+    const nextPath = [...path, nextNodeId];
 
-    window.setTimeout(() => {
-      const nextMessages: Msg[] = [
-        ...withUser,
-        { role: "bot", text: next.bot },
-      ];
-      const nextPath = [...path, next.id];
-      setMessages(nextMessages);
-      setPath(nextPath);
-      setNodeId(next.id);
-      setTyping(false);
-      void logSession(nextPath, nextMessages, next.id);
-    }, 450);
+    setMessages(nextMessages);
+    setPath(nextPath);
+    setNodeId(nextNodeId);
+    void logSession(nextPath, nextMessages, label);
   }
 
-  function goTo(nextId: string, userLabel: string) {
-    applyNode(nextId, userLabel);
-  }
-
-  function sendTyped(e?: React.FormEvent) {
-    e?.preventDefault();
+  async function sendTyped(e: React.FormEvent) {
+    e.preventDefault();
     const text = draft.trim();
     if (!text || typing) return;
+
     setDraft("");
-    const nextId = resolveUserMessage(text);
-    applyNode(nextId, text);
+    const userMsg: Msg = { role: "user", text };
+    const history = [...messages, userMsg];
+    setMessages(history);
+    setTyping(true);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sessionId: sid,
+          userMessage: text,
+          history,
+        }),
+      });
+      const data = await res.json();
+      const reply =
+        data.reply ||
+        "Thanks for sharing. A Vertara partner will follow up on this shortly.";
+      const finalMsgs = [...history, { role: "bot" as const, text: reply }];
+      setMessages(finalMsgs);
+    } catch {
+      setMessages([
+        ...history,
+        {
+          role: "bot",
+          text: "I’ve noted that. Would you like to leave your details for a partner callback?",
+        },
+      ]);
+    } finally {
+      setTyping(false);
+    }
   }
 
   async function submitLead(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const form = e.currentTarget;
+    const fd = new FormData(form);
     setSubmitting(true);
-    const form = new FormData(e.currentTarget);
     try {
       await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: form.get("name"),
-          company: form.get("company"),
-          email: form.get("email"),
-          phone: form.get("phone"),
-          intent: path[path.length - 1] || "chat",
-          source: "chat",
-          metadata: { sessionId: sid, path },
+          name: fd.get("name"),
+          email: fd.get("email"),
+          phone: fd.get("phone"),
+          source: "chat_assistant",
+          payload: { path, messages },
         }),
       });
       setLeadDone(true);
-      const nextMessages: Msg[] = [
-        ...messages,
-        {
-          role: "bot",
-          text: "Thanks — a partner will follow up within one business day.",
-        },
-      ];
+      const ack: Msg = {
+        role: "bot",
+        text: "Thank you — a partner will reach out within one business day.",
+      };
+      const nextMessages = [...messages, ack];
       setMessages(nextMessages);
       void logSession(path, nextMessages, "lead_captured");
     } finally {
@@ -201,49 +219,68 @@ export function ChatAssistant() {
   return (
     <>
       {!open ? (
-        <div className="fixed bottom-4 right-4 z-40 flex items-end gap-3 sm:bottom-5 sm:right-5">
-          <AnimatePresence>
+        <div className="fixed bottom-4 right-4 z-40 sm:bottom-5 sm:right-5">
+          <AnimatePresence mode="wait">
             {showBubble ? (
               <motion.div
-                initial={{ opacity: 0, x: 12, scale: 0.96 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                exit={{ opacity: 0, x: 8 }}
-                className="relative mb-1 max-w-[min(72vw,230px)] cursor-pointer rounded-2xl border border-border bg-white px-3 py-2.5 shadow-xl shadow-navy/10 sm:max-w-[230px] sm:px-4 sm:py-3"
-                onClick={openChat}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") openChat();
-                }}
+                key="preview-card"
+                initial={{ opacity: 0, y: 16, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.96 }}
+                transition={{ duration: 0.25 }}
+                className="w-[min(90vw,360px)] overflow-hidden rounded-2xl border border-border bg-white shadow-2xl shadow-navy/20"
               >
-                <button
-                  type="button"
-                  onClick={dismissBubble}
-                  className="absolute right-2 top-2 rounded-full p-0.5 text-muted hover:bg-surface"
-                  aria-label="Dismiss"
-                >
-                  <X className="h-3 w-3" />
-                </button>
-                <p className="pr-4 text-sm font-bold text-navy">Alex · online 24/7</p>
-                <p className="mt-0.5 text-xs text-muted">
-                  Type a question or book a quick call.
-                </p>
-                <span className="absolute -right-1.5 bottom-4 h-3 w-3 rotate-45 border-b border-r border-border bg-white" />
-              </motion.div>
-            ) : null}
-          </AnimatePresence>
+                {/* Header matching Image 2 */}
+                <div className="flex items-center justify-between bg-navy px-4 py-3 text-white">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <AlexAvatar size={38} ring={false} />
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold leading-tight">Alex</p>
+                      <p className="mt-0.5 text-xs text-white/70">
+                        Online 24/7 · type anytime
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={dismissBubble}
+                    className="rounded-full p-1.5 text-white/80 hover:bg-white/10 hover:text-white transition"
+                    aria-label="Close"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
 
-          <button
-            type="button"
-            onClick={openChat}
-            className="relative transition hover:scale-[1.03]"
-            aria-label="Chat with Alex — online 24/7"
-          >
-            <AlexAvatar size={58} />
-            <span className="absolute -left-1 -top-1 rounded-full bg-navy px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-emerald-300 shadow-md ring-1 ring-emerald-400/50">
-              24/7
-            </span>
-          </button>
+                {/* Message preview body matching Image 2 */}
+                <div
+                  onClick={openChat}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") openChat();
+                  }}
+                  className="cursor-pointer bg-white p-3.5 sm:p-4 transition hover:bg-slate-50/80"
+                >
+                  <div className="rounded-2xl border border-border bg-white p-3.5 text-sm leading-relaxed text-navy shadow-xs">
+                    Hi — I’m Alex. Ask me anything about GCC setup in India, or tap a quick topic below. I can also book you a short call with a partner.
+                  </div>
+                </div>
+              </motion.div>
+            ) : (
+              <button
+                key="avatar-button"
+                type="button"
+                onClick={openChat}
+                className="relative transition hover:scale-[1.03]"
+                aria-label="Chat with Alex — online 24/7"
+              >
+                <AlexAvatar size={58} />
+                <span className="absolute -left-1 -top-1 rounded-full bg-navy px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-emerald-300 shadow-md ring-1 ring-emerald-400/50">
+                  24/7
+                </span>
+              </button>
+            )}
+          </AnimatePresence>
         </div>
       ) : null}
 
@@ -259,12 +296,8 @@ export function ChatAssistant() {
               <div className="flex min-w-0 items-center gap-3">
                 <AlexAvatar size={40} ring={false} />
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold">Alex</p>
-                  <p className="flex items-center gap-1.5 text-xs text-white/70">
-                    <span className="relative inline-flex h-2 w-2">
-                      <span className="online-ping absolute inset-0 rounded-full bg-emerald-400" />
-                      <span className="online-glow relative block h-full w-full rounded-full bg-emerald-400" />
-                    </span>
+                  <p className="text-sm font-semibold leading-tight">Alex</p>
+                  <p className="mt-0.5 text-xs text-white/70">
                     Online 24/7 · type anytime
                   </p>
                 </div>

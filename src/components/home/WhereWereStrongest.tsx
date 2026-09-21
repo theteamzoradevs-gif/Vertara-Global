@@ -11,9 +11,8 @@ import {
   MapPin,
   GitBranch,
   Building2,
-  Sprout,
-  Maximize2,
-  Handshake,
+  BarChart3,
+  UsersRound,
   Cpu,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -87,19 +86,19 @@ const triggerSteps: TriggerStep[] = [
   {
     step: "02",
     title: "Scaling GCCs",
-    icon: Sprout,
+    icon: BarChart3,
     description: "Cost centre → capability hub → innovation centre",
   },
   {
     step: "03",
     title: "Existing GCCs going Tier-2",
-    icon: Maximize2,
+    icon: MapPin,
     description: "Second location, without duplicating governance",
   },
   {
     step: "04",
     title: "Investor-backed firms",
-    icon: Handshake,
+    icon: UsersRound,
     description: "Rapid, compliant scale",
   },
   {
@@ -128,15 +127,17 @@ export function WhereWereStrongest() {
     return () => clearInterval(timer);
   }, [isInView, isHovered]);
 
-  // Keep active pill centered in horizontal scroll on mobile
+  // Keep active pill centered in horizontal scroll on mobile without affecting window scroll
   useEffect(() => {
     if (pillsRef.current) {
-      const activeBtn = pillsRef.current.children[activeStrength] as HTMLElement;
+      const container = pillsRef.current;
+      const activeBtn = container.children[activeStrength] as HTMLElement;
       if (activeBtn) {
-        activeBtn.scrollIntoView({
+        const targetLeft =
+          activeBtn.offsetLeft - (container.clientWidth - activeBtn.clientWidth) / 2;
+        container.scrollTo({
+          left: Math.max(0, targetLeft),
           behavior: "smooth",
-          block: "nearest",
-          inline: "center",
         });
       }
     }
@@ -149,32 +150,23 @@ export function WhereWereStrongest() {
     <section
       id="where-were-strongest"
       ref={containerRef}
+      className="relative overflow-hidden border-t border-border bg-surface-elevated py-16 md:py-20"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative w-full overflow-hidden bg-white py-16 md:py-24"
     >
       <div className="relative z-[1] mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mb-10 max-w-3xl md:mb-14"
-        >
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
-            Where We&apos;re Strongest
+        {/* Section Header: Eyebrow + Title + Subtitle */}
+        <div className="max-w-3xl">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#b49339] sm:text-sm">
+            WHERE WE&apos;RE STRONGEST
           </p>
-          <h2 className="text-3xl font-bold tracking-tight text-[#0b1f3a] sm:text-4xl">
-            Where We&apos;re Strongest Mid–Market GCCs
+          <h2 className="mt-2 text-2xl font-bold tracking-tight text-navy sm:text-3xl md:text-4xl">
+            Where Vertara wins on execution
           </h2>
-          <p className="mt-3 text-base leading-relaxed text-[#526171] sm:text-lg">
-            A GCC for a mid-market company needs different judgment than one for
-            a Fortune 500 different pace, different budget discipline, different
-            cities. This is the work we know best.
+          <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+            How we compare against generic consulting firms and offshore agencies
           </p>
-        </motion.div>
-
+        </div>
         {/* Interactive 6-Point Selector Layout */}
         <div className="mt-8 md:mt-10">
           {/* Mobile Horizontal Pill Selector */}
@@ -289,27 +281,40 @@ export function WhereWereStrongest() {
           </div>
         </div>
 
-        {/* Bullet Points List: CHOOSE VERTARA IF */}
-        <div className="mt-12 md:mt-16">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#b49339] sm:text-sm">
-            CHOOSE VERTARA IF
-          </p>
+        {/* CHOOSE VERTARA IF: 5 Points in a Single Row */}
+        <div className="mt-14 md:mt-18">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#b49339] sm:text-sm">
+              CHOOSE VERTARA IF
+            </p>
+          </div>
 
-          <ul className="mt-5 space-y-3 sm:mt-6 sm:space-y-3.5">
-            {triggerSteps.map((item) => (
-              <li
-                key={item.title}
-                className="flex items-start gap-3 text-sm leading-relaxed text-slate sm:text-base"
-              >
-                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#b49339]" />
-                <span>
-                  <strong className="font-bold text-navy">{item.title}</strong>
-                  {" – "}
-                  <span className="text-slate-600">{item.description}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
+          <div className="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-5 md:gap-6 lg:gap-8">
+            {triggerSteps.map((item) => {
+              const ItemIcon = item.icon;
+              return (
+                <div
+                  key={item.title}
+                  className="flex flex-col items-center text-center px-1"
+                >
+                  {/* Icon Circle */}
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#e5ebe6] text-[#2e3f33] shadow-xs transition-transform duration-300 hover:scale-105 sm:h-16 sm:w-16">
+                    <ItemIcon className="h-6 w-6 stroke-[2]" />
+                  </div>
+
+                  {/* Title */}
+                  <h4 className="mt-3.5 text-xs font-bold text-navy sm:text-sm leading-snug">
+                    {item.title}
+                  </h4>
+
+                  {/* Description */}
+                  <p className="mt-1.5 text-[11px] leading-relaxed text-muted sm:text-xs">
+                    {item.description}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
