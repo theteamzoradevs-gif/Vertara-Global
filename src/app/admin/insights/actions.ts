@@ -70,7 +70,7 @@ export async function createInsightAction(formData: FormData) {
       readTime,
       published: isPublished,
       featured,
-      publishedAt: isPublished ? new Date() : null,
+      ...(isPublished ? { publishedAt: new Date() } : {}),
     });
 
     revalidatePath("/insights");
