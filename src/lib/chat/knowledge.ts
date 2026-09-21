@@ -202,7 +202,7 @@ async function buildCorpus(): Promise<KnowledgeDoc[]> {
       .filter(Boolean)
       .join(" "),
     link: { href: "/about", label: "Open About" },
-    keywords: ["about", "company", "story", "mission", "who", "veratara"],
+    keywords: ["about", "company", "story", "mission", "who", "vertara", "veratara"],
   });
 
   docs.push({

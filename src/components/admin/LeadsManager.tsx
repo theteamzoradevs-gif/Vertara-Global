@@ -67,12 +67,12 @@ const SOURCE_LABELS: Record<string, { label: string; style: string }> = {
 };
 
 function defaultEmailDraft(lead: LeadItemData) {
-  const subject = "Re: your inquiry with Veratara Global";
-  const lines = [`Hi ${lead.name},`, "", "Thank you for reaching out to Veratara Global."];
+  const subject = "Re: your inquiry with Vertara Global";
+  const lines = [`Hi ${lead.name},`, "", "Thank you for reaching out to Vertara Global."];
   if (lead.message) {
     lines.push("", "You wrote:", lead.message);
   }
-  lines.push("", "- Veratara Global");
+  lines.push("", "- Vertara Global");
   return { subject, body: lines.join("\n") };
 }
 

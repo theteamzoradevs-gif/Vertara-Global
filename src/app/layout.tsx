@@ -17,8 +17,8 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "Veratara Global — Build & scale Global Capability Centers in India",
-    template: "%s · Veratara Global",
+    default: "Vertara Global — Build & scale Global Capability Centers in India",
+    template: "%s · Vertara Global",
   },
   description:
     "Enterprise GCC advisory and services: talent, workspace, business operations, and research & advisory — one connected system for India capability centers.",
