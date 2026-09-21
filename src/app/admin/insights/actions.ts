@@ -44,9 +44,7 @@ export async function createInsightAction(formData: FormData) {
     const excerpt = String(formData.get("excerpt") || "").trim();
     const body = String(formData.get("body") || "").trim();
     const category = String(formData.get("category") || "GCC Strategy").trim();
-    const coverImage =
-      String(formData.get("coverImage") || "").trim() ||
-      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80";
+    const coverImage = String(formData.get("coverImage") || "").trim();
     
     let readTime = String(formData.get("readTime") || "").trim();
     if (!readTime) {
@@ -54,6 +52,7 @@ export async function createInsightAction(formData: FormData) {
     }
 
     const isPublished = formData.get("published") === "true";
+    const featured = formData.get("featured") === "true";
 
     // Ensure slug uniqueness
     const existing = await Insight.findOne({ slug });
@@ -70,6 +69,7 @@ export async function createInsightAction(formData: FormData) {
       coverImage,
       readTime,
       published: isPublished,
+      featured,
       publishedAt: isPublished ? new Date() : null,
     });
 
@@ -77,6 +77,7 @@ export async function createInsightAction(formData: FormData) {
     revalidatePath(`/insights/${slug}`);
     revalidatePath("/admin/insights");
     revalidatePath("/");
+    revalidatePath("/", "layout");
 
     return { success: true, message: "Insight created successfully!" };
   } catch (err: unknown) {
@@ -120,6 +121,7 @@ export async function updateInsightAction(formData: FormData) {
     }
 
     const isPublished = formData.get("published") === "true";
+    const featured = formData.get("featured") === "true";
 
     const updateData: Record<string, unknown> = {
       title,
@@ -129,6 +131,7 @@ export async function updateInsightAction(formData: FormData) {
       category,
       readTime,
       published: isPublished,
+      featured,
     };
 
     if (coverImage) {
@@ -148,6 +151,7 @@ export async function updateInsightAction(formData: FormData) {
     revalidatePath(`/insights/${slug}`);
     revalidatePath("/admin/insights");
     revalidatePath("/");
+    revalidatePath("/", "layout");
 
     return { success: true, message: "Insight updated successfully!" };
   } catch (err: unknown) {
@@ -172,6 +176,7 @@ export async function toggleInsightStatusAction(id: string, currentPublished: bo
     revalidatePath("/insights");
     revalidatePath("/admin/insights");
     revalidatePath("/");
+    revalidatePath("/", "layout");
 
     return {
       success: true,
@@ -195,6 +200,7 @@ export async function deleteInsightAction(id: string) {
     revalidatePath("/insights");
     revalidatePath("/admin/insights");
     revalidatePath("/");
+    revalidatePath("/", "layout");
 
     return { success: true, message: "Insight deleted successfully." };
   } catch (err: unknown) {

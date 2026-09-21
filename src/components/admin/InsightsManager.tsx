@@ -16,6 +16,7 @@ import {
   Loader2,
   Check,
   ChevronDown,
+  Star,
 } from "lucide-react";
 import {
   createInsightAction,
@@ -34,6 +35,7 @@ export interface InsightItemData {
   category?: string;
   readTime?: string;
   published: boolean;
+  featured?: boolean;
   publishedAt?: string | Date;
   createdAt?: string | Date;
 }
@@ -63,6 +65,7 @@ export function InsightsManager({ initialInsights }: { initialInsights: InsightI
   const [formTitle, setFormTitle] = useState("");
   const [formSlug, setFormSlug] = useState("");
   const [formPublished, setFormPublished] = useState(true);
+  const [formFeatured, setFormFeatured] = useState(false);
   const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false);
   const statusDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -139,6 +142,7 @@ export function InsightsManager({ initialInsights }: { initialInsights: InsightI
     setIsCustomCategory(false);
     setCustomCategoryInput("");
     setFormPublished(true);
+    setFormFeatured(false);
     setIsStatusDropdownOpen(false);
     setMessage(null);
     setIsModalOpen(true);
@@ -152,6 +156,7 @@ export function InsightsManager({ initialInsights }: { initialInsights: InsightI
     setIsCustomCategory(false);
     setCustomCategoryInput("");
     setFormPublished(item.published);
+    setFormFeatured(Boolean(item.featured));
     setIsStatusDropdownOpen(false);
     setMessage(null);
     setIsModalOpen(true);
@@ -387,7 +392,15 @@ export function InsightsManager({ initialInsights }: { initialInsights: InsightI
                       )}
                       <div className="min-w-0 max-w-xs md:max-w-md">
                         <p className="font-semibold text-navy truncate">{item.title}</p>
-                        <p className="text-[11px] text-muted truncate">/insights/{item.slug}</p>
+                        <div className="flex items-center gap-2">
+                          <p className="text-[11px] text-muted truncate">/insights/{item.slug}</p>
+                          {item.featured ? (
+                            <span className="inline-flex items-center gap-1 rounded-lg bg-amber-50 px-1.5 py-0.5 text-[10px] font-semibold text-amber-700">
+                              <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+                              Homepage
+                            </span>
+                          ) : null}
+                        </div>
                       </div>
                     </div>
                   </td>
@@ -716,6 +729,24 @@ export function InsightsManager({ initialInsights }: { initialInsights: InsightI
                 <p className="mt-1.5 text-[11px] text-muted">
                   Draft stays hidden, Published goes live on the website.
                 </p>
+              </div>
+
+              <div className="flex items-start gap-2.5 rounded-xl border border-border bg-surface px-3.5 py-3">
+                <input
+                  type="checkbox"
+                  id="insight-featured"
+                  name="featured"
+                  value="true"
+                  checked={formFeatured}
+                  onChange={(e) => setFormFeatured(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 rounded border-border text-accent focus:ring-accent"
+                />
+                <label htmlFor="insight-featured" className="cursor-pointer">
+                  <span className="block text-xs font-semibold text-navy">Feature on Homepage</span>
+                  <span className="mt-0.5 block text-[11px] text-muted">
+                    Checked items appear in the homepage featured insights section.
+                  </span>
+                </label>
               </div>
 
               {/* Cover Image */}

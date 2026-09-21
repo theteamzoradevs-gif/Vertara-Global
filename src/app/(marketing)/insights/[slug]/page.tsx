@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { CmsImage } from "@/components/ui/CmsImage";
 import { notFound } from "next/navigation";
 import { Section } from "@/components/ui/Section";
 import { getInsightBySlug, getInsights } from "@/lib/content";
@@ -58,7 +58,7 @@ export default async function InsightArticlePage({
     <>
       <section className="relative bg-navy text-white">
         <div className="absolute inset-0 opacity-25">
-          <Image
+          <CmsImage
             src={insight.coverImage?.trim() || "/images/gcc-ops.png"}
             alt={insight.title || "Insight"}
             fill

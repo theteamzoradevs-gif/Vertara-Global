@@ -24,8 +24,8 @@ export default async function AdminDashboard() {
   }
 
   const cards = [
-    { label: "Total leads", value: leadCount, href: "/admin/leads" },
-    { label: "New leads", value: newLeads, href: "/admin/leads" },
+    { label: "Total leads", value: leadCount, href: "/admin/inquiries" },
+    { label: "New leads", value: newLeads, href: "/admin/inquiries" },
     { label: "Chat sessions", value: chatCount, href: "/admin/chat-sessions" },
     { label: "Insights", value: insightCount, href: "/admin/insights" },
     { label: "FAQs", value: faqCount, href: "/admin/faqs" },

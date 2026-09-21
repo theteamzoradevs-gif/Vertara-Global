@@ -35,7 +35,7 @@ export async function createTestimonialAction(formData: FormData) {
     });
 
     revalidatePath("/admin/testimonials");
-    revalidatePath("/customers");
+    revalidatePath("/case-studies");
     revalidatePath("/");
 
     return { success: true, message: "Testimonial created successfully!" };
@@ -81,7 +81,7 @@ export async function updateTestimonialAction(formData: FormData) {
     });
 
     revalidatePath("/admin/testimonials");
-    revalidatePath("/customers");
+    revalidatePath("/case-studies");
     revalidatePath("/");
 
     return { success: true, message: "Testimonial updated successfully!" };
@@ -102,7 +102,7 @@ export async function deleteTestimonialAction(id: string) {
     await Testimonial.findByIdAndDelete(id);
 
     revalidatePath("/admin/testimonials");
-    revalidatePath("/customers");
+    revalidatePath("/case-studies");
     revalidatePath("/");
 
     return { success: true, message: "Testimonial deleted successfully." };
@@ -139,7 +139,7 @@ export async function seedTestimonialsAction() {
     );
 
     revalidatePath("/admin/testimonials");
-    revalidatePath("/customers");
+    revalidatePath("/case-studies");
     revalidatePath("/");
 
     return {

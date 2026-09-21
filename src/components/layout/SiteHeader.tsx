@@ -62,7 +62,7 @@ const insightLinks = [
 
 const simpleLinks = [
   { href: "/engagement-models", label: "Engagement" },
-  { href: "/customers", label: "Customers" },
+  { href: "/case-studies", label: "Case Studies" },
   { href: "/about", label: "About" },
   { href: "/faq", label: "FAQ" },
 ];

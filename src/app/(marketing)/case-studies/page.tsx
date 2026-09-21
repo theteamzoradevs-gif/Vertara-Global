@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { CmsImage } from "@/components/ui/CmsImage";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
 import { CTABand } from "@/components/ui/CTABand";
@@ -10,21 +10,28 @@ import {
 } from "@/lib/content";
 
 export const metadata = {
-  title: "Customers",
+  title: "Case Studies",
   description: "Outcomes, capability areas, and operator voices from GCC programmes.",
 };
 
-export default async function CustomersPage() {
+export const dynamic = "force-dynamic";
+
+export default async function CaseStudiesPage() {
   const [cases, testimonials, logos] = await Promise.all([
     getCaseStudies(),
     getTestimonials(),
     getClientLogos(),
   ]);
 
+  const orderedCases = [
+    ...cases.filter((c: { featured?: boolean }) => c.featured === true),
+    ...cases.filter((c: { featured?: boolean }) => c.featured !== true),
+  ];
+
   return (
     <>
       <PageHero
-        title="Customers"
+        title="Case Studies"
         description="Outcomes from programmes that needed an India GCC with clear ownership and pace."
       />
 
@@ -78,7 +85,7 @@ export default async function CustomersPage() {
           description="Programme shapes with metric callouts — industry and service type only."
         />
         <div className="space-y-10">
-          {cases.map((cs: {
+          {orderedCases.map((cs: {
             title: string;
             client: string;
             industry: string;
@@ -86,12 +93,12 @@ export default async function CustomersPage() {
             approach: string;
             result: string;
             metrics: { label: string; value: string }[];
-            image: string;
+            image?: string;
           }) => (
             <Reveal key={cs.title}>
               <article className="overflow-hidden rounded-2xl border border-border bg-surface-elevated md:grid md:grid-cols-2">
-                <div className="relative min-h-[240px]">
-                  <Image
+                <div className="relative min-h-[240px] bg-surface">
+                  <CmsImage
                     src={cs.image?.trim() || "/images/gcc-floor.webp"}
                     alt={cs.title || "Case study"}
                     fill

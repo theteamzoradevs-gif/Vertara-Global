@@ -18,6 +18,7 @@ import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
 import { WhoWeServe } from "@/components/home/WhoWeServe";
 import { JourneySteps } from "@/components/home/JourneySteps";
 import { HomeCaseStudies } from "@/components/home/HomeCaseStudies";
+import { HomeInsights } from "@/components/home/HomeInsights";
 import {
   getSettings,
   getServices,
@@ -26,11 +27,14 @@ import {
   getFaqs,
   getEngagementModels,
   getCaseStudies,
+  getInsights,
 } from "@/lib/content";
 import { whyGccCards } from "@/data/seed-content";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
-  const [settings, services, testimonials, logos, faqs, models, cases] =
+  const [settings, services, testimonials, logos, faqs, models, cases, insights] =
     await Promise.all([
       getSettings(),
       getServices(),
@@ -39,9 +43,17 @@ export default async function HomePage() {
       getFaqs(),
       getEngagementModels(),
       getCaseStudies(),
+      getInsights(),
     ]);
 
-  const featuredCases = cases.filter((c: { featured?: boolean }) => c.featured).slice(0, 2);
+  const homepageCases = [
+    ...cases.filter((c: { featured?: boolean }) => c.featured === true),
+    ...cases.filter((c: { featured?: boolean }) => c.featured !== true),
+  ].slice(0, 2);
+  const homepageInsights = [
+    ...insights.filter((i: { featured?: boolean }) => i.featured === true),
+    ...insights.filter((i: { featured?: boolean }) => i.featured !== true),
+  ].slice(0, 3);
 
   return (
     <>
@@ -188,15 +200,31 @@ export default async function HomePage() {
         <SectionHeader
           eyebrow="Outcomes"
           title="Case studies from live programmes"
-          description="Challenge → result with metric callouts — same storytelling language as our customers page."
+          description="Challenge → result with metric callouts — same storytelling language as our case studies page."
         />
-        <HomeCaseStudies cases={featuredCases.length ? featuredCases : cases.slice(0, 2)} />
+        <HomeCaseStudies cases={homepageCases} />
         <div className="mt-8 flex justify-center sm:justify-start">
-          <Button href="/customers" variant="primary">
-            View all customer stories
+          <Button href="/case-studies" variant="outline">
+            View all case studies
           </Button>
         </div>
       </Section>
+
+      {homepageInsights.length > 0 ? (
+        <Section>
+          <SectionHeader
+            eyebrow="Insights"
+            title="Practical reading for GCC leaders"
+            description="Perspectives on strategy, talent, location, and engagement — featured from the insights library."
+          />
+          <HomeInsights insights={homepageInsights} />
+          <div className="mt-8">
+            <Button href="/insights" variant="outline">
+              View all insights
+            </Button>
+          </div>
+        </Section>
+      ) : null}
 
       <Section tone="muted">
         <SectionHeader
