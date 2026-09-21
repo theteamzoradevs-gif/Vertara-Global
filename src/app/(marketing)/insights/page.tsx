@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { CmsImage } from "@/components/ui/CmsImage";
 import { Section } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
 import { PageHero } from "@/components/ui/PageHero";
@@ -10,8 +10,14 @@ export const metadata = {
   description: "Perspectives on GCC strategy, talent, location, and engagement models.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function InsightsPage() {
   const insights = await getInsights();
+  const orderedInsights = [
+    ...insights.filter((i: { featured?: boolean }) => i.featured === true),
+    ...insights.filter((i: { featured?: boolean }) => i.featured !== true),
+  ];
 
   return (
     <>
@@ -21,7 +27,7 @@ export default async function InsightsPage() {
       />
       <Section>
         <div className="grid gap-6 md:grid-cols-3">
-          {insights.map((insight: {
+          {orderedInsights.map((insight: {
             slug: string;
             title: string;
             excerpt: string;
@@ -33,8 +39,8 @@ export default async function InsightsPage() {
                 href={`/insights/${insight.slug}`}
                 className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface-elevated transition hover:-translate-y-1 hover:shadow-lg"
               >
-                <div className="relative h-44">
-                  <Image
+                <div className="relative h-44 bg-surface">
+                  <CmsImage
                     src={insight.coverImage}
                     alt=""
                     fill

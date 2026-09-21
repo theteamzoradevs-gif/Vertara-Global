@@ -16,6 +16,8 @@ import {
   Clock,
   MessageSquare,
   Target,
+  Copy,
+  ExternalLink,
 } from "lucide-react";
 import {
   updateLeadStatusAction,
@@ -64,6 +66,27 @@ const SOURCE_LABELS: Record<string, { label: string; style: string }> = {
   },
 };
 
+function defaultEmailDraft(lead: LeadItemData) {
+  const subject = "Re: your inquiry with Veratara Global";
+  const lines = [`Hi ${lead.name},`, "", "Thank you for reaching out to Veratara Global."];
+  if (lead.message) {
+    lines.push("", "You wrote:", lead.message);
+  }
+  lines.push("", "- Veratara Global");
+  return { subject, body: lines.join("\n") };
+}
+
+function gmailComposeUrl(to: string, subject: string, body: string) {
+  const params = new URLSearchParams({
+    view: "cm",
+    fs: "1",
+    to,
+    su: subject,
+    body,
+  });
+  return `https://mail.google.com/mail/?${params.toString()}`;
+}
+
 export function LeadsManager({
   initialLeads,
   isDbConnected,
@@ -71,11 +94,12 @@ export function LeadsManager({
   const [leads, setLeads] = useState<LeadItemData[]>(initialLeads);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [sourceFilter, setSourceFilter] = useState<string>("all");
 
   // Modal states
   const [selectedLead, setSelectedLead] = useState<LeadItemData | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [emailingLead, setEmailingLead] = useState<LeadItemData | null>(null);
+  const [emailSubject, setEmailSubject] = useState("");
 
   // Status message state
   const [toastMessage, setToastMessage] = useState<{
@@ -92,10 +116,39 @@ export function LeadsManager({
     }, 4000);
   };
 
+  const openEmailComposer = (lead: LeadItemData) => {
+    if (!lead.email) {
+      showToast("error", "This inquiry has no email address.");
+      return;
+    }
+    const draft = defaultEmailDraft(lead);
+    setEmailingLead(lead);
+    setEmailSubject(draft.subject);
+  };
+
+  const openGmailCompose = () => {
+    if (!emailingLead?.email) return;
+    const { body } = defaultEmailDraft(emailingLead);
+    window.open(
+      gmailComposeUrl(emailingLead.email, emailSubject, body),
+      "_blank",
+      "noopener,noreferrer",
+    );
+  };
+
+  const copyInquiryEmail = async () => {
+    if (!emailingLead?.email) return;
+    try {
+      await navigator.clipboard.writeText(emailingLead.email);
+      showToast("success", "Email address copied.");
+    } catch {
+      showToast("error", "Could not copy email address.");
+    }
+  };
+
   // Metrics count
   const newCount = leads.filter((l) => l.status === "new").length;
   const contactedCount = leads.filter((l) => l.status === "contacted").length;
-  const archivedCount = leads.filter((l) => l.status === "archived").length;
 
   // Filtered leads
   const filteredLeads = leads.filter((lead) => {
@@ -109,10 +162,8 @@ export function LeadsManager({
 
     const matchesStatus =
       statusFilter === "all" || lead.status === statusFilter;
-    const matchesSource =
-      sourceFilter === "all" || lead.source === sourceFilter;
 
-    return matchesSearch && matchesStatus && matchesSource;
+    return matchesSearch && matchesStatus;
   });
 
   // Handle Status Update
@@ -183,7 +234,7 @@ export function LeadsManager({
         <div className="flex items-center gap-3 rounded-xl border border-amber-300/80 bg-amber-50 p-4 text-amber-900 shadow-xs">
           <AlertCircle className="h-5 w-5 shrink-0 text-amber-600" />
           <p className="text-sm font-medium">
-            Database connection is unavailable. Real inquiries will sync automatically when connected.
+            Database is offline. Inquiries will load when connected.
           </p>
         </div>
       )}
@@ -191,30 +242,26 @@ export function LeadsManager({
       {/* Header & Metrics */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-navy">Leads Inbox</h1>
+          <h1 className="text-2xl font-bold text-navy">Inquiries</h1>
           <p className="mt-1 text-sm text-muted">
-            Unified inbox — contact form, trust pop, chat sessions, and engagement selector.
+            Form and chat inquiries from the website.
           </p>
         </div>
       </div>
 
       {/* Metrics Row */}
-      <div className="grid gap-4 grid-cols-2 sm:grid-cols-4">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
         <div className="rounded-2xl border border-border bg-surface-elevated p-4 shadow-xs">
           <p className="text-xs text-muted font-medium">Total Inquiries</p>
           <p className="mt-1 text-2xl font-bold text-navy">{leads.length}</p>
         </div>
         <div className="rounded-2xl border border-border bg-surface-elevated p-4 shadow-xs">
-          <p className="text-xs text-muted font-medium">New / Unread</p>
+          <p className="text-xs text-muted font-medium">New</p>
           <p className="mt-1 text-2xl font-bold text-teal-600">{newCount}</p>
         </div>
         <div className="rounded-2xl border border-border bg-surface-elevated p-4 shadow-xs">
           <p className="text-xs text-muted font-medium">Contacted</p>
           <p className="mt-1 text-2xl font-bold text-blue-600">{contactedCount}</p>
-        </div>
-        <div className="rounded-2xl border border-border bg-surface-elevated p-4 shadow-xs">
-          <p className="text-xs text-muted font-medium">Archived</p>
-          <p className="mt-1 text-2xl font-bold text-slate-500">{archivedCount}</p>
         </div>
       </div>
 
@@ -225,7 +272,7 @@ export function LeadsManager({
           <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
-            placeholder="Search leads by name, email, company..."
+            placeholder="Search inquiries by name, email, company..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full rounded-xl border border-border bg-surface pl-10 pr-4 py-2 text-sm text-navy placeholder:text-slate-400 focus:border-accent focus:outline-none"
@@ -236,7 +283,7 @@ export function LeadsManager({
         <div className="flex flex-wrap items-center gap-3">
           {/* Status Filter */}
           <div className="flex items-center gap-1.5 rounded-xl border border-border bg-surface p-1 text-xs">
-            {(["all", "new", "contacted", "archived"] as const).map((st) => (
+            {(["all", "new", "contacted"] as const).map((st) => (
               <button
                 key={st}
                 onClick={() => setStatusFilter(st)}
@@ -250,19 +297,6 @@ export function LeadsManager({
               </button>
             ))}
           </div>
-
-          {/* Source Channel Filter */}
-          <select
-            value={sourceFilter}
-            onChange={(e) => setSourceFilter(e.target.value)}
-            className="rounded-xl border border-border bg-surface px-3 py-2 text-xs font-semibold text-navy focus:border-accent focus:outline-none cursor-pointer"
-          >
-            <option value="all">All Sources</option>
-            <option value="contact">Contact Form</option>
-            <option value="trust_pop">Trust Pop</option>
-            <option value="chat">Live Chat</option>
-            <option value="engagement_selector">Engagement Selector</option>
-          </select>
         </div>
       </div>
 
@@ -287,11 +321,11 @@ export function LeadsManager({
                   <td colSpan={7} className="px-5 py-12 text-center text-muted">
                     <div className="flex flex-col items-center justify-center">
                       <Inbox className="h-10 w-10 text-slate-300" />
-                      <p className="mt-3 text-base font-semibold text-navy">No leads found</p>
+                      <p className="mt-3 text-base font-semibold text-navy">No inquiries found</p>
                       <p className="mt-1 text-xs text-muted">
-                        {searchQuery || statusFilter !== "all" || sourceFilter !== "all"
-                          ? "Try adjusting your search or filter settings."
-                          : "New inquiries from your website will appear here in real-time."}
+                        {searchQuery || statusFilter !== "all"
+                          ? "Try a different search or status."
+                          : "New inquiries will show up here."}
                       </p>
                     </div>
                   </td>
@@ -326,7 +360,7 @@ export function LeadsManager({
 
                       {/* Company & Email */}
                       <td className="px-5 py-4">
-                        <p className="font-semibold text-navy">{lead.company || "—"}</p>
+                        <p className="font-semibold text-navy">{lead.company || "-"}</p>
                         {lead.email && (
                           <p className="text-xs text-muted mt-0.5 flex items-center gap-1">
                             <Mail className="h-3 w-3 text-slate-400" />
@@ -347,14 +381,14 @@ export function LeadsManager({
                       {/* Intent */}
                       <td className="px-5 py-4">
                         <span className="text-xs font-medium text-navy max-w-[200px] truncate block">
-                          {lead.intent || "—"}
+                          {lead.intent || "-"}
                         </span>
                       </td>
 
                       {/* Status Selector Pills */}
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-1">
-                          {(["new", "contacted", "archived"] as const).map((st) => (
+                          {(["new", "contacted"] as const).map((st) => (
                             <button
                               key={st}
                               onClick={() => handleStatusUpdate(lead._id, st)}
@@ -363,9 +397,7 @@ export function LeadsManager({
                                 lead.status === st
                                   ? st === "new"
                                     ? "bg-teal-600 text-white shadow-xs"
-                                    : st === "contacted"
-                                    ? "bg-blue-600 text-white shadow-xs"
-                                    : "bg-slate-600 text-white shadow-xs"
+                                    : "bg-blue-600 text-white shadow-xs"
                                   : "bg-surface text-slate-500 hover:bg-surface-elevated hover:text-navy border border-border"
                               }`}
                             >
@@ -387,16 +419,33 @@ export function LeadsManager({
                       {/* Actions */}
                       <td className="px-5 py-4 text-right">
                         <div className="flex items-center justify-end gap-1">
+                          {lead.email ? (
+                            <button
+                              type="button"
+                              onClick={() => openEmailComposer(lead)}
+                              title={`Email ${lead.email}`}
+                              className="rounded-lg p-1.5 text-slate-500 hover:bg-accent-soft hover:text-accent"
+                            >
+                              <Mail className="h-4 w-4" />
+                            </button>
+                          ) : (
+                            <span
+                              title="No email provided"
+                              className="rounded-lg p-1.5 text-slate-300 cursor-not-allowed"
+                            >
+                              <Mail className="h-4 w-4" />
+                            </span>
+                          )}
                           <button
                             onClick={() => setSelectedLead(lead)}
-                            title="View Full Inquiry Details"
+                            title="View inquiry"
                             className="rounded-lg p-1.5 text-slate-500 hover:bg-surface hover:text-navy"
                           >
                             <Eye className="h-4 w-4" />
                           </button>
                           <button
                             onClick={() => setDeletingId(lead._id)}
-                            title="Delete Lead"
+                            title="Delete inquiry"
                             className="rounded-lg p-1.5 text-slate-500 hover:bg-rose-50 hover:text-rose-600"
                           >
                             <Trash2 className="h-4 w-4" />
@@ -455,12 +504,13 @@ export function LeadsManager({
                   </p>
                   <p className="mt-1 text-sm font-bold text-navy">
                     {selectedLead.email ? (
-                      <a
-                        href={`mailto:${selectedLead.email}`}
+                      <button
+                        type="button"
+                        onClick={() => openEmailComposer(selectedLead)}
                         className="text-accent hover:underline"
                       >
                         {selectedLead.email}
-                      </a>
+                      </button>
                     ) : (
                       "Not provided"
                     )}
@@ -502,7 +552,7 @@ export function LeadsManager({
                 <div className="rounded-xl border border-border bg-surface p-3.5">
                   <p className="text-xs font-semibold uppercase tracking-wider text-muted flex items-center gap-1">
                     <Target className="h-3.5 w-3.5 text-accent" />
-                    Primary Intent / Interest
+                    Intent
                   </p>
                   <p className="mt-1 text-sm font-bold text-navy">
                     {selectedLead.intent}
@@ -514,19 +564,19 @@ export function LeadsManager({
               <div className="rounded-xl border border-border bg-surface p-4">
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted flex items-center gap-1">
                   <MessageSquare className="h-3.5 w-3.5 text-slate-400" />
-                  Inquiry Message / Notes
+                  Inquiry message
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-slate font-normal whitespace-pre-wrap">
-                  {selectedLead.message || "No message body recorded for this lead."}
+                  {selectedLead.message || "No message recorded."}
                 </p>
               </div>
 
               {/* Status Updater in Modal */}
               <div className="flex items-center justify-between border-t border-border pt-4">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-navy">Set Status:</span>
+                  <span className="text-xs font-bold text-navy">Status:</span>
                   <div className="flex items-center gap-1">
-                    {(["new", "contacted", "archived"] as const).map((st) => (
+                    {(["new", "contacted"] as const).map((st) => (
                       <button
                         key={st}
                         onClick={() => handleStatusUpdate(selectedLead._id, st)}
@@ -535,9 +585,7 @@ export function LeadsManager({
                           selectedLead.status === st
                             ? st === "new"
                               ? "bg-teal-600 text-white"
-                              : st === "contacted"
-                              ? "bg-blue-600 text-white"
-                              : "bg-slate-600 text-white"
+                              : "bg-blue-600 text-white"
                             : "bg-surface text-slate-500 hover:bg-surface-elevated hover:text-navy border border-border"
                         }`}
                       >
@@ -560,14 +608,82 @@ export function LeadsManager({
         </div>
       )}
 
+      {/* Email compose modal */}
+      {emailingLead && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-lg rounded-2xl border border-border bg-surface-elevated p-6 shadow-xl">
+            <div className="flex items-center justify-between border-b border-border pb-4">
+              <div>
+                <h3 className="text-lg font-bold text-navy">Email inquiry</h3>
+                <p className="mt-0.5 text-xs text-muted">{emailingLead.name}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setEmailingLead(null)}
+                className="rounded-lg p-1 text-slate-400 hover:bg-surface hover:text-slate-600"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="mt-4 space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-navy mb-1">To</label>
+                <div className="flex items-center gap-2">
+                  <input
+                    readOnly
+                    value={emailingLead.email || ""}
+                    className="w-full rounded-xl border border-border bg-surface px-3.5 py-2 text-sm text-navy"
+                  />
+                  <button
+                    type="button"
+                    onClick={copyInquiryEmail}
+                    title="Copy email"
+                    className="rounded-xl border border-border p-2 text-slate-500 hover:bg-surface hover:text-navy"
+                  >
+                    <Copy className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-navy mb-1">Subject</label>
+                <input
+                  value={emailSubject}
+                  onChange={(e) => setEmailSubject(e.target.value)}
+                  className="w-full rounded-xl border border-border px-3.5 py-2 text-sm text-navy focus:border-accent focus:outline-none"
+                />
+              </div>
+            </div>
+
+            <div className="mt-5 flex items-center justify-end gap-3 border-t border-border pt-4">
+              <button
+                type="button"
+                onClick={() => setEmailingLead(null)}
+                className="rounded-xl border border-border px-4 py-2 text-sm font-medium text-slate-600 hover:bg-surface"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={openGmailCompose}
+                className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-white hover:bg-accent-hover"
+              >
+                <ExternalLink className="h-4 w-4" />
+                Open in Gmail
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Delete Confirmation Modal */}
       {deletingId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
           <div className="w-full max-w-sm rounded-2xl border border-border bg-surface-elevated p-6 shadow-xl text-center">
             <AlertCircle className="mx-auto h-12 w-12 text-rose-500" />
-            <h3 className="mt-3 text-lg font-bold text-navy">Delete Lead Inquiry?</h3>
+            <h3 className="mt-3 text-lg font-bold text-navy">Delete inquiry?</h3>
             <p className="mt-1 text-sm text-muted">
-              This action cannot be undone. Are you sure you want to permanently delete this lead?
+              This will permanently delete the inquiry.
             </p>
 
             <div className="mt-6 flex items-center justify-center gap-3">

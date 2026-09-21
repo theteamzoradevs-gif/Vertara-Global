@@ -42,7 +42,7 @@ const navGroups: NavGroup[] = [
     title: "Main",
     items: [
       { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
-      { href: "/admin/leads", label: "Leads Inbox", icon: Inbox },
+      { href: "/admin/inquiries", label: "Inquiries", icon: Inbox },
       { href: "/admin/chat-sessions", label: "Chat Sessions", icon: MessageSquare },
     ],
   },
@@ -154,7 +154,16 @@ export function AdminSidebar({ userEmail, signOutAction }: AdminSidebarProps) {
         </div>
 
         {/* Action Buttons */}
-        <div>
+        <div className="space-y-2">
+          <Link
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white/80 transition hover:bg-white/10 hover:text-white"
+          >
+            <ExternalLink className="h-3.5 w-3.5" />
+            <span>View Website</span>
+          </Link>
           <form action={signOutAction}>
             <button
               type="submit"

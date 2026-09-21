@@ -43,6 +43,7 @@ export async function POST(req: Request) {
     const lead = await Lead.create(parsed.data);
     try {
       revalidatePath("/admin/leads");
+      revalidatePath("/admin/inquiries");
     } catch (revalErr) {
       console.warn("Revalidation warning:", revalErr);
     }

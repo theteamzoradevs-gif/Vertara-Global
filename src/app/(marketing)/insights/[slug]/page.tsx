@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { CmsImage } from "@/components/ui/CmsImage";
 import { notFound } from "next/navigation";
 import { Section } from "@/components/ui/Section";
 import { getInsightBySlug, getInsights } from "@/lib/content";
@@ -58,7 +58,14 @@ export default async function InsightArticlePage({
     <>
       <section className="relative bg-navy text-white">
         <div className="absolute inset-0 opacity-25">
-          <Image src={insight.coverImage} alt="" fill className="object-cover" priority sizes="100vw" />
+          <CmsImage
+            src={insight.coverImage}
+            alt=""
+            fill
+            className="object-cover"
+            priority
+            sizes="100vw"
+          />
           <div className="absolute inset-0 bg-navy/85" />
         </div>
         <div className="relative mx-auto max-w-3xl px-4 py-20 sm:px-6 lg:px-8">

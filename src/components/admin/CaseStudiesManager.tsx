@@ -579,7 +579,7 @@ export function CaseStudiesManager({
                     htmlFor="add-featured"
                     className="text-sm font-semibold text-navy cursor-pointer"
                   >
-                    Featured on Case Studies section
+                    Featured on Homepage
                   </label>
                 </div>
               </div>
@@ -770,7 +770,7 @@ export function CaseStudiesManager({
                     htmlFor="edit-featured"
                     className="text-sm font-semibold text-navy cursor-pointer"
                   >
-                    Featured on Case Studies section
+                    Featured on Homepage
                   </label>
                 </div>
               </div>

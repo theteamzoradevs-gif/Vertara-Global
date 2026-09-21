@@ -23,6 +23,7 @@ export async function updateLeadStatusAction(id: string, status: string) {
     await Lead.findByIdAndUpdate(id, { status });
 
     revalidatePath("/admin/leads");
+    revalidatePath("/admin/inquiries");
     revalidatePath("/admin");
 
     return { success: true, message: `Lead status updated to ${status}.` };
@@ -47,6 +48,7 @@ export async function deleteLeadAction(id: string) {
     await Lead.findByIdAndDelete(id);
 
     revalidatePath("/admin/leads");
+    revalidatePath("/admin/inquiries");
     revalidatePath("/admin");
 
     return { success: true, message: "Lead deleted successfully." };

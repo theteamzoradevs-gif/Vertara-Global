@@ -71,6 +71,16 @@ export const chatNodes: Record<string, ChatNode> = {
       { id: "back", label: "Main menu", next: "start" },
     ],
   },
+  knowledge: {
+    id: "knowledge",
+    bot: "",
+    choices: [
+      { id: "services", label: "Browse services", next: "services_hub" },
+      { id: "models", label: "Engagement models", next: "models_link" },
+      { id: "call", label: "Get a quick call", next: "consult" },
+      { id: "back", label: "Main menu", next: "start" },
+    ],
+  },
   full_gcc: {
     id: "full_gcc",
     bot: "A full GCC typically spans talent, workspace, operations, and advisory as one plan — so ownership, timeline, and quality stay aligned. The next step is usually a short discovery call to map your headcount, city, and ownership preference.",

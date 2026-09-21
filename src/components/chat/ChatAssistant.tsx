@@ -7,17 +7,40 @@ import { Send, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   chatNodes,
-  resolveUserMessage,
   type ChatNode,
 } from "@/lib/chat/script";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
 type Msg = { role: "bot" | "user"; text: string };
+type ReplyLink = { href: string; label: string };
 
 const DISMISS_KEY = "gcc-chat-dismissed";
 const ALEX_AVATAR =
   "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&h=200&q=80";
+
+/** Choice targets that stay on the scripted lead/menu flow */
+const SCRIPT_NODES = new Set([
+  "start",
+  "greeting",
+  "thanks",
+  "consult",
+  "callback",
+  "consult_form",
+]);
+
+/** Map quick-choice nodes to natural questions for CMS retrieval */
+const KNOWLEDGE_QUERIES: Record<string, string> = {
+  services_hub: "What services do you offer?",
+  talent: "Tell me about Talent Solutions",
+  workspace: "Tell me about Workspace services",
+  operations: "Tell me about Business Operations",
+  advisory: "Tell me about Research and Advisory",
+  pricing: "What does the website say about GCC cost and commercials?",
+  models_link: "What engagement models do you offer including managed teams?",
+  full_gcc: "Tell me about full GCC setup in India",
+  fallback: "What can you help with from the website?",
+};
 
 function sessionId() {
   if (typeof window === "undefined") return "";
@@ -74,6 +97,8 @@ export function ChatAssistant() {
   const [submitting, setSubmitting] = useState(false);
   const [draft, setDraft] = useState("");
   const [typing, setTyping] = useState(false);
+  const [replyLink, setReplyLink] = useState<ReplyLink | null>(null);
+  const [showLeadForm, setShowLeadForm] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const node: ChatNode = chatNodes[nodeId] ?? chatNodes.start;
@@ -99,10 +124,31 @@ export function ChatAssistant() {
   }
 
   function closeChat() {
+    // Capture session id before open=false clears sid memo — only explicit close marks completed
+    const currentSid =
+      sid ||
+      (typeof window !== "undefined"
+        ? sessionStorage.getItem("gcc-chat-session") || ""
+        : "");
     setOpen(false);
     sessionStorage.setItem(DISMISS_KEY, "1");
-    // Always bring the “Alex online” bubble back after chat closes
     setBubbleSoftHidden(false);
+
+    if (currentSid) {
+      void fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sessionId: currentSid,
+          path,
+          messages,
+          intent: path[path.length - 1] || "chat",
+          status: "completed",
+        }),
+      }).catch(() => {
+        /* non-blocking */
+      });
+    }
   }
 
   function dismissBubble(e: React.MouseEvent) {
@@ -116,6 +162,8 @@ export function ChatAssistant() {
     intent?: string,
   ) {
     if (!sid) return;
+    const hasUser = nextMessages.some((m) => m.role === "user");
+    const status = hasUser && nextMessages.length > 1 ? "in_progress" : "opened";
     try {
       await fetch("/api/chat", {
         method: "POST",
@@ -125,6 +173,7 @@ export function ChatAssistant() {
           path: nextPath,
           messages: nextMessages,
           intent,
+          status,
         }),
       });
     } catch {
@@ -135,6 +184,8 @@ export function ChatAssistant() {
   function applyNode(nextId: string, userLabel: string) {
     const next = chatNodes[nextId] ?? chatNodes.fallback;
     setTyping(true);
+    setReplyLink(null);
+    setShowLeadForm(Boolean(next.collectLead));
     const withUser: Msg[] = [...messages, { role: "user", text: userLabel }];
     setMessages(withUser);
 
@@ -147,13 +198,65 @@ export function ChatAssistant() {
       setMessages(nextMessages);
       setPath(nextPath);
       setNodeId(next.id);
+      setReplyLink(next.link ?? null);
       setTyping(false);
       void logSession(nextPath, nextMessages, next.id);
     }, 450);
   }
 
+  async function askKnowledge(displayText: string, question: string) {
+    setTyping(true);
+    setReplyLink(null);
+    setShowLeadForm(false);
+    const withUser: Msg[] = [...messages, { role: "user", text: displayText }];
+    setMessages(withUser);
+
+    try {
+      const res = await fetch("/api/chat/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question }),
+      });
+      const data = await res.json().catch(() => null);
+      const answer =
+        data?.answer ||
+        "I couldn’t look that up right now. Please try again, or say “book a call”.";
+      const nextMessages: Msg[] = [
+        ...withUser,
+        { role: "bot", text: answer },
+      ];
+      const intent = String(data?.intent || "knowledge");
+      const nextPath = [...path, intent];
+      setMessages(nextMessages);
+      setPath(nextPath);
+      setNodeId(data?.collectLead ? "consult" : "knowledge");
+      setReplyLink(data?.link ?? null);
+      setShowLeadForm(Boolean(data?.collectLead));
+      if (data?.collectLead) setLeadDone(false);
+      void logSession(nextPath, nextMessages, intent);
+    } catch {
+      const nextMessages: Msg[] = [
+        ...withUser,
+        {
+          role: "bot",
+          text: "Something went wrong while searching the website. Please try again.",
+        },
+      ];
+      setMessages(nextMessages);
+      setNodeId("knowledge");
+      void logSession([...path, "error"], nextMessages, "error");
+    } finally {
+      setTyping(false);
+    }
+  }
+
   function goTo(nextId: string, userLabel: string) {
-    applyNode(nextId, userLabel);
+    if (SCRIPT_NODES.has(nextId)) {
+      applyNode(nextId, userLabel);
+      return;
+    }
+    const question = KNOWLEDGE_QUERIES[nextId] || userLabel;
+    void askKnowledge(userLabel, question);
   }
 
   function sendTyped(e?: React.FormEvent) {
@@ -161,8 +264,7 @@ export function ChatAssistant() {
     const text = draft.trim();
     if (!text || typing) return;
     setDraft("");
-    const nextId = resolveUserMessage(text);
-    applyNode(nextId, text);
+    void askKnowledge(text, text);
   }
 
   async function submitLead(e: React.FormEvent<HTMLFormElement>) {
@@ -302,17 +404,17 @@ export function ChatAssistant() {
                 </div>
               ) : null}
 
-              {node.link && !typing ? (
+              {replyLink && !typing ? (
                 <Link
-                  href={node.link.href}
+                  href={replyLink.href}
                   className="inline-flex rounded-lg border border-accent bg-accent-soft px-3 py-2 text-sm font-semibold text-accent hover:bg-accent hover:text-white"
                   onClick={closeChat}
                 >
-                  {node.link.label} →
+                  {replyLink.label} →
                 </Link>
               ) : null}
 
-              {node.collectLead && !leadDone && !typing ? (
+              {(showLeadForm || node.collectLead) && !leadDone && !typing ? (
                 <form
                   onSubmit={submitLead}
                   className="min-w-0 space-y-2 rounded-xl border border-border bg-white p-3 shadow-sm"
@@ -348,9 +450,12 @@ export function ChatAssistant() {
               <div ref={bottomRef} />
             </div>
 
-            {node.choices?.length && !typing ? (
+            {(node.choices?.length || nodeId === "knowledge") && !typing ? (
               <div className="flex flex-wrap gap-2 border-t border-border bg-white px-3 pt-2">
-                {node.choices.map((c) => (
+                {(node.choices?.length
+                  ? node.choices
+                  : chatNodes.knowledge.choices!
+                ).map((c) => (
                   <button
                     key={c.id}
                     type="button"
