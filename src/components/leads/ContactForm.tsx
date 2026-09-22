@@ -3,15 +3,26 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { ArrowRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function ContactForm({
   source = "contact",
   defaultIntent = "",
   submitLabel = "Book a consultation",
+  title,
+  description,
+  buttonVariant = "primary",
+  buttonClassName,
+  className,
 }: {
   source?: string;
   defaultIntent?: string;
   submitLabel?: string;
+  title?: string;
+  description?: string;
+  buttonVariant?: "primary" | "secondary" | "ghost" | "outline" | "gold";
+  buttonClassName?: string;
+  className?: string;
 }) {
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">(
     "idle",
@@ -67,8 +78,21 @@ export function ContactForm({
   return (
     <form
       onSubmit={onSubmit}
-      className="w-full min-w-0 max-w-full space-y-4 overflow-hidden rounded-2xl border border-border bg-white p-4 shadow-sm sm:p-6"
+      className={cn(
+        "w-full min-w-0 max-w-full space-y-4 overflow-hidden rounded-2xl border border-border bg-white p-5 shadow-sm sm:p-7 md:p-8",
+        className,
+      )}
     >
+      {title || description ? (
+        <div className="mb-5">
+          {title ? (
+            <h3 className="text-xl sm:text-2xl font-bold text-navy">{title}</h3>
+          ) : null}
+          {description ? (
+            <p className="mt-1 text-sm text-slate">{description}</p>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
         <Field label="Name" name="name" placeholder="Your Name" />
@@ -83,7 +107,7 @@ export function ContactForm({
         <select
           name="intent"
           defaultValue={defaultIntent || ""}
-          className="min-w-0 w-full max-w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm outline-none ring-accent focus:ring-2"
+          className="min-w-0 w-full max-w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-sm text-navy outline-none transition-colors focus:border-[#b49339] focus:ring-2 focus:ring-[#b49339]/20"
         >
           <option value="">
             Select an option (optional)
@@ -103,15 +127,21 @@ export function ContactForm({
         <textarea
           name="message"
           rows={4}
-          placeholder="City, headcount, timeline, or anything a partner should know…"
-          className="min-w-0 w-full max-w-full rounded-lg border border-border px-3 py-2.5 text-sm outline-none ring-accent focus:ring-2"
+          placeholder="Tell us about your requirements…"
+          className="min-w-0 w-full max-w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-sm text-navy placeholder:text-muted/70 outline-none transition-colors focus:border-[#b49339] focus:ring-2 focus:ring-[#b49339]/20"
         />
       </div>
       {status === "error" ? (
         <p className="text-sm text-danger text-center">Could not send. Please try again.</p>
       ) : null}
       <div className="flex justify-center pt-2">
-        <Button type="submit" size="lg" className="w-full sm:w-auto" disabled={status === "loading"}>
+        <Button
+          type="submit"
+          variant={buttonVariant}
+          size="lg"
+          className={cn("w-full sm:w-auto", buttonClassName)}
+          disabled={status === "loading"}
+        >
           {status === "loading" ? (
             "Sending…"
           ) : (
@@ -149,7 +179,7 @@ function Field({
         type={type}
         required={required}
         placeholder={placeholder}
-        className="min-w-0 w-full max-w-full rounded-lg border border-border px-3 py-2.5 text-sm outline-none ring-accent focus:ring-2"
+        className="min-w-0 w-full max-w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-sm text-navy placeholder:text-muted/70 outline-none transition-colors focus:border-[#b49339] focus:ring-2 focus:ring-[#b49339]/20"
       />
     </div>
   );
