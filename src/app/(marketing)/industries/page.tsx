@@ -6,29 +6,29 @@ import { FlowThreads } from "@/components/ui/FlowThreads";
 import { CTABand } from "@/components/ui/CTABand";
 import { ContactForm } from "@/components/leads/ContactForm";
 import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
+import { Accordion } from "@/components/ui/Accordion";
 import {
   getSettings,
   getTestimonials,
   getClientLogos,
+  getFaqs,
 } from "@/lib/content";
 import {
   Cpu,
   FlaskConical,
-  ShoppingBag,
   Coins,
   Sparkles,
+  ShoppingBag,
   Factory,
-  Hotel,
   Pickaxe,
+  Hotel,
   ArrowRight,
-  ShieldCheck,
-  Building2,
 } from "lucide-react";
 
 export const metadata = {
   title: "Industry Verticals & Sector Specializations | Vertara Global",
   description:
-    "Explore Vertara's specialized GCC capability models across Engineering & ER&D, Healthcare & Life Sciences, FMCG & Retail, Wealth Management, Tech & AI, Manufacturing, Hospitality, and Mining & Metals.",
+    "Explore Vertara's specialized GCC capability models across Engineering & ER&D, Healthcare & Life Sciences, Wealth Management, Tech & AI, FMCG & Retail, Manufacturing, Mining & Metals, and Travel & Hospitality.",
 };
 
 const industryList = [
@@ -38,7 +38,6 @@ const industryList = [
     tagline: "From CAD Seats to Real Product Ownership",
     description:
       "Specialized engineering and R&D pipelines, software simulation capabilities (FEA/CFD), hardware-in-the-loop (HIL) testing, and embedded firmware CoEs.",
-    href: "/industries/engineering-erd",
     icon: Cpu,
   },
   {
@@ -47,7 +46,6 @@ const industryList = [
     tagline: "From Back-Office Support to Regulatory-Grade Capability",
     description:
       "Compliant life sciences hubs with regulatory data handling (eCTD), biostatistics (CDISC/SAS), clinical data management, and pharmacovigilance with zero compliance drift.",
-    href: "/industries/healthcare-life-sciences",
     icon: FlaskConical,
   },
   {
@@ -56,7 +54,6 @@ const industryList = [
     tagline: "From Back-Office Reconciliation to Investment-Grade Operations",
     description:
       "Institutional-grade fund accounting, shadow NAV computation, actuarial modeling, and client reporting sized for mid-market AUM not a bulge-bracket build.",
-    href: "/industries/wealth-management-pe-insurance",
     icon: Coins,
   },
   {
@@ -65,16 +62,48 @@ const industryList = [
     tagline: "From IT Support to AI-Grade Infrastructure",
     description:
       "Right-sized GPU/compute infrastructure, custom GenAI/LLM engineering, automated MLOps pipelines, and Cloud FinOps governance for high-velocity software companies.",
-    href: "/industries/technology-ai",
     icon: Sparkles,
+  },
+  {
+    id: "fmcg-retail",
+    title: "FMCG & Retail",
+    tagline: "From Merchandising Support to Omnichannel Velocity",
+    description:
+      "Demand forecasting algorithms, digital shelf analytics, unified supply chain visibility CoEs, and localized multi-region master data governance.",
+    icon: ShoppingBag,
+  },
+  {
+    id: "manufacturing",
+    title: "Manufacturing",
+    tagline: "From Shop Floor Telemetry to Smart Factory Operations",
+    description:
+      "Industrial IoT (IIoT) telemetry pipelines, predictive maintenance models, supply-chain twin architecture, and PLM systems engineering.",
+    icon: Factory,
+  },
+  {
+    id: "mining-metals",
+    title: "Mining & Metals",
+    tagline: "From Asset Reporting to Autonomous Resource Intelligence",
+    description:
+      "Geological modeling, mine-to-port dispatch optimization, ESG compliance automation, and real-time operational telemetry monitoring.",
+    icon: Pickaxe,
+  },
+  {
+    id: "travel-leisure-hospitality",
+    title: "Travel, Leisure & Hospitality",
+    tagline: "From Reservation Support to Next-Gen Experience Systems",
+    description:
+      "Dynamic pricing engines, loyalty intelligence platforms, property management APIs, and high-availability guest experience architectures.",
+    icon: Hotel,
   },
 ];
 
 export default async function IndustriesHubPage() {
-  const [settings, testimonials, logos] = await Promise.all([
+  const [settings, testimonials, logos, faqs] = await Promise.all([
     getSettings(),
     getTestimonials(),
     getClientLogos(),
+    getFaqs(),
   ]);
 
   return (
@@ -99,7 +128,7 @@ export default async function IndustriesHubPage() {
 
           <p className="mt-5 max-w-2xl text-base text-white/85 sm:text-lg leading-relaxed">
             One size does not fit all. We build dedicated Indian capability
-            centres engineered around your sector's exact regulatory compliance,
+            centres engineered around your sector&apos;s exact regulatory compliance,
             data infrastructure, and practitioner talent depth.
           </p>
 
@@ -119,48 +148,42 @@ export default async function IndustriesHubPage() {
         </div>
       </section>
 
-      {/* 2. INDUSTRY DIRECTORY CARDS GRID */}
+      {/* 2. INDUSTRY DIRECTORY CARDS GRID (4 IN A ROW, 2 ROWS TOTAL) */}
       <Section id="sectors" tone="muted">
         <SectionHeader
-          eyebrow="Sector Specializations"
-          title="Engineered for your exact operating model"
-          description="Click into any sector to explore tailored journeys, technical requirements, and connected capability blueprints."
+          eyebrow="INDUSTRIES WE SERVE"
+          title="Sector expertise shaped around your GCC ambition."
+          description="Dedicated capability architectures, regulatory rigor, and connected operating systems tailored for each domain."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {industryList.map((item) => {
             const Icon = item.icon;
             return (
-              <Link
+              <div
                 key={item.id}
-                href={item.href}
-                className="group relative flex flex-col justify-between rounded-3xl border border-[#cddcd1] bg-white p-6 sm:p-8 transition-all duration-300 hover:border-[#b49339] hover:bg-[#fafaf8] hover:-translate-y-1 hover:shadow-xl hover:shadow-navy/5 cursor-pointer"
+                className="group relative flex flex-col justify-between rounded-3xl border border-[#cddcd1] bg-[#edf5ef] p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1.5 hover:border-[#2e3f33] hover:bg-white hover:shadow-xl hover:shadow-[#2e3f33]/10 cursor-default"
               >
                 <div>
                   <div className="flex items-start justify-start">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#0b1f3a] text-[#b49339] shadow-md ring-4 ring-white group-hover:bg-[#2e3f33] transition-all">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#2e3f33] text-[#b49339] shadow-md ring-4 ring-white group-hover:scale-110 group-hover:bg-[#0b1f3a] transition-all duration-300">
                       <Icon className="h-6 w-6" />
                     </div>
                   </div>
 
-                  <h3 className="mt-5 text-xl font-bold text-navy group-hover:text-navy transition-colors">
+                  <h3 className="mt-5 text-lg font-bold text-navy group-hover:text-[#2e3f33] transition-colors">
                     {item.title}
                   </h3>
 
-                  <p className="mt-1 text-xs font-bold text-[#b49339] uppercase tracking-wider">
+                  <p className="mt-1 text-[11px] font-bold text-[#b49339] uppercase tracking-wider leading-snug">
                     {item.tagline}
                   </p>
 
-                  <p className="mt-3 text-sm text-slate leading-relaxed">
+                  <p className="mt-3 text-xs sm:text-sm text-slate leading-relaxed">
                     {item.description}
                   </p>
                 </div>
-
-                <div className="mt-6 flex items-center gap-2 text-xs font-bold text-[#2e3f33] group-hover:text-[#b49339] group-hover:translate-x-1 transition-all">
-                  <span>Explore {item.title} Model</span>
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </div>
-              </Link>
+              </div>
             );
           })}
         </div>
@@ -213,6 +236,27 @@ export default async function IndustriesHubPage() {
             defaultIntent="talent"
             submitLabel="Request an industry partner call"
           />
+        </div>
+      </Section>
+
+      {/* 6. FAQ SECTION */}
+      <Section tone="muted">
+        <SectionHeader
+          eyebrow="FAQ"
+          title="Frequently asked questions about industry GCCs"
+          description="Regulatory compliance, air-gapped security perimeters, talent availability, and setup timelines across industries."
+        />
+        <Accordion
+          items={faqs.slice(0, 5).map((f) => ({
+            id: f.question,
+            title: f.question,
+            content: f.answer,
+          }))}
+        />
+        <div className="mt-6 flex justify-center sm:justify-start">
+          <Button href="/faq" variant="primary">
+            View full FAQ
+          </Button>
         </div>
       </Section>
     </>

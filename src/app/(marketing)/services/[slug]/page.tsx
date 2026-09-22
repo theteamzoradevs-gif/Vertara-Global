@@ -7,9 +7,11 @@ import { CTABand } from "@/components/ui/CTABand";
 import { ProcessSteps } from "@/components/services/ProcessSteps";
 import { SubServiceCards } from "@/components/services/SubServiceCards";
 import { ContactForm } from "@/components/leads/ContactForm";
-import { getServiceBySlug, getServices, getSettings } from "@/lib/content";
+import { getServiceBySlug, getServices, getSettings, getTestimonials, getClientLogos, getFaqs } from "@/lib/content";
 import { FlowThreads } from "@/components/ui/FlowThreads";
 import { CompetitiveComparison } from "@/components/home/CompetitiveComparison";
+import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
+import { Accordion } from "@/components/ui/Accordion";
 import { Mail, Phone } from "lucide-react";
 
 const galleryBySlug: Record<string, string[]> = {
@@ -64,9 +66,12 @@ export default async function ServicePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const [service, settings] = await Promise.all([
+  const [service, settings, testimonials, logos, faqs] = await Promise.all([
     getServiceBySlug(slug),
     getSettings(),
+    getTestimonials(),
+    getClientLogos(),
+    getFaqs(),
   ]);
   if (!service) notFound();
 
@@ -201,47 +206,93 @@ export default async function ServicePage({
         <CompetitiveComparison />
       </Section>
 
-      <Section id="enquire">
-        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-          <div>
-            <SectionHeader
-              eyebrow="Enquire"
-              title={`Talk about ${service.name}`}
-              description="Tell us your timeline and intent. A partner will respond within one business day — commercials are discussed live, not as generic rates."
-            />
+      {/* TESTIMONIALS & TRUST */}
+      <Section tone="muted">
+        <SectionHeader
+          eyebrow="Trust & Track Record"
+          title="Enterprises building lasting India capability"
+          description="The capabilities we deliver, backed by the experiences of leaders building and scaling in India."
+        />
+        <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-6">
+          {logos.map((logo) => (
+            <div
+              key={logo.name}
+              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2e3f33]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
+            >
+              {logo.logoText}
+            </div>
+          ))}
+        </div>
+        <div className="mt-10">
+          <TestimonialMarquee items={testimonials} />
+        </div>
+      </Section>
+
+      {/* FAQ SECTION */}
+      <Section>
+        <SectionHeader
+          eyebrow="FAQ"
+          title={`Frequently asked questions about ${service.name.toLowerCase()}`}
+          description="Everything you need to know about timelines, ownership, and operations before starting."
+        />
+        <Accordion
+          items={faqs.slice(0, 5).map((f) => ({
+            id: f.question,
+            title: f.question,
+            content: f.answer,
+          }))}
+        />
+        <div className="mt-6 flex justify-center sm:justify-start">
+          <Button href="/faq" variant="primary">
+            View full FAQ
+          </Button>
+        </div>
+      </Section>
+
+      {/* ENQUIRY & CONTACT FORM */}
+      <Section id="enquire" tone="muted">
+        <SectionHeader
+          eyebrow="Enquire"
+          title={`Talk about ${service.name}`}
+          description="Tell us your timeline and intent. A partner will respond within one business day — commercials are discussed live, not as generic rates."
+        />
+        <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] items-stretch">
+          <div className="flex flex-col">
             <ContactForm
               source={`service_${slug}`}
               defaultIntent={slug}
               submitLabel="Request a partner call"
             />
           </div>
-          <div className="space-y-4">
-            <div className="relative h-48 overflow-hidden rounded-2xl border border-border sm:h-56">
+          <div className="flex flex-col justify-between gap-4">
+            <div className="relative min-h-[220px] flex-1 overflow-hidden rounded-2xl border border-border shadow-xs">
               <Image
                 src={gallery[0]}
                 alt=""
                 fill
                 className="object-cover"
-                sizes="40vw"
+                sizes="(max-width: 1024px) 100vw, 40vw"
               />
             </div>
-            <div className="rounded-2xl border border-border bg-surface-elevated p-5">
-              <p className="text-sm font-semibold text-navy">Prefer a direct line?</p>
-              <a
-                href={`mailto:${settings.contactEmail}`}
-                className="mt-3 flex items-center gap-2 text-sm text-slate hover:text-accent"
-              >
-                <Mail className="h-4 w-4 text-accent" />
-                {settings.contactEmail}
-              </a>
-              <a
-                href={`tel:${settings.contactPhone.replace(/\s/g, "")}`}
-                className="mt-2 flex items-center gap-2 text-sm text-slate hover:text-accent"
-              >
-                <Phone className="h-4 w-4 text-accent" />
-                {settings.contactPhone}
-              </a>
-              <Button href="/contact" variant="outline" className="mt-4 w-full" size="sm">
+            <div className="rounded-2xl border border-border bg-white p-6 shadow-xs">
+              <p className="text-base font-bold text-navy">Prefer a direct line?</p>
+              <div className="mt-4 space-y-2.5">
+                <a
+                  href={`mailto:${settings.contactEmail}`}
+                  className="flex items-center gap-2.5 text-sm text-slate hover:text-accent font-medium transition-colors"
+                >
+                  <Mail className="h-4 w-4 text-accent shrink-0" />
+                  {settings.contactEmail}
+                </a>
+                <a
+                  href={`tel:${settings.contactPhone.replace(/\s/g, "")}`}
+                  className="flex items-center gap-2.5 text-sm text-slate hover:text-accent font-medium transition-colors"
+                >
+                  <Phone className="h-4 w-4 text-accent shrink-0" />
+                  {settings.contactPhone}
+                </a>
+              </div>
+              <Button href="/contact" variant="outline" className="mt-5 w-full" size="sm">
                 Full consultation page
               </Button>
             </div>

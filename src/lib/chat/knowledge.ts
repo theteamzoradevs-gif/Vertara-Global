@@ -22,16 +22,16 @@ export type KnowledgeAnswer = {
 type KnowledgeDoc = {
   id: string;
   kind:
-    | "service"
-    | "insight"
-    | "case_study"
-    | "faq"
-    | "testimonial"
-    | "team"
-    | "about"
-    | "engagement"
-    | "contact"
-    | "hero";
+  | "service"
+  | "insight"
+  | "case_study"
+  | "faq"
+  | "testimonial"
+  | "team"
+  | "about"
+  | "engagement"
+  | "contact"
+  | "hero";
   title: string;
   text: string;
   link?: KnowledgeLink;
@@ -106,7 +106,7 @@ const STOP = new Set([
   "here",
   "website",
   "site",
-  "veratara",
+  "vertara",
   "global",
   "alex",
 ]);
