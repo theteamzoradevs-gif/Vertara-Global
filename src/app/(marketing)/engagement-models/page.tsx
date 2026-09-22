@@ -2,6 +2,8 @@ import Image from "next/image";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { CTABand } from "@/components/ui/CTABand";
 import { ModelSelector } from "@/components/engagement/ModelSelector";
+import { CommercialModelsTable } from "@/components/engagement/CommercialModelsTable";
+import { CommercialPrinciples } from "@/components/engagement/CommercialPrinciples";
 import { Reveal } from "@/components/ui/Reveal";
 import { ContactForm } from "@/components/leads/ContactForm";
 import { FlowThreads } from "@/components/ui/FlowThreads";
@@ -10,7 +12,7 @@ import { getEngagementModels } from "@/lib/content";
 export const metadata = {
   title: "Engagement Models",
   description:
-    "Compare Flexible Partnership, Build & Transfer, and Managed Team — plus an interactive fit selector.",
+    "Compare Flexible Partnership, Build & Transfer, and Managed Team — plus an interactive fit selector and 5 commercial models.",
 };
 
 export default async function EngagementModelsPage() {
@@ -40,13 +42,25 @@ export default async function EngagementModelsPage() {
             Choose how we work together
           </h1>
           <p className="mt-5 max-w-2xl text-base text-white/80 md:text-lg">
-            Three proven models — compared on length, ownership, setup time, fit,
-            and cost — with a short selector to highlight your likely match.
+            Proven commercial structures and operational models — compared on
+            length, ownership, setup time, fit, and cost.
           </p>
         </div>
       </section>
 
+      {/* 1. FIVE COMMERCIAL MODELS TABULAR SECTION */}
       <Section>
+        <SectionHeader
+          eyebrow="Commercial Structures"
+          title="Five commercial models to work with us"
+          description="The right commercial structure depends on where you are in the GCC journey — not a fixed package applied regardless of stage. One Accountable partner."
+        />
+        <CommercialModelsTable />
+        <CommercialPrinciples />
+      </Section>
+
+      {/* 2. SIDE-BY-SIDE MODEL SELECTOR */}
+      <Section tone="muted">
         <SectionHeader
           eyebrow="Compare"
           title="Side-by-side engagement models"

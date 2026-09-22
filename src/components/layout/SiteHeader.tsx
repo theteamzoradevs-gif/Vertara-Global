@@ -60,20 +60,30 @@ const insightLinks = [
   { href: "/insights", label: "View all insights →" },
 ];
 
+const industryCol1 = [
+  { href: "/industries/engineering-erd", label: "Engineering & ER&D" },
+  { href: "/industries/healthcare-life-sciences", label: "Healthcare & Life Sciences" },
+  { href: "/industries", label: "View all industries →" },
+];
+
+const industryCol2 = [
+  { href: "/industries/wealth-management-pe-insurance", label: "Wealth Management, PE & Insurance" },
+  { href: "/industries/technology-ai", label: "Technology & AI" },
+];
+
 const simpleLinks = [
   { href: "/engagement-models", label: "Engagement" },
   { href: "/case-studies", label: "Case Studies" },
   { href: "/about", label: "About" },
-  { href: "/faq", label: "FAQ" },
 ];
 
 export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: string }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [menu, setMenu] = useState<"services" | "insights" | null>(null);
+  const [menu, setMenu] = useState<"services" | "industries" | "insights" | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  function openMenu(next: "services" | "insights") {
+  function openMenu(next: "services" | "industries" | "insights") {
     if (closeTimer.current) clearTimeout(closeTimer.current);
     setMenu(next);
   }
@@ -103,6 +113,12 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
             label="Services"
             active={menu === "services" || pathname.startsWith("/services")}
             onEnter={() => openMenu("services")}
+            onLeave={scheduleClose}
+          />
+          <MegaTrigger
+            label="Industries"
+            active={menu === "industries" || pathname.startsWith("/industries")}
+            onEnter={() => openMenu("industries")}
             onLeave={scheduleClose}
           />
           <MegaTrigger
@@ -152,7 +168,7 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
           onMouseEnter={() => openMenu(menu)}
           onMouseLeave={scheduleClose}
         >
-          <div className="mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:px-6 md:grid-cols-[1.2fr_0.8fr] lg:px-8">
+          <div className="mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:px-6 md:grid-cols-[1.25fr_0.75fr] lg:px-8">
             {menu === "services" ? (
               <>
                 <div className="grid gap-2 sm:grid-cols-2">
@@ -193,6 +209,59 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
                   >
                     See how it connects <ArrowRight className="h-3.5 w-3.5" />
                   </Link>
+                </div>
+              </>
+            ) : menu === "industries" ? (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-1">
+                  <div className="space-y-1">
+                    {industryCol1.map((item) => (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-navy transition hover:bg-[#e5ebe6]/70 hover:text-accent"
+                        onClick={() => setMenu(null)}
+                      >
+                        <Building2 className="h-4 w-4 text-slate shrink-0" />
+                        <span>{item.label}</span>
+                      </Link>
+                    ))}
+                  </div>
+                  <div className="space-y-1">
+                    {industryCol2.map((item) => (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-navy transition hover:bg-[#e5ebe6]/70 hover:text-accent"
+                        onClick={() => setMenu(null)}
+                      >
+                        <Building2 className="h-4 w-4 text-slate shrink-0" />
+                        <span>{item.label}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+                <div className="rounded-2xl border border-border/80 bg-[#f4f7fb]/80 p-5 sm:p-6 flex flex-col justify-between">
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate/80">
+                      Domain Specialization
+                    </p>
+                    <p className="mt-2 text-sm sm:text-base font-bold text-navy leading-snug">
+                      Customized GCC setups for specialized industry verticals
+                    </p>
+                    <p className="mt-2 text-xs text-slate/90 leading-relaxed">
+                      Air-gapped security, certified physical perimeters, and regulatory compliance for your sector.
+                    </p>
+                  </div>
+                  <div>
+                    <Link
+                      href="/industries/engineering-erd"
+                      className="mt-4 inline-flex items-center rounded-lg bg-[#2e3f33] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#212e25]"
+                      onClick={() => setMenu(null)}
+                    >
+                      Browse industries
+                    </Link>
+                  </div>
                 </div>
               </>
             ) : (
@@ -268,6 +337,23 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
                 </Link>
               );
             })}
+          </div>
+
+          <p className="mt-5 text-[11px] font-bold uppercase tracking-wider text-[#b49339]">
+            Industries
+          </p>
+          <div className="mt-2 space-y-1">
+            {[...industryCol1, ...industryCol2].map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="flex items-center gap-2.5 rounded-xl px-2.5 py-1.5 text-sm font-medium text-navy transition hover:bg-[#e5ebe6]"
+                onClick={() => setMobileOpen(false)}
+              >
+                <Building2 className="h-4 w-4 text-slate shrink-0" />
+                <span>{item.label}</span>
+              </Link>
+            ))}
           </div>
 
           <p className="mt-5 text-[11px] font-bold uppercase tracking-wider text-[#b49339]">
