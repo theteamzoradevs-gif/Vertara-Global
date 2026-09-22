@@ -3,10 +3,14 @@ import { Section, SectionHeader } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
 import { CTABand } from "@/components/ui/CTABand";
 import { PageHero } from "@/components/ui/PageHero";
+import { Button } from "@/components/ui/Button";
+import { Accordion } from "@/components/ui/Accordion";
+import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
 import {
   getCaseStudies,
   getTestimonials,
   getClientLogos,
+  getFaqs,
 } from "@/lib/content";
 
 export const metadata = {
@@ -17,10 +21,11 @@ export const metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function CaseStudiesPage() {
-  const [cases, testimonials, logos] = await Promise.all([
+  const [cases, testimonials, logos, faqs] = await Promise.all([
     getCaseStudies(),
     getTestimonials(),
     getClientLogos(),
+    getFaqs(),
   ]);
 
   const orderedCases = [
@@ -35,54 +40,12 @@ export default async function CaseStudiesPage() {
         description="Outcomes from programmes that needed an India GCC with clear ownership and pace."
       />
 
-      <Section>
-        <SectionHeader
-          eyebrow="Capability"
-          title="Industries & services we deliver"
-          description="Placeholder labels until named client logos are ready to publish."
-        />
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
-          {logos.map((logo: { name: string; logoText: string }) => (
-            <div
-              key={logo.name}
-              className="flex h-20 items-center justify-center rounded-2xl border border-[#cddcd1] bg-[#e5ebe6] px-3 text-center text-sm font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2e3f33]/40 hover:shadow-md"
-            >
-              {logo.logoText}
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      <Section tone="muted">
-        <SectionHeader eyebrow="Voices" title="What operators say" />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {testimonials.map((t: {
-            name: string;
-            quote: string;
-            role: string;
-            company: string;
-          }) => (
-            <Reveal key={t.name}>
-              <blockquote className="h-full rounded-2xl border border-border bg-surface-elevated p-6">
-                <p className="text-sm leading-relaxed text-slate">&ldquo;{t.quote}&rdquo;</p>
-                <footer className="mt-4 text-sm font-semibold text-navy">
-                  {t.name}
-                  <span className="block text-xs font-normal text-muted">{t.role}</span>
-                  <span className="mt-0.5 block text-[11px] font-normal text-accent">
-                    {t.company}
-                  </span>
-                </footer>
-              </blockquote>
-            </Reveal>
-          ))}
-        </div>
-      </Section>
-
+      {/* 1. CASE STUDIES SECTION */}
       <Section>
         <SectionHeader
           eyebrow="Case studies"
           title="Challenge → approach → result"
-          description="Programme shapes with metric callouts — industry and service type only."
+          description="Programme shapes with metric callouts across diverse industries and capability areas."
         />
         <div className="space-y-10">
           {orderedCases.map((cs: {
@@ -140,6 +103,49 @@ export default async function CaseStudiesPage() {
               </article>
             </Reveal>
           ))}
+        </div>
+      </Section>
+
+      {/* 2. TESTIMONIALS & TRUST SECTION */}
+      <Section tone="muted">
+        <SectionHeader
+          eyebrow="Trust & Track Record"
+          title="Enterprises building lasting India capability"
+          description="The capabilities we deliver, backed by the experiences of leaders building and scaling in India."
+        />
+        <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-6">
+          {logos.map((logo: { name: string; logoText: string }) => (
+            <div
+              key={logo.name}
+              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2e3f33]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
+            >
+              {logo.logoText}
+            </div>
+          ))}
+        </div>
+        <div className="mt-10">
+          <TestimonialMarquee items={testimonials} />
+        </div>
+      </Section>
+
+      {/* 3. FAQ SECTION */}
+      <Section>
+        <SectionHeader
+          eyebrow="FAQ"
+          title="Frequently asked questions about GCC programmes"
+          description="Timelines, commercials, ownership models, and capability scaling answered upfront."
+        />
+        <Accordion
+          items={faqs.slice(0, 5).map((f) => ({
+            id: f.question,
+            title: f.question,
+            content: f.answer,
+          }))}
+        />
+        <div className="mt-6 flex justify-center sm:justify-start">
+          <Button href="/faq" variant="primary">
+            View full FAQ
+          </Button>
         </div>
         <div className="mt-12">
           <CTABand />
