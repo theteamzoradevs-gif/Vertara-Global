@@ -69,14 +69,12 @@ export function ContactForm({
       onSubmit={onSubmit}
       className="w-full min-w-0 max-w-full space-y-4 overflow-hidden rounded-2xl border border-border bg-white p-4 shadow-sm sm:p-6"
     >
-      <div className="rounded-xl bg-surface px-3 py-2.5 text-xs leading-relaxed text-muted sm:text-sm">
-        No ballpark rates here — tell us the brief and we&apos;ll arrange a scoped conversation.
-      </div>
+
       <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
-        <Field label="Name" name="name" required />
-        <Field label="Company" name="company" required />
-        <Field label="Work email" name="email" type="email" required />
-        <Field label="Phone" name="phone" type="tel" />
+        <Field label="Name" name="name" placeholder="Your Name" />
+        <Field label="Company" name="company" placeholder="Company Name" />
+        <Field label="Work Email" name="email" type="email" placeholder="name@company.com" required />
+        <Field label="Phone" name="phone" type="tel" placeholder="+1 (555) 000-0000" />
       </div>
       <div className="min-w-0">
         <label className="mb-1.5 block text-sm font-medium text-navy">
@@ -84,12 +82,11 @@ export function ContactForm({
         </label>
         <select
           name="intent"
-          required
           defaultValue={defaultIntent || ""}
           className="min-w-0 w-full max-w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm outline-none ring-accent focus:ring-2"
         >
-          <option value="" disabled>
-            Select an option
+          <option value="">
+            Select an option (optional)
           </option>
           <option value="full_gcc">Full GCC setup</option>
           <option value="talent">Talent</option>
@@ -111,17 +108,19 @@ export function ContactForm({
         />
       </div>
       {status === "error" ? (
-        <p className="text-sm text-danger">Could not send. Please try again.</p>
+        <p className="text-sm text-danger text-center">Could not send. Please try again.</p>
       ) : null}
-      <Button type="submit" size="lg" className="w-full sm:w-auto" disabled={status === "loading"}>
-        {status === "loading" ? (
-          "Sending…"
-        ) : (
-          <>
-            {submitLabel} <ArrowRight className="h-4 w-4" />
-          </>
-        )}
-      </Button>
+      <div className="flex justify-center pt-2">
+        <Button type="submit" size="lg" className="w-full sm:w-auto" disabled={status === "loading"}>
+          {status === "loading" ? (
+            "Sending…"
+          ) : (
+            <>
+              {submitLabel} <ArrowRight className="h-4 w-4" />
+            </>
+          )}
+        </Button>
+      </div>
     </form>
   );
 }
@@ -131,19 +130,25 @@ function Field({
   name,
   type = "text",
   required,
+  placeholder,
 }: {
   label: string;
   name: string;
   type?: string;
   required?: boolean;
+  placeholder?: string;
 }) {
   return (
     <div className="min-w-0">
-      <label className="mb-1.5 block text-sm font-medium text-navy">{label}</label>
+      <label className="mb-1.5 block text-sm font-medium text-navy">
+        {label}
+        {required ? <span className="ml-0.5 text-red-500 font-bold">*</span> : null}
+      </label>
       <input
         name={name}
         type={type}
         required={required}
+        placeholder={placeholder}
         className="min-w-0 w-full max-w-full rounded-lg border border-border px-3 py-2.5 text-sm outline-none ring-accent focus:ring-2"
       />
     </div>
