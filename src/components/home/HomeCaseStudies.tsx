@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
+import { CmsImage } from "@/components/ui/CmsImage";
 import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/ui/Reveal";
 
@@ -12,7 +12,7 @@ type CaseItem = {
   challenge: string;
   result: string;
   metrics: { label: string; value: string }[];
-  image: string;
+  image?: string;
 };
 
 export function HomeCaseStudies({ cases }: { cases: CaseItem[] }) {
@@ -23,8 +23,8 @@ export function HomeCaseStudies({ cases }: { cases: CaseItem[] }) {
       {cases.map((cs, i) => (
         <Reveal key={cs.title} delay={i * 0.06}>
           <article className="group overflow-hidden rounded-2xl border border-border bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-xl hover:shadow-navy/10 md:grid md:grid-cols-2">
-            <div className="relative min-h-[220px] overflow-hidden sm:min-h-[260px]">
-              <Image
+            <div className="relative min-h-[220px] overflow-hidden bg-surface sm:min-h-[260px]">
+              <CmsImage
                 src={cs.image?.trim() || "/images/gcc-floor.webp"}
                 alt={cs.title || "Case study"}
                 fill
@@ -69,7 +69,7 @@ export function HomeCaseStudies({ cases }: { cases: CaseItem[] }) {
                 ))}
               </div>
               <Link
-                href="/customers"
+                href="/case-studies"
                 className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:text-accent-hover"
               >
                 See more outcomes

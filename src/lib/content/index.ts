@@ -70,13 +70,13 @@ function mergeSettings(doc: Partial<Settings> | null): Settings {
   if (!settings.heroFormSuccess) settings.heroFormSuccess = seedSettings.heroFormSuccess;
 
   if (settings.brandName === "GCC Advisor") {
-    settings.brandName = "Veratara Global";
+    settings.brandName = "Vertara Global";
   }
   if (settings.contactEmail === "hello@gccadvisor.com") {
     settings.contactEmail = "hello@verataraglobal.com";
   }
   if (settings.aboutStory?.includes("GCC Advisor")) {
-    settings.aboutStory = settings.aboutStory.replace(/GCC Advisor/g, "Veratara Global");
+    settings.aboutStory = settings.aboutStory.replace(/GCC Advisor/g, "Vertara Global");
   }
   return settings;
 }
@@ -121,10 +121,11 @@ export async function getInsights(): Promise<InsightItem[]> {
     const docs = await Insight.find({ published: true })
       .sort({ publishedAt: -1 })
       .lean();
-    return docs.length
+    const items = docs.length
       ? (JSON.parse(JSON.stringify(docs)) as InsightItem[])
       : seedInsights;
-  }, seedInsights);
+    return sortFeaturedFirst(items);
+  }, sortFeaturedFirst([...seedInsights]));
 }
 
 export async function getInsightBySlug(
@@ -134,13 +135,24 @@ export async function getInsightBySlug(
   return insights.find((i) => i.slug === slug) ?? null;
 }
 
+function sortFeaturedFirst<T extends { featured?: boolean }>(items: T[]): T[] {
+  const featured: T[] = [];
+  const rest: T[] = [];
+  for (const item of items) {
+    if (item.featured === true) featured.push(item);
+    else rest.push(item);
+  }
+  return [...featured, ...rest];
+}
+
 export async function getCaseStudies(): Promise<CaseStudyItem[]> {
   return withDB(async () => {
-    const docs = await CaseStudy.find().lean();
-    return docs.length
+    const docs = await CaseStudy.find().sort({ createdAt: 1 }).lean();
+    const items = docs.length
       ? (JSON.parse(JSON.stringify(docs)) as CaseStudyItem[])
       : seedCaseStudies;
-  }, seedCaseStudies);
+    return sortFeaturedFirst(items);
+  }, sortFeaturedFirst([...seedCaseStudies]));
 }
 
 export async function getTestimonials(): Promise<TestimonialItem[]> {

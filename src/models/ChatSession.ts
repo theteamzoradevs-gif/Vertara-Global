@@ -12,10 +12,20 @@ const ChatSessionSchema = new Schema(
       },
     ],
     intent: String,
+    /** opened | in_progress | completed — set by chat lifecycle, not page navigation */
+    status: {
+      type: String,
+      enum: ["opened", "in_progress", "completed"],
+      default: "opened",
+      index: true,
+    },
     leadId: { type: Schema.Types.ObjectId, ref: "Lead" },
   },
   { timestamps: true },
 );
 
-export const ChatSession =
-  models.ChatSession || model("ChatSession", ChatSessionSchema);
+if (models.ChatSession) {
+  delete (models as Record<string, unknown>).ChatSession;
+}
+
+export const ChatSession = model("ChatSession", ChatSessionSchema);

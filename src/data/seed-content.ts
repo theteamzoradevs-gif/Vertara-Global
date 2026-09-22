@@ -19,7 +19,7 @@ export const seedHeroRotatingLines: HeroRotatingLine[] = [
 ];
 
 export const seedSettings = {
-  brandName: "Veratara Global",
+  brandName: "Vertara Global",
   tagline: "Build, staff, and scale Global Capability Centers in India",
   heroHeadline: "Your GCC in India designed, staffed, and scaled with clarity",
   heroSubheadline:
@@ -46,7 +46,7 @@ export const seedSettings = {
   trustPopImage: "/images/workspace-blue.webp",
   trustPopHeadline: "Trusted by enterprises building lasting India capability",
   aboutStory:
-    "Veratara Global was founded by operators who have built and scaled India capability centers from the inside — not decks, but delivery. We combine talent, workspace, business operations, and strategic advisory into one accountable partnership so enterprises can move from intent to a live, high-performing GCC without stitching together a dozen vendors.",
+    "Vertara Global was founded by operators who have built and scaled India capability centers from the inside — not decks, but delivery. We combine talent, workspace, business operations, and strategic advisory into one accountable partnership so enterprises can move from intent to a live, high-performing GCC without stitching together a dozen vendors.",
   aboutMission:
     "Make India GCC setup predictable for enterprise buyers: clear ownership, honest timelines, and a single operating rhythm from first hire to steady-state scale.",
   leadership: [
@@ -502,6 +502,7 @@ export const seedInsights = [
     category: "Talent",
     coverImage: "/images/talent-team.webp",
     published: true,
+    featured: false,
     body: `## Start with outcomes, not headcount
 
 A GCC succeeds when the parent organisation is clear about what the centre owns — product modules, finance ops, analytics, or shared services — and how success will be measured in the first 18 months.
@@ -529,6 +530,7 @@ Rituals, feedback cadence, and manager enablement travel poorly if left to chanc
     category: "Advisory",
     coverImage: "/images/workspace-collab.jpg",
     published: true,
+    featured: false,
     body: `## There is no single “best” city
 
 Bengaluru still leads for deep engineering and AI/ML density. Hyderabad and Pune often win on cost-to-quality for scaled engineering. NCR offers diverse functions and useful overlap with Europe and US East. Chennai and Mumbai fit specific domain strengths.
@@ -549,6 +551,7 @@ Micro-market choice inside a city can swing attrition more than a 5% compensatio
     category: "Engagement",
     coverImage: "/images/gcc-floor.webp",
     published: true,
+    featured: false,
     body: `## Use managed teams to learn
 
 If you need capacity in 4–6 weeks for a bounded mission, a managed team reduces irreversible decisions. You still own IP and direction.

@@ -11,7 +11,7 @@ export async function saveSiteSettingsAction(formData: FormData) {
   try {
     const conn = await connectDB();
 
-    const brandName = String(formData.get("brandName") || "Veratara Global").trim();
+    const brandName = String(formData.get("brandName") || "Vertara Global").trim();
     const contactEmail = String(formData.get("contactEmail") || "hello@verataraglobal.com").trim();
     const contactPhone = String(formData.get("contactPhone") || "+91 80 4000 1200").trim();
 

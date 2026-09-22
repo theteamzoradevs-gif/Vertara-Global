@@ -19,6 +19,7 @@ import {
   X,
   Shield,
   User,
+  ArrowRight,
 } from "lucide-react";
 
 interface AdminSidebarProps {
@@ -42,7 +43,7 @@ const navGroups: NavGroup[] = [
     title: "Main",
     items: [
       { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
-      { href: "/admin/leads", label: "Leads Inbox", icon: Inbox },
+      { href: "/admin/inquiries", label: "Inquiries", icon: Inbox },
       { href: "/admin/chat-sessions", label: "Chat Sessions", icon: MessageSquare },
     ],
   },
@@ -83,7 +84,7 @@ export function AdminSidebar({ userEmail, signOutAction }: AdminSidebarProps) {
               <Shield className="h-5 w-5" />
             </div>
             <div>
-              <span className="font-bold tracking-tight text-white text-base">Veratara Global</span>
+              <span className="font-bold tracking-tight text-white text-base">Vertara Global</span>
               <p className="text-[11px] text-white/50">Admin Panel</p>
             </div>
           </Link>
@@ -154,7 +155,16 @@ export function AdminSidebar({ userEmail, signOutAction }: AdminSidebarProps) {
         </div>
 
         {/* Action Buttons */}
-        <div>
+        <div className="space-y-2">
+          <Link
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white/80 transition hover:bg-white/10 hover:text-white"
+          >
+            <ExternalLink className="h-3.5 w-3.5" />
+            <span>View Website</span>
+          </Link>
           <form action={signOutAction}>
             <button
               type="submit"
@@ -172,20 +182,32 @@ export function AdminSidebar({ userEmail, signOutAction }: AdminSidebarProps) {
   return (
     <>
       {/* Mobile Bar Header */}
-      <div className="sticky top-0 z-40 flex items-center justify-between border-b border-border bg-[#061526] px-4 py-3 text-white md:hidden">
+      <div className="sticky top-0 z-40 flex items-center justify-between border-b border-white/10 bg-[#061526] px-4 py-3 text-white md:hidden w-full">
         <Link href="/admin" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-white">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-white shadow-xs">
             <Shield className="h-4 w-4" />
           </div>
-          <span className="font-bold text-sm tracking-tight">Veratara Global Admin</span>
+          <span className="font-bold text-sm tracking-tight text-white">Vertara Global Admin</span>
         </Link>
-        <button
-          onClick={() => setMobileOpen(true)}
-          className="rounded-lg border border-white/10 p-2 text-white/80 hover:bg-white/10"
-          aria-label="Open navigation menu"
-        >
-          <Menu className="h-5 w-5" />
-        </button>
+
+        <div className="flex items-center gap-2">
+          <Link
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 rounded-lg border border-accent/40 bg-accent/15 px-2.5 py-1 text-xs font-semibold text-highlight hover:bg-accent/25 transition"
+          >
+            <span>View Site</span>
+            <ArrowRight className="h-3 w-3" />
+          </Link>
+          <button
+            onClick={() => setMobileOpen(true)}
+            className="rounded-lg border border-white/10 p-1.5 text-white/80 hover:bg-white/10"
+            aria-label="Open navigation menu"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+        </div>
       </div>
 
       {/* Desktop Persistent Sidebar */}

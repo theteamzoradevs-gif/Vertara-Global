@@ -35,7 +35,11 @@ const ClientLogoSchema = new Schema(
   { timestamps: true },
 );
 
-export const CaseStudy = models.CaseStudy || model("CaseStudy", CaseStudySchema);
+if (models.CaseStudy) {
+  delete (models as Record<string, unknown>).CaseStudy;
+}
+
+export const CaseStudy = model("CaseStudy", CaseStudySchema);
 export const Testimonial =
   models.Testimonial || model("Testimonial", TestimonialSchema);
 export const ClientLogo =

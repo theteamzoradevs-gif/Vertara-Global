@@ -7,7 +7,7 @@ import {
 } from "@/components/admin/CaseStudiesManager";
 
 export const metadata = {
-  title: "Case Studies Management | Veratara Global Admin",
+  title: "Case Studies Management | Vertara Global Admin",
 };
 
 export default async function AdminCaseStudiesPage() {

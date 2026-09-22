@@ -10,9 +10,14 @@ const InsightSchema = new Schema(
     category: String,
     readTime: String,
     published: { type: Boolean, default: true },
+    featured: { type: Boolean, default: false },
     publishedAt: { type: Date, default: Date.now },
   },
   { timestamps: true },
 );
 
-export const Insight = models.Insight || model("Insight", InsightSchema);
+if (models.Insight) {
+  delete (models as Record<string, unknown>).Insight;
+}
+
+export const Insight = model("Insight", InsightSchema);

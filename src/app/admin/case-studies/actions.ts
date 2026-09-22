@@ -47,8 +47,9 @@ export async function createCaseStudyAction(formData: FormData) {
     });
 
     revalidatePath("/admin/case-studies");
-    revalidatePath("/customers");
+    revalidatePath("/case-studies");
     revalidatePath("/");
+    revalidatePath("/", "layout");
 
     return { success: true, message: "Case Study created successfully!" };
   } catch (err: unknown) {
@@ -105,8 +106,9 @@ export async function updateCaseStudyAction(formData: FormData) {
     });
 
     revalidatePath("/admin/case-studies");
-    revalidatePath("/customers");
+    revalidatePath("/case-studies");
     revalidatePath("/");
+    revalidatePath("/", "layout");
 
     return { success: true, message: "Case Study updated successfully!" };
   } catch (err: unknown) {
@@ -126,8 +128,9 @@ export async function deleteCaseStudyAction(id: string) {
     await CaseStudy.findByIdAndDelete(id);
 
     revalidatePath("/admin/case-studies");
-    revalidatePath("/customers");
+    revalidatePath("/case-studies");
     revalidatePath("/");
+    revalidatePath("/", "layout");
 
     return { success: true, message: "Case Study deleted successfully." };
   } catch (err: unknown) {
@@ -167,8 +170,9 @@ export async function seedCaseStudiesAction() {
     );
 
     revalidatePath("/admin/case-studies");
-    revalidatePath("/customers");
+    revalidatePath("/case-studies");
     revalidatePath("/");
+    revalidatePath("/", "layout");
 
     return {
       success: true,

@@ -4,7 +4,7 @@ import { seedInsights } from "@/data/seed-content";
 import { InsightsManager } from "@/components/admin/InsightsManager";
 
 export const metadata = {
-  title: "Insights Management | Veratara Global Admin",
+  title: "Insights Management | Vertara Global Admin",
 };
 
 export default async function AdminInsightsPage() {

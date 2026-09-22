@@ -14,7 +14,7 @@ const columns = [
     title: "Company",
     links: [
       { href: "/about", label: "About" },
-      { href: "/customers", label: "Customers" },
+      { href: "/case-studies", label: "Case Studies" },
       { href: "/insights", label: "Insights" },
       { href: "/faq", label: "FAQ" },
     ],

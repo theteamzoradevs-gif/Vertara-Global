@@ -131,8 +131,8 @@ export function AdminSettingsManager({
                 type="text"
                 name="brandName"
                 required
-                defaultValue={initialSettings.brandName || "Veratara Global"}
-                placeholder="e.g. Veratara Global"
+                defaultValue={initialSettings.brandName || "Vertara Global"}
+                placeholder="e.g. Vertara Global"
                 className="w-full rounded-xl border border-border px-4 py-2.5 text-xs text-navy font-medium focus:border-accent focus:outline-none transition"
               />
             </div>
@@ -198,7 +198,7 @@ export function AdminSettingsManager({
               </h2>
               <div className="flex items-center gap-1.5 rounded-full bg-surface px-3 py-1 border border-border text-[11px] font-medium text-slate-600">
                 <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
-                <span className="truncate max-w-[140px]">{userEmail || "admin@verataraglobal.com"}</span>
+                <span className="truncate max-w-[140px]">{userEmail || "admin@vertaraglobal.com"}</span>
               </div>
             </div>
 

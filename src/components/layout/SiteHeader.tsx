@@ -62,12 +62,12 @@ const insightLinks = [
 
 const simpleLinks = [
   { href: "/engagement-models", label: "Engagement" },
-  { href: "/customers", label: "Customers" },
+  { href: "/case-studies", label: "Case Studies" },
   { href: "/about", label: "About" },
   { href: "/faq", label: "FAQ" },
 ];
 
-export function SiteHeader({ brandName = "Veratara Global" }: { brandName?: string }) {
+export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: string }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [menu, setMenu] = useState<"services" | "insights" | null>(null);
