@@ -79,7 +79,7 @@ export function ContactForm({
     <form
       onSubmit={onSubmit}
       className={cn(
-        "w-full min-w-0 max-w-full space-y-4 overflow-hidden rounded-2xl border border-border bg-white p-5 shadow-sm sm:p-7 md:p-8",
+        "w-full min-w-0 max-w-full space-y-4 overflow-hidden rounded-3xl border border-[#cddcd1] bg-[#edf5ef] p-6 shadow-xl shadow-navy/5 sm:p-8 md:p-10",
         className,
       )}
     >
@@ -107,7 +107,7 @@ export function ContactForm({
         <select
           name="intent"
           defaultValue={defaultIntent || ""}
-          className="min-w-0 w-full max-w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-sm text-navy outline-none transition-colors focus:border-[#b49339] focus:ring-2 focus:ring-[#b49339]/20"
+          className="min-w-0 w-full max-w-full rounded-xl border border-[#cddcd1] bg-white px-3.5 py-2.5 text-sm text-navy outline-none transition-colors focus:border-[#2e3f33] focus:ring-2 focus:ring-[#2e3f33]/15"
         >
           <option value="">
             Select an option (optional)
@@ -128,7 +128,7 @@ export function ContactForm({
           name="message"
           rows={4}
           placeholder="Tell us about your requirements…"
-          className="min-w-0 w-full max-w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-sm text-navy placeholder:text-muted/70 outline-none transition-colors focus:border-[#b49339] focus:ring-2 focus:ring-[#b49339]/20"
+          className="min-w-0 w-full max-w-full rounded-xl border border-[#cddcd1] bg-white px-3.5 py-2.5 text-sm text-navy placeholder:text-muted/70 outline-none transition-colors focus:border-[#2e3f33] focus:ring-2 focus:ring-[#2e3f33]/15"
         />
       </div>
       {status === "error" ? (
@@ -179,7 +179,7 @@ function Field({
         type={type}
         required={required}
         placeholder={placeholder}
-        className="min-w-0 w-full max-w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-sm text-navy placeholder:text-muted/70 outline-none transition-colors focus:border-[#b49339] focus:ring-2 focus:ring-[#b49339]/20"
+        className="min-w-0 w-full max-w-full rounded-xl border border-[#cddcd1] bg-white px-3.5 py-2.5 text-sm text-navy placeholder:text-muted/70 outline-none transition-colors focus:border-[#2e3f33] focus:ring-2 focus:ring-[#2e3f33]/15"
       />
     </div>
   );

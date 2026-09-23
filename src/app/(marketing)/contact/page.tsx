@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { ContactForm } from "@/components/leads/ContactForm";
 import { PageHero } from "@/components/ui/PageHero";
@@ -5,7 +6,7 @@ import { JourneySteps } from "@/components/home/JourneySteps";
 import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
 import { Accordion } from "@/components/ui/Accordion";
 import { Button } from "@/components/ui/Button";
-import { CTABand } from "@/components/ui/CTABand";
+import { FlowThreads } from "@/components/ui/FlowThreads";
 import { getSettings, getTestimonials, getClientLogos, getFaqs } from "@/lib/content";
 import { Mail, Phone, MapPin } from "lucide-react";
 
@@ -37,7 +38,7 @@ export default async function ContactPage() {
       />
 
       {/* 1. CONTACT FORM & DIRECT INFO */}
-      <Section tone="muted" className="bg-[#fbfbf9] py-14 sm:py-16 md:py-20">
+      <Section id="enquire" tone="muted" className="bg-[#fbfbf9] py-14 sm:py-16 md:py-20">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-14 items-start">
           {/* Left Column: Contact details & proposition */}
           <div className="lg:col-span-5 space-y-8">
@@ -47,7 +48,7 @@ export default async function ContactPage() {
                   CONTACT US
                 </span>
               </div>
-              <h2 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-[42px] font-bold tracking-tight text-navy leading-[1.18]">
+              <h2 className="mt-4 text-3xl sm:text-4xl lg:text-[40px] font-bold tracking-tight text-navy leading-tight">
                 Your next opportunity starts here.
               </h2>
               <p className="mt-4 text-base leading-relaxed text-slate sm:text-lg">
@@ -57,8 +58,8 @@ export default async function ContactPage() {
 
             <div className="space-y-6 pt-2">
               <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#e8e0d2] bg-[#f4efe6] text-navy shadow-xs">
-                  <Mail className="h-5 w-5 text-navy" />
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#cddcd1] bg-[#edf5ef] text-[#2e3f33] shadow-xs">
+                  <Mail className="h-5 w-5 text-[#2e3f33]" />
                 </div>
                 <div>
                   <p className="text-xs font-medium text-slate">Email us</p>
@@ -72,8 +73,8 @@ export default async function ContactPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#e8e0d2] bg-[#f4efe6] text-navy shadow-xs">
-                  <Phone className="h-5 w-5 text-navy" />
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#cddcd1] bg-[#edf5ef] text-[#2e3f33] shadow-xs">
+                  <Phone className="h-5 w-5 text-[#2e3f33]" />
                 </div>
                 <div>
                   <p className="text-xs font-medium text-slate">Call us</p>
@@ -87,8 +88,8 @@ export default async function ContactPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#e8e0d2] bg-[#f4efe6] text-navy shadow-xs">
-                  <MapPin className="h-5 w-5 text-navy" />
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#cddcd1] bg-[#edf5ef] text-[#2e3f33] shadow-xs">
+                  <MapPin className="h-5 w-5 text-[#2e3f33]" />
                 </div>
                 <div>
                   <p className="text-xs font-medium text-slate">Visit us</p>
@@ -105,9 +106,9 @@ export default async function ContactPage() {
             <ContactForm
               source="contact"
               title="Send us a message"
-              submitLabel="Send message"
+              submitLabel="Book a consultation"
               buttonVariant="primary"
-              className="border border-[#e2e8f0]/80 shadow-lg shadow-black/[0.03] sm:p-8"
+              className="border border-[#cddcd1] bg-[#edf5ef] rounded-3xl shadow-xl shadow-navy/5 p-6 sm:p-8 md:p-10"
             />
           </div>
         </div>
@@ -148,7 +149,47 @@ export default async function ContactPage() {
         </div>
       </Section>
 
-      {/* 4. FAQ SECTION */}
+      {/* 4. FULL-WIDTH CTA BANNER */}
+      <section className="relative w-full overflow-hidden text-white">
+        <Image
+          src="/images/workspace-vibrant.jpg"
+          alt=""
+          fill
+          className="object-cover"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-navy/85" />
+        <div
+          className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-accent/30 blur-3xl"
+          aria-hidden
+        />
+
+        <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+          <div className="max-w-2xl">
+            <h3 className="text-2xl font-bold tracking-tight md:text-3xl text-white">
+              Ready to talk through your GCC plans?
+            </h3>
+            <p className="mt-3 text-sm leading-relaxed text-white/75 md:text-base">
+              Share a short brief a partner will map fit, timeline, and next steps. No sales theatre.
+            </p>
+            <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-start">
+              <Button href="#enquire" variant="gold" size="lg" className="w-full text-center sm:w-auto">
+                Get a quick call
+              </Button>
+              <Button
+                href="/engagement-models"
+                variant="outline"
+                size="lg"
+                className="w-full text-center border-white/25 bg-transparent text-white hover:border-white hover:bg-white/10 hover:text-white sm:w-auto"
+              >
+                Compare engagement models
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. FAQ SECTION */}
       <Section>
         <SectionHeader
           eyebrow="FAQ"
@@ -166,9 +207,6 @@ export default async function ContactPage() {
           <Button href="/faq" variant="primary">
             View full FAQ
           </Button>
-        </div>
-        <div className="mt-12">
-          <CTABand />
         </div>
       </Section>
     </>

@@ -6,6 +6,7 @@ import { FlowThreads } from "@/components/ui/FlowThreads";
 import { CTABand } from "@/components/ui/CTABand";
 import { Accordion } from "@/components/ui/Accordion";
 import { ContactForm } from "@/components/leads/ContactForm";
+import { IndustryFormSideContent } from "@/components/industries/IndustryFormSideContent";
 import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
 import {
   WealthOpportunityJourney,
@@ -68,24 +69,27 @@ export default async function WealthManagementPeInsurancePage() {
   return (
     <>
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden text-white">
+      <section className="relative overflow-hidden text-white bg-[#0e3621]">
+        {/* Right-aligned Realistic Background Image */}
         <div className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600&q=80"
-            alt="Wealth Management, PE & Insurance GCC in India"
+            src="/images/wealth-management.png"
+            alt="Wealth Management & PE Investment Infrastructure"
             fill
-            className="object-cover"
+            className="object-cover object-right lg:object-right"
             priority
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-navy/85" />
-          <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/90 to-navy/60" />
-          <FlowThreads intensity="medium" onDark className="opacity-45" />
+          {/* Subtle Emerald / Forest Green Soft Gradient & Shadow Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0d3320] via-[#0d3320]/95 via-40% sm:via-48% md:via-52% to-[#0d3320]/25 lg:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0d3320] via-transparent to-[#0d3320]/40" />
+          <div className="absolute inset-0 bg-[#0d3320]/20 mix-blend-multiply" />
+          <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
 
-        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
+        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20 lg:py-24 lg:px-8">
           {/* Breadcrumb / Eyebrow */}
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#b49339]">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
             <Link href="/industries" className="hover:underline">
               Industries
             </Link>
@@ -93,84 +97,43 @@ export default async function WealthManagementPeInsurancePage() {
             <span>Wealth Management, PE & Insurance</span>
           </div>
 
-          <h1 className="mt-4 max-w-3xl font-serif text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-5xl leading-tight">
+          <h1 className="mt-4 max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-[44px] xl:text-[48px] leading-tight text-white">
             From Back-Office Reconciliation to Investment-Grade Operations
           </h1>
 
-          <p className="mt-5 max-w-2xl text-base text-white/85 sm:text-lg leading-relaxed">
+          <p className="mt-4 max-w-xl text-base text-white/90 sm:text-lg leading-relaxed font-normal">
             Institutional-grade fund and policy operations sized for a
             mid-market AUM not a bulge-bracket one. Own fund accounting, shadow
             NAV, actuarial modeling, and client reporting in India.
           </p>
 
-          {/* Domain Scope Tags */}
-          <div className="mt-6 flex flex-wrap gap-2 text-xs font-medium text-white/80">
-            {[
-              "Fund & Portfolio Operations",
-              "Actuarial Support",
-              "Client Reporting & Compliance",
-              "Investment & Equity Research",
-              "Shadow NAV Accounting",
-              "IFRS 17 & SEC Filings",
-            ].map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full border border-white/20 bg-white/10 px-3 py-1 backdrop-blur-xs"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-
           {/* Hero CTAs */}
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Button href="#enquire" variant="gold" size="lg">
-              Book an Investment consultation <ArrowRight className="h-4 w-4" />
-            </Button>
-            <Button
-              href="#the-opportunity"
-              variant="outline"
-              size="lg"
-              className="border-white/30 bg-white/10 text-white hover:border-white hover:bg-white/20 hover:text-white"
-            >
-              Explore operations model
+              Book a Wealth consultation <ArrowRight className="h-4 w-4" />
             </Button>
           </div>
         </div>
       </section>
 
-      {/* 2. VALUE METRICS STRIP */}
-      <section className="border-b border-border bg-white py-8 sm:py-10">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
-            <div className="border-l-2 border-[#b49339] pl-4">
-              <p className="text-2xl sm:text-3xl font-bold text-navy">100%</p>
-              <p className="mt-1 text-xs sm:text-sm text-slate">IFRS 17, SEC & SOX readiness</p>
-            </div>
-            <div className="border-l-2 border-[#b49339] pl-4">
-              <p className="text-2xl sm:text-3xl font-bold text-navy">45–60%</p>
-              <p className="mt-1 text-xs sm:text-sm text-slate">Lower middle & back office cost</p>
-            </div>
-            <div className="border-l-2 border-[#b49339] pl-4">
-              <p className="text-2xl sm:text-3xl font-bold text-navy">Daily/Monthly</p>
-              <p className="mt-1 text-xs sm:text-sm text-slate">Shadow NAV & liquidity sync</p>
-            </div>
-            <div className="border-l-2 border-[#b49339] pl-4">
-              <p className="text-2xl sm:text-3xl font-bold text-navy">Zero-Trust</p>
-              <p className="mt-1 text-xs sm:text-sm text-slate">Strict LP & policyholder Chinese walls</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. THE OPPORTUNITY — 3-STAGE WEALTH & PE JOURNEY */}
+      {/* 2. THE OPPORTUNITY — 3-STAGE WEALTH & PE JOURNEY */}
       <Section id="the-opportunity" tone="muted">
         <SectionHeader
           eyebrow="The Opportunity"
-          title="From Back-Office Support to Investment-Grade Ownership"
-          description="A progressive 3-stage journey turning manual reconciliations into high-precision fund accounting, actuarial modeling, and investment research."
+          title="From Back Office Support to Investment Grade Ownership"
+          description="A progressive 3-stage journey turning manual reconciliations into high precision fund accounting, actuarial modeling, and investment research."
         />
         <WealthOpportunityJourney />
+      </Section>
+
+      {/* 3. WHAT THIS SECTOR NEEDS — 3-POINT INSTITUTIONAL ARCHITECTURE */}
+      <Section>
+        <SectionHeader
+          eyebrow="What This Sector Needs"
+          title="Engineered for Multi-Regulatory Rigor, Chinese Walls & Live Sync"
+          description="Explore the automated statutory reporting pipelines, zero-trust data segregation, and real-time portfolio interconnects required for institutional financial operations."
+        />
+        <WealthSectorNeedsSelector />
       </Section>
 
       {/* 4. CTA BANNER */}
@@ -183,16 +146,6 @@ export default async function WealthManagementPeInsurancePage() {
           secondaryHref="/engagement-models"
           secondaryLabel="Compare engagement models"
         />
-      </Section>
-
-      {/* 5. WHAT THIS SECTOR NEEDS — 3-POINT INSTITUTIONAL ARCHITECTURE */}
-      <Section tone="muted">
-        <SectionHeader
-          eyebrow="What This Sector Needs"
-          title="Engineered for Multi-Regulatory Rigor, Chinese Walls & Live Sync"
-          description="Explore the automated statutory reporting pipelines, zero-trust data segregation, and real-time portfolio interconnects required for institutional financial operations."
-        />
-        <WealthSectorNeedsSelector />
       </Section>
 
       {/* 6. HOW VERTARA HELPS — CONNECTED BLUEPRINT */}
@@ -208,9 +161,9 @@ export default async function WealthManagementPeInsurancePage() {
       {/* 7. CLIENT VOICES & TESTIMONIALS */}
       <Section tone="muted">
         <SectionHeader
-          eyebrow="Trust & Track Record"
-          title="Asset managers and insurers scaling institutional capability"
-          description="Hear from General Partners, CFOs, and Chief Risk Officers who streamlined their fund and policy velocity with Vertara."
+          eyebrow="Trust"
+          title="Enterprises building lasting India capability"
+          description="The capabilities we deliver, backed by the experiences of leaders building and scaling in India."
         />
         <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-6">
           {logos.map((logo) => (
@@ -234,12 +187,18 @@ export default async function WealthManagementPeInsurancePage() {
           title="Let's build your investment-grade capability center"
           description="Share your fund or insurance footprint, we'll connect you with our Wealth Management & PE practice lead."
         />
-        <div className="mx-auto max-w-2xl">
-          <ContactForm
-            source="industries-wealth-management-pe-insurance"
-            defaultIntent="talent"
-            submitLabel="Request a Wealth & PE partner call"
-          />
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-8 items-stretch">
+          <div className="lg:col-span-7 flex flex-col">
+            <ContactForm
+              source="industries-wealth-management-pe-insurance"
+              defaultIntent="talent"
+              submitLabel="Request a call"
+              className="h-full flex flex-col justify-between"
+            />
+          </div>
+          <div className="lg:col-span-5 flex flex-col">
+            <IndustryFormSideContent />
+          </div>
         </div>
       </Section>
 

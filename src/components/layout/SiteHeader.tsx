@@ -7,10 +7,18 @@ import {
   ArrowRight,
   Building2,
   ChevronDown,
+  Coins,
   Compass,
+  Cpu,
+  Factory,
   FileText,
+  FlaskConical,
+  Hotel,
   Menu,
+  Pickaxe,
   Settings2,
+  ShoppingBag,
+  Sparkles,
   Users,
   X,
 } from "lucide-react";
@@ -61,14 +69,17 @@ const insightLinks = [
 ];
 
 const industryCol1 = [
-  { href: "/industries/engineering-erd", label: "Engineering & ER&D" },
-  { href: "/industries/healthcare-life-sciences", label: "Healthcare & Life Sciences" },
-  { href: "/industries", label: "View all industries →" },
+  { href: "/industries/engineering-erd", label: "Engineering & ER&D", icon: Cpu },
+  { href: "/industries/healthcare-life-sciences", label: "Healthcare & Life Sciences", icon: FlaskConical },
+  { href: "/industries/fmcg-retail", label: "FMCG & Retail", icon: ShoppingBag },
+  { href: "/industries/manufacturing", label: "Manufacturing & Industrial IoT", icon: Factory },
 ];
 
 const industryCol2 = [
-  { href: "/industries/wealth-management-pe-insurance", label: "Wealth Management, PE & Insurance" },
-  { href: "/industries/technology-ai", label: "Technology & AI" },
+  { href: "/industries/wealth-management-pe-insurance", label: "Wealth Management, PE & Insurance", icon: Coins },
+  { href: "/industries/technology-ai", label: "Technology & AI", icon: Sparkles },
+  { href: "/industries/mining-metals", label: "Mining & Metals", icon: Pickaxe },
+  { href: "/industries/travel-leisure-hospitality", label: "Travel, Leisure, Hospitality", icon: Hotel },
 ];
 
 const simpleLinks = [
@@ -117,9 +128,11 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
           />
           <MegaTrigger
             label="Industries"
+            href="/industries"
             active={menu === "industries" || pathname.startsWith("/industries")}
             onEnter={() => openMenu("industries")}
             onLeave={scheduleClose}
+            onClick={() => setMenu(null)}
           />
           <MegaTrigger
             label="Insights"
@@ -181,8 +194,8 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
                         className="group flex gap-3 rounded-xl border border-transparent p-3 transition hover:border-[#b49339]/30 hover:bg-[#e5ebe6]/60"
                         onClick={() => setMenu(null)}
                       >
-                        <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#2e3f33] text-[#b49339] shadow-sm">
-                          <Icon className="h-5 w-5 stroke-[2.2] text-[#b49339]" />
+                        <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#e5ebe6] text-[#2e3f33] shadow-xs group-hover:bg-[#2e3f33] group-hover:text-[#b49339] transition-all">
+                          <Icon className="h-5 w-5 stroke-[2.2]" />
                         </span>
                         <span>
                           <span className="block text-sm font-semibold text-navy group-hover:text-accent">
@@ -194,72 +207,90 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
                     );
                   })}
                 </div>
-                <div className="rounded-2xl bg-[#2e3f33] p-5 text-white shadow-sm">
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#b49339]">
-                    Connected platform
-                  </p>
-                  <p className="mt-2 text-lg font-bold">One operating system for your GCC</p>
-                  <p className="mt-2 text-sm text-white/70">
-                    Talent, workspace, ops, and advisory — planned together so nothing slips between vendors.
-                  </p>
-                  <Link
-                    href="/#how-it-connects"
-                    className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#b49339] hover:text-white"
-                    onClick={() => setMenu(null)}
-                  >
-                    See how it connects <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
+                <div className="rounded-2xl border border-[#cddcd1] bg-[#e5ebe6] p-5 shadow-xs flex flex-col justify-between">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#b49339]">
+                      Connected platform
+                    </p>
+                    <p className="mt-2 text-lg font-bold text-navy">One operating system for your GCC</p>
+                    <p className="mt-2 text-sm text-slate leading-relaxed">
+                      Talent, workspace, ops, and advisory — planned together so nothing slips between vendors.
+                    </p>
+                  </div>
+                  <div>
+                    <Link
+                      href="/#how-it-connects"
+                      className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#2e3f33] hover:text-[#b49339] transition-colors"
+                      onClick={() => setMenu(null)}
+                    >
+                      See how it connects <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
+                  </div>
                 </div>
               </>
             ) : menu === "industries" ? (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-1">
-                  <div className="space-y-1">
-                    {industryCol1.map((item) => (
-                      <Link
-                        key={item.label}
-                        href={item.href}
-                        className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-navy transition hover:bg-[#e5ebe6]/70 hover:text-accent"
-                        onClick={() => setMenu(null)}
-                      >
-                        <Building2 className="h-4 w-4 text-slate shrink-0" />
-                        <span>{item.label}</span>
-                      </Link>
-                    ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
+                  <div className="space-y-1.5">
+                    {industryCol1.map((item) => {
+                      const Icon = item.icon;
+                      return (
+                        <Link
+                          key={item.label}
+                          href={item.href}
+                          className="group flex items-center gap-3.5 rounded-xl border border-transparent p-2.5 transition hover:border-[#b49339]/30 hover:bg-[#e5ebe6]/60"
+                          onClick={() => setMenu(null)}
+                        >
+                          <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#e5ebe6] text-[#2e3f33] shadow-xs group-hover:bg-[#2e3f33] group-hover:text-[#b49339] group-hover:scale-105 transition-all">
+                            <Icon className="h-5 w-5 stroke-[2.2]" />
+                          </span>
+                          <span className="block text-sm font-semibold text-navy group-hover:text-accent">
+                            {item.label}
+                          </span>
+                        </Link>
+                      );
+                    })}
                   </div>
-                  <div className="space-y-1">
-                    {industryCol2.map((item) => (
-                      <Link
-                        key={item.label}
-                        href={item.href}
-                        className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-navy transition hover:bg-[#e5ebe6]/70 hover:text-accent"
-                        onClick={() => setMenu(null)}
-                      >
-                        <Building2 className="h-4 w-4 text-slate shrink-0" />
-                        <span>{item.label}</span>
-                      </Link>
-                    ))}
+                  <div className="space-y-1.5">
+                    {industryCol2.map((item) => {
+                      const Icon = item.icon;
+                      return (
+                        <Link
+                          key={item.label}
+                          href={item.href}
+                          className="group flex items-center gap-3.5 rounded-xl border border-transparent p-2.5 transition hover:border-[#b49339]/30 hover:bg-[#e5ebe6]/60"
+                          onClick={() => setMenu(null)}
+                        >
+                          <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#e5ebe6] text-[#2e3f33] shadow-xs group-hover:bg-[#2e3f33] group-hover:text-[#b49339] group-hover:scale-105 transition-all">
+                            <Icon className="h-5 w-5 stroke-[2.2]" />
+                          </span>
+                          <span className="block text-sm font-semibold text-navy group-hover:text-accent">
+                            {item.label}
+                          </span>
+                        </Link>
+                      );
+                    })}
                   </div>
                 </div>
-                <div className="rounded-2xl border border-border/80 bg-[#f4f7fb]/80 p-5 sm:p-6 flex flex-col justify-between">
+                <div className="rounded-2xl border border-[#cddcd1] bg-[#e5ebe6] p-5 sm:p-6 flex flex-col justify-between">
                   <div>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate/80">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#b49339]">
                       Domain Specialization
                     </p>
                     <p className="mt-2 text-sm sm:text-base font-bold text-navy leading-snug">
                       Customized GCC setups for specialized industry verticals
                     </p>
-                    <p className="mt-2 text-xs text-slate/90 leading-relaxed">
+                    <p className="mt-2 text-xs text-slate leading-relaxed">
                       Air-gapped security, certified physical perimeters, and regulatory compliance for your sector.
                     </p>
                   </div>
                   <div>
                     <Link
-                      href="/industries/engineering-erd"
-                      className="mt-4 inline-flex items-center rounded-lg bg-[#2e3f33] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#212e25]"
+                      href="/industries"
+                      className="mt-4 inline-flex items-center rounded-lg bg-[#b49339] px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-[#9e7f2b]"
                       onClick={() => setMenu(null)}
                     >
-                      Browse industries
+                      View all industries →
                     </Link>
                   </div>
                 </div>
@@ -327,7 +358,7 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
                   className="flex items-center gap-3 rounded-xl p-2 text-sm font-semibold text-navy transition hover:bg-[#e5ebe6]"
                   onClick={() => setMobileOpen(false)}
                 >
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#2e3f33] text-[#b49339]">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#e5ebe6] text-[#2e3f33]">
                     <Icon className="h-4 w-4 stroke-[2.2]" />
                   </span>
                   <div className="min-w-0">
@@ -343,17 +374,22 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
             Industries
           </p>
           <div className="mt-2 space-y-1">
-            {[...industryCol1, ...industryCol2].map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="flex items-center gap-2.5 rounded-xl px-2.5 py-1.5 text-sm font-medium text-navy transition hover:bg-[#e5ebe6]"
-                onClick={() => setMobileOpen(false)}
-              >
-                <Building2 className="h-4 w-4 text-slate shrink-0" />
-                <span>{item.label}</span>
-              </Link>
-            ))}
+            {[...industryCol1, ...industryCol2].map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="flex items-center gap-3 rounded-xl p-2 text-sm font-semibold text-navy transition hover:bg-[#e5ebe6]"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#e5ebe6] text-[#2e3f33]">
+                    <Icon className="h-4 w-4 stroke-[2.2]" />
+                  </span>
+                  <span className="text-sm font-semibold text-navy leading-tight">{item.label}</span>
+                </Link>
+              );
+            })}
           </div>
 
           <p className="mt-5 text-[11px] font-bold uppercase tracking-wider text-[#b49339]">
@@ -389,25 +425,50 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
 function MegaTrigger({
   label,
   active,
+  href,
   onEnter,
   onLeave,
+  onClick,
 }: {
   label: string;
   active: boolean;
+  href?: string;
   onEnter: () => void;
   onLeave: () => void;
+  onClick?: () => void;
 }) {
+  const commonClasses = cn(
+    "inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors cursor-pointer",
+    active ? "bg-accent-soft text-accent" : "text-slate hover:bg-surface hover:text-navy",
+  );
+
+  if (href) {
+    return (
+      <Link
+        href={href}
+        className={commonClasses}
+        onMouseEnter={onEnter}
+        onMouseLeave={onLeave}
+        onFocus={onEnter}
+        onBlur={onLeave}
+        onClick={onClick}
+        aria-expanded={active}
+      >
+        {label}
+        <ChevronDown className={cn("h-3.5 w-3.5 transition", active && "rotate-180")} />
+      </Link>
+    );
+  }
+
   return (
     <button
       type="button"
-      className={cn(
-        "inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-        active ? "bg-accent-soft text-accent" : "text-slate hover:bg-surface hover:text-navy",
-      )}
+      className={commonClasses}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
       onFocus={onEnter}
       onBlur={onLeave}
+      onClick={onClick}
       aria-expanded={active}
     >
       {label}

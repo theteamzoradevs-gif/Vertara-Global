@@ -6,6 +6,7 @@ import { FlowThreads } from "@/components/ui/FlowThreads";
 import { CTABand } from "@/components/ui/CTABand";
 import { Accordion } from "@/components/ui/Accordion";
 import { ContactForm } from "@/components/leads/ContactForm";
+import { IndustryFormSideContent } from "@/components/industries/IndustryFormSideContent";
 import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
 import {
   TechAiOpportunityJourney,
@@ -68,24 +69,27 @@ export default async function TechnologyAiPage() {
   return (
     <>
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden text-white">
+      <section className="relative overflow-hidden text-white bg-[#0e3621]">
+        {/* Right-aligned Realistic Background Image */}
         <div className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1600&q=80"
-            alt="Technology & AI GCC in India"
+            src="/images/technology-ai.png"
+            alt="Technology & AI Compute Architecture"
             fill
-            className="object-cover"
+            className="object-cover object-right lg:object-right"
             priority
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-navy/85" />
-          <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/90 to-navy/60" />
-          <FlowThreads intensity="medium" onDark className="opacity-45" />
+          {/* Subtle Emerald / Forest Green Soft Gradient & Shadow Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0d3320] via-[#0d3320]/95 via-40% sm:via-48% md:via-52% to-[#0d3320]/25 lg:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0d3320] via-transparent to-[#0d3320]/40" />
+          <div className="absolute inset-0 bg-[#0d3320]/20 mix-blend-multiply" />
+          <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
 
-        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
+        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20 lg:py-24 lg:px-8">
           {/* Breadcrumb / Eyebrow */}
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#b49339]">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
             <Link href="/industries" className="hover:underline">
               Industries
             </Link>
@@ -93,77 +97,26 @@ export default async function TechnologyAiPage() {
             <span>Technology & AI</span>
           </div>
 
-          <h1 className="mt-4 max-w-3xl font-serif text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-5xl leading-tight">
+          <h1 className="mt-4 max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-[44px] xl:text-[48px] leading-tight text-white">
             From IT Support to AI-Grade Infrastructure
           </h1>
 
-          <p className="mt-5 max-w-2xl text-base text-white/85 sm:text-lg leading-relaxed">
+          <p className="mt-4 max-w-xl text-base text-white/90 sm:text-lg leading-relaxed font-normal">
             AI infrastructure built to scale with usage not provisioned for a
-            headcount you don't have yet. Own GenAI/LLM engineering, MLOps,
+            headcount you don&apos;t have yet. Own GenAI/LLM engineering, MLOps,
             applied research, and high-density compute in India.
           </p>
-
-          {/* Domain Scope Tags */}
-          <div className="mt-6 flex flex-wrap gap-2 text-xs font-medium text-white/80">
-            {[
-              "GenAI/LLM Engineering",
-              "MLOps & Model Lifecycle",
-              "Applied AI Research",
-              "Data Platforms & Pipelines",
-              "GPU & Bare-Metal Compute",
-              "Cloud FinOps Governance",
-            ].map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full border border-white/20 bg-white/10 px-3 py-1 backdrop-blur-xs"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
 
           {/* Hero CTAs */}
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Button href="#enquire" variant="gold" size="lg">
               Book an AI consultation <ArrowRight className="h-4 w-4" />
             </Button>
-            <Button
-              href="#the-opportunity"
-              variant="outline"
-              size="lg"
-              className="border-white/30 bg-white/10 text-white hover:border-white hover:bg-white/20 hover:text-white"
-            >
-              Explore AI model
-            </Button>
           </div>
         </div>
       </section>
 
-      {/* 2. VALUE METRICS STRIP */}
-      <section className="border-b border-border bg-white py-8 sm:py-10">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
-            <div className="border-l-2 border-[#b49339] pl-4">
-              <p className="text-2xl sm:text-3xl font-bold text-navy">100%</p>
-              <p className="mt-1 text-xs sm:text-sm text-slate">GPU utilization & MLOps sync</p>
-            </div>
-            <div className="border-l-2 border-[#b49339] pl-4">
-              <p className="text-2xl sm:text-3xl font-bold text-navy">50%+</p>
-              <p className="mt-1 text-xs sm:text-sm text-slate">Lower GPU & compute burn</p>
-            </div>
-            <div className="border-l-2 border-[#b49339] pl-4">
-              <p className="text-2xl sm:text-3xl font-bold text-navy">GenAI</p>
-              <p className="mt-1 text-xs sm:text-sm text-slate">LLM fine-tuning & quantization</p>
-            </div>
-            <div className="border-l-2 border-[#b49339] pl-4">
-              <p className="text-2xl sm:text-3xl font-bold text-navy">Zero-Trust</p>
-              <p className="mt-1 text-xs sm:text-sm text-slate">Sovereign weights & training IP</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. THE OPPORTUNITY — 3-STAGE TECH & AI JOURNEY */}
+      {/* 2. THE OPPORTUNITY — 3-STAGE TECH & AI JOURNEY */}
       <Section id="the-opportunity" tone="muted">
         <SectionHeader
           eyebrow="The Opportunity"
@@ -171,6 +124,16 @@ export default async function TechnologyAiPage() {
           description="A progressive 3-stage journey turning legacy engineering tickets into production-grade GenAI models, custom MLOps pipelines, and scalable data platforms."
         />
         <TechAiOpportunityJourney />
+      </Section>
+
+      {/* 3. WHAT THIS SECTOR NEEDS — 3-POINT AI INFRASTRUCTURE */}
+      <Section>
+        <SectionHeader
+          eyebrow="What This Sector Needs"
+          title="Engineered for Right-Sized Compute, MLOps Rigor & Cloud FinOps"
+          description="Explore the high-density GPU orchestration, automated model registry loops, and hybrid multi-cloud cost controls required for high-velocity AI enterprises."
+        />
+        <TechAiSectorNeedsSelector />
       </Section>
 
       {/* 4. CTA BANNER */}
@@ -183,16 +146,6 @@ export default async function TechnologyAiPage() {
           secondaryHref="/engagement-models"
           secondaryLabel="Compare engagement models"
         />
-      </Section>
-
-      {/* 5. WHAT THIS SECTOR NEEDS — 3-POINT AI INFRASTRUCTURE */}
-      <Section tone="muted">
-        <SectionHeader
-          eyebrow="What This Sector Needs"
-          title="Engineered for Right-Sized Compute, MLOps Rigor & Cloud FinOps"
-          description="Explore the high-density GPU orchestration, automated model registry loops, and hybrid multi-cloud cost controls required for high-velocity AI enterprises."
-        />
-        <TechAiSectorNeedsSelector />
       </Section>
 
       {/* 6. HOW VERTARA HELPS — CONNECTED BLUEPRINT */}
@@ -208,9 +161,9 @@ export default async function TechnologyAiPage() {
       {/* 7. CLIENT VOICES & TESTIMONIALS */}
       <Section tone="muted">
         <SectionHeader
-          eyebrow="Trust & Track Record"
-          title="AI and SaaS enterprises scaling production intelligence"
-          description="Hear from CTOs, Heads of AI Research, and VP Engineering who accelerated their model deployment velocity with Vertara."
+          eyebrow="Trust"
+          title="Enterprises building lasting India capability"
+          description="The capabilities we deliver, backed by the experiences of leaders building and scaling in India."
         />
         <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-6">
           {logos.map((logo) => (
@@ -234,12 +187,18 @@ export default async function TechnologyAiPage() {
           title="Let's build your AI-grade capability center"
           description="Share your product and compute roadmap, we'll connect you with our Technology & AI practice lead."
         />
-        <div className="mx-auto max-w-2xl">
-          <ContactForm
-            source="industries-technology-ai"
-            defaultIntent="talent"
-            submitLabel="Request a Tech & AI partner call"
-          />
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-8 items-stretch">
+          <div className="lg:col-span-7 flex flex-col">
+            <ContactForm
+              source="industries-technology-ai"
+              defaultIntent="talent"
+              submitLabel="Request a call"
+              className="h-full flex flex-col justify-between"
+            />
+          </div>
+          <div className="lg:col-span-5 flex flex-col">
+            <IndustryFormSideContent />
+          </div>
         </div>
       </Section>
 

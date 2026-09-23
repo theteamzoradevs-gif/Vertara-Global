@@ -6,6 +6,7 @@ import { FlowThreads } from "@/components/ui/FlowThreads";
 import { CTABand } from "@/components/ui/CTABand";
 import { Accordion } from "@/components/ui/Accordion";
 import { ContactForm } from "@/components/leads/ContactForm";
+import { IndustryFormSideContent } from "@/components/industries/IndustryFormSideContent";
 import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
 import {
   HospitalityOpportunityJourney,
@@ -68,24 +69,27 @@ export default async function TravelLeisureHospitalityPage() {
   return (
     <>
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden text-white">
+      <section className="relative overflow-hidden text-white bg-[#0e3621]">
+        {/* Right-aligned Realistic Background Image */}
         <div className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1600&q=80"
-            alt="Travel, Leisure & Hospitality GCC in India"
+            src="/images/travel.png"
+            alt="Travel & Hospitality Experience Architecture"
             fill
-            className="object-cover"
+            className="object-cover object-right lg:object-right"
             priority
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-navy/85" />
-          <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/90 to-navy/60" />
-          <FlowThreads intensity="medium" onDark className="opacity-45" />
+          {/* Subtle Emerald / Forest Green Soft Gradient & Shadow Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0d3320] via-[#0d3320]/95 via-40% sm:via-48% md:via-52% to-[#0d3320]/25 lg:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0d3320] via-transparent to-[#0d3320]/40" />
+          <div className="absolute inset-0 bg-[#0d3320]/20 mix-blend-multiply" />
+          <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
 
-        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
+        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20 lg:py-24 lg:px-8">
           {/* Breadcrumb / Eyebrow */}
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#b49339]">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
             <Link href="/industries" className="hover:underline">
               Industries
             </Link>
@@ -93,78 +97,27 @@ export default async function TravelLeisureHospitalityPage() {
             <span>Travel, Leisure, Hospitality</span>
           </div>
 
-          <h1 className="mt-4 max-w-3xl font-serif text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-5xl leading-tight">
+          <h1 className="mt-4 max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-[44px] xl:text-[48px] leading-tight text-white">
             From Reservations Processing to Revenue Intelligence
           </h1>
 
-          <p className="mt-5 max-w-2xl text-base text-white/85 sm:text-lg leading-relaxed">
+          <p className="mt-4 max-w-xl text-base text-white/90 sm:text-lg leading-relaxed font-normal">
             A revenue-management centre sized for a boutique portfolio not a
             5,000-property chain. Own dynamic pricing, multi-channel
             distribution, guest personalization, and loyalty operations in
             India.
           </p>
 
-          {/* Domain Scope Tags */}
-          <div className="mt-6 flex flex-wrap gap-2 text-xs font-medium text-white/80">
-            {[
-              "Reservations & Channel Managers",
-              "Loyalty Platforms & CRM",
-              "Guest Personalization AI",
-              "RevPAR & Yield Reporting",
-              "OTA Commission Reconciliation",
-              "Multi-Property Operations",
-            ].map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full border border-white/20 bg-white/10 px-3 py-1 backdrop-blur-xs"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-
           {/* Hero CTAs */}
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Button href="#enquire" variant="gold" size="lg">
               Book a Hospitality consultation <ArrowRight className="h-4 w-4" />
             </Button>
-            <Button
-              href="#the-opportunity"
-              variant="outline"
-              size="lg"
-              className="border-white/30 bg-white/10 text-white hover:border-white hover:bg-white/20 hover:text-white"
-            >
-              Explore revenue model
-            </Button>
           </div>
         </div>
       </section>
 
-      {/* 2. VALUE METRICS STRIP */}
-      <section className="border-b border-border bg-white py-8 sm:py-10">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
-            <div className="border-l-2 border-[#b49339] pl-4">
-              <p className="text-2xl sm:text-3xl font-bold text-navy">100%</p>
-              <p className="mt-1 text-xs sm:text-sm text-slate">Sub-second PMS & OTA sync</p>
-            </div>
-            <div className="border-l-2 border-[#b49339] pl-4">
-              <p className="text-2xl sm:text-3xl font-bold text-navy">15–25%</p>
-              <p className="mt-1 text-xs sm:text-sm text-slate">Higher RevPAR & ADR yield</p>
-            </div>
-            <div className="border-l-2 border-[#b49339] pl-4">
-              <p className="text-2xl sm:text-3xl font-bold text-navy">PCI-DSS</p>
-              <p className="mt-1 text-xs sm:text-sm text-slate">Tokenized guest & card vaults</p>
-            </div>
-            <div className="border-l-2 border-[#b49339] pl-4">
-              <p className="text-2xl sm:text-3xl font-bold text-navy">Zero-Trust</p>
-              <p className="mt-1 text-xs sm:text-sm text-slate">Cross-property privacy perimeter</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. THE OPPORTUNITY — 3-STAGE HOSPITALITY JOURNEY */}
+      {/* 2. THE OPPORTUNITY — 3-STAGE HOSPITALITY JOURNEY */}
       <Section id="the-opportunity" tone="muted">
         <SectionHeader
           eyebrow="The Opportunity"
@@ -172,6 +125,16 @@ export default async function TravelLeisureHospitalityPage() {
           description="A progressive 3-stage journey turning standard reservation handling into algorithmic yield management, guest loyalty, and direct booking capture."
         />
         <HospitalityOpportunityJourney />
+      </Section>
+
+      {/* 3. WHAT THIS SECTOR NEEDS — 3-POINT HOSPITALITY ARCHITECTURE */}
+      <Section>
+        <SectionHeader
+          eyebrow="What This Sector Needs"
+          title="Engineered for Multi-Channel Sync, Demand Yield & Guest Data Security"
+          description="Explore the sub-second PMS/OTA interconnects, dynamic pricing engines, and PCI-DSS tokenized payment vaults required for agile hospitality portfolios."
+        />
+        <HospitalitySectorNeedsSelector />
       </Section>
 
       {/* 4. CTA BANNER */}
@@ -184,16 +147,6 @@ export default async function TravelLeisureHospitalityPage() {
           secondaryHref="/engagement-models"
           secondaryLabel="Compare engagement models"
         />
-      </Section>
-
-      {/* 5. WHAT THIS SECTOR NEEDS — 3-POINT HOSPITALITY ARCHITECTURE */}
-      <Section tone="muted">
-        <SectionHeader
-          eyebrow="What This Sector Needs"
-          title="Engineered for Multi-Channel Sync, Demand Yield & Guest Data Security"
-          description="Explore the sub-second PMS/OTA interconnects, dynamic pricing engines, and PCI-DSS tokenized payment vaults required for agile hospitality portfolios."
-        />
-        <HospitalitySectorNeedsSelector />
       </Section>
 
       {/* 6. HOW VERTARA HELPS — CONNECTED BLUEPRINT */}
@@ -209,9 +162,9 @@ export default async function TravelLeisureHospitalityPage() {
       {/* 7. CLIENT VOICES & TESTIMONIALS */}
       <Section tone="muted">
         <SectionHeader
-          eyebrow="Trust & Track Record"
-          title="Hospitality and leisure brands scaling global revenue operations"
-          description="Hear from Chief Commercial Officers, VP Revenue Management, and Hotel Operations Directors who expanded their RevPAR with Vertara."
+          eyebrow="Trust"
+          title="Enterprises building lasting India capability"
+          description="The capabilities we deliver, backed by the experiences of leaders building and scaling in India."
         />
         <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-6">
           {logos.map((logo) => (
@@ -235,12 +188,18 @@ export default async function TravelLeisureHospitalityPage() {
           title="Let's build your hospitality intelligence capability center"
           description="Share your property footprint, we'll connect you with our Travel & Hospitality practice lead."
         />
-        <div className="mx-auto max-w-2xl">
-          <ContactForm
-            source="industries-travel-leisure-hospitality"
-            defaultIntent="talent"
-            submitLabel="Request a Hospitality partner call"
-          />
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-8 items-stretch">
+          <div className="lg:col-span-7 flex flex-col">
+            <ContactForm
+              source="industries-travel-leisure-hospitality"
+              defaultIntent="talent"
+              submitLabel="Request a call"
+              className="h-full flex flex-col justify-between"
+            />
+          </div>
+          <div className="lg:col-span-5 flex flex-col">
+            <IndustryFormSideContent />
+          </div>
         </div>
       </Section>
 
