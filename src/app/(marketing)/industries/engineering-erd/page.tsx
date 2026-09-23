@@ -6,6 +6,7 @@ import { FlowThreads } from "@/components/ui/FlowThreads";
 import { CTABand } from "@/components/ui/CTABand";
 import { Accordion } from "@/components/ui/Accordion";
 import { ContactForm } from "@/components/leads/ContactForm";
+import { IndustryFormSideContent } from "@/components/industries/IndustryFormSideContent";
 import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
 import {
   ErdOpportunityJourney,
@@ -68,24 +69,27 @@ export default async function EngineeringErdPage() {
   return (
     <>
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden text-white">
+      <section className="relative overflow-hidden text-white bg-[#0e3621]">
+        {/* Right-aligned Realistic Background Image */}
         <div className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1600&q=80"
-            alt="Engineering & ER&D GCC"
+            src="/images/engineering-erd.png"
+            alt="Engineering & ER&D Workspace"
             fill
-            className="object-cover"
+            className="object-cover object-right lg:object-right"
             priority
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-navy/85" />
-          <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/90 to-navy/60" />
-          <FlowThreads intensity="medium" onDark className="opacity-45" />
+          {/* Subtle Emerald / Forest Green Soft Gradient & Shadow Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0d3320] via-[#0d3320]/95 via-40% sm:via-48% md:via-52% to-[#0d3320]/25 lg:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0d3320] via-transparent to-[#0d3320]/40" />
+          <div className="absolute inset-0 bg-[#0d3320]/20 mix-blend-multiply" />
+          <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
 
-        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
+        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20 lg:py-24 lg:px-8">
           {/* Breadcrumb / Eyebrow */}
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#b49339]">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
             <Link href="/industries" className="hover:underline">
               Industries
             </Link>
@@ -93,76 +97,26 @@ export default async function EngineeringErdPage() {
             <span>Engineering & ER&D</span>
           </div>
 
-          <h1 className="mt-4 max-w-3xl font-serif text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-5xl leading-tight">
+          <h1 className="mt-4 max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-[44px] xl:text-[48px] leading-tight text-white">
             From CAD Seats to Real Product Ownership
           </h1>
 
-          <p className="mt-5 max-w-2xl text-base text-white/85 sm:text-lg leading-relaxed">
-            An ER&D centre engineered around your product architecture — not
+          <p className="mt-4 max-w-xl text-base text-white/90 sm:text-lg leading-relaxed font-normal">
+            An ER&D centre engineered around your product architecture not
             someone else’s IT template. Own systems design, embedded firmware,
             and simulation-driven R&D in India.
           </p>
-
-          {/* Domain Scope Tags */}
-          <div className="mt-6 flex flex-wrap gap-2 text-xs font-medium text-white/80">
-            {[
-              "Product Engineering",
-              "R&D & Prototyping",
-              "Software Simulation (FEA/CFD)",
-              "Embedded AI & Firmware",
-              "Architectural & PLM Design",
-            ].map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full border border-white/20 bg-white/10 px-3 py-1 backdrop-blur-xs"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
 
           {/* Hero CTAs */}
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Button href="#enquire" variant="gold" size="lg">
               Book an ER&D consultation <ArrowRight className="h-4 w-4" />
             </Button>
-            <Button
-              href="#the-opportunity"
-              variant="outline"
-              size="lg"
-              className="border-white/30 bg-white/10 text-white hover:border-white hover:bg-white/20 hover:text-white"
-            >
-              Explore engineering model
-            </Button>
           </div>
         </div>
       </section>
 
-      {/* 2. VALUE METRICS STRIP */}
-      <section className="border-b border-border bg-white py-8 sm:py-10">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
-            <div className="border-l-2 border-[#b49339] pl-4">
-              <p className="text-2xl sm:text-3xl font-bold text-navy">40–60%</p>
-              <p className="mt-1 text-xs sm:text-sm text-slate">Faster R&D cycle times</p>
-            </div>
-            <div className="border-l-2 border-[#b49339] pl-4">
-              <p className="text-2xl sm:text-3xl font-bold text-navy">100%</p>
-              <p className="mt-1 text-xs sm:text-sm text-slate">Direct global IP ownership</p>
-            </div>
-            <div className="border-l-2 border-[#b49339] pl-4">
-              <p className="text-2xl sm:text-3xl font-bold text-navy">Tier-1</p>
-              <p className="mt-1 text-xs sm:text-sm text-slate">CAD/PLM & CAE clusters</p>
-            </div>
-            <div className="border-l-2 border-[#b49339] pl-4">
-              <p className="text-2xl sm:text-3xl font-bold text-navy">Zero-Trust</p>
-              <p className="mt-1 text-xs sm:text-sm text-slate">Day-1 air-gapped lab security</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. THE OPPORTUNITY — INTERACTIVE NUMBERED JOURNEY */}
+      {/* 2. THE OPPORTUNITY — INTERACTIVE NUMBERED JOURNEY */}
       <Section id="the-opportunity" tone="muted">
         <SectionHeader
           eyebrow="The Opportunity"
@@ -170,6 +124,16 @@ export default async function EngineeringErdPage() {
           description="A progressive 3-stage journey turning offshore engineering seats into genuine systems architecture and patent-generating innovation."
         />
         <ErdOpportunityJourney />
+      </Section>
+
+      {/* 3. WHAT THIS SECTOR NEEDS — INTERACTIVE 3-POINT SELECTOR */}
+      <Section>
+        <SectionHeader
+          eyebrow="What This Sector Needs"
+          title="Engineered for Heavy Simulation & Zero-Trust Security"
+          description="Explore the technical infrastructure, high-density compute, and air-gapped security frameworks required for specialized ER&D operations."
+        />
+        <ErdSectorNeedsSelector />
       </Section>
 
       {/* 4. CTA BANNER */}
@@ -182,16 +146,6 @@ export default async function EngineeringErdPage() {
           secondaryHref="/engagement-models"
           secondaryLabel="Compare engagement models"
         />
-      </Section>
-
-      {/* 5. WHAT THIS SECTOR NEEDS — INTERACTIVE 3-POINT SELECTOR */}
-      <Section tone="muted">
-        <SectionHeader
-          eyebrow="What This Sector Needs"
-          title="Engineered for Heavy Simulation & Zero-Trust Security"
-          description="Explore the technical infrastructure, high-density compute, and air-gapped security frameworks required for specialized ER&D operations."
-        />
-        <ErdSectorNeedsSelector />
       </Section>
 
       {/* 6. HOW VERTARA HELPS — INTERACTIVE CAPABILITY REVEAL */}
@@ -207,9 +161,9 @@ export default async function EngineeringErdPage() {
       {/* 7. CLIENT VOICES & TESTIMONIALS */}
       <Section tone="muted">
         <SectionHeader
-          eyebrow="Trust & Track Record"
-          title="Enterprises building lasting engineering capability"
-          description="Hear from engineering leaders and COOs who transformed their R&D velocity with Vertara."
+          eyebrow="Trust"
+          title="Enterprises building lasting India capability"
+          description="The capabilities we deliver, backed by the experiences of leaders building and scaling in India."
         />
         <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-6">
           {logos.map((logo) => (
@@ -233,12 +187,18 @@ export default async function EngineeringErdPage() {
           title="Let's build your engineering capability center"
           description="Share what you're building, we'll connect you with our engineering & ER&D practice lead."
         />
-        <div className="mx-auto max-w-2xl">
-          <ContactForm
-            source="industries-engineering-erd"
-            defaultIntent="talent"
-            submitLabel="Request an ER&D partner call"
-          />
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-8 items-stretch">
+          <div className="lg:col-span-7 flex flex-col">
+            <ContactForm
+              source="industries-engineering-erd"
+              defaultIntent="talent"
+              submitLabel="Request a call"
+              className="h-full flex flex-col justify-between"
+            />
+          </div>
+          <div className="lg:col-span-5 flex flex-col">
+            <IndustryFormSideContent />
+          </div>
         </div>
       </Section>
 

@@ -204,7 +204,7 @@ export default async function HomePage() {
         />
         <HomeCaseStudies cases={homepageCases} />
         <div className="mt-8 flex justify-center sm:justify-start">
-          <Button href="/case-studies" variant="outline">
+          <Button href="/case-studies" variant="primary">
             View all case studies
           </Button>
         </div>

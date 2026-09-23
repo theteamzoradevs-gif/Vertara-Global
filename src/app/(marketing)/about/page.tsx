@@ -89,8 +89,20 @@ export default async function AboutPage() {
         </div>
       </Section>
 
-      {/* 7. FAQ Section */}
+      {/* 7. Contact & Enquiry */}
       <Section>
+        <SectionHeader
+          eyebrow="Enquire"
+          title="Start a conversation with the team"
+          description="Share what you’re building, we’ll connect you with the right partner."
+        />
+        <div className="mx-auto max-w-2xl">
+          <ContactForm source="about" submitLabel="Request a partner call" />
+        </div>
+      </Section>
+
+      {/* 8. FAQ Section */}
+      <Section tone="muted">
         <SectionHeader
           eyebrow="FAQ"
           title="Frequently asked questions about Vertara"
@@ -107,18 +119,6 @@ export default async function AboutPage() {
           <Button href="/faq" variant="primary">
             View full FAQ
           </Button>
-        </div>
-      </Section>
-
-      {/* 8. Contact & Enquiry */}
-      <Section tone="muted">
-        <SectionHeader
-          eyebrow="Enquire"
-          title="Start a conversation with the team"
-          description="Share what you’re building, we’ll connect you with the right partner."
-        />
-        <div className="mx-auto max-w-2xl">
-          <ContactForm source="about" submitLabel="Request a partner call" />
         </div>
       </Section>
     </>

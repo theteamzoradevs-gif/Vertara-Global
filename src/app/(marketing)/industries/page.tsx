@@ -5,13 +5,16 @@ import { Section, SectionHeader } from "@/components/ui/Section";
 import { FlowThreads } from "@/components/ui/FlowThreads";
 import { CTABand } from "@/components/ui/CTABand";
 import { ContactForm } from "@/components/leads/ContactForm";
+import { IndustryFormSideContent } from "@/components/industries/IndustryFormSideContent";
 import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
+import { HomeCaseStudies } from "@/components/home/HomeCaseStudies";
 import { Accordion } from "@/components/ui/Accordion";
 import {
   getSettings,
   getTestimonials,
   getClientLogos,
   getFaqs,
+  getCaseStudies,
 } from "@/lib/content";
 import {
   Cpu,
@@ -37,7 +40,7 @@ const industryList = [
     title: "Engineering & ER&D",
     tagline: "From CAD Seats to Real Product Ownership",
     description:
-      "Specialized engineering and R&D pipelines, software simulation capabilities (FEA/CFD), hardware-in-the-loop (HIL) testing, and embedded firmware CoEs.",
+      "Specialized engineering and R&D pipelines, software simulation capabilities (FEA/CFD), hardware in the loop (HIL) testing, and embedded firmware CoEs.",
     icon: Cpu,
   },
   {
@@ -99,50 +102,61 @@ const industryList = [
 ];
 
 export default async function IndustriesHubPage() {
-  const [settings, testimonials, logos, faqs] = await Promise.all([
+  const [settings, testimonials, logos, faqs, cases] = await Promise.all([
     getSettings(),
     getTestimonials(),
     getClientLogos(),
     getFaqs(),
+    getCaseStudies(),
   ]);
+
+  const featuredCases = [
+    ...cases.filter((c: { featured?: boolean }) => c.featured === true),
+    ...cases.filter((c: { featured?: boolean }) => c.featured !== true),
+  ].slice(0, 2);
 
   return (
     <>
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden text-white">
-        <div className="absolute inset-0 bg-navy">
-          <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/95 to-navy/80" />
-          <FlowThreads intensity="medium" onDark className="opacity-35" />
+      <section className="relative overflow-hidden text-white bg-[#0e3621]">
+        {/* Right-aligned Realistic Background Image */}
+        <div className="absolute inset-0">
+          <Image
+            src="/images/industries.png"
+            alt="Dedicated GCC Setups for Specialized Industry Verticals"
+            fill
+            className="object-cover object-right lg:object-right"
+            priority
+            sizes="100vw"
+          />
+          {/* Subtle Emerald / Forest Green Soft Gradient & Shadow Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0d3320] via-[#0d3320]/95 via-40% sm:via-48% md:via-52% to-[#0d3320]/25 lg:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0d3320] via-transparent to-[#0d3320]/40" />
+          <div className="absolute inset-0 bg-[#0d3320]/20 mix-blend-multiply" />
+          <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
 
-        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#b49339]">
+        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20 lg:py-24 lg:px-8">
+          {/* Breadcrumb / Eyebrow */}
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
             <span>Industries</span>
             <span>/</span>
             <span>Sector Specialization</span>
           </div>
 
-          <h1 className="mt-4 max-w-3xl font-serif text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-5xl leading-tight">
+          <h1 className="mt-4 max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-[44px] xl:text-[48px] leading-tight text-white">
             Dedicated GCC Setups for Specialized Industry Verticals
           </h1>
 
-          <p className="mt-5 max-w-2xl text-base text-white/85 sm:text-lg leading-relaxed">
+          <p className="mt-4 max-w-xl text-base text-white/90 sm:text-lg leading-relaxed font-normal">
             One size does not fit all. We build dedicated Indian capability
             centres engineered around your sector&apos;s exact regulatory compliance,
             data infrastructure, and practitioner talent depth.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Button href="#sectors" variant="gold" size="lg">
+            <Button href="#enquire" variant="gold" size="lg">
               Explore industry models <ArrowRight className="h-4 w-4" />
-            </Button>
-            <Button
-              href="/contact"
-              variant="outline"
-              size="lg"
-              className="border-white/30 bg-white/10 text-white hover:border-white hover:bg-white/20 hover:text-white"
-            >
-              Book an industry consultation
             </Button>
           </div>
         </div>
@@ -160,30 +174,27 @@ export default async function IndustriesHubPage() {
           {industryList.map((item) => {
             const Icon = item.icon;
             return (
-              <div
+              <Link
                 key={item.id}
-                className="group relative flex flex-col justify-between rounded-3xl border border-[#cddcd1] bg-[#edf5ef] p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1.5 hover:border-[#2e3f33] hover:bg-white hover:shadow-xl hover:shadow-[#2e3f33]/10 cursor-default"
+                href={`/industries/${item.id}`}
+                className="group relative flex flex-col justify-between rounded-3xl border border-[#cddcd1] bg-[#edf5ef] p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1.5 hover:border-[#2e3f33] hover:bg-white hover:shadow-xl hover:shadow-[#2e3f33]/10 cursor-pointer"
               >
-                <div>
+                <div className="flex h-full flex-col">
                   <div className="flex items-start justify-start">
                     <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#2e3f33] text-[#b49339] shadow-md ring-4 ring-white group-hover:scale-110 group-hover:bg-[#0b1f3a] transition-all duration-300">
                       <Icon className="h-6 w-6" />
                     </div>
                   </div>
 
-                  <h3 className="mt-5 text-lg font-bold text-navy group-hover:text-[#2e3f33] transition-colors">
+                  <h3 className="mt-5 flex min-h-[3.25rem] items-start text-lg font-bold leading-snug text-navy group-hover:text-[#2e3f33] transition-colors sm:min-h-[3.5rem]">
                     {item.title}
                   </h3>
 
-                  <p className="mt-1 text-[11px] font-bold text-[#b49339] uppercase tracking-wider leading-snug">
-                    {item.tagline}
-                  </p>
-
-                  <p className="mt-3 text-xs sm:text-sm text-slate leading-relaxed">
+                  <p className="mt-2 text-xs sm:text-sm text-slate leading-relaxed">
                     {item.description}
                   </p>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
@@ -201,12 +212,27 @@ export default async function IndustriesHubPage() {
         />
       </Section>
 
-      {/* 4. CLIENT VOICES & TESTIMONIALS */}
+      {/* 4. CASE STUDIES SECTION */}
+      <Section id="outcomes" threads="light">
+        <SectionHeader
+          eyebrow="Outcomes"
+          title="Case studies from live programmes"
+          description="Challenge → result with metric callouts — proven execution across enterprise domains."
+        />
+        <HomeCaseStudies cases={featuredCases} />
+        <div className="mt-8 flex justify-center sm:justify-start">
+          <Button href="/case-studies" variant="primary">
+            View all case studies
+          </Button>
+        </div>
+      </Section>
+
+      {/* 5. CLIENT VOICES & TESTIMONIALS */}
       <Section tone="muted">
         <SectionHeader
-          eyebrow="Trust & Track Record"
-          title="Enterprises scaling capability across industries"
-          description="Hear from business leaders who built domain-specialized Centers of Excellence with Vertara."
+          eyebrow="Trust"
+          title="Enterprises building lasting India capability"
+          description="The capabilities we deliver, backed by the experiences of leaders building and scaling in India."
         />
         <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-6">
           {logos.map((logo) => (
@@ -223,24 +249,30 @@ export default async function IndustriesHubPage() {
         </div>
       </Section>
 
-      {/* 5. ENQUIRY / CONTACT FORM */}
-      <Section id="enquire">
+      {/* 6. ENQUIRY / CONTACT FORM */}
+      <Section id="enquire" tone="muted">
         <SectionHeader
           eyebrow="Enquire"
           title="Let's build your industry capability center"
           description="Share what you're building, we'll connect you with the appropriate industry practice partner."
         />
-        <div className="mx-auto max-w-2xl">
-          <ContactForm
-            source="industries-hub"
-            defaultIntent="talent"
-            submitLabel="Request an industry partner call"
-          />
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-8 items-stretch">
+          <div className="lg:col-span-7 flex flex-col">
+            <ContactForm
+              source="industries-hub"
+              defaultIntent="talent"
+              submitLabel="Request a call"
+              className="h-full flex flex-col justify-between"
+            />
+          </div>
+          <div className="lg:col-span-5 flex flex-col">
+            <IndustryFormSideContent />
+          </div>
         </div>
       </Section>
 
-      {/* 6. FAQ SECTION */}
-      <Section tone="muted">
+      {/* 7. FAQ SECTION */}
+      <Section>
         <SectionHeader
           eyebrow="FAQ"
           title="Frequently asked questions about industry GCCs"
