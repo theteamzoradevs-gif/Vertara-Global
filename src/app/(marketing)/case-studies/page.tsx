@@ -65,9 +65,9 @@ export default async function CaseStudiesPage() {
         <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20 lg:py-24 lg:px-8">
           {/* Breadcrumb / Eyebrow */}
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
-            <span>Proven Track Record</span>
-            <span>/</span>
-            <span>Client Transformations</span>
+            <span>Case Studies</span>
+
+
           </div>
 
           <h1 className="mt-4 max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-[44px] xl:text-[48px] leading-tight text-white">
@@ -78,7 +78,7 @@ export default async function CaseStudiesPage() {
             Outcomes from programmes that needed an India GCC with clear ownership, accelerated velocity, and zero compliance compromise.
           </p>
 
-          {/* Hero CTAs */}
+
 
         </div>
       </section>

@@ -110,7 +110,7 @@ export default async function FmcgRetailPage() {
           {/* Hero CTAs */}
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Button href="#enquire" variant="gold" size="lg">
-              Book a Retail consultation <ArrowRight className="h-4 w-4" />
+              Book a consultation
             </Button>
           </div>
         </div>
