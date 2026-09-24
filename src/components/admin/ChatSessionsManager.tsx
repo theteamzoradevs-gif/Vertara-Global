@@ -16,6 +16,9 @@ import {
   Route,
   ChevronLeft,
   ChevronRight,
+  Mail,
+  Phone,
+  ExternalLink,
 } from "lucide-react";
 import {
   deleteChatSessionAction,
@@ -41,6 +44,12 @@ export type ChatSessionData = {
   status?: "opened" | "in_progress" | "completed" | string;
   createdAt?: string;
   updatedAt?: string;
+  leadId?: string | null;
+  lead?: {
+    name?: string;
+    email?: string;
+    phone?: string;
+  } | null;
 };
 
 interface ChatSessionsManagerProps {
@@ -89,11 +98,12 @@ function formatDateTime(value?: string) {
   });
 }
 
-function lastUserPreview(messages?: ChatMessageData[]) {
+function firstOrLatestUserPreview(messages?: ChatMessageData[]) {
   const userMsgs = (messages || []).filter((m) => m.role === "user" && m.text?.trim());
   if (!userMsgs.length) return "No user message yet";
+  // Prefer latest user message for scannability
   const text = userMsgs[userMsgs.length - 1].text.trim();
-  return text.length > 110 ? `${text.slice(0, 110)}...` : text;
+  return text.length > 80 ? `${text.slice(0, 80)}…` : text;
 }
 
 function sessionStatus(session: ChatSessionData) {
@@ -118,6 +128,33 @@ function sessionStatus(session: ChatSessionData) {
   return { label: "In progress", style: "bg-teal-50 text-teal-700 border-teal-200" };
 }
 
+function defaultChatEmailDraft(session: ChatSessionData) {
+  const name = session.lead?.name?.trim() || "there";
+  const subject = "Re: your inquiry with Vertara Global";
+  const preview = firstOrLatestUserPreview(session.messages);
+  const lines = [
+    `Hi ${name},`,
+    "",
+    "Thank you for reaching out to Vertara Global via chat.",
+  ];
+  if (preview && preview !== "No user message yet") {
+    lines.push("", "You wrote:", preview);
+  }
+  lines.push("", "- Vertara Global");
+  return { subject, body: lines.join("\n") };
+}
+
+function gmailComposeUrl(to: string, subject: string, body: string) {
+  const params = new URLSearchParams({
+    view: "cm",
+    fs: "1",
+    to,
+    su: subject,
+    body,
+  });
+  return `https://mail.google.com/mail/?${params.toString()}`;
+}
+
 export function ChatSessionsManager({
   initialSessions,
   initialTotal,
@@ -131,6 +168,8 @@ export function ChatSessionsManager({
   const [datePreset, setDatePreset] = useState<ChatSessionListFilters["datePreset"]>("all");
   const [selected, setSelected] = useState<ChatSessionData | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [emailingSession, setEmailingSession] = useState<ChatSessionData | null>(null);
+  const [emailSubject, setEmailSubject] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(loadError || null);
   const [toastMessage, setToastMessage] = useState<{
@@ -187,6 +226,36 @@ export function ChatSessionsManager({
       showToast("success", "Session ID copied.");
     } catch {
       showToast("error", "Could not copy session ID.");
+    }
+  };
+
+  const openEmailComposer = (session: ChatSessionData) => {
+    if (!session.lead?.email?.trim()) {
+      showToast("error", "This session has no linked email.");
+      return;
+    }
+    const draft = defaultChatEmailDraft(session);
+    setEmailingSession(session);
+    setEmailSubject(draft.subject);
+  };
+
+  const openGmailCompose = () => {
+    if (!emailingSession?.lead?.email) return;
+    const { body } = defaultChatEmailDraft(emailingSession);
+    window.open(
+      gmailComposeUrl(emailingSession.lead.email, emailSubject, body),
+      "_blank",
+      "noopener,noreferrer",
+    );
+  };
+
+  const copyInquiryEmail = async () => {
+    if (!emailingSession?.lead?.email) return;
+    try {
+      await navigator.clipboard.writeText(emailingSession.lead.email);
+      showToast("success", "Email copied.");
+    } catch {
+      showToast("error", "Could not copy email address.");
     }
   };
 
@@ -281,104 +350,134 @@ export function ChatSessionsManager({
         </select>
       </div>
 
-      <div className="space-y-3">
-        {loading ? (
-          <div className="flex items-center justify-center rounded-2xl border border-border bg-surface-elevated py-16 text-muted">
-            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-            Loading sessions...
-          </div>
-        ) : sessions.length === 0 ? (
-          <div className="rounded-2xl border border-border bg-surface-elevated px-5 py-12 text-center">
-            <MessageSquare className="mx-auto h-10 w-10 text-slate-300" />
-            <p className="mt-3 text-base font-semibold text-navy">No chat sessions found</p>
-            <p className="mt-1 text-xs text-muted">
-              {searchQuery || datePreset !== "all"
-                ? "Try a different search or date range."
-                : "New chat sessions will show up here."}
-            </p>
-          </div>
-        ) : (
-          sessions.map((session) => {
-            const status = sessionStatus(session);
-            const messageCount = session.messages?.length || 0;
-            return (
-              <article
-                key={session._id}
-                role="button"
-                tabIndex={0}
-                onClick={() => setSelected(session)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    setSelected(session);
-                  }
-                }}
-                className="cursor-pointer rounded-2xl border border-border bg-surface-elevated p-5 shadow-xs transition hover:border-accent/40 hover:shadow-md"
-              >
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <p className="font-mono text-sm font-semibold text-navy">
-                        {session.sessionId}
+      <div className="overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-xs">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm text-slate">
+            <thead className="border-b border-border bg-surface text-xs font-semibold uppercase tracking-wider text-muted">
+              <tr>
+                <th className="px-5 py-3.5">Session</th>
+                <th className="px-5 py-3.5">Message</th>
+                <th className="px-5 py-3.5">Source</th>
+                <th className="px-5 py-3.5">Status</th>
+                <th className="px-5 py-3.5">Msgs</th>
+                <th className="px-5 py-3.5">Received</th>
+                <th className="px-5 py-3.5 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {loading ? (
+                <tr>
+                  <td colSpan={7} className="px-5 py-16 text-center text-muted">
+                    <span className="inline-flex items-center justify-center">
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Loading sessions...
+                    </span>
+                  </td>
+                </tr>
+              ) : sessions.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="px-5 py-12 text-center text-muted">
+                    <div className="flex flex-col items-center justify-center">
+                      <MessageSquare className="h-10 w-10 text-slate-300" />
+                      <p className="mt-3 text-base font-semibold text-navy">No chat sessions found</p>
+                      <p className="mt-1 text-xs text-muted">
+                        {searchQuery || datePreset !== "all"
+                          ? "Try a different search or date range."
+                          : "New chat sessions will show up here."}
                       </p>
-                      {status.label !== "In progress" ? (
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                sessions.map((session) => {
+                  const status = sessionStatus(session);
+                  const messageCount = session.messages?.length || 0;
+                  return (
+                    <tr key={session._id} className="transition hover:bg-surface/50">
+                      <td className="px-5 py-4">
+                        <p className="font-mono text-xs font-semibold text-navy break-all max-w-[180px]">
+                          {session.sessionId}
+                        </p>
+                      </td>
+                      <td className="px-5 py-4">
+                        <p className="max-w-[260px] truncate text-sm text-navy">
+                          {firstOrLatestUserPreview(session.messages)}
+                        </p>
+                      </td>
+                      <td className="px-5 py-4">
+                        <span className="inline-block rounded-lg border border-orange-200 bg-orange-50 px-2.5 py-1 text-xs font-bold text-orange-700">
+                          Chat
+                        </span>
+                      </td>
+                      <td className="px-5 py-4">
                         <span
-                          className={`inline-block rounded-lg border px-2 py-0.5 text-[11px] font-bold ${status.style}`}
+                          className={`inline-block rounded-lg border px-2.5 py-1 text-xs font-bold ${status.style}`}
                         >
                           {status.label}
                         </span>
-                      ) : null}
-                    </div>
-                    <p className="mt-1 flex items-center gap-1 text-xs text-muted">
-                      <Clock className="h-3 w-3" />
-                      {formatDateTime(session.updatedAt || session.createdAt)}
-                    </p>
-                  </div>
-                  <div
-                    className="flex items-center gap-1"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <button
-                      type="button"
-                      onClick={() => setSelected(session)}
-                      title="View conversation"
-                      className="rounded-lg p-1.5 text-slate-500 hover:bg-surface hover:text-navy"
-                    >
-                      <Eye className="h-4 w-4" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={(e) => copySessionId(session.sessionId, e)}
-                      title="Copy session ID"
-                      className="rounded-lg p-1.5 text-slate-500 hover:bg-accent-soft hover:text-accent"
-                    >
-                      <Copy className="h-4 w-4" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setDeletingId(session._id)}
-                      title="Delete session"
-                      className="rounded-lg p-1.5 text-slate-500 hover:bg-rose-50 hover:text-rose-600"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
-                <p className="mt-3 text-xs text-muted">
-                  <span className="font-semibold text-navy">Path: </span>
-                  {formatPath(session.path)}
-                </p>
-                <p className="mt-2 text-sm text-slate">
-                  <span className="font-semibold text-navy">User: </span>
-                  {lastUserPreview(session.messages)}
-                </p>
-                <p className="mt-2 text-[11px] font-medium text-muted">
-                  {messageCount} message{messageCount === 1 ? "" : "s"}
-                </p>
-              </article>
-            );
-          })
-        )}
+                      </td>
+                      <td className="px-5 py-4">
+                        <span className="text-xs font-semibold text-navy">{messageCount}</span>
+                      </td>
+                      <td className="px-5 py-4">
+                        <p className="text-xs text-muted">
+                          {formatDateTime(session.updatedAt || session.createdAt)}
+                        </p>
+                      </td>
+                      <td className="px-5 py-4">
+                        <div className="flex items-center justify-end gap-1">
+                          {session.lead?.email?.trim() ? (
+                            <button
+                              type="button"
+                              onClick={() => openEmailComposer(session)}
+                              title={`Email ${session.lead.email}`}
+                              className="rounded-lg p-1.5 text-slate-500 hover:bg-accent-soft hover:text-accent"
+                            >
+                              <Mail className="h-4 w-4" />
+                            </button>
+                          ) : null}
+                          {session.lead?.phone?.trim() ? (
+                            <a
+                              href={`tel:${session.lead.phone}`}
+                              title={`Call ${session.lead.phone}`}
+                              className="rounded-lg p-1.5 text-slate-500 hover:bg-teal-50 hover:text-teal-700"
+                            >
+                              <Phone className="h-4 w-4" />
+                            </a>
+                          ) : null}
+                          <button
+                            type="button"
+                            onClick={() => setSelected(session)}
+                            title="View conversation"
+                            className="rounded-lg p-1.5 text-slate-500 hover:bg-surface hover:text-navy"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => copySessionId(session.sessionId, e)}
+                            title="Copy session ID"
+                            className="rounded-lg p-1.5 text-slate-500 hover:bg-accent-soft hover:text-accent"
+                          >
+                            <Copy className="h-4 w-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setDeletingId(session._id)}
+                            title="Delete session"
+                            className="rounded-lg p-1.5 text-slate-500 hover:bg-rose-50 hover:text-rose-600"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {total > CHAT_SESSION_PAGE_SIZE && (
@@ -489,7 +588,26 @@ export function ChatSessionsManager({
               )}
             </div>
 
-            <div className="flex items-center justify-end gap-2 border-t border-border px-6 py-4">
+            <div className="flex flex-wrap items-center justify-end gap-2 border-t border-border px-6 py-4">
+              {selected.lead?.email?.trim() ? (
+                <button
+                  type="button"
+                  onClick={() => openEmailComposer(selected)}
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-border px-3 py-2 text-sm font-medium text-navy hover:bg-surface"
+                >
+                  <Mail className="h-3.5 w-3.5" />
+                  Email
+                </button>
+              ) : null}
+              {selected.lead?.phone?.trim() ? (
+                <a
+                  href={`tel:${selected.lead.phone}`}
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-border px-3 py-2 text-sm font-medium text-navy hover:bg-surface"
+                >
+                  <Phone className="h-3.5 w-3.5" />
+                  Call
+                </a>
+              ) : null}
               <button
                 type="button"
                 onClick={() => copySessionId(selected.sessionId)}
@@ -514,6 +632,75 @@ export function ChatSessionsManager({
                 className="rounded-xl border border-border px-4 py-2 text-sm font-medium text-slate-600 hover:bg-surface"
               >
                 Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {emailingSession && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-lg rounded-2xl border border-border bg-surface-elevated p-6 shadow-xl">
+            <div className="flex items-center justify-between border-b border-border pb-4">
+              <div>
+                <h3 className="text-lg font-bold text-navy">Email inquiry</h3>
+                <p className="mt-0.5 text-xs text-muted">
+                  {emailingSession.lead?.name || "Chat lead"}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setEmailingSession(null)}
+                className="rounded-lg p-1 text-slate-400 hover:bg-surface hover:text-slate-600"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="mt-4 space-y-4">
+              <div>
+                <label className="mb-1 block text-xs font-semibold text-navy">To</label>
+                <div className="flex items-center gap-2">
+                  <input
+                    readOnly
+                    value={emailingSession.lead?.email || ""}
+                    className="w-full rounded-xl border border-border bg-surface px-3.5 py-2 text-sm text-navy"
+                  />
+                  <button
+                    type="button"
+                    onClick={copyInquiryEmail}
+                    title="Copy email"
+                    className="rounded-xl border border-border p-2 text-slate-500 hover:bg-surface hover:text-navy"
+                  >
+                    <Copy className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-semibold text-navy">Subject</label>
+                <input
+                  value={emailSubject}
+                  onChange={(e) => setEmailSubject(e.target.value)}
+                  className="w-full rounded-xl border border-border px-3.5 py-2 text-sm text-navy focus:border-accent focus:outline-none"
+                />
+              </div>
+            </div>
+
+            <div className="mt-5 flex items-center justify-end gap-3 border-t border-border pt-4">
+              <button
+                type="button"
+                onClick={() => setEmailingSession(null)}
+                className="rounded-xl border border-border px-4 py-2 text-sm font-medium text-slate-600 hover:bg-surface"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={openGmailCompose}
+                className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-white hover:bg-accent-hover"
+              >
+                <ExternalLink className="h-4 w-4" />
+                Open in Gmail
               </button>
             </div>
           </div>

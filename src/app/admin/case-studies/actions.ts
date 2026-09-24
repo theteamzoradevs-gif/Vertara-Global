@@ -34,6 +34,11 @@ export async function createCaseStudyAction(formData: FormData) {
       metrics = [];
     }
 
+    // Only one case study can be featured at a time
+    if (featured) {
+      await CaseStudy.updateMany({ featured: true }, { $set: { featured: false } });
+    }
+
     await CaseStudy.create({
       title,
       client,
@@ -91,6 +96,14 @@ export async function updateCaseStudyAction(formData: FormData) {
       metrics = JSON.parse(rawMetrics);
     } catch {
       metrics = [];
+    }
+
+    // Only one case study can be featured at a time
+    if (featured) {
+      await CaseStudy.updateMany(
+        { _id: { $ne: id }, featured: true },
+        { $set: { featured: false } },
+      );
     }
 
     await CaseStudy.findByIdAndUpdate(id, {

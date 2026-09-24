@@ -36,14 +36,16 @@ const LIBRARY_IMAGES = [
   "/images/workspace-vibrant.jpg",
 ];
 
+const MAX_ROTATING_LINES = 7;
+
 function padMetrics(metrics: Metric[]): Metric[] {
-  const next = metrics.slice(0, 3).map((m) => ({
+  const next = metrics.slice(0, 4).map((m) => ({
     label: m.label || "",
     value: m.value ?? 0,
     suffix: m.suffix || "+",
     prefix: m.prefix || "",
   }));
-  while (next.length < 3) {
+  while (next.length < 4) {
     next.push({ label: "", value: 0, suffix: "+", prefix: "" });
   }
   return next;
@@ -159,7 +161,7 @@ export function HeroManager({ initialSettings }: { initialSettings: Settings }) 
   return (
     <div className="w-full max-w-7xl space-y-6">
       <div className="border-b border-border pb-4">
-        <h1 className="text-2xl font-bold text-navy">Hero Section</h1>
+        <h1 className="text-2xl font-bold text-navy">Home Editor</h1>
         <p className="mt-1 text-sm text-muted">
           Edit the homepage banner — copy, image, rotating help lines, buttons, form, and stats.
         </p>
@@ -302,13 +304,23 @@ export function HeroManager({ initialSettings }: { initialSettings: Settings }) 
                 </div>
               ))}
             </div>
-            <button
-              type="button"
-              onClick={() => setRotatingLines((lines) => [...lines, { label: "", detail: "" }])}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent"
-            >
-              <Plus className="h-4 w-4" /> Add rotating line
-            </button>
+            {rotatingLines.length >= MAX_ROTATING_LINES ? (
+              <p className="text-xs font-medium text-muted">Maximum 7 lines allowed</p>
+            ) : (
+              <button
+                type="button"
+                onClick={() =>
+                  setRotatingLines((lines) =>
+                    lines.length >= MAX_ROTATING_LINES
+                      ? lines
+                      : [...lines, { label: "", detail: "" }],
+                  )
+                }
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent"
+              >
+                <Plus className="h-4 w-4" /> Add rotating line
+              </button>
+            )}
           </Section>
 
           <Section icon={MousePointerClick} title="Buttons">

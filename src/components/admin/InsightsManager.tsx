@@ -110,25 +110,27 @@ export function InsightsManager({ initialInsights }: { initialInsights: InsightI
     ])
   );
 
-  // Filtered insights list
-  const filteredInsights = insights.filter((item) => {
-    const matchesSearch =
-      item.title.toLowerCase().includes(search.toLowerCase()) ||
-      (item.category && item.category.toLowerCase().includes(search.toLowerCase())) ||
-      item.slug.toLowerCase().includes(search.toLowerCase());
+  // Filtered insights list — featured (Homepage) pinned first
+  const filteredInsights = insights
+    .filter((item) => {
+      const matchesSearch =
+        item.title.toLowerCase().includes(search.toLowerCase()) ||
+        (item.category && item.category.toLowerCase().includes(search.toLowerCase())) ||
+        item.slug.toLowerCase().includes(search.toLowerCase());
 
-    const matchesStatus =
-      statusFilter === "all"
-        ? true
-        : statusFilter === "published"
-        ? item.published
-        : !item.published;
+      const matchesStatus =
+        statusFilter === "all"
+          ? true
+          : statusFilter === "published"
+          ? item.published
+          : !item.published;
 
-    const matchesCat =
-      selectedCategory === "all" ? true : item.category === selectedCategory;
+      const matchesCat =
+        selectedCategory === "all" ? true : item.category === selectedCategory;
 
-    return matchesSearch && matchesStatus && matchesCat;
-  });
+      return matchesSearch && matchesStatus && matchesCat;
+    })
+    .sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
 
   const totalPublished = insights.filter((i) => i.published).length;
   const totalDrafts = insights.filter((i) => !i.published).length;
