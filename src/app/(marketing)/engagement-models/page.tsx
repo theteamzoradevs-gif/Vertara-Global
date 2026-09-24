@@ -2,19 +2,34 @@ import Image from "next/image";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { CTABand } from "@/components/ui/CTABand";
 import { ModelSelector } from "@/components/engagement/ModelSelector";
+import { CommercialModelsTable } from "@/components/engagement/CommercialModelsTable";
+import { CommercialPrinciples } from "@/components/engagement/CommercialPrinciples";
+import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
+import { Accordion } from "@/components/ui/Accordion";
+import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { ContactForm } from "@/components/leads/ContactForm";
 import { FlowThreads } from "@/components/ui/FlowThreads";
-import { getEngagementModels } from "@/lib/content";
+import {
+  getEngagementModels,
+  getTestimonials,
+  getClientLogos,
+  getFaqs,
+} from "@/lib/content";
 
 export const metadata = {
   title: "Engagement Models",
   description:
-    "Compare Flexible Partnership, Build & Transfer, and Managed Team — plus an interactive fit selector.",
+    "Compare Flexible Partnership, Build & Transfer, and Managed Team — plus an interactive fit selector and 5 commercial models.",
 };
 
 export default async function EngagementModelsPage() {
-  const models = await getEngagementModels();
+  const [models, testimonials, logos, faqs] = await Promise.all([
+    getEngagementModels(),
+    getTestimonials(),
+    getClientLogos(),
+    getFaqs(),
+  ]);
 
   return (
     <>
@@ -40,13 +55,25 @@ export default async function EngagementModelsPage() {
             Choose how we work together
           </h1>
           <p className="mt-5 max-w-2xl text-base text-white/80 md:text-lg">
-            Three proven models — compared on length, ownership, setup time, fit,
-            and cost — with a short selector to highlight your likely match.
+            Proven commercial structures and operational models — compared on
+            length, ownership, setup time, fit, and cost.
           </p>
         </div>
       </section>
 
+      {/* 1. FIVE COMMERCIAL MODELS TABULAR SECTION */}
       <Section>
+        <SectionHeader
+          eyebrow="Commercial Structures"
+          title="Five commercial models to work with us"
+          description="The right commercial structure depends on where you are in the GCC journey — not a fixed package applied regardless of stage. One Accountable partner."
+        />
+        <CommercialModelsTable />
+        <CommercialPrinciples />
+      </Section>
+
+      {/* 2. SIDE-BY-SIDE MODEL SELECTOR */}
+      <Section tone="muted">
         <SectionHeader
           eyebrow="Compare"
           title="Side-by-side engagement models"
@@ -55,7 +82,8 @@ export default async function EngagementModelsPage() {
         <ModelSelector models={models} />
       </Section>
 
-      <Section tone="muted">
+      {/* 3. WHAT EACH MODEL LOOKS LIKE DAY TO DAY */}
+      <Section>
         <SectionHeader
           eyebrow="In practice"
           title="What each model looks like day to day"
@@ -93,7 +121,51 @@ export default async function EngagementModelsPage() {
         </div>
       </Section>
 
-      <Section id="enquire">
+      {/* 4. TESTIMONIALS & TRUST SECTION */}
+      <Section tone="muted">
+        <SectionHeader
+          eyebrow="Trust & Track Record"
+          title="Enterprises building lasting India capability"
+          description="The capabilities we deliver, backed by the experiences of leaders building and scaling in India."
+        />
+        <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-6">
+          {logos.map((logo) => (
+            <div
+              key={logo.name}
+              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2e3f33]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
+            >
+              {logo.logoText}
+            </div>
+          ))}
+        </div>
+        <div className="mt-10">
+          <TestimonialMarquee items={testimonials} />
+        </div>
+      </Section>
+
+      {/* 5. FAQ SECTION */}
+      <Section>
+        <SectionHeader
+          eyebrow="FAQ"
+          title="Frequently asked questions about engagement models"
+          description="Ownership transfers, milestone delivery, itemized pricing, and staffing flexibility answered."
+        />
+        <Accordion
+          items={faqs.slice(0, 5).map((f) => ({
+            id: f.question,
+            title: f.question,
+            content: f.answer,
+          }))}
+        />
+        <div className="mt-6 flex justify-center sm:justify-start">
+          <Button href="/faq" variant="primary">
+            View full FAQ
+          </Button>
+        </div>
+      </Section>
+
+      {/* 6. ENQUIRY / NEXT STEP */}
+      <Section id="enquire" tone="muted">
         <SectionHeader
           eyebrow="Next step"
           title="Talk through the right model"

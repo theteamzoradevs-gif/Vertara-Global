@@ -3,15 +3,26 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { ArrowRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function ContactForm({
   source = "contact",
   defaultIntent = "",
   submitLabel = "Book a consultation",
+  title,
+  description,
+  buttonVariant = "primary",
+  buttonClassName,
+  className,
 }: {
   source?: string;
   defaultIntent?: string;
   submitLabel?: string;
+  title?: string;
+  description?: string;
+  buttonVariant?: "primary" | "secondary" | "ghost" | "outline" | "gold";
+  buttonClassName?: string;
+  className?: string;
 }) {
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">(
     "idle",
@@ -67,16 +78,27 @@ export function ContactForm({
   return (
     <form
       onSubmit={onSubmit}
-      className="w-full min-w-0 max-w-full space-y-4 overflow-hidden rounded-2xl border border-border bg-white p-4 shadow-sm sm:p-6"
+      className={cn(
+        "w-full min-w-0 max-w-full space-y-4 overflow-hidden rounded-3xl border border-[#cddcd1] bg-[#edf5ef] p-6 shadow-xl shadow-navy/5 sm:p-8 md:p-10",
+        className,
+      )}
     >
-      <div className="rounded-xl bg-surface px-3 py-2.5 text-xs leading-relaxed text-muted sm:text-sm">
-        No ballpark rates here — tell us the brief and we&apos;ll arrange a scoped conversation.
-      </div>
+      {title || description ? (
+        <div className="mb-5">
+          {title ? (
+            <h3 className="text-xl sm:text-2xl font-bold text-navy">{title}</h3>
+          ) : null}
+          {description ? (
+            <p className="mt-1 text-sm text-slate">{description}</p>
+          ) : null}
+        </div>
+      ) : null}
+
       <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
-        <Field label="Name" name="name" required />
-        <Field label="Company" name="company" required />
-        <Field label="Work email" name="email" type="email" required />
-        <Field label="Phone" name="phone" type="tel" />
+        <Field label="Name" name="name" placeholder="Your Name" />
+        <Field label="Company" name="company" placeholder="Company Name" />
+        <Field label="Work Email" name="email" type="email" placeholder="name@company.com" required />
+        <Field label="Phone" name="phone" type="tel" placeholder="+1 (555) 000-0000" />
       </div>
       <div className="min-w-0">
         <label className="mb-1.5 block text-sm font-medium text-navy">
@@ -84,12 +106,11 @@ export function ContactForm({
         </label>
         <select
           name="intent"
-          required
           defaultValue={defaultIntent || ""}
-          className="min-w-0 w-full max-w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm outline-none ring-accent focus:ring-2"
+          className="min-w-0 w-full max-w-full rounded-xl border border-[#cddcd1] bg-white px-3.5 py-2.5 text-sm text-navy outline-none transition-colors focus:border-[#2e3f33] focus:ring-2 focus:ring-[#2e3f33]/15"
         >
-          <option value="" disabled>
-            Select an option
+          <option value="">
+            Select an option (optional)
           </option>
           <option value="full_gcc">Full GCC setup</option>
           <option value="talent">Talent</option>
@@ -106,22 +127,30 @@ export function ContactForm({
         <textarea
           name="message"
           rows={4}
-          placeholder="City, headcount, timeline, or anything a partner should know…"
-          className="min-w-0 w-full max-w-full rounded-lg border border-border px-3 py-2.5 text-sm outline-none ring-accent focus:ring-2"
+          placeholder="Tell us about your requirements…"
+          className="min-w-0 w-full max-w-full rounded-xl border border-[#cddcd1] bg-white px-3.5 py-2.5 text-sm text-navy placeholder:text-muted/70 outline-none transition-colors focus:border-[#2e3f33] focus:ring-2 focus:ring-[#2e3f33]/15"
         />
       </div>
       {status === "error" ? (
-        <p className="text-sm text-danger">Could not send. Please try again.</p>
+        <p className="text-sm text-danger text-center">Could not send. Please try again.</p>
       ) : null}
-      <Button type="submit" size="lg" className="w-full sm:w-auto" disabled={status === "loading"}>
-        {status === "loading" ? (
-          "Sending…"
-        ) : (
-          <>
-            {submitLabel} <ArrowRight className="h-4 w-4" />
-          </>
-        )}
-      </Button>
+      <div className="flex justify-center pt-2">
+        <Button
+          type="submit"
+          variant={buttonVariant}
+          size="lg"
+          className={cn("w-full sm:w-auto", buttonClassName)}
+          disabled={status === "loading"}
+        >
+          {status === "loading" ? (
+            "Sending…"
+          ) : (
+            <>
+              {submitLabel} <ArrowRight className="h-4 w-4" />
+            </>
+          )}
+        </Button>
+      </div>
     </form>
   );
 }
@@ -131,20 +160,26 @@ function Field({
   name,
   type = "text",
   required,
+  placeholder,
 }: {
   label: string;
   name: string;
   type?: string;
   required?: boolean;
+  placeholder?: string;
 }) {
   return (
     <div className="min-w-0">
-      <label className="mb-1.5 block text-sm font-medium text-navy">{label}</label>
+      <label className="mb-1.5 block text-sm font-medium text-navy">
+        {label}
+        {required ? <span className="ml-0.5 text-red-500 font-bold">*</span> : null}
+      </label>
       <input
         name={name}
         type={type}
         required={required}
-        className="min-w-0 w-full max-w-full rounded-lg border border-border px-3 py-2.5 text-sm outline-none ring-accent focus:ring-2"
+        placeholder={placeholder}
+        className="min-w-0 w-full max-w-full rounded-xl border border-[#cddcd1] bg-white px-3.5 py-2.5 text-sm text-navy placeholder:text-muted/70 outline-none transition-colors focus:border-[#2e3f33] focus:ring-2 focus:ring-[#2e3f33]/15"
       />
     </div>
   );
