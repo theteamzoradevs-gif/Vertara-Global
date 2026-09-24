@@ -278,11 +278,26 @@ export function ChatAssistant() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: fd.get("name"),
-          email: fd.get("email"),
-          phone: fd.get("phone"),
-          source: "chat_assistant",
-          payload: { path, messages },
+          name: String(fd.get("name") || "").trim(),
+          email: String(fd.get("email") || "").trim(),
+          phone: String(fd.get("phone") || "").trim() || undefined,
+          intent: "chat_callback",
+          message:
+            messages
+              .filter((m) => m.role === "user")
+              .slice(-3)
+              .map((m) => m.text)
+              .join(" · ") || undefined,
+          source: "chat",
+          metadata: {
+            sessionId:
+              sid ||
+              (typeof window !== "undefined"
+                ? sessionStorage.getItem("gcc-chat-session") || ""
+                : ""),
+            path,
+            messages,
+          },
         }),
       });
       setLeadDone(true);

@@ -118,7 +118,7 @@ export function AdminSettingsManager({
                 <span>Site Information</span>
               </h2>
               <Link href="/admin/hero" className="text-[11px] font-semibold text-accent hover:underline">
-                Edit homepage hero →
+                Open Home Editor →
               </Link>
             </div>
 
