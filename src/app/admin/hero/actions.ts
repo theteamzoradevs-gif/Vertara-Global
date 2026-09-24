@@ -39,11 +39,12 @@ function cleanLines(lines: HeroRotatingLine[]): HeroRotatingLine[] {
       label: String(line.label || "").trim(),
       detail: String(line.detail || "").trim(),
     }))
-    .filter((line) => line.label || line.detail);
+    .filter((line) => line.label || line.detail)
+    .slice(0, 7);
 }
 
 function cleanMetrics(metrics: Metric[]): Metric[] {
-  return metrics.slice(0, 3).map((m) => ({
+  return metrics.slice(0, 4).map((m) => ({
     label: String(m.label || "").trim() || "Metric",
     value: Number.isFinite(Number(m.value)) ? Number(m.value) : 0,
     suffix: String(m.suffix || "").trim(),
@@ -69,7 +70,7 @@ export async function saveHeroAction(payload: HeroPayload) {
     const heroMetrics = cleanMetrics(payload.metrics);
     const existing = await SiteSettings.findOne().lean();
     const restMetrics = Array.isArray(existing?.metrics)
-      ? existing.metrics.slice(3)
+      ? existing.metrics.slice(4)
       : [];
 
     await SiteSettings.findOneAndUpdate(

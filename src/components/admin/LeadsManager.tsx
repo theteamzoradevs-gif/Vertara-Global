@@ -52,8 +52,16 @@ const SOURCE_LABELS: Record<string, { label: string; style: string }> = {
     label: "Trust Pop",
     style: "bg-blue-50 text-blue-700 border-blue-200",
   },
+  trust_pop_brief: {
+    label: "Trust Pop",
+    style: "bg-blue-50 text-blue-700 border-blue-200",
+  },
   chat: {
-    label: "Live Chat",
+    label: "Chat",
+    style: "bg-orange-50 text-orange-700 border-orange-200",
+  },
+  chat_assistant: {
+    label: "Chat",
     style: "bg-orange-50 text-orange-700 border-orange-200",
   },
   engagement_selector: {
@@ -65,6 +73,27 @@ const SOURCE_LABELS: Record<string, { label: string; style: string }> = {
     style: "bg-emerald-50 text-emerald-700 border-emerald-200",
   },
 };
+
+/** Filter values → matching Lead.source keys (aliases grouped). */
+const SOURCE_FILTER_OPTIONS: { value: string; label: string; sources: string[] }[] = [
+  { value: "all", label: "All Sources", sources: [] },
+  { value: "chat", label: "Chat", sources: ["chat", "chat_assistant"] },
+  { value: "contact", label: "Contact Form", sources: ["contact"] },
+  { value: "hero_quick_call", label: "Hero Quick Call", sources: ["hero_quick_call"] },
+  { value: "trust_pop", label: "Trust Pop", sources: ["trust_pop", "trust_pop_brief"] },
+  {
+    value: "engagement_selector",
+    label: "Engagement Selector",
+    sources: ["engagement_selector"],
+  },
+];
+
+function matchesSourceFilter(leadSource: string, filterValue: string) {
+  if (filterValue === "all") return true;
+  const option = SOURCE_FILTER_OPTIONS.find((o) => o.value === filterValue);
+  if (!option || option.sources.length === 0) return true;
+  return option.sources.includes(leadSource);
+}
 
 function defaultEmailDraft(lead: LeadItemData) {
   const subject = "Re: your inquiry with Vertara Global";
@@ -94,6 +123,7 @@ export function LeadsManager({
   const [leads, setLeads] = useState<LeadItemData[]>(initialLeads);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [sourceFilter, setSourceFilter] = useState<string>("all");
 
   // Modal states
   const [selectedLead, setSelectedLead] = useState<LeadItemData | null>(null);
@@ -150,20 +180,25 @@ export function LeadsManager({
   const newCount = leads.filter((l) => l.status === "new").length;
   const contactedCount = leads.filter((l) => l.status === "contacted").length;
 
-  // Filtered leads
+  // Filtered leads — search + status + source together
   const filteredLeads = leads.filter((lead) => {
-    const q = searchQuery.toLowerCase();
+    const q = searchQuery.toLowerCase().trim();
     const matchesSearch =
+      !q ||
       lead.name.toLowerCase().includes(q) ||
       (lead.email && lead.email.toLowerCase().includes(q)) ||
       (lead.company && lead.company.toLowerCase().includes(q)) ||
       (lead.intent && lead.intent.toLowerCase().includes(q)) ||
-      (lead.message && lead.message.toLowerCase().includes(q));
+      (lead.message && lead.message.toLowerCase().includes(q)) ||
+      (lead.source && lead.source.toLowerCase().includes(q)) ||
+      (SOURCE_LABELS[lead.source]?.label || "").toLowerCase().includes(q);
 
     const matchesStatus =
       statusFilter === "all" || lead.status === statusFilter;
 
-    return matchesSearch && matchesStatus;
+    const matchesSource = matchesSourceFilter(lead.source, sourceFilter);
+
+    return matchesSearch && matchesStatus && matchesSource;
   });
 
   // Handle Status Update
@@ -272,7 +307,7 @@ export function LeadsManager({
           <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
-            placeholder="Search inquiries by name, email, company..."
+            placeholder="Search by name, email, company, source..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full rounded-xl border border-border bg-surface pl-10 pr-4 py-2 text-sm text-navy placeholder:text-slate-400 focus:border-accent focus:outline-none"
@@ -281,6 +316,20 @@ export function LeadsManager({
 
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-3">
+          {/* Source Filter */}
+          <select
+            value={sourceFilter}
+            onChange={(e) => setSourceFilter(e.target.value)}
+            className="rounded-xl border border-border bg-surface px-3 py-2 text-xs font-semibold text-navy focus:border-accent focus:outline-none"
+            aria-label="Filter by source"
+          >
+            {SOURCE_FILTER_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+
           {/* Status Filter */}
           <div className="flex items-center gap-1.5 rounded-xl border border-border bg-surface p-1 text-xs">
             {(["all", "new", "contacted"] as const).map((st) => (
@@ -323,8 +372,8 @@ export function LeadsManager({
                       <Inbox className="h-10 w-10 text-slate-300" />
                       <p className="mt-3 text-base font-semibold text-navy">No inquiries found</p>
                       <p className="mt-1 text-xs text-muted">
-                        {searchQuery || statusFilter !== "all"
-                          ? "Try a different search or status."
+                        {searchQuery || statusFilter !== "all" || sourceFilter !== "all"
+                          ? "Try a different search, status, or source."
                           : "New inquiries will show up here."}
                       </p>
                     </div>

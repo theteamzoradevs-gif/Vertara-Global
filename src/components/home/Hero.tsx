@@ -86,7 +86,7 @@ export function Hero({
           phone: phoneVal || undefined,
           intent: "quick_call",
           message: phoneVal && !email ? `Phone callback requested: ${phoneVal}` : undefined,
-          source: "contact",
+          source: "hero_quick_call",
         }),
       });
       const data = await res.json().catch(() => null);

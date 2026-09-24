@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import type { QueryFilter } from "mongoose";
 import { connectDB } from "@/lib/db";
 import { ChatSession } from "@/models/ChatSession";
+import { Lead } from "@/models/Lead";
 import {
   CHAT_SESSION_PAGE_SIZE,
   type ChatSessionListFilters,
@@ -60,6 +61,7 @@ export async function listChatSessionsAction(filters: ChatSessionListFilters = {
 
     const [docs, total] = await Promise.all([
       ChatSession.find(query)
+        .populate("leadId", "name email phone")
         .sort({ updatedAt: -1 })
         .skip((page - 1) * pageSize)
         .limit(pageSize)
@@ -67,9 +69,65 @@ export async function listChatSessionsAction(filters: ChatSessionListFilters = {
       ChatSession.countDocuments(query),
     ]);
 
+    const sessions = JSON.parse(JSON.stringify(docs)).map(
+      (doc: {
+        sessionId: string;
+        leadId?:
+          | string
+          | { _id?: string; name?: string; email?: string; phone?: string }
+          | null;
+      }) => {
+        const populated =
+          doc.leadId && typeof doc.leadId === "object" ? doc.leadId : null;
+        return {
+          ...doc,
+          leadId: populated?._id || doc.leadId || null,
+          lead: populated
+            ? {
+                name: populated.name || "",
+                email: populated.email || "",
+                phone: populated.phone || "",
+              }
+            : null,
+        };
+      },
+    );
+
+    // Fallback: chat leads linked by metadata.sessionId (no leadId on session)
+    const missing = sessions.filter((s: { lead: unknown; sessionId: string }) => !s.lead);
+    if (missing.length) {
+      const orphanLeads = await Lead.find({
+        "metadata.sessionId": { $in: missing.map((s: { sessionId: string }) => s.sessionId) },
+        source: { $in: ["chat", "chat_assistant"] },
+      })
+        .select("name email phone metadata.sessionId")
+        .lean();
+
+      const bySession = new Map<
+        string,
+        { name: string; email: string; phone: string }
+      >();
+      for (const lead of orphanLeads) {
+        const sid = (lead as { metadata?: { sessionId?: string } }).metadata
+          ?.sessionId;
+        if (!sid || bySession.has(sid)) continue;
+        bySession.set(sid, {
+          name: String((lead as { name?: string }).name || ""),
+          email: String((lead as { email?: string }).email || ""),
+          phone: String((lead as { phone?: string }).phone || ""),
+        });
+      }
+
+      for (const session of sessions) {
+        if (!session.lead) {
+          session.lead = bySession.get(session.sessionId) || null;
+        }
+      }
+    }
+
     return {
       success: true,
-      sessions: JSON.parse(JSON.stringify(docs)),
+      sessions,
       total,
       page,
       pageSize,

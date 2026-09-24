@@ -111,16 +111,18 @@ export function CaseStudiesManager({
     setModalMetrics((prev) => prev.filter((_, idx) => idx !== index));
   };
 
-  // Filtered list
-  const filteredCases = cases.filter((cs) => {
-    const q = searchQuery.toLowerCase();
-    return (
-      cs.title.toLowerCase().includes(q) ||
-      cs.client.toLowerCase().includes(q) ||
-      cs.industry.toLowerCase().includes(q) ||
-      cs.challenge.toLowerCase().includes(q)
-    );
-  });
+  // Filtered list — featured pinned first (same as frontend)
+  const filteredCases = cases
+    .filter((cs) => {
+      const q = searchQuery.toLowerCase();
+      return (
+        cs.title.toLowerCase().includes(q) ||
+        cs.client.toLowerCase().includes(q) ||
+        cs.industry.toLowerCase().includes(q) ||
+        cs.challenge.toLowerCase().includes(q)
+      );
+    })
+    .sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
 
   // Handle Create Submit
   const handleCreateSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -145,7 +147,12 @@ export function CaseStudiesManager({
           featured: formData.get("featured") === "true",
           metrics: modalMetrics,
         };
-        setCases((prev) => [newObj, ...prev]);
+        setCases((prev) => [
+          newObj,
+          ...(newObj.featured
+            ? prev.map((c) => ({ ...c, featured: false }))
+            : prev),
+        ]);
       } else {
         showToast("error", res.error || "Failed to create case study.");
       }
@@ -188,7 +195,9 @@ export function CaseStudiesManager({
                   featured: updatedFeatured,
                   metrics: modalMetrics,
                 }
-              : c
+              : updatedFeatured
+                ? { ...c, featured: false }
+                : c
           )
         );
         setEditingItem(null);

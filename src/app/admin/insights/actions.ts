@@ -60,6 +60,11 @@ export async function createInsightAction(formData: FormData) {
       slug = `${slug}-${Date.now().toString().slice(-4)}`;
     }
 
+    // Only one insight can be featured at a time
+    if (featured) {
+      await Insight.updateMany({ featured: true }, { $set: { featured: false } });
+    }
+
     await Insight.create({
       title,
       slug,
@@ -143,6 +148,14 @@ export async function updateInsightAction(formData: FormData) {
       if (!current?.publishedAt) {
         updateData.publishedAt = new Date();
       }
+    }
+
+    // Only one insight can be featured at a time
+    if (featured) {
+      await Insight.updateMany(
+        { _id: { $ne: id }, featured: true },
+        { $set: { featured: false } },
+      );
     }
 
     await Insight.findByIdAndUpdate(id, updateData);
