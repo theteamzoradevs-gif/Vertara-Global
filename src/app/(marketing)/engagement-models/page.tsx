@@ -9,7 +9,9 @@ import { Accordion } from "@/components/ui/Accordion";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { ContactForm } from "@/components/leads/ContactForm";
+import { EngagementFormSideContent } from "@/components/engagement/EngagementFormSideContent";
 import { FlowThreads } from "@/components/ui/FlowThreads";
+import { ArrowRight } from "lucide-react";
 import {
   getEngagementModels,
   getTestimonials,
@@ -33,40 +35,57 @@ export default async function EngagementModelsPage() {
 
   return (
     <>
-      <section className="relative overflow-hidden text-white">
+      {/* 1. HERO SECTION */}
+      <section className="relative overflow-hidden text-white bg-[#0e3621]">
+        {/* Right-aligned Realistic Background Image */}
         <div className="absolute inset-0">
           <Image
             src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1600&q=80"
-            alt=""
+            alt="Engagement and Commercial Models"
             fill
-            className="object-cover"
+            className="object-cover object-right lg:object-right"
             priority
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-navy/70" />
-          <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-navy/65 to-navy/40" />
-          <FlowThreads intensity="medium" onDark className="opacity-50" />
+          {/* Subtle Emerald / Forest Green Soft Gradient & Shadow Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0d3320] via-[#0d3320]/95 via-40% sm:via-48% md:via-52% to-[#0d3320]/25 lg:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0d3320] via-transparent to-[#0d3320]/40" />
+          <div className="absolute inset-0 bg-[#0d3320]/20 mix-blend-multiply" />
+          <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
-        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-highlight">
-            Engagement
-          </p>
-          <h1 className="mt-3 max-w-3xl text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+
+        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20 lg:py-24 lg:px-8">
+          {/* Breadcrumb / Eyebrow */}
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
+            <span>Engagement</span>
+            <span>/</span>
+            <span>Commercial Models</span>
+          </div>
+
+          <h1 className="mt-4 max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-[44px] xl:text-[48px] leading-tight text-white">
             Choose how we work together
           </h1>
-          <p className="mt-5 max-w-2xl text-base text-white/80 md:text-lg">
-            Proven commercial structures and operational models — compared on
+
+          <p className="mt-4 max-w-xl text-base text-white/90 sm:text-lg leading-relaxed font-normal">
+            Proven commercial structures and operational models compared on
             length, ownership, setup time, fit, and cost.
           </p>
+
+          {/* Hero CTAs */}
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <Button href="#models" variant="gold" size="lg">
+              Explore engagement models <ArrowRight className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </section>
 
-      {/* 1. FIVE COMMERCIAL MODELS TABULAR SECTION */}
-      <Section>
+      {/* 2. FIVE COMMERCIAL MODELS TABULAR SECTION */}
+      <Section id="models">
         <SectionHeader
           eyebrow="Commercial Structures"
           title="Five commercial models to work with us"
-          description="The right commercial structure depends on where you are in the GCC journey — not a fixed package applied regardless of stage. One Accountable partner."
+          description="The right commercial structure depends on where you are in the GCC journey not a fixed package applied regardless of stage. One Accountable partner."
         />
         <CommercialModelsTable />
         <CommercialPrinciples />
@@ -143,8 +162,29 @@ export default async function EngagementModelsPage() {
         </div>
       </Section>
 
-      {/* 5. FAQ SECTION */}
-      <Section>
+      {/* 5. ENQUIRY / NEXT STEP */}
+      <Section id="enquire">
+        <SectionHeader
+          eyebrow="Next step"
+          title="Talk through the right model"
+          description="Share your headcount, city, and ownership preference — a partner will map the fit."
+        />
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-8 items-stretch">
+          <div className="lg:col-span-7 flex flex-col">
+            <ContactForm
+              source="engagement_models"
+              submitLabel="Book a model discussion"
+              className="h-full flex flex-col justify-between"
+            />
+          </div>
+          <div className="lg:col-span-5 flex flex-col">
+            <EngagementFormSideContent />
+          </div>
+        </div>
+      </Section>
+
+      {/* 6. FAQ SECTION */}
+      <Section tone="muted">
         <SectionHeader
           eyebrow="FAQ"
           title="Frequently asked questions about engagement models"
@@ -161,21 +201,6 @@ export default async function EngagementModelsPage() {
           <Button href="/faq" variant="primary">
             View full FAQ
           </Button>
-        </div>
-      </Section>
-
-      {/* 6. ENQUIRY / NEXT STEP */}
-      <Section id="enquire" tone="muted">
-        <SectionHeader
-          eyebrow="Next step"
-          title="Talk through the right model"
-          description="Share your headcount, city, and ownership preference — a partner will map the fit."
-        />
-        <div className="mx-auto max-w-2xl">
-          <ContactForm
-            source="engagement_models"
-            submitLabel="Book a model discussion"
-          />
         </div>
       </Section>
     </>

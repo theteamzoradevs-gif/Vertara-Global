@@ -145,6 +145,13 @@ function sortFeaturedFirst<T extends { featured?: boolean }>(items: T[]): T[] {
   return [...featured, ...rest];
 }
 
+export function slugifyCaseStudy(title: string): string {
+  return (title || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
+}
+
 export async function getCaseStudies(): Promise<CaseStudyItem[]> {
   return withDB(async () => {
     const docs = await CaseStudy.find().sort({ createdAt: 1 }).lean();
@@ -153,6 +160,20 @@ export async function getCaseStudies(): Promise<CaseStudyItem[]> {
       : seedCaseStudies;
     return sortFeaturedFirst(items);
   }, sortFeaturedFirst([...seedCaseStudies]));
+}
+
+export async function getCaseStudyBySlug(
+  slug: string,
+): Promise<CaseStudyItem | null> {
+  const cases = await getCaseStudies();
+  const normalizedSlug = decodeURIComponent(slug || "").toLowerCase().trim();
+  return (
+    cases.find((c) => {
+      const caseSlug = (c as { slug?: string }).slug || slugifyCaseStudy(c.title);
+      const caseId = (c as { _id?: string })._id?.toString();
+      return caseSlug === normalizedSlug || caseId === normalizedSlug;
+    }) ?? null
+  );
 }
 
 export async function getTestimonials(): Promise<TestimonialItem[]> {

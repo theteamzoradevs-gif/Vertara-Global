@@ -1,84 +1,139 @@
 "use client";
 
 import Link from "next/link";
-import { CmsImage } from "@/components/ui/CmsImage";
-import { ArrowRight } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, Users, Clock, BarChart3 } from "lucide-react";
 import { Reveal } from "@/components/ui/Reveal";
+import { Button } from "@/components/ui/Button";
+
+function slugifyCaseStudy(title: string): string {
+  return (title || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
+}
 
 type CaseItem = {
   title: string;
   client: string;
   industry: string;
   challenge: string;
+  approach?: string;
   result: string;
   metrics: { label: string; value: string }[];
   image?: string;
+  slug?: string;
 };
 
 export function HomeCaseStudies({ cases }: { cases: CaseItem[] }) {
   if (!cases.length) return null;
 
   return (
-    <div className="space-y-6">
-      {cases.map((cs, i) => (
-        <Reveal key={cs.title} delay={i * 0.06}>
-          <article className="group overflow-hidden rounded-2xl border border-border bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-xl hover:shadow-navy/10 md:grid md:grid-cols-2">
-            <div className="relative min-h-[220px] overflow-hidden bg-surface sm:min-h-[260px]">
-              <CmsImage
-                src={cs.image?.trim() || "/images/gcc-floor.webp"}
-                alt={cs.title || "Case study"}
-                fill
-                className="object-cover transition duration-700 group-hover:scale-105"
-                sizes="(max-width:768px) 100vw, 50vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-navy/70 via-navy/20 to-transparent md:bg-gradient-to-r" />
-              <div className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-highlight">
-                  {cs.industry}
+    <div className="space-y-8">
+      {cases.map((cs, i) => {
+        const caseSlug = cs.slug || slugifyCaseStudy(cs.title);
+        return (
+          <Reveal key={cs.title} delay={i * 0.06}>
+            <article className="relative overflow-hidden rounded-3xl border border-[#b49339]/35 bg-[#0e3621] text-white shadow-xl p-6 sm:p-8 md:p-10 lg:p-12">
+              {/* Right-aligned Background Image */}
+              <div className="absolute inset-0">
+                <Image
+                  src={cs.image?.trim() || "/images/gcc-floor.webp"}
+                  alt={cs.title || "Featured Case Study"}
+                  fill
+                  className="object-cover object-right"
+                  sizes="(max-width: 1200px) 100vw, 1200px"
+                />
+                {/* Soft Emerald Gradient Overlays */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#0d3320] via-[#0d3320]/92 via-40% md:via-48% lg:via-52% to-[#0d3320]/15 lg:to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0d3320]/60 via-transparent to-[#0d3320]/25" />
+              </div>
+
+              {/* Foreground Content */}
+              <div className="relative z-10 max-w-2xl">
+                {/* Featured Pill Badge */}
+                <div>
+                  <span className="inline-flex items-center rounded-full bg-[#c89d3c] px-4 py-1.5 text-xs font-extrabold uppercase tracking-wider text-[#0e3621] shadow-md">
+                    Featured Story
+                  </span>
+                </div>
+
+                {/* Industry Eyebrow */}
+                <p className="mt-4 text-xs font-bold uppercase tracking-[0.2em] text-white/90 sm:text-sm">
+                  {cs.industry || "RETAIL / DIGITAL"}
                 </p>
-                <p className="mt-1 text-[10px] font-medium tracking-wide text-white/75">
-                  {cs.client}
-                </p>
-                <h3 className="mt-1 text-xl font-bold text-white md:text-2xl">
-                  {cs.title}
+
+                {/* Title */}
+                <h3 className="mt-3 text-2xl font-bold tracking-tight text-white sm:text-3xl md:text-4xl lg:text-[40px] leading-tight">
+                  <Link href={`/case-studies/${caseSlug}`} className="hover:underline">
+                    {cs.title}
+                  </Link>
                 </h3>
-              </div>
-            </div>
-            <div className="flex flex-col p-5 sm:p-7">
-              <p className="text-xs font-semibold uppercase tracking-wide text-accent">
-                Challenge
-              </p>
-              <p className="mt-1 text-sm leading-relaxed text-muted">{cs.challenge}</p>
-              <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-accent">
-                Result
-              </p>
-              <p className="mt-1 text-sm leading-relaxed text-slate">{cs.result}</p>
-              <div className="mt-5 grid grid-cols-3 gap-2.5 sm:gap-3">
-                {cs.metrics.map((m) => (
-                  <div
-                    key={m.label}
-                    className="rounded-2xl bg-[#e5ebe6] p-3.5 sm:p-4"
-                  >
-                    <p className="metric-number text-lg font-bold text-accent sm:text-xl md:text-2xl">
-                      {m.value}
-                    </p>
-                    <p className="mt-1 text-[11px] leading-snug text-muted sm:text-xs">
-                      {m.label}
-                    </p>
+
+                {/* Description */}
+                <p className="mt-4 text-sm leading-relaxed text-white/90 sm:text-base font-normal">
+                  {cs.result || cs.challenge || "From zero to a fully operational engineering centre in 10 months, enabling faster innovation and scalable product delivery."}
+                </p>
+
+                {/* Read full case study CTA */}
+                <div className="mt-6 sm:mt-7">
+                  <Button href={`/case-studies/${caseSlug}`} variant="gold" size="lg" className="font-semibold shadow-md">
+                    Read full case study <ArrowRight className="ml-1 h-4 w-4" />
+                  </Button>
+                </div>
+
+                {/* Metrics Bar */}
+                {cs.metrics && cs.metrics.length > 0 && (
+                  <div className="mt-8 rounded-2xl border border-white/20 bg-[#0d3320]/75 backdrop-blur-md p-4 sm:p-5 sm:mt-10 shadow-lg">
+                    <div className="grid grid-cols-1 gap-4 divide-y divide-white/20 sm:grid-cols-3 sm:gap-0 sm:divide-y-0 sm:divide-x">
+                      {cs.metrics.map((m, idx) => {
+                        let Icon = Users;
+                        const labelLower = (m.label || "").toLowerCase();
+                        if (
+                          idx === 0 ||
+                          labelLower.includes("headcount") ||
+                          labelLower.includes("team") ||
+                          labelLower.includes("specialist")
+                        ) {
+                          Icon = Users;
+                        } else if (
+                          idx === 1 ||
+                          labelLower.includes("time") ||
+                          labelLower.includes("launch") ||
+                          labelLower.includes("cohort")
+                        ) {
+                          Icon = Clock;
+                        } else {
+                          Icon = BarChart3;
+                        }
+
+                        return (
+                          <div
+                            key={m.label}
+                            className="flex items-center gap-3.5 px-3 pt-3 sm:pt-0 first:pt-0 first:pl-2 last:pr-2"
+                          >
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#b49339]/50 bg-[#b49339]/20 text-[#c89d3c] shadow-xs">
+                              <Icon className="h-5 w-5" />
+                            </div>
+                            <div>
+                              <p className="text-xl font-bold tracking-tight text-white sm:text-2xl leading-none">
+                                {m.value}
+                              </p>
+                              <p className="mt-1 text-xs font-medium text-white/80 leading-snug">
+                                {m.label}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
-                ))}
+                )}
               </div>
-              <Link
-                href="/case-studies"
-                className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:text-accent-hover"
-              >
-                See more outcomes
-                <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
-              </Link>
-            </div>
-          </article>
-        </Reveal>
-      ))}
+            </article>
+          </Reveal>
+        );
+      })}
     </div>
   );
 }

@@ -498,7 +498,7 @@ export const seedInsights = [
     title: "The CHRO’s checklist for a first India GCC",
     slug: "chro-checklist-first-india-gcc",
     excerpt:
-      "What people leaders should lock before the first offer letter goes out — governance, bands, and culture transfer.",
+      "What people leaders should lock before the first offer letter goes out governance, bands, and culture transfer.",
     category: "Talent",
     coverImage: "/images/talent-team.webp",
     published: true,

@@ -49,11 +49,11 @@ export default async function HomePage() {
   const homepageCases = [
     ...cases.filter((c: { featured?: boolean }) => c.featured === true),
     ...cases.filter((c: { featured?: boolean }) => c.featured !== true),
-  ].slice(0, 2);
+  ].slice(0, 1);
   const homepageInsights = [
     ...insights.filter((i: { featured?: boolean }) => i.featured === true),
     ...insights.filter((i: { featured?: boolean }) => i.featured !== true),
-  ].slice(0, 3);
+  ].slice(0, 1);
 
   return (
     <>
@@ -157,31 +157,35 @@ export default async function HomePage() {
 
       <JourneySteps />
 
-      <Section tone="navy">
+      <Section
+        tone="green"
+        threads="medium"
+        className="relative shadow-[inset_0_2px_30px_rgba(0,0,0,0.35)] bg-gradient-to-r from-[#0d3320] via-[#0e3621] to-[#0d3320]"
+      >
         <SectionHeader
           eyebrow="Engagement"
           title="Ways of working that match how you buy"
           description="Flexible partnership, build and transfer, or managed team compare side by side."
           light
         />
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-3">
           {models.map((m) => (
             <Reveal key={m.slug}>
               <Link
                 href="/engagement-models"
-                className="group relative block h-full overflow-hidden rounded-2xl border border-white/15 bg-white/5 p-5 transition hover:-translate-y-1 hover:border-[#b49339]/60"
+                className="group relative block h-full overflow-hidden rounded-2xl border border-white/15 bg-white/5 p-6 shadow-xl shadow-black/25 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-[#b49339]/70 hover:bg-white/10 hover:shadow-2xl hover:shadow-black/40"
               >
                 <div
                   aria-hidden
                   className="pointer-events-none absolute inset-0 origin-left scale-x-0 bg-white/10 transition-transform duration-500 group-hover:scale-x-100"
                 />
                 <div className="relative">
-                  <h3 className="text-lg font-bold text-white">{m.name}</h3>
-                  <p className="mt-2 text-sm text-white/70">{m.summary}</p>
-                  <p className="mt-3 text-sm text-white/55 opacity-0 transition group-hover:opacity-100">
+                  <h3 className="text-xl font-bold text-white">{m.name}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-white/75">{m.summary}</p>
+                  <p className="mt-3 text-sm text-white/60 opacity-0 transition duration-300 group-hover:opacity-100">
                     Best fit: {m.bestFit}
                   </p>
-                  <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-[#b49339]">
+                  <p className="mt-5 text-xs font-semibold uppercase tracking-wider text-[#b49339]">
                     Setup · {m.setupTime}
                   </p>
                 </div>
@@ -190,7 +194,12 @@ export default async function HomePage() {
           ))}
         </div>
         <div className="mt-8">
-          <Button href="/engagement-models" variant="gold" size="lg">
+          <Button
+            href="/engagement-models"
+            variant="gold"
+            size="lg"
+            className="shadow-lg shadow-black/25 hover:shadow-xl"
+          >
             Compare models & take the selector
           </Button>
         </div>
@@ -218,8 +227,8 @@ export default async function HomePage() {
             description="Perspectives on strategy, talent, location, and engagement — featured from the insights library."
           />
           <HomeInsights insights={homepageInsights} />
-          <div className="mt-8">
-            <Button href="/insights" variant="outline">
+          <div className="mt-8 flex justify-center sm:justify-start">
+            <Button href="/insights" variant="primary">
               View all insights
             </Button>
           </div>

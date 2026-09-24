@@ -1,5 +1,3 @@
-"use client";
-
 import { CheckCircle2, ArrowRight, ShieldCheck, UserCheck, Layers, Award, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -29,9 +27,9 @@ const commercialModels: CommercialModel[] = [
   {
     name: "Project-Based / Managed Workstream",
     covers: "A defined deliverable, or one functional pillar run end-to-end",
-    deliveryOwner: "Vertara (scoped)",
+    deliveryOwner: "Vertara",
     ownerType: "scoped",
-    bestFit: "Discrete builds — entity setup, location study, org design",
+    bestFit: "Discrete builds entity setup, location study, org design",
   },
   {
     name: "Milestone-Based Build",

@@ -113,7 +113,7 @@ export default async function IndustriesHubPage() {
   const featuredCases = [
     ...cases.filter((c: { featured?: boolean }) => c.featured === true),
     ...cases.filter((c: { featured?: boolean }) => c.featured !== true),
-  ].slice(0, 2);
+  ].slice(0, 1);
 
   return (
     <>
@@ -181,18 +181,24 @@ export default async function IndustriesHubPage() {
               >
                 <div className="flex h-full flex-col">
                   <div className="flex items-start justify-start">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#2e3f33] text-[#b49339] shadow-md ring-4 ring-white group-hover:scale-110 group-hover:bg-[#0b1f3a] transition-all duration-300">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#2e3f33] text-[#b49339] shadow-md ring-4 ring-white transition-all duration-300 group-hover:scale-105 group-hover:bg-[#0b1f3a]">
                       <Icon className="h-6 w-6" />
                     </div>
                   </div>
 
-                  <h3 className="mt-5 flex min-h-[3.25rem] items-start text-lg font-bold leading-snug text-navy group-hover:text-[#2e3f33] transition-colors sm:min-h-[3.5rem]">
+                  <h3 className="mt-5 flex min-h-[3.25rem] items-start text-lg font-bold leading-snug text-navy transition-colors group-hover:text-[#2e3f33] sm:min-h-[3.5rem]">
                     {item.title}
                   </h3>
 
-                  <p className="mt-2 text-xs sm:text-sm text-slate leading-relaxed">
+                  <p className="mt-2 flex-1 text-xs leading-relaxed text-slate sm:text-sm">
                     {item.description}
                   </p>
+
+                  <div className="mt-6 flex items-center justify-start">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-[#2e3f33] text-[#2e3f33] transition-all duration-300 group-hover:bg-[#2e3f33] group-hover:text-[#b49339] group-hover:translate-x-1 group-hover:shadow-md">
+                      <ArrowRight className="h-5 w-5 stroke-[2.2]" />
+                    </div>
+                  </div>
                 </div>
               </Link>
             );

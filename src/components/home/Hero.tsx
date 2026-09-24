@@ -264,7 +264,7 @@ export function Hero({
               <Button
                 type="submit"
                 size="lg"
-                className="w-full !bg-navy hover:!bg-navy-soft"
+                className="w-full !bg-[#0e3621] hover:!bg-[#092416] text-white shadow-md shadow-black/20 hover:shadow-lg transition-all"
                 disabled={status === "loading"}
               >
                 {status === "loading" ? (
