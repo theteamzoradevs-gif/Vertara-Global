@@ -57,7 +57,7 @@ export function ServiceCard({
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
                 sizes="(max-width:768px) 100vw, 25vw"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-navy/65 via-navy/15 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0d3320]/75 via-[#0d3320]/20 to-transparent" />
               <span className="absolute bottom-3 left-3 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-white text-accent shadow">
                 <Icon className="h-5 w-5" />
               </span>
@@ -80,8 +80,8 @@ export function ServiceCard({
             </div>
           </div>
 
-          {/* Back — navy / blue theme */}
-          <div className="absolute inset-0 flex flex-col overflow-hidden rounded-2xl border border-navy-soft bg-navy p-5 text-white shadow-lg [backface-visibility:hidden] [transform:rotateY(180deg)] sm:p-6">
+          {/* Back — dark green theme */}
+          <div className="absolute inset-0 flex flex-col overflow-hidden rounded-2xl border border-white/15 bg-[#0e3621] bg-gradient-to-br from-[#0d3320] via-[#0e3621] to-[#082013] p-5 text-white shadow-xl shadow-black/30 [backface-visibility:hidden] [transform:rotateY(180deg)] sm:p-6">
             <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 text-highlight">
               <Icon className="h-5 w-5" />
             </div>
@@ -92,7 +92,7 @@ export function ServiceCard({
             <div className="mt-4 space-y-2">
               <Link
                 href={`/services/${slug}`}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-highlight px-4 py-2.5 text-sm font-semibold text-navy transition hover:bg-white"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-highlight px-4 py-2.5 text-sm font-semibold text-[#0d3320] transition hover:bg-white"
               >
                 View service
                 <ArrowRight className="h-4 w-4" />

@@ -1,20 +1,20 @@
 import { CheckCircle2 } from "lucide-react";
 
-const nextSteps = [
+const engagementModelsList = [
   {
     step: "01",
-    title: "Sector-specific capability design",
-    desc: "Define the functions, talent and capabilities your industry needs to build in India.",
+    title: "Advisory & Strategy",
+    desc: "Strategic guidance, feasibility, business-case development and operating-model design.",
   },
   {
     step: "02",
-    title: "GCC strategy & execution",
-    desc: "Align location, operating model, governance and infrastructure with your business objectives.",
+    title: "Build & Managed Delivery",
+    desc: "Project-based, milestone-based and managed workstreams from setup through operational launch.",
   },
   {
     step: "03",
-    title: "Scalable operating model",
-    desc: "Build a foundation that can expand as your capability requirements and business evolve.",
+    title: "Long-Term Partnership",
+    desc: "Ongoing capability support, specialist capacity and structured transition toward client ownership.",
   },
 ];
 
@@ -24,24 +24,24 @@ const assurances = [
   "100% direct parent-entity asset ownership",
 ];
 
-export function IndustryFormSideContent() {
+export function EngagementFormSideContent() {
   return (
     <div className="h-full flex flex-col justify-between py-2 sm:py-3 lg:pl-2">
       <div>
         <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#b49339]">
-          HOW VERTARA SUPPORTS YOUR INDUSTRY
+          HOW YOU CAN WORK WITH VERTARA
         </p>
 
         <h3 className="mt-2.5 text-xl sm:text-2xl font-bold tracking-tight text-navy">
-          Built around your industry's real operating needs
+          Engagement models built around your GCC journey
         </h3>
         <p className="mt-1.5 text-xs sm:text-sm text-slate leading-relaxed">
-          We combine sector understanding, GCC strategy and execution capabilities to design a capability model aligned with your business.
+          Choose the level of support that fits your stage — from strategic advisory to a fully managed build and long-term operating partnership.
         </p>
 
-        {/* Numbered Steps */}
+        {/* Numbered 3 Models */}
         <div className="mt-6 space-y-3.5 sm:space-y-4">
-          {nextSteps.map((item) => (
+          {engagementModelsList.map((item) => (
             <div
               key={item.step}
               className="flex items-start gap-3.5 rounded-2xl border border-[#cddcd1] bg-white p-4 sm:p-4.5 shadow-xs transition-all duration-300 hover:border-[#2e3f33]/40 hover:shadow-sm"

@@ -1,6 +1,6 @@
 "use client";
 
-import { Target, Receipt, Eye, Sparkles, CheckCircle2 } from "lucide-react";
+import { Target, Receipt, Eye, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface CommercialPrinciple {
@@ -29,13 +29,8 @@ const principles: CommercialPrinciple[] = [
 
 export function CommercialPrinciples({ className }: { className?: string }) {
   return (
-    <div
-      className={cn(
-        "mt-8 rounded-3xl border border-[#cddcd1] bg-white p-6 sm:p-8 shadow-lg shadow-navy/5",
-        className
-      )}
-    >
-      <div className="mb-6 flex items-center gap-3">
+    <div className={cn("mt-8", className)}>
+      <div className="mb-6 flex items-center gap-2.5">
         <div className="h-2 w-2 rounded-full bg-[#b49339]" />
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
           Commercial Principles
@@ -48,12 +43,12 @@ export function CommercialPrinciples({ className }: { className?: string }) {
           return (
             <div
               key={index}
-              className="group flex items-start gap-4 rounded-2xl border border-transparent p-2 transition-all duration-200 hover:border-[#cddcd1]/50 hover:bg-[#f0f4f1]/40"
+              className="group flex items-start gap-3.5"
             >
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#cddcd1] bg-[#edf5ef] text-[#2e3f33] shadow-xs transition-transform duration-300 group-hover:scale-105 group-hover:bg-[#e2ede4]">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#cddcd1] bg-[#edf5ef] text-[#2e3f33] shadow-xs transition-transform duration-300 group-hover:scale-105 group-hover:bg-[#e2ede4]">
                 <Icon className="h-5 w-5 text-[#2e3f33]" />
               </div>
-              <p className="pt-1 text-xs sm:text-sm font-medium leading-relaxed text-navy">
+              <p className="pt-1 text-xs font-medium leading-relaxed text-navy sm:text-sm">
                 {item.text}
               </p>
             </div>

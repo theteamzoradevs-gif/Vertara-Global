@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Section, SectionHeader } from "@/components/ui/Section";
@@ -12,7 +13,7 @@ import { FlowThreads } from "@/components/ui/FlowThreads";
 import { CompetitiveComparison } from "@/components/home/CompetitiveComparison";
 import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
 import { Accordion } from "@/components/ui/Accordion";
-import { Mail, Phone } from "lucide-react";
+import { Mail, Phone, ArrowRight } from "lucide-react";
 
 const galleryBySlug: Record<string, string[]> = {
   talent: [
@@ -79,39 +80,53 @@ export default async function ServicePage({
 
   return (
     <>
-      <section className="relative overflow-hidden text-white">
+      {/* 1. HERO SECTION */}
+      <section className="relative overflow-hidden text-white bg-[#0e3621]">
+        {/* Right-aligned Background Image */}
         <div className="absolute inset-0">
           <Image
             src={service.image}
-            alt=""
+            alt={service.name}
             fill
-            className="object-cover"
+            className="object-cover object-right lg:object-right"
             priority
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-navy/70" />
-          <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-navy/65 to-navy/40" />
-          <FlowThreads intensity="medium" onDark className="opacity-45" />
+          {/* Subtle Emerald / Forest Green Soft Gradient & Shadow Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0d3320] via-[#0d3320]/95 via-40% sm:via-48% md:via-52% to-[#0d3320]/25 lg:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0d3320] via-transparent to-[#0d3320]/40" />
+          <div className="absolute inset-0 bg-[#0d3320]/20 mix-blend-multiply" />
+          <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
-        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-highlight">
-            Service
-          </p>
-          <h1 className="mt-3 max-w-3xl text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+
+        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20 lg:py-24 lg:px-8">
+          {/* Breadcrumb / Eyebrow */}
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
+            <Link href="/#services" className="hover:underline">
+              Services
+            </Link>
+            <span>/</span>
+            <span>{service.name}</span>
+          </div>
+
+          <h1 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-[44px] xl:text-[48px] leading-tight text-white">
             {service.name}
           </h1>
-          <p className="mt-5 max-w-2xl text-base text-white/80 md:text-lg">
+
+          <p className="mt-4 max-w-2xl text-base text-white/90 sm:text-lg leading-relaxed font-normal">
             {service.valueProposition}
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button href="#enquire" size="lg">
+
+          {/* Hero CTAs */}
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <Button href="#enquire" variant="gold" size="lg" className="shadow-lg shadow-black/25 hover:shadow-xl">
               Enquire about this service
             </Button>
             <Button
               href="#how-it-works"
               variant="outline"
               size="lg"
-              className="border-white/30 bg-white/10 text-white hover:border-white hover:bg-white/20 hover:text-white"
+              className="border-white/25 bg-white/5 text-white backdrop-blur-sm hover:border-white/50 hover:bg-white/10 hover:text-white shadow-md shadow-black/15"
             >
               How it works
             </Button>

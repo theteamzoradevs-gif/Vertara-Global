@@ -142,12 +142,12 @@ export function ConnectedModules({ modules }: { modules: Module[] }) {
       <div className="relative grid items-center gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1fr)] lg:gap-16 xl:gap-20">
         <div className="relative mx-auto hidden aspect-square w-full max-w-[420px] sm:block lg:max-w-[460px]">
           <div className="absolute inset-[20%] rounded-full border border-dashed border-accent/40" />
-          <div className="absolute inset-[34%] rounded-full bg-navy text-center text-white shadow-xl shadow-navy/20">
+          <div className="absolute inset-[34%] rounded-full bg-[#0e3621] bg-gradient-to-br from-[#0d3320] via-[#0e3621] to-[#082013] text-center text-white shadow-xl shadow-black/30 border border-white/10">
             <div className="flex h-full flex-col items-center justify-center px-4">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-highlight">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#b49339]">
                 Platform
               </p>
-              <p className="mt-1 text-sm font-bold leading-snug md:text-base">
+              <p className="mt-1 text-sm font-bold leading-snug md:text-base text-white">
                 GCC Operating System
               </p>
             </div>
@@ -203,7 +203,7 @@ export function ConnectedModules({ modules }: { modules: Module[] }) {
                     className="object-cover"
                     sizes="(max-width:1024px) 100vw, 40vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/25 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0d3320]/85 via-[#0d3320]/30 to-transparent" />
                   <div className="absolute bottom-3 left-4 right-4">
                     <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-highlight">
                       Module focus

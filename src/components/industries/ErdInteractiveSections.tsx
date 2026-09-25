@@ -129,7 +129,7 @@ export function ErdSectorNeedsSelector() {
         return (
           <div
             key={item.id}
-            className="group relative rounded-2xl sm:rounded-3xl border border-[#cddcd1] bg-[#edf5ef] p-6 sm:p-7 transition-all duration-300 hover:border-[#2e3f33]/40 hover:bg-[#e5ebe6] hover:-translate-y-1.5 hover:shadow-lg flex flex-col justify-between h-full cursor-default"
+            className="relative rounded-2xl sm:rounded-3xl border border-[#cddcd1] bg-[#edf5ef] p-6 sm:p-7 flex flex-col justify-between h-full cursor-default"
           >
             <div>
               <div className="flex items-center justify-between gap-2">
@@ -138,7 +138,7 @@ export function ErdSectorNeedsSelector() {
                 </p>
               </div>
 
-              <div className="mt-5 flex h-11 w-11 items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] text-[#2e3f33] shadow-xs group-hover:bg-[#2e3f33] group-hover:text-[#b49339] transition-colors">
+              <div className="mt-5 flex h-11 w-11 items-center justify-center rounded-xl bg-[#2e3f33] text-[#b49339] shadow-sm">
                 <Icon className="h-5 w-5" />
               </div>
 

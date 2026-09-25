@@ -8,6 +8,7 @@ import { OurVision } from "@/components/home/OurVision";
 import { WhoAreWe } from "@/components/home/WhoAreWe";
 import { PractitionersTeam } from "@/components/home/PractitionersTeam";
 import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
+import { ArrowRight } from "lucide-react";
 import {
   getSettings,
   getTestimonials,
@@ -17,7 +18,7 @@ import {
 
 export const metadata = {
   title: "About",
-  description: "Company story, leadership, and credibility markers for GCC Advisor.",
+  description: "Company story, leadership, and credibility markers for Vertara Global.",
 };
 
 export default async function AboutPage() {
@@ -30,31 +31,43 @@ export default async function AboutPage() {
 
   return (
     <>
-      {/* 1. Hero Header */}
-      <section className="relative overflow-hidden text-white">
+      {/* 1. HERO SECTION */}
+      <section className="relative overflow-hidden text-white bg-[#0e3621]">
+        {/* Right-aligned Realistic Background Image */}
         <div className="absolute inset-0">
           <Image
-            src="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=1600"
-            alt=""
+            src="/images/about us.png"
+            alt="About Vertara Global"
             fill
-            className="object-cover"
+            className="object-cover object-right lg:object-right"
             priority
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-navy/72" />
-          <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-navy/65 to-navy/45" />
-          <FlowThreads intensity="medium" onDark className="opacity-50" />
+          {/* Subtle Emerald / Forest Green Soft Gradient & Shadow Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0d3320] via-[#0d3320]/95 via-40% sm:via-48% md:via-52% to-[#0d3320]/25 lg:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0d3320] via-transparent to-[#0d3320]/40" />
+          <div className="absolute inset-0 bg-[#0d3320]/20 mix-blend-multiply" />
+          <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
-        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#b49339]">
-            About
-          </p>
-          <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-            About {settings.brandName}
+
+        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20 lg:py-24 lg:px-8">
+          {/* Breadcrumb / Eyebrow */}
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
+            <span>About</span>
+            <span>/</span>
+            <span>Who We Are</span>
+          </div>
+
+          <h1 className="mt-4 max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-[44px] xl:text-[48px] leading-tight text-white">
+            About Vertara Global
           </h1>
-          <p className="mt-4 max-w-2xl text-base text-white/80 md:text-lg">
-            {settings.aboutMission}
+
+          <p className="mt-4 max-w-xl text-base text-white/90 sm:text-lg leading-relaxed font-normal">
+            {settings.aboutMission || "Make India GCC setup predictable for enterprise buyers: clear ownership, honest timelines, and a single operating rhythm from first hire to steady-state scale."}
           </p>
+
+          {/* Hero CTAs */}
+
         </div>
       </section>
 

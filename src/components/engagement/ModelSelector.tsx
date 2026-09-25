@@ -159,17 +159,17 @@ export function ModelSelector({ models }: { models: Model[] }) {
         ) : null}
       </div>
 
-      <div className="hidden md:block overflow-x-auto rounded-2xl border border-border bg-surface-elevated">
+      <div className="hidden md:block overflow-x-auto rounded-2xl border border-[#cddcd1] bg-surface-elevated">
         <table className="min-w-[720px] w-full text-left text-sm">
-          <thead className="bg-navy text-white">
+          <thead className="bg-[#2e3f33] text-white">
             <tr>
-              <th className="sticky left-0 bg-navy px-4 py-3 font-semibold">Criteria</th>
+              <th className="sticky left-0 bg-[#2e3f33] px-4 py-3 font-semibold">Criteria</th>
               {models.map((m) => (
                 <th
                   key={m.slug}
                   className={cn(
-                    "px-4 py-3 font-semibold",
-                    best?.slug === m.slug && "bg-accent",
+                    "px-4 py-3 font-semibold transition-colors",
+                    best?.slug === m.slug && "bg-[#b49339] text-white",
                   )}
                 >
                   {m.name}
