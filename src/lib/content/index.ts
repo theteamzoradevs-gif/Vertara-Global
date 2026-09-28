@@ -57,10 +57,8 @@ function mergeSettings(doc: Partial<Settings> | null): Settings {
   if (!settings.heroRotatingEyebrow) {
     settings.heroRotatingEyebrow = seedSettings.heroRotatingEyebrow;
   }
-  if (!settings.heroPrimaryCta) settings.heroPrimaryCta = seedSettings.heroPrimaryCta;
-  if (!settings.heroSecondaryCta) {
-    settings.heroSecondaryCta = seedSettings.heroSecondaryCta;
-  }
+  settings.heroPrimaryCta = "Discuss Your GCC Mandate";
+  settings.heroSecondaryCta = "See Our Offerings";
   if (!settings.heroFormEyebrow) settings.heroFormEyebrow = seedSettings.heroFormEyebrow;
   if (!settings.heroFormTitle) settings.heroFormTitle = seedSettings.heroFormTitle;
   if (!settings.heroFormDescription) {

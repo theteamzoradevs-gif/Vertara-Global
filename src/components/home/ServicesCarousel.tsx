@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
 import { useInView } from "framer-motion";
@@ -84,7 +84,7 @@ export function ServicesCarousel({ services }: { services: ServiceItem[] }) {
             onClick={() => setActiveIndex(idx)}
             className={cn(
               "h-1.5 rounded-full transition-all duration-300",
-              activeIndex === idx ? "w-6 bg-[#2e3f33]" : "w-1.5 bg-[#cddcd1]"
+              activeIndex === idx ? "w-6 bg-[#2F3F34]" : "w-1.5 bg-[#cddcd1]"
             )}
             aria-label={`Go to slide ${idx + 1}`}
           />

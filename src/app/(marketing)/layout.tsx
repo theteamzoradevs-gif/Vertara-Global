@@ -1,6 +1,5 @@
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
-import { ChatAssistant } from "@/components/chat/ChatAssistant";
 import { TrustPop } from "@/components/leads/TrustPop";
 import { getSettings } from "@/lib/content";
 
@@ -20,7 +19,6 @@ export default async function MarketingLayout({
         email={settings.contactEmail}
         phone={settings.contactPhone}
       />
-      <ChatAssistant />
       <TrustPop
         metrics={settings.metrics}
         headline={settings.trustPopHeadline}

@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { CTABand } from "@/components/ui/CTABand";
 import { ModelSelector } from "@/components/engagement/ModelSelector";
@@ -22,7 +22,7 @@ import {
 export const metadata = {
   title: "Engagement Models",
   description:
-    "Compare Flexible Partnership, Build & Transfer, and Managed Team — plus an interactive fit selector and 5 commercial models.",
+    "Compare Flexible Partnership, Build & Transfer, and Managed Team â€” plus an interactive fit selector and 5 commercial models.",
 };
 
 export default async function EngagementModelsPage() {
@@ -36,7 +36,7 @@ export default async function EngagementModelsPage() {
   return (
     <>
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden text-white bg-[#0e3621]">
+      <section className="relative overflow-hidden text-white bg-[#2F3F34]">
         {/* Right-aligned Realistic Background Image */}
         <div className="absolute inset-0">
           <Image
@@ -48,9 +48,9 @@ export default async function EngagementModelsPage() {
             sizes="100vw"
           />
           {/* Subtle Emerald / Forest Green Soft Gradient & Shadow Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0d3320] via-[#0d3320]/95 via-40% sm:via-48% md:via-52% to-[#0d3320]/25 lg:to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0d3320] via-transparent to-[#0d3320]/40" />
-          <div className="absolute inset-0 bg-[#0d3320]/20 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#233027] via-[#233027]/95 via-40% sm:via-48% md:via-52% to-[#233027]/25 lg:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#233027] via-transparent to-[#233027]/40" />
+          <div className="absolute inset-0 bg-[#233027]/20 mix-blend-multiply" />
           <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
 
@@ -136,7 +136,7 @@ export default async function EngagementModelsPage() {
           ))}
         </div>
         <div className="mt-12">
-          <CTABand title="Unsure which model fits? Let’s decide together." />
+          <CTABand title="Unsure which model fits? Letâ€™s decide together." />
         </div>
       </Section>
 
@@ -151,7 +151,7 @@ export default async function EngagementModelsPage() {
           {logos.map((logo) => (
             <div
               key={logo.name}
-              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2e3f33]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
+              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2F3F34]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
             >
               {logo.logoText}
             </div>
@@ -167,7 +167,7 @@ export default async function EngagementModelsPage() {
         <SectionHeader
           eyebrow="Next step"
           title="Talk through the right model"
-          description="Share your headcount, city, and ownership preference — a partner will map the fit."
+          description="Share your headcount, city, and ownership preference â€” a partner will map the fit."
         />
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-8 items-stretch">
           <div className="lg:col-span-7 flex flex-col">

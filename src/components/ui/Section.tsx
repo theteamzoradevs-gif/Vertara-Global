@@ -12,7 +12,7 @@ export function Section({
   children: ReactNode;
   className?: string;
   id?: string;
-  tone?: "default" | "muted" | "navy" | "green";
+  tone?: "default" | "muted" | "navy" | "green" | "ink";
   /** soft flowing threads; false to disable */
   threads?: false | "light" | "medium" | "strong";
 }) {
@@ -20,8 +20,11 @@ export function Section({
     default: "bg-surface",
     muted: "bg-surface-elevated",
     navy: "bg-navy text-white",
-    green: "bg-[#0e3621] text-white",
+    green: "bg-[#2F3F34] text-white",
+    ink: "bg-[#101C30] text-white",
   };
+
+  const isDark = tone === "navy" || tone === "green" || tone === "ink";
 
   return (
     <section
@@ -31,8 +34,8 @@ export function Section({
       {threads ? (
         <FlowThreads
           intensity={threads}
-          onDark={tone === "navy" || tone === "green"}
-          className={tone === "navy" || tone === "green" ? "opacity-40" : undefined}
+          onDark={isDark}
+          className={isDark ? "opacity-40" : undefined}
         />
       ) : null}
       <div className="relative z-[1] mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -47,14 +50,16 @@ export function SectionHeader({
   title,
   description,
   light,
+  className,
 }: {
   eyebrow?: string;
   title: string;
   description?: string;
   light?: boolean;
+  className?: string;
 }) {
   return (
-    <div className="mb-10 max-w-3xl md:mb-14">
+    <div className={cn("mb-10 max-w-3xl md:mb-14", className)}>
       {eyebrow ? (
         <p
           className={cn(

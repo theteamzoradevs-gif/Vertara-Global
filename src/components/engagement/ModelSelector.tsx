@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -26,8 +26,8 @@ const questions = [
     key: "teamSize" as const,
     label: "Approximate India team size in year one?",
     options: [
-      { value: "1-50", label: "1–50" },
-      { value: "50-200", label: "50–200" },
+      { value: "1-50", label: "1â€“50" },
+      { value: "50-200", label: "50â€“200" },
       { value: "200+", label: "200+" },
     ],
   },
@@ -36,8 +36,8 @@ const questions = [
     label: "When do you need a productive team?",
     options: [
       { value: "asap", label: "As soon as possible" },
-      { value: "3-6", label: "3–6 months" },
-      { value: "6-12", label: "6–12 months" },
+      { value: "3-6", label: "3â€“6 months" },
+      { value: "6-12", label: "6â€“12 months" },
       { value: "flexible", label: "Flexible / exploring" },
     ],
   },
@@ -108,7 +108,7 @@ export function ModelSelector({ models }: { models: Model[] }) {
       <div className="rounded-2xl border border-border bg-surface-elevated p-6 md:p-8">
         <h3 className="text-xl font-bold text-navy">Find your fit</h3>
         <p className="mt-2 text-sm text-muted">
-          Answer three questions — we&apos;ll highlight the model that usually fits.
+          Answer three questions â€” we&apos;ll highlight the model that usually fits.
         </p>
         <div className="mt-6 space-y-6">
           {questions.map((q) => (
@@ -152,7 +152,7 @@ export function ModelSelector({ models }: { models: Model[] }) {
                 size="sm"
                 onClick={captureSoftLead}
               >
-                {submittedLead ? "Saved — thank you" : "Share details for follow-up"}
+                {submittedLead ? "Saved â€” thank you" : "Share details for follow-up"}
               </Button>
             </div>
           </div>
@@ -161,9 +161,9 @@ export function ModelSelector({ models }: { models: Model[] }) {
 
       <div className="hidden md:block overflow-x-auto rounded-2xl border border-[#cddcd1] bg-surface-elevated">
         <table className="min-w-[720px] w-full text-left text-sm">
-          <thead className="bg-[#2e3f33] text-white">
+          <thead className="bg-[#2F3F34] text-white">
             <tr>
-              <th className="sticky left-0 bg-[#2e3f33] px-4 py-3 font-semibold">Criteria</th>
+              <th className="sticky left-0 bg-[#2F3F34] px-4 py-3 font-semibold">Criteria</th>
               {models.map((m) => (
                 <th
                   key={m.slug}

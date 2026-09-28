@@ -1,10 +1,10 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 
 const frames = [
   {
     number: "01",
     src: "/images/workspace-blue.webp",
-    caption: "Premium GCC floors — ready before day one",
+    caption: "Premium GCC floors â€” ready before day one",
     category: "Workspace",
   },
   {
@@ -16,13 +16,13 @@ const frames = [
   {
     number: "03",
     src: "/images/gcc-ops.png",
-    caption: "Operations command — visible, governed, scalable",
+    caption: "Operations command â€” visible, governed, scalable",
     category: "Operations",
   },
   {
     number: "04",
     src: "/images/gcc-floor.webp",
-    caption: "Enterprise-ready technology — built for how your teams work",
+    caption: "Enterprise-ready technology â€” built for how your teams work",
     category: "Technology",
   },
   {
@@ -34,7 +34,7 @@ const frames = [
   {
     number: "06",
     src: "/images/workspace-vibrant.jpg",
-    caption: "Secure by design — resilient for business-critical operations",
+    caption: "Secure by design â€” resilient for business-critical operations",
     category: "Security & continuity",
   },
 ];
@@ -47,7 +47,7 @@ export function ImageStoryStrip() {
         {frames.map((frame) => (
           <figure
             key={frame.caption}
-            className="group relative overflow-hidden rounded-xl border border-border shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-[#2e3f33]/40 hover:shadow-lg sm:rounded-2xl"
+            className="group relative overflow-hidden rounded-xl border border-border shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-[#2F3F34]/40 hover:shadow-lg sm:rounded-2xl"
           >
             <div className="relative aspect-[3/4] w-full sm:aspect-auto sm:h-56 md:h-60">
               <Image

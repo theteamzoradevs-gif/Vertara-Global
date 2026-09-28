@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 import { Accordion } from "@/components/ui/Accordion";
@@ -32,7 +32,7 @@ export default async function AboutPage() {
   return (
     <>
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden text-white bg-[#0e3621]">
+      <section className="relative overflow-hidden text-white bg-[#2F3F34]">
         {/* Right-aligned Realistic Background Image */}
         <div className="absolute inset-0">
           <Image
@@ -44,9 +44,9 @@ export default async function AboutPage() {
             sizes="100vw"
           />
           {/* Subtle Emerald / Forest Green Soft Gradient & Shadow Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0d3320] via-[#0d3320]/95 via-40% sm:via-48% md:via-52% to-[#0d3320]/25 lg:to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0d3320] via-transparent to-[#0d3320]/40" />
-          <div className="absolute inset-0 bg-[#0d3320]/20 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#233027] via-[#233027]/95 via-40% sm:via-48% md:via-52% to-[#233027]/25 lg:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#233027] via-transparent to-[#233027]/40" />
+          <div className="absolute inset-0 bg-[#233027]/20 mix-blend-multiply" />
           <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
 
@@ -91,7 +91,7 @@ export default async function AboutPage() {
           {logos.map((logo) => (
             <div
               key={logo.name}
-              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2e3f33]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
+              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2F3F34]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
             >
               {logo.logoText}
             </div>
@@ -107,7 +107,7 @@ export default async function AboutPage() {
         <SectionHeader
           eyebrow="Enquire"
           title="Start a conversation with the team"
-          description="Share what you’re building, we’ll connect you with the right partner."
+          description="Share what youâ€™re building, weâ€™ll connect you with the right partner."
         />
         <div className="mx-auto max-w-2xl">
           <ContactForm source="about" submitLabel="Request a partner call" />

@@ -7,18 +7,10 @@ import {
   ArrowRight,
   Building2,
   ChevronDown,
-  Coins,
   Compass,
-  Cpu,
-  Factory,
   FileText,
-  FlaskConical,
-  Hotel,
   Menu,
-  Pickaxe,
   Settings2,
-  ShoppingBag,
-  Sparkles,
   Users,
   X,
 } from "lucide-react";
@@ -35,7 +27,7 @@ const services = [
   {
     href: "/services/workspace",
     label: "Workspace",
-    desc: "Secure, branded floors in India’s talent hubs",
+    desc: "Secure, branded floors in Indiaâ€™s talent hubs",
     icon: Building2,
   },
   {
@@ -65,9 +57,10 @@ const insightLinks = [
     href: "/insights/build-transfer-vs-managed-team",
     label: "Build & transfer vs managed team",
   },
-  { href: "/insights", label: "View all insights →" },
+  { href: "/insights", label: "View all insights â†’" },
 ];
 
+/* Kept for future re-enabling if needed:
 const industryCol1 = [
   { href: "/industries/engineering-erd", label: "Engineering & ER&D", icon: Cpu },
   { href: "/industries/healthcare-life-sciences", label: "Healthcare & Life Sciences", icon: FlaskConical },
@@ -81,20 +74,19 @@ const industryCol2 = [
   { href: "/industries/mining-metals", label: "Mining & Metals", icon: Pickaxe },
   { href: "/industries/travel-leisure-hospitality", label: "Travel, Leisure, Hospitality", icon: Hotel },
 ];
+*/
 
 const simpleLinks = [
-  { href: "/engagement-models", label: "Engagement" },
-  { href: "/case-studies", label: "Case Studies" },
-  { href: "/about", label: "About" },
+  { href: "/about", label: "About Us" },
 ];
 
 export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: string }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [menu, setMenu] = useState<"services" | "industries" | "insights" | null>(null);
+  const [menu, setMenu] = useState<"services" | "insights" | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  function openMenu(next: "services" | "industries" | "insights") {
+  function openMenu(next: "services" | "insights") {
     if (closeTimer.current) clearTimeout(closeTimer.current);
     setMenu(next);
   }
@@ -114,26 +106,30 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
       <div className="mx-auto flex h-[4.25rem] w-full max-w-6xl items-center justify-between gap-2 px-3 sm:gap-4 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="shrink-0 text-sm sm:text-base md:text-lg font-bold uppercase tracking-[0.14em] sm:tracking-[0.2em] text-navy transition hover:opacity-90"
+          className="shrink-0 text-sm sm:text-base md:text-lg font-bold tracking-[0.14em] sm:tracking-[0.2em] text-navy transition hover:opacity-90"
         >
-          VERTARA <span className="text-[#b49339]">GLOBAL</span>
+          VERTARA <span className="text-[#b49339] lowercase font-medium">global</span>
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">
+          <Link
+            href="/"
+            className={cn(
+              "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+              pathname === "/"
+                ? "bg-accent-soft text-accent font-semibold"
+                : "text-slate hover:bg-surface hover:text-navy",
+            )}
+          >
+            Home
+          </Link>
           <MegaTrigger
-            label="Services"
+            label="Our Offerings"
             active={menu === "services" || pathname.startsWith("/services")}
             onEnter={() => openMenu("services")}
             onLeave={scheduleClose}
           />
-          <MegaTrigger
-            label="Industries"
-            href="/industries"
-            active={menu === "industries" || pathname.startsWith("/industries")}
-            onEnter={() => openMenu("industries")}
-            onLeave={scheduleClose}
-            onClick={() => setMenu(null)}
-          />
+          {/* Industries menu disabled - to be added later */}
           <MegaTrigger
             label="Insights"
             active={menu === "insights" || pathname.startsWith("/insights")}
@@ -162,7 +158,7 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
             size="sm"
             className="hidden sm:inline-flex shrink-0 whitespace-nowrap text-xs sm:text-sm px-3 sm:px-3.5 py-1.5 sm:py-2"
           >
-            Book a consultation
+            Discuss your GCC mandate
           </Button>
           <button
             type="button"
@@ -194,7 +190,7 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
                         className="group flex gap-3 rounded-xl border border-transparent p-3 transition hover:border-[#b49339]/30 hover:bg-[#e5ebe6]/60"
                         onClick={() => setMenu(null)}
                       >
-                        <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#e5ebe6] text-[#2e3f33] shadow-xs group-hover:bg-[#2e3f33] group-hover:text-[#b49339] transition-all">
+                        <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#e5ebe6] text-[#2F3F34] shadow-xs group-hover:bg-[#2F3F34] group-hover:text-[#b49339] transition-all">
                           <Icon className="h-5 w-5 stroke-[2.2]" />
                         </span>
                         <span>
@@ -214,83 +210,16 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
                     </p>
                     <p className="mt-2 text-lg font-bold text-navy">One operating system for your GCC</p>
                     <p className="mt-2 text-sm text-slate leading-relaxed">
-                      Talent, workspace, ops, and advisory — planned together so nothing slips between vendors.
+                      Talent, workspace, ops, and advisory â€” planned together so nothing slips between vendors.
                     </p>
                   </div>
                   <div>
                     <Link
                       href="/#how-it-connects"
-                      className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#2e3f33] hover:text-[#b49339] transition-colors"
+                      className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#2F3F34] hover:text-[#b49339] transition-colors"
                       onClick={() => setMenu(null)}
                     >
                       See how it connects <ArrowRight className="h-3.5 w-3.5" />
-                    </Link>
-                  </div>
-                </div>
-              </>
-            ) : menu === "industries" ? (
-              <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
-                  <div className="space-y-1.5">
-                    {industryCol1.map((item) => {
-                      const Icon = item.icon;
-                      return (
-                        <Link
-                          key={item.label}
-                          href={item.href}
-                          className="group flex items-center gap-3.5 rounded-xl border border-transparent p-2.5 transition hover:border-[#b49339]/30 hover:bg-[#e5ebe6]/60"
-                          onClick={() => setMenu(null)}
-                        >
-                          <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#e5ebe6] text-[#2e3f33] shadow-xs group-hover:bg-[#2e3f33] group-hover:text-[#b49339] group-hover:scale-105 transition-all">
-                            <Icon className="h-5 w-5 stroke-[2.2]" />
-                          </span>
-                          <span className="block text-sm font-semibold text-navy group-hover:text-accent">
-                            {item.label}
-                          </span>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                  <div className="space-y-1.5">
-                    {industryCol2.map((item) => {
-                      const Icon = item.icon;
-                      return (
-                        <Link
-                          key={item.label}
-                          href={item.href}
-                          className="group flex items-center gap-3.5 rounded-xl border border-transparent p-2.5 transition hover:border-[#b49339]/30 hover:bg-[#e5ebe6]/60"
-                          onClick={() => setMenu(null)}
-                        >
-                          <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#e5ebe6] text-[#2e3f33] shadow-xs group-hover:bg-[#2e3f33] group-hover:text-[#b49339] group-hover:scale-105 transition-all">
-                            <Icon className="h-5 w-5 stroke-[2.2]" />
-                          </span>
-                          <span className="block text-sm font-semibold text-navy group-hover:text-accent">
-                            {item.label}
-                          </span>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </div>
-                <div className="rounded-2xl border border-[#cddcd1] bg-[#e5ebe6] p-5 sm:p-6 flex flex-col justify-between">
-                  <div>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#b49339]">
-                      Domain Specialization
-                    </p>
-                    <p className="mt-2 text-sm sm:text-base font-bold text-navy leading-snug">
-                      Customized GCC setups for specialized industry verticals
-                    </p>
-                    <p className="mt-2 text-xs text-slate leading-relaxed">
-                      Air-gapped security, certified physical perimeters, and regulatory compliance for your sector.
-                    </p>
-                  </div>
-                  <div>
-                    <Link
-                      href="/industries"
-                      className="mt-4 inline-flex items-center rounded-lg bg-[#b49339] px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-[#9e7f2b]"
-                      onClick={() => setMenu(null)}
-                    >
-                      View all industries →
                     </Link>
                   </div>
                 </div>
@@ -341,12 +270,12 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
               className="w-full justify-center"
               onClick={() => setMobileOpen(false)}
             >
-              Book a consultation
+              Discuss your GCC mandate
             </Button>
           </div>
 
           <p className="text-[11px] font-bold uppercase tracking-wider text-[#b49339]">
-            Services
+            Our Offerings
           </p>
           <div className="mt-2 space-y-1">
             {services.map((s) => {
@@ -358,7 +287,7 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
                   className="flex items-center gap-3 rounded-xl p-2 text-sm font-semibold text-navy transition hover:bg-[#e5ebe6]"
                   onClick={() => setMobileOpen(false)}
                 >
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#e5ebe6] text-[#2e3f33]">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#e5ebe6] text-[#2F3F34]">
                     <Icon className="h-4 w-4 stroke-[2.2]" />
                   </span>
                   <div className="min-w-0">
@@ -370,35 +299,16 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
             })}
           </div>
 
-          <p className="mt-5 text-[11px] font-bold uppercase tracking-wider text-[#b49339]">
-            Industries
-          </p>
-          <div className="mt-2 space-y-1">
-            {[...industryCol1, ...industryCol2].map((item) => {
-              const Icon = item.icon;
-              return (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className="flex items-center gap-3 rounded-xl p-2 text-sm font-semibold text-navy transition hover:bg-[#e5ebe6]"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#e5ebe6] text-[#2e3f33]">
-                    <Icon className="h-4 w-4 stroke-[2.2]" />
-                  </span>
-                  <span className="text-sm font-semibold text-navy leading-tight">{item.label}</span>
-                </Link>
-              );
-            })}
-          </div>
+          {/* Industries section disabled for now */}
 
           <p className="mt-5 text-[11px] font-bold uppercase tracking-wider text-[#b49339]">
             Explore
           </p>
           <div className="mt-2 grid grid-cols-2 gap-1.5">
             {[
-              ...simpleLinks,
+              { href: "/", label: "Home" },
               { href: "/insights", label: "Insights" },
+              { href: "/about", label: "About Us" },
               { href: "/contact", label: "Contact" },
             ].map((link) => (
               <Link

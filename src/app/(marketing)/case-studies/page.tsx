@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import { CmsImage } from "@/components/ui/CmsImage";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
@@ -44,7 +44,7 @@ export default async function CaseStudiesPage() {
   return (
     <>
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden text-white bg-[#0e3621]">
+      <section className="relative overflow-hidden text-white bg-[#2F3F34]">
         {/* Right-aligned Realistic Background Image */}
         <div className="absolute inset-0">
           <Image
@@ -56,9 +56,9 @@ export default async function CaseStudiesPage() {
             sizes="100vw"
           />
           {/* Subtle Emerald / Forest Green Soft Gradient & Shadow Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0d3320] via-[#0d3320]/95 via-40% sm:via-48% md:via-52% to-[#0d3320]/25 lg:to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0d3320] via-transparent to-[#0d3320]/40" />
-          <div className="absolute inset-0 bg-[#0d3320]/20 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#233027] via-[#233027]/95 via-40% sm:via-48% md:via-52% to-[#233027]/25 lg:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#233027] via-transparent to-[#233027]/40" />
+          <div className="absolute inset-0 bg-[#233027]/20 mix-blend-multiply" />
           <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
 
@@ -87,7 +87,7 @@ export default async function CaseStudiesPage() {
       <Section id="case-studies">
         <SectionHeader
           eyebrow="Case studies"
-          title="Challenge → approach → result"
+          title="Challenge â†’ approach â†’ result"
           description="Programme shapes with metric callouts across diverse industries and capability areas."
         />
 
@@ -108,7 +108,7 @@ export default async function CaseStudiesPage() {
               const caseSlug = cs.slug || slugifyCaseStudy(cs.title);
               return (
                 <Reveal key={cs.title}>
-                  <article className="relative overflow-hidden rounded-3xl border border-[#b49339]/35 bg-[#0e3621] text-white shadow-xl p-6 sm:p-8 md:p-10 lg:p-12">
+                  <article className="relative overflow-hidden rounded-3xl border border-[#b49339]/35 bg-[#2F3F34] text-white shadow-xl p-6 sm:p-8 md:p-10 lg:p-12">
                     {/* Right-aligned Background Image */}
                     <div className="absolute inset-0">
                       <Image
@@ -119,15 +119,15 @@ export default async function CaseStudiesPage() {
                         sizes="100vw"
                       />
                       {/* Soft Emerald Gradient Overlays */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#0d3320] via-[#0d3320]/92 via-40% md:via-48% lg:via-52% to-[#0d3320]/15 lg:to-transparent" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0d3320]/60 via-transparent to-[#0d3320]/25" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#233027] via-[#233027]/92 via-40% md:via-48% lg:via-52% to-[#233027]/15 lg:to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#233027]/60 via-transparent to-[#233027]/25" />
                     </div>
 
                     {/* Foreground Content */}
                     <div className="relative z-10 max-w-2xl">
                       {/* Featured Pill Badge */}
                       <div>
-                        <span className="inline-flex items-center rounded-full bg-[#c89d3c] px-4 py-1.5 text-xs font-extrabold uppercase tracking-wider text-[#0e3621] shadow-md">
+                        <span className="inline-flex items-center rounded-full bg-[#c89d3c] px-4 py-1.5 text-xs font-extrabold uppercase tracking-wider text-[#2F3F34] shadow-md">
                           Featured Story
                         </span>
                       </div>
@@ -158,7 +158,7 @@ export default async function CaseStudiesPage() {
 
                       {/* Metrics Bar */}
                       {cs.metrics && cs.metrics.length > 0 && (
-                        <div className="mt-8 rounded-2xl border border-white/20 bg-[#0d3320]/75 backdrop-blur-md p-4 sm:p-5 sm:mt-10 shadow-lg">
+                        <div className="mt-8 rounded-2xl border border-white/20 bg-[#233027]/75 backdrop-blur-md p-4 sm:p-5 sm:mt-10 shadow-lg">
                           <div className="grid grid-cols-1 gap-4 divide-y divide-white/20 sm:grid-cols-3 sm:gap-0 sm:divide-y-0 sm:divide-x">
                             {cs.metrics.map((m, idx) => {
                               let Icon = Users;
@@ -229,7 +229,7 @@ export default async function CaseStudiesPage() {
                 const caseSlug = cs.slug || slugifyCaseStudy(cs.title);
                 return (
                   <Reveal key={cs.title}>
-                    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#cddcd1] bg-surface-elevated transition hover:-translate-y-1 hover:border-[#2e3f33]/40 hover:bg-[#edf5ef]/30 hover:shadow-lg">
+                    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#cddcd1] bg-surface-elevated transition hover:-translate-y-1 hover:border-[#2F3F34]/40 hover:bg-[#edf5ef]/30 hover:shadow-lg">
                       {/* Card Top Image */}
                       <Link href={`/case-studies/${caseSlug}`} className="block">
                         <div className="relative h-48 w-full overflow-hidden bg-surface sm:h-52">
@@ -296,7 +296,7 @@ export default async function CaseStudiesPage() {
                         <div className="mt-4 pt-3 border-t border-[#cddcd1]/40 flex items-center justify-between">
                           <Link
                             href={`/case-studies/${caseSlug}`}
-                            className="text-xs font-bold text-[#2e3f33] group-hover:text-accent transition-colors inline-flex items-center gap-1"
+                            className="text-xs font-bold text-[#2F3F34] group-hover:text-accent transition-colors inline-flex items-center gap-1"
                           >
                             <span>Read case study</span>
                             <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
@@ -323,7 +323,7 @@ export default async function CaseStudiesPage() {
           {logos.map((logo: { name: string; logoText: string }) => (
             <div
               key={logo.name}
-              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2e3f33]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
+              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2F3F34]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
             >
               {logo.logoText}
             </div>
