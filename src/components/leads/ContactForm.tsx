@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
@@ -58,7 +58,7 @@ export function ContactForm({
   if (status === "done") {
     return (
       <div className="rounded-2xl border border-accent/40 bg-accent-soft p-5 text-navy shadow-sm sm:p-6">
-        <p className="font-semibold">Thank you — we received your enquiry.</p>
+        <p className="font-semibold">Thank you â€” we received your enquiry.</p>
         <p className="mt-2 text-sm text-slate">
           A partner will respond within one business day.
         </p>
@@ -107,7 +107,7 @@ export function ContactForm({
         <select
           name="intent"
           defaultValue={defaultIntent || ""}
-          className="min-w-0 w-full max-w-full rounded-xl border border-[#cddcd1] bg-white px-3.5 py-2.5 text-sm text-navy outline-none transition-colors focus:border-[#2e3f33] focus:ring-2 focus:ring-[#2e3f33]/15"
+          className="min-w-0 w-full max-w-full rounded-xl border border-[#cddcd1] bg-white px-3.5 py-2.5 text-sm text-navy outline-none transition-colors focus:border-[#2F3F34] focus:ring-2 focus:ring-[#2F3F34]/15"
         >
           <option value="">
             Select an option (optional)
@@ -127,8 +127,8 @@ export function ContactForm({
         <textarea
           name="message"
           rows={4}
-          placeholder="Tell us about your requirements…"
-          className="min-w-0 w-full max-w-full rounded-xl border border-[#cddcd1] bg-white px-3.5 py-2.5 text-sm text-navy placeholder:text-muted/70 outline-none transition-colors focus:border-[#2e3f33] focus:ring-2 focus:ring-[#2e3f33]/15"
+          placeholder="Tell us about your requirementsâ€¦"
+          className="min-w-0 w-full max-w-full rounded-xl border border-[#cddcd1] bg-white px-3.5 py-2.5 text-sm text-navy placeholder:text-muted/70 outline-none transition-colors focus:border-[#2F3F34] focus:ring-2 focus:ring-[#2F3F34]/15"
         />
       </div>
       {status === "error" ? (
@@ -143,7 +143,7 @@ export function ContactForm({
           disabled={status === "loading"}
         >
           {status === "loading" ? (
-            "Sending…"
+            "Sendingâ€¦"
           ) : (
             <>
               {submitLabel} <ArrowRight className="h-4 w-4" />
@@ -179,7 +179,7 @@ function Field({
         type={type}
         required={required}
         placeholder={placeholder}
-        className="min-w-0 w-full max-w-full rounded-xl border border-[#cddcd1] bg-white px-3.5 py-2.5 text-sm text-navy placeholder:text-muted/70 outline-none transition-colors focus:border-[#2e3f33] focus:ring-2 focus:ring-[#2e3f33]/15"
+        className="min-w-0 w-full max-w-full rounded-xl border border-[#cddcd1] bg-white px-3.5 py-2.5 text-sm text-navy placeholder:text-muted/70 outline-none transition-colors focus:border-[#2F3F34] focus:ring-2 focus:ring-[#2F3F34]/15"
       />
     </div>
   );

@@ -12,13 +12,13 @@ export type Practitioner = {
 export const practitionersTeam: Practitioner[] = [
   {
     name: "Neha",
-    role: "Co-Founder, Ex-Rio Tinto Director",
+    role: "Co-Founder, Former Global Mining Director",
     initials: "N",
-    bio: "20+ years in corporate real estate, workplace strategy and portfolio management, set up GCCs for Rio Tinto, setup execution across a large enterprise footprint",
+    bio: "20+ years in corporate real estate, workplace strategy and portfolio management; set up GCCs for one of the world's largest mining companies, with execution across a large enterprise footprint.",
     bullets: [
       "20+ years in corporate real estate",
       "Workplace strategy & portfolio management",
-      "Set up GCCs for Rio Tinto",
+      "Set up GCCs for a leading global mining enterprise",
       "Execution across large enterprise footprint",
     ],
     image:
@@ -27,14 +27,14 @@ export const practitionersTeam: Practitioner[] = [
   },
   {
     name: "Namit G",
-    role: "Co-Founder, Ex-KPMG Partner",
+    role: "Co-Founder, Former Big 4 Partner",
     initials: "NG",
-    bio: "17+ yrs at KPMG, Built and led KPMG Capability hub, enabled 10+ GCC set-ups, expert in GCC strategy, location assessment and innovation led CoEs.",
+    bio: "17+ years at a Big 4 firm; built and led a Big 4 Capability hub, enabled 10+ GCC set-ups; expert in GCC strategy, location assessment, and innovation-led CoEs.",
     bullets: [
-      "17+ years at KPMG",
-      "Built and led KPMG capability hub",
+      "17+ years at a Big 4 firm",
+      "Built and led Big 4 capability hub",
       "Enabled 10+ GCC set-ups",
-      "Expert in GCC strategy, location assessment and innovation led CoEs.",
+      "Expert in GCC strategy, location assessment, and innovation-led CoEs",
     ],
     image:
       "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=compress&cs=tinysrgb&w=800",

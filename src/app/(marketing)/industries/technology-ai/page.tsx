@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Section, SectionHeader } from "@/components/ui/Section";
@@ -23,7 +22,7 @@ import { ArrowRight } from "lucide-react";
 export const metadata = {
   title: "Technology & AI GCC Setup in India | Vertara Global",
   description:
-    "From IT support to AI-grade infrastructure. Build a dedicated Indian Technology & AI capability center — GenAI/LLM engineering, high-density GPU clusters, MLOps pipelines, and Cloud FinOps governance.",
+    "From IT support to AI-grade infrastructure. Build a dedicated Indian Technology & AI capability center â€” GenAI/LLM engineering, high-density GPU clusters, MLOps pipelines, and Cloud FinOps governance.",
 };
 
 const techAiFaqs = [
@@ -47,7 +46,7 @@ const techAiFaqs = [
   },
   {
     id: "faq-4",
-    title: "Can we start with a small, focused 5–10 person AI research or data engineering pod?",
+    title: "Can we start with a small, focused 5â€“10 person AI research or data engineering pod?",
     content:
       "Yes. You do not need a 100-person build. We help high-growth AI and SaaS companies launch agile pods dedicated to prompt engineering evaluation harnesses, dataset curation, or fine-tuning infrastructure, scaling compute as production API volume grows.",
   },
@@ -69,21 +68,12 @@ export default async function TechnologyAiPage() {
   return (
     <>
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden text-white bg-[#0e3621]">
-        {/* Right-aligned Realistic Background Image */}
+      <section className="relative overflow-hidden text-white bg-[#2F3F34]">
         <div className="absolute inset-0">
-          <Image
-            src="/images/technology-ai.png"
-            alt="Technology & AI Compute Architecture"
-            fill
-            className="object-cover object-right lg:object-right"
-            priority
-            sizes="100vw"
-          />
           {/* Subtle Emerald / Forest Green Soft Gradient & Shadow Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0d3320] via-[#0d3320]/95 via-40% sm:via-48% md:via-52% to-[#0d3320]/25 lg:to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0d3320] via-transparent to-[#0d3320]/40" />
-          <div className="absolute inset-0 bg-[#0d3320]/20 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#233027] via-[#233027]/95 via-40% sm:via-48% md:via-52% to-[#233027]/25 lg:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#233027] via-transparent to-[#233027]/40" />
+          <div className="absolute inset-0 bg-[#233027]/20 mix-blend-multiply" />
           <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
 
@@ -116,7 +106,7 @@ export default async function TechnologyAiPage() {
         </div>
       </section>
 
-      {/* 2. THE OPPORTUNITY — 3-STAGE TECH & AI JOURNEY */}
+      {/* 2. THE OPPORTUNITY â€” 3-STAGE TECH & AI JOURNEY */}
       <Section id="the-opportunity" tone="muted">
         <SectionHeader
           eyebrow="The Opportunity"
@@ -126,7 +116,7 @@ export default async function TechnologyAiPage() {
         <TechAiOpportunityJourney />
       </Section>
 
-      {/* 3. WHAT THIS SECTOR NEEDS — 3-POINT AI INFRASTRUCTURE */}
+      {/* 3. WHAT THIS SECTOR NEEDS â€” 3-POINT AI INFRASTRUCTURE */}
       <Section>
         <SectionHeader
           eyebrow="What This Sector Needs"
@@ -148,7 +138,7 @@ export default async function TechnologyAiPage() {
         />
       </Section>
 
-      {/* 6. HOW VERTARA HELPS — CONNECTED BLUEPRINT */}
+      {/* 6. HOW VERTARA HELPS â€” CONNECTED BLUEPRINT */}
       <Section>
         <SectionHeader
           eyebrow="How Vertara Helps"
@@ -169,7 +159,7 @@ export default async function TechnologyAiPage() {
           {logos.map((logo) => (
             <div
               key={logo.name}
-              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2e3f33]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
+              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2F3F34]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
             >
               {logo.logoText}
             </div>

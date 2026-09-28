@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import Image from "next/image";
 import { CmsImage } from "@/components/ui/CmsImage";
 import { Section, SectionHeader } from "@/components/ui/Section";
@@ -29,9 +29,9 @@ export default async function InsightsPage() {
   return (
     <>
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden text-white bg-[#0e3621]">
+      <section className="relative overflow-hidden text-white bg-[#2F3F34]">
         {/* Soft Emerald Gradient & Threads */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0d3320] via-[#0d3320]/95 to-[#0d3320]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#233027] via-[#233027]/95 to-[#233027]" />
         <FlowThreads intensity="medium" onDark className="opacity-40" />
 
         <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20 lg:py-24 lg:px-8">
@@ -65,7 +65,7 @@ export default async function InsightsPage() {
               category: string;
             }) => (
               <Reveal key={insight.slug}>
-                <article className="relative overflow-hidden rounded-3xl border border-[#b49339]/35 bg-[#0e3621] text-white shadow-xl p-6 sm:p-8 md:p-10 lg:p-12">
+                <article className="relative overflow-hidden rounded-3xl border border-[#b49339]/35 bg-[#2F3F34] text-white shadow-xl p-6 sm:p-8 md:p-10 lg:p-12">
                   {/* Right-aligned Background Image */}
                   <div className="absolute inset-0">
                     <CmsImage
@@ -76,15 +76,15 @@ export default async function InsightsPage() {
                       sizes="100vw"
                     />
                     {/* Soft Emerald Gradient Overlays */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#0d3320] via-[#0d3320]/92 via-40% md:via-48% lg:via-52% to-[#0d3320]/15 lg:to-transparent" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0d3320]/60 via-transparent to-[#0d3320]/25" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#233027] via-[#233027]/92 via-40% md:via-48% lg:via-52% to-[#233027]/15 lg:to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#233027]/60 via-transparent to-[#233027]/25" />
                   </div>
 
                   {/* Foreground Content */}
                   <div className="relative z-10 max-w-2xl">
                     {/* Featured Pill Badge */}
                     <div>
-                      <span className="inline-flex items-center rounded-full bg-[#c89d3c] px-4 py-1.5 text-xs font-extrabold uppercase tracking-wider text-[#0e3621] shadow-md">
+                      <span className="inline-flex items-center rounded-full bg-[#c89d3c] px-4 py-1.5 text-xs font-extrabold uppercase tracking-wider text-[#2F3F34] shadow-md">
                         Featured Article
                       </span>
                     </div>
@@ -131,7 +131,7 @@ export default async function InsightsPage() {
                 category: string;
               }) => (
                 <Reveal key={insight.slug}>
-                  <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#cddcd1] bg-surface-elevated transition hover:-translate-y-1 hover:border-[#2e3f33]/40 hover:bg-[#edf5ef]/30 hover:shadow-lg">
+                  <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#cddcd1] bg-surface-elevated transition hover:-translate-y-1 hover:border-[#2F3F34]/40 hover:bg-[#edf5ef]/30 hover:shadow-lg">
                     {/* Card Top Image */}
                     <Link href={`/insights/${insight.slug}`} className="block">
                       <div className="relative h-48 w-full overflow-hidden bg-surface sm:h-52">

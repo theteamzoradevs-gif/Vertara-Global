@@ -1,4 +1,4 @@
-import { CheckCircle2 } from "lucide-react";
+﻿import { CheckCircle2 } from "lucide-react";
 
 const engagementModelsList = [
   {
@@ -36,7 +36,7 @@ export function EngagementFormSideContent() {
           Engagement models built around your GCC journey
         </h3>
         <p className="mt-1.5 text-xs sm:text-sm text-slate leading-relaxed">
-          Choose the level of support that fits your stage — from strategic advisory to a fully managed build and long-term operating partnership.
+          Choose the level of support that fits your stage â€” from strategic advisory to a fully managed build and long-term operating partnership.
         </p>
 
         {/* Numbered 3 Models */}
@@ -44,7 +44,7 @@ export function EngagementFormSideContent() {
           {engagementModelsList.map((item) => (
             <div
               key={item.step}
-              className="flex items-start gap-3.5 rounded-2xl border border-[#cddcd1] bg-white p-4 sm:p-4.5 shadow-xs transition-all duration-300 hover:border-[#2e3f33]/40 hover:shadow-sm"
+              className="flex items-start gap-3.5 rounded-2xl border border-[#cddcd1] bg-white p-4 sm:p-4.5 shadow-xs transition-all duration-300 hover:border-[#2F3F34]/40 hover:shadow-sm"
             >
               <span className="flex h-7 w-8 shrink-0 items-center justify-center rounded-lg bg-[#b49339] text-xs font-extrabold text-white shadow-xs">
                 {item.step}
@@ -69,7 +69,7 @@ export function EngagementFormSideContent() {
         </p>
         <div className="space-y-2">
           {assurances.map((item, idx) => (
-            <div key={idx} className="flex items-center gap-2 text-xs font-medium text-[#2e3f33]">
+            <div key={idx} className="flex items-center gap-2 text-xs font-medium text-[#2F3F34]">
               <CheckCircle2 className="h-4 w-4 shrink-0 text-[#b49339]" />
               <span>{item}</span>
             </div>

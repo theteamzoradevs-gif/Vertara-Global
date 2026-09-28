@@ -1,173 +1,139 @@
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { CmsImage } from "@/components/ui/CmsImage";
-import { CTABand } from "@/components/ui/CTABand";
-import { ArrowLeft, Users, Clock, BarChart3, CheckCircle2 } from "lucide-react";
-import { getCaseStudies, getCaseStudyBySlug, slugifyCaseStudy } from "@/lib/content";
+﻿import Image from "next/image";
+import { Section, SectionHeader } from "@/components/ui/Section";
+import { Button } from "@/components/ui/Button";
+import { Accordion } from "@/components/ui/Accordion";
+import { ContactForm } from "@/components/leads/ContactForm";
+import { FlowThreads } from "@/components/ui/FlowThreads";
+import { OurVision } from "@/components/home/OurVision";
+import { WhoAreWe } from "@/components/home/WhoAreWe";
+import { PractitionersTeam } from "@/components/home/PractitionersTeam";
+import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
+import { ArrowRight } from "lucide-react";
+import {
+  getSettings,
+  getTestimonials,
+  getClientLogos,
+  getFaqs,
+} from "@/lib/content";
 
-export const dynamic = "force-dynamic";
+export const metadata = {
+  title: "About",
+  description: "Company story, leadership, and credibility markers for Vertara Global.",
+};
 
-export async function generateStaticParams() {
-  const cases = await getCaseStudies();
-  return cases.map((c) => ({
-    slug: (c as { slug?: string }).slug || slugifyCaseStudy(c.title),
-  }));
-}
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
-  const caseStudy = await getCaseStudyBySlug(slug);
-  if (!caseStudy) return { title: "Case Study | Vertara Global" };
-  return {
-    title: `${caseStudy.title} | Case Studies | Vertara Global`,
-    description: caseStudy.challenge || caseStudy.result || "GCC case study transformation by Vertara Global.",
-  };
-}
-
-export default async function CaseStudyDetailPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
-  const caseStudy = await getCaseStudyBySlug(slug);
-
-  if (!caseStudy) {
-    notFound();
-  }
+export default async function AboutPage() {
+  const [settings, testimonials, logos, faqs] = await Promise.all([
+    getSettings(),
+    getTestimonials(),
+    getClientLogos(),
+    getFaqs(),
+  ]);
 
   return (
-    <div className="min-h-screen bg-surface">
-      <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:py-14 lg:px-8">
-        {/* Top Eyebrow */}
-        <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-[#b49339]">
-          {caseStudy.industry || "Case Study"}
-        </p>
-
-        {/* Main Heading */}
-        <h1 className="mt-3 text-3xl font-bold tracking-tight text-navy sm:text-4xl md:text-5xl lg:text-[46px] xl:text-[50px] leading-[1.15]">
-          {caseStudy.title}
-        </h1>
-
-        {/* Client / Track meta */}
-        {caseStudy.client && (
-          <p className="mt-3 text-sm font-medium text-slate">
-            {caseStudy.client}
-          </p>
-        )}
-
-        {/* Large Horizontal Hero Image */}
-        <div className="relative mt-7 w-full overflow-hidden rounded-2xl sm:rounded-3xl border border-[#cddcd1] bg-surface-elevated shadow-md aspect-[16/10] sm:aspect-[21/9] md:aspect-[2.35/1] min-h-[280px] sm:min-h-[420px] md:min-h-[480px]">
-          <CmsImage
-            src={caseStudy.image?.trim() || "/images/gcc-floor.webp"}
-            alt={caseStudy.title || "Case study"}
+    <>
+      {/* 1. HERO SECTION */}
+      <section className="relative overflow-hidden text-white bg-[#2F3F34]">
+        {/* Right-aligned Realistic Background Image */}
+        <div className="absolute inset-0">
+          <Image
+            src="/images/about us.png"
+            alt="About Vertara Global"
             fill
-            className="object-cover"
+            className="object-cover object-right lg:object-right"
             priority
-            sizes="(max-width: 1400px) 100vw, 1360px"
+            sizes="100vw"
           />
+          {/* Subtle Emerald / Forest Green Soft Gradient & Shadow Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#233027] via-[#233027]/95 via-40% sm:via-48% md:via-52% to-[#233027]/25 lg:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#233027] via-transparent to-[#233027]/40" />
+          <div className="absolute inset-0 bg-[#233027]/20 mix-blend-multiply" />
+          <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
 
-        {/* Content Sections: Challenge, Approach, Result */}
-        <div className="mt-10 sm:mt-12 space-y-8">
-          {/* CHALLENGE */}
-          {caseStudy.challenge && (
-            <div>
-              <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-navy">
-                Challenge
-              </h2>
-              <p className="mt-2 text-base sm:text-lg leading-relaxed text-slate">
-                {caseStudy.challenge}
-              </p>
-            </div>
-          )}
-
-          {/* APPROACH */}
-          {caseStudy.approach && (
-            <div>
-              <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-navy">
-                Approach
-              </h2>
-              <p className="mt-2 text-base sm:text-lg leading-relaxed text-slate">
-                {caseStudy.approach}
-              </p>
-            </div>
-          )}
-
-          {/* RESULT */}
-          {caseStudy.result && (
-            <div>
-              <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-navy">
-                Result
-              </h2>
-              <p className="mt-2 text-base sm:text-lg leading-relaxed text-slate">
-                {caseStudy.result}
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Key Metrics Callout */}
-        {caseStudy.metrics && caseStudy.metrics.length > 0 && (
-          <div className="mt-10 rounded-2xl border border-[#cddcd1] bg-[#edf5ef] p-6 sm:p-8">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#b49339]">
-              Key Outcomes & Metrics
-            </p>
-            <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
-              {caseStudy.metrics.map((m, idx) => {
-                let Icon = Users;
-                if (idx === 0) Icon = Users;
-                else if (idx === 1) Icon = Clock;
-                else Icon = BarChart3;
-
-                return (
-                  <div
-                    key={m.label}
-                    className="flex items-center gap-3.5 rounded-xl border border-[#cddcd1]/60 bg-white p-4 shadow-xs"
-                  >
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#2e3f33] text-[#b49339]">
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="text-xl font-bold text-navy leading-none">
-                        {m.value}
-                      </p>
-                      <p className="mt-1 text-xs text-muted leading-snug">
-                        {m.label}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20 lg:py-24 lg:px-8">
+          {/* Breadcrumb / Eyebrow */}
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
+            <span>About</span>
+            <span>/</span>
+            <span>Who We Are</span>
           </div>
-        )}
 
-        {/* Bottom Navigation: Back to Case Studies */}
+          <h1 className="mt-4 max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-[44px] xl:text-[48px] leading-tight text-white">
+            About Vertara Global
+          </h1>
+
+          <p className="mt-4 max-w-xl text-base text-white/90 sm:text-lg leading-relaxed font-normal">
+            {settings.aboutMission || "Make India GCC setup predictable for enterprise buyers: clear ownership, honest timelines, and a single operating rhythm from first hire to steady-state scale."}
+          </p>
+
+          {/* Hero CTAs */}
+
+        </div>
+      </section>
+
+      {/* 2. Our Story & Vision */}
+      <OurVision />
+
+      {/* 4. Foundation Pillars & Operator Mindset */}
+      <WhoAreWe />
+
+      {/* 5. Leadership Team */}
+      <PractitionersTeam />
+
+      {/* 6. Client Voices & Testimonials */}
+      <Section tone="muted">
+        <SectionHeader
+          eyebrow="Trust"
+          title="Enterprises building lasting India capability"
+          description="The capabilities we deliver, backed by the experiences of leaders building and scaling in India."
+        />
+        <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-6">
+          {logos.map((logo) => (
+            <div
+              key={logo.name}
+              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2F3F34]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
+            >
+              {logo.logoText}
+            </div>
+          ))}
+        </div>
         <div className="mt-10">
-          <Link
-            href="/case-studies"
-            className="inline-flex items-center gap-2 rounded-xl bg-[#2e3f33] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#212e25] hover:shadow-md active:scale-[0.98]"
-          >
-            <ArrowLeft className="h-4 w-4 text-[#b49339]" />
-            <span>Back to Case Studies</span>
-          </Link>
+          <TestimonialMarquee items={testimonials} />
         </div>
+      </Section>
 
-        {/* CTA Band */}
-        <div className="mt-14">
-          <CTABand
-            title="Ready to build your dedicated India capability?"
-            description="Discuss your domain focus, operating model, and timeline with our senior GCC advisors."
-            primaryHref="/contact"
-            primaryLabel="Discuss your GCC case"
-          />
+      {/* 7. Contact & Enquiry */}
+      <Section>
+        <SectionHeader
+          eyebrow="Enquire"
+          title="Start a conversation with the team"
+          description="Share what youâ€™re building, weâ€™ll connect you with the right partner."
+        />
+        <div className="mx-auto max-w-2xl">
+          <ContactForm source="about" submitLabel="Request a partner call" />
         </div>
-      </main>
-    </div>
+      </Section>
+
+      {/* 8. FAQ Section */}
+      <Section tone="muted">
+        <SectionHeader
+          eyebrow="FAQ"
+          title="Frequently asked questions about Vertara"
+          description="Timelines, ownership models, governance, and leadership answered upfront."
+        />
+        <Accordion
+          items={faqs.slice(0, 5).map((f) => ({
+            id: f.question,
+            title: f.question,
+            content: f.answer,
+          }))}
+        />
+        <div className="mt-6 flex justify-center sm:justify-start">
+          <Button href="/faq" variant="primary">
+            View full FAQ
+          </Button>
+        </div>
+      </Section>
+    </>
   );
 }

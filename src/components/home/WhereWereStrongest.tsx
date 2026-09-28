@@ -10,10 +10,6 @@ import {
   UserCheck,
   MapPin,
   GitBranch,
-  Building2,
-  BarChart3,
-  UsersRound,
-  Cpu,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -24,11 +20,10 @@ interface StrengthItem {
   icon: React.ComponentType<{ className?: string }>;
 }
 
-interface TriggerStep {
-  step: string;
+interface DecisionTrigger {
+  number: string;
   title: string;
   description: string;
-  icon: React.ComponentType<{ className?: string }>;
 }
 
 const strengthItems: StrengthItem[] = [
@@ -37,74 +32,69 @@ const strengthItems: StrengthItem[] = [
     title: "Integrated Execution & Senior Judgment",
     icon: Link2,
     description:
-      "Direct founder/practitioner engagement, no large delivery bureaucracy • One team, not multiple vendors • decisions made by GCC professionals",
+      "Direct founder/practitioner engagement, no large delivery bureaucracy â€¢ One team, not multiple vendors â€¢ decisions made by GCC professionals",
   },
   {
     number: "02",
     title: "Speed to Deliver & Agility to Scale",
     icon: Rocket,
     description:
-      "Launch in weeks, not quarters • scales pilot to capability hub • no re-architecture as headcount grows • Integrated execution (Strategy, legal, HR, tech)",
+      "Launch in weeks, not quarters â€¢ scales pilot to capability hub â€¢ no re-architecture as headcount grows â€¢ Integrated execution (Strategy, legal, HR, tech)",
   },
   {
     number: "03",
     title: "Right-Sized Governance",
     icon: ShieldCheck,
     description:
-      "Compliance scoped to a lean centre • controls built in from day one, not retrofitted • capability ownership, not just cost arbitrage.",
+      "Compliance scoped to a lean centre â€¢ controls built in from day one, not retrofitted â€¢ capability ownership, not just cost arbitrage.",
   },
   {
     number: "04",
     title: "Leadership-First Build",
     icon: UserCheck,
     description:
-      "First 5 hires before the next 50 • senior hiring before scale hiring",
+      "First 5 hires before the next 50 â€¢ senior hiring before scale hiring",
   },
   {
     number: "05",
     title: "Tier-2 City Fluency, Cost Economics",
     icon: MapPin,
     description:
-      "Tier-2 cities (Coimbatore, Indore, Jaipur, Kochi etc.) — evaluated on equal footing with Bengaluru, Gurgaon & Hyderabad",
+      "Tier-2 cities (Coimbatore, Indore, Jaipur, Kochi etc.) â€” evaluated on equal footing with Bengaluru, Gurgaon & Hyderabad",
   },
   {
     number: "06",
     title: "Sector-Shaped Judgment",
     icon: GitBranch,
     description:
-      "Engineering • Pharma • FMCG • Financial Services — same rigor, different starting point",
+      "Engineering â€¢ Pharma â€¢ FMCG â€¢ Financial Services â€” same rigor, different starting point",
   },
 ];
 
-const triggerSteps: TriggerStep[] = [
+const chooseVertaraTriggers: DecisionTrigger[] = [
   {
-    step: "01",
-    title: "First-time entering India",
-    icon: Building2,
-    description: "Building your first India GCC",
+    number: "01",
+    title: "You’re building your first India GCC",
+    description: "Whether that starts as a Nano pilot or a larger build",
   },
   {
-    step: "02",
-    title: "Scaling GCCs",
-    icon: BarChart3,
-    description: "Cost centre → capability hub → innovation centre",
+    number: "02",
+    title: "You’re scaling capability",
+    description: "From cost centre to capability hub to innovation centre",
   },
   {
-    step: "03",
-    title: "Existing GCCs going Tier-2",
-    icon: MapPin,
-    description: "Second location, without duplicating governance",
+    number: "03",
+    title: "You’re opening a second location",
+    description: "Without duplicating governance",
   },
   {
-    step: "04",
-    title: "Investor-backed firms",
-    icon: UsersRound,
-    description: "Rapid, compliant scale",
+    number: "04",
+    title: "You’re investor-backed",
+    description: "Need rapid, compliant scale on a tight runway",
   },
   {
-    step: "05",
-    title: "Digital-native businesses",
-    icon: Cpu,
+    number: "05",
+    title: "You’re a digital-native business",
     description: "Expanding engineering, analytics or AI",
   },
 ];
@@ -186,11 +176,11 @@ export function WhereWereStrongest() {
                     className={cn(
                       "flex shrink-0 items-center gap-2 rounded-full px-4 py-2.5 text-xs font-bold transition-all duration-200",
                       isActive
-                        ? "bg-[#2e3f33] text-white shadow-sm"
-                        : "bg-[#e5ebe6] text-[#2e3f33] hover:bg-[#d8e2da]"
+                        ? "bg-[#2F3F34] text-white shadow-sm"
+                        : "bg-[#e5ebe6] text-[#2F3F34] hover:bg-[#d8e2da]"
                     )}
                   >
-                    <ItemIcon className={cn("h-3.5 w-3.5 stroke-[2.2]", isActive ? "text-[#b49339]" : "text-[#2e3f33]")} />
+                    <ItemIcon className={cn("h-3.5 w-3.5 stroke-[2.2]", isActive ? "text-[#b49339]" : "text-[#2F3F34]")} />
                     <span>{item.title}</span>
                   </button>
                 );
@@ -214,16 +204,16 @@ export function WhereWereStrongest() {
                     className={cn(
                       "group flex w-full cursor-pointer items-center gap-3.5 rounded-2xl border p-3.5 text-left transition-all duration-300",
                       isActive
-                        ? "border-[#2e3f33] bg-[#e5ebe6] text-[#2e3f33] shadow-md shadow-[#2e3f33]/10 translate-x-1"
-                        : "border-border bg-white text-[#0b1f3a] hover:border-[#2e3f33]/40 hover:bg-[#e5ebe6]/40"
+                        ? "border-[#2F3F34] bg-[#e5ebe6] text-[#2F3F34] shadow-md shadow-[#2F3F34]/10 translate-x-1"
+                        : "border-border bg-white text-[#0b1f3a] hover:border-[#2F3F34]/40 hover:bg-[#e5ebe6]/40"
                     )}
                   >
                     <span
                       className={cn(
                         "inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-colors duration-300",
                         isActive
-                          ? "bg-[#2e3f33] text-[#b49339]"
-                          : "bg-[#e5ebe6] text-[#2e3f33] group-hover:bg-[#2e3f33] group-hover:text-[#b49339]"
+                          ? "bg-[#2F3F34] text-[#b49339]"
+                          : "bg-[#e5ebe6] text-[#2F3F34] group-hover:bg-[#2F3F34] group-hover:text-[#b49339]"
                       )}
                     >
                       <ItemIcon className="h-4 w-4 stroke-[2.2]" />
@@ -238,7 +228,7 @@ export function WhereWereStrongest() {
 
             {/* Right Column (7 cols / ~58%): Active Detailed Content Card with Auto-Slide Horizontal Animation */}
             <div className="lg:col-span-7">
-              <div className="relative flex h-full min-h-[320px] flex-col justify-between overflow-hidden rounded-3xl border border-[#3c5243] bg-[#2e3f33] p-6 sm:p-8 lg:p-10 shadow-lg text-white">
+              <div className="relative flex h-full min-h-[320px] flex-col justify-between overflow-hidden rounded-3xl border border-[#3c5243] bg-[#2F3F34] p-6 sm:p-8 lg:p-10 shadow-lg text-white">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={currentStrength.title}
@@ -269,7 +259,7 @@ export function WhereWereStrongest() {
                     <div className="mt-8 pt-5 border-t border-white/10">
                       <Link
                         href="/contact"
-                        className="inline-flex w-fit items-center gap-2 rounded-full bg-[#b49339] px-6 py-3 text-sm font-bold text-[#0b1f3a] shadow-md transition hover:bg-white hover:text-[#2e3f33]"
+                        className="inline-flex w-fit items-center gap-2 rounded-full bg-[#b49339] px-6 py-3 text-sm font-bold text-[#0b1f3a] shadow-md transition hover:bg-white hover:text-[#2F3F34]"
                       >
                         Discuss Your GCC
                       </Link>
@@ -281,39 +271,73 @@ export function WhereWereStrongest() {
           </div>
         </div>
 
-        {/* CHOOSE VERTARA IF: 5 Points in a Single Row */}
-        <div className="mt-14 md:mt-18">
-          <div>
+        {/* CHOOSE VERTARA IF: 5 Numbered Triggers */}
+        <div className="mt-14 border-t border-border pt-12 md:mt-18 md:pt-16">
+          <div className="max-w-3xl">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#b49339] sm:text-sm">
-              CHOOSE VERTARA IF
+              DECISION TRIGGERS
             </p>
+            <h3 className="mt-2 text-2xl font-bold tracking-tight text-navy sm:text-3xl">
+              Choose Vertara if
+            </h3>
           </div>
 
-          <div className="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-5 md:gap-6 lg:gap-8">
-            {triggerSteps.map((item) => {
-              const ItemIcon = item.icon;
-              return (
-                <div
-                  key={item.title}
-                  className="flex flex-col items-center text-center px-1"
-                >
-                  {/* Icon Circle */}
-                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#e5ebe6] text-[#2e3f33] shadow-xs transition-transform duration-300 hover:scale-105 sm:h-16 sm:w-16">
-                    <ItemIcon className="h-6 w-6 stroke-[2]" />
+          <div className="mt-8 max-w-4xl">
+            <div className="space-y-6 sm:space-y-7">
+              {chooseVertaraTriggers.map((item, i) => (
+                <div key={item.number} className="cursor-default">
+                  <div className="flex items-start gap-4 sm:gap-6">
+                    {/* Number 01 / 02 / 03 / 04 / 05 - Constant Golden */}
+                    <motion.span
+                      initial={{ opacity: 0, y: 14 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{
+                        duration: 0.45,
+                        delay: 0.08 + i * 0.08,
+                        ease: "easeOut",
+                      }}
+                      className="font-mono text-2xl sm:text-3xl font-bold tracking-tight text-[#b49339] shrink-0 w-8 sm:w-10 select-none pt-0.5"
+                    >
+                      {item.number}
+                    </motion.span>
+
+                    {/* Text block */}
+                    <div className="flex-1">
+                      <motion.h4
+                        initial={{ opacity: 0, y: 12 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{
+                          duration: 0.45,
+                          delay: 0.12 + i * 0.08,
+                          ease: "easeOut",
+                        }}
+                        className="text-base sm:text-lg font-bold text-navy tracking-tight"
+                      >
+                        {item.title}
+                      </motion.h4>
+
+                      {item.description ? (
+                        <motion.p
+                          initial={{ opacity: 0, y: 10 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{
+                            duration: 0.45,
+                            delay: 0.16 + i * 0.08,
+                            ease: "easeOut",
+                          }}
+                          className="mt-1 text-xs leading-relaxed text-slate sm:text-sm"
+                        >
+                          {item.description}
+                        </motion.p>
+                      ) : null}
+                    </div>
                   </div>
-
-                  {/* Title */}
-                  <h4 className="mt-3.5 text-xs font-bold text-navy sm:text-sm leading-snug">
-                    {item.title}
-                  </h4>
-
-                  {/* Description */}
-                  <p className="mt-1.5 text-[11px] leading-relaxed text-muted sm:text-xs">
-                    {item.description}
-                  </p>
                 </div>
-              );
-            })}
+              ))}
+            </div>
           </div>
         </div>
       </div>

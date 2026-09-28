@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Target, Receipt, Eye, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -11,7 +11,7 @@ interface CommercialPrinciple {
 const principles: CommercialPrinciple[] = [
   {
     icon: Target,
-    text: "Milestone-linked, not upfront-loaded — you pay as value is delivered",
+    text: "Milestone-linked, not upfront-loaded â€” you pay as value is delivered",
   },
   {
     icon: Receipt,
@@ -19,7 +19,7 @@ const principles: CommercialPrinciple[] = [
   },
   {
     icon: Eye,
-    text: "Transparent scope-change process — no silent creep",
+    text: "Transparent scope-change process â€” no silent creep",
   },
   {
     icon: Sparkles,
@@ -45,8 +45,8 @@ export function CommercialPrinciples({ className }: { className?: string }) {
               key={index}
               className="group flex items-start gap-3.5"
             >
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#cddcd1] bg-[#edf5ef] text-[#2e3f33] shadow-xs transition-transform duration-300 group-hover:scale-105 group-hover:bg-[#e2ede4]">
-                <Icon className="h-5 w-5 text-[#2e3f33]" />
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#cddcd1] bg-[#edf5ef] text-[#2F3F34] shadow-xs transition-transform duration-300 group-hover:scale-105 group-hover:bg-[#e2ede4]">
+                <Icon className="h-5 w-5 text-[#2F3F34]" />
               </div>
               <p className="pt-1 text-xs font-medium leading-relaxed text-navy sm:text-sm">
                 {item.text}
