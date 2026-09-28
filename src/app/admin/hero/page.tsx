@@ -1,6 +1,8 @@
 import { getSettings } from "@/lib/content";
 import { HeroManager } from "@/components/admin/HeroManager";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Home Editor | Vertara Global Admin",
 };
@@ -10,3 +12,4 @@ export default async function AdminHeroPage() {
 
   return <HeroManager initialSettings={settings} />;
 }
+
