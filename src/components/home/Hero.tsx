@@ -23,6 +23,7 @@ type Props = {
   formDescription?: string;
   formButton?: string;
   formSuccess?: string;
+  showQuickCallForm?: boolean;
 };
 
 export function Hero({
@@ -38,6 +39,7 @@ export function Hero({
   formDescription = seedSettings.heroFormDescription,
   formButton = seedSettings.heroFormButton,
   formSuccess = seedSettings.heroFormSuccess,
+  showQuickCallForm = true,
 }: Props) {
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">(
     "idle",
@@ -83,10 +85,20 @@ export function Hero({
     }
   }
 
+  const activeMetrics = (metrics || []).filter(
+    (m) => m && m.label && String(m.label).trim() !== "",
+  );
+
   return (
     <section className="relative flex flex-col justify-between overflow-hidden border-b border-border min-h-[calc(100svh-68px)] bg-[#061526]">
 
-      <div className="relative mx-auto my-auto grid w-full max-w-6xl items-center gap-6 px-4 py-6 sm:gap-8 sm:px-6 sm:py-8 md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.75fr)] md:gap-10 md:py-6 lg:gap-14 lg:px-8 lg:py-6">
+      <div
+        className={`relative mx-auto my-auto grid w-full max-w-6xl items-center gap-6 px-4 py-6 sm:gap-8 sm:px-6 sm:py-8 md:gap-10 md:py-6 lg:gap-14 lg:px-8 lg:py-6 ${
+          showQuickCallForm
+            ? "md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.75fr)]"
+            : "grid-cols-1 max-w-4xl text-left"
+        }`}
+      >
         <div className="w-full min-w-0 md:pr-2">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#B59439]">
             {tagline}
@@ -99,7 +111,11 @@ export function Hero({
           </p>
 
           <div className="mt-5 flex flex-wrap gap-3">
-            <Button href="/contact" size="lg" className="w-full sm:w-auto">
+            <Button
+              href={showQuickCallForm ? "#hero-enquiry" : "/contact"}
+              size="lg"
+              className="w-full sm:w-auto"
+            >
               {primaryCta}
             </Button>
             <Button
@@ -113,100 +129,112 @@ export function Hero({
           </div>
         </div>
 
-        <aside
-          id="hero-enquiry"
-          className="w-full min-w-0 justify-self-stretch overflow-hidden rounded-2xl border border-white/20 bg-white p-5 shadow-2xl shadow-black/30 md:justify-self-end md:w-full md:max-w-[340px] md:p-5"
-        >
-          <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-accent">
-            {formEyebrow}
-          </p>
-          <h2 className="mt-1 text-lg font-bold text-navy">
-            {formTitle}
-          </h2>
-          <p className="mt-1 text-xs leading-relaxed text-muted">
-            {formDescription}
-          </p>
+        {showQuickCallForm && (
+          <aside
+            id="hero-enquiry"
+            className="w-full min-w-0 justify-self-stretch overflow-hidden rounded-2xl border border-white/20 bg-white p-5 shadow-2xl shadow-black/30 md:justify-self-end md:w-full md:max-w-[340px] md:p-5"
+          >
+            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-accent">
+              {formEyebrow}
+            </p>
+            <h2 className="mt-1 text-lg font-bold text-navy">
+              {formTitle}
+            </h2>
+            <p className="mt-1 text-xs leading-relaxed text-muted">
+              {formDescription}
+            </p>
 
-          {status === "done" ? (
-            <div className="mt-4 rounded-xl bg-accent-soft p-4 text-sm text-navy">
-              <p className="font-semibold">{formSuccess}</p>
-              <button
-                type="button"
-                className="mt-3 text-sm font-semibold text-accent"
-                onClick={() => setStatus("idle")}
-              >
-                Submit another
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={onEnquiry} className="mt-3.5 grid min-w-0 gap-2.5">
-              <input
-                name="name"
-                required
-                placeholder="Your name"
-                className="min-w-0 w-full rounded-lg border border-border px-3 py-2 text-sm outline-none ring-accent focus:ring-2"
-              />
-              <input
-                name="email"
-                type="email"
-                placeholder="Work email"
-                className="min-w-0 w-full rounded-lg border border-border px-3 py-2 text-sm outline-none ring-accent focus:ring-2"
-              />
-              <input
-                name="phone"
-                type="tel"
-                placeholder="Phone"
-                className="min-w-0 w-full rounded-lg border border-border px-3 py-2 text-sm outline-none ring-accent focus:ring-2"
-              />
-              {status === "error" ? (
-                <p className="text-xs text-danger">
-                  {errorMessage || "Add an email or phone so we can reach you."}
-                </p>
-              ) : null}
-              <Button
-                type="submit"
-                size="lg"
-                className="w-full !bg-[#2F3F34] hover:!bg-[#1a241e] text-white shadow-md shadow-black/20 hover:shadow-lg transition-all"
-                disabled={status === "loading"}
-              >
-                {status === "loading" ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" /> Sendingâ€¦
-                  </>
-                ) : (
-                  formButton
-                )}
-              </Button>
-              <p className="text-center text-[11px] text-muted">
-                Or{" "}
-                <a
-                  href={`tel:${phone.replace(/\s/g, "")}`}
-                  className="font-semibold text-accent hover:underline"
+            {status === "done" ? (
+              <div className="mt-4 rounded-xl bg-accent-soft p-4 text-sm text-navy">
+                <p className="font-semibold">{formSuccess}</p>
+                <button
+                  type="button"
+                  className="mt-3 text-sm font-semibold text-accent cursor-pointer"
+                  onClick={() => setStatus("idle")}
                 >
-                  call {phone}
-                </a>
-              </p>
-            </form>
-          )}
-        </aside>
+                  Submit another
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={onEnquiry} className="mt-3.5 grid min-w-0 gap-2.5">
+                <input
+                  name="name"
+                  required
+                  placeholder="Your name"
+                  className="min-w-0 w-full rounded-lg border border-border px-3 py-2 text-sm outline-none ring-accent focus:ring-2"
+                />
+                <input
+                  name="email"
+                  type="email"
+                  placeholder="Work email"
+                  className="min-w-0 w-full rounded-lg border border-border px-3 py-2 text-sm outline-none ring-accent focus:ring-2"
+                />
+                <input
+                  name="phone"
+                  type="tel"
+                  placeholder="Phone"
+                  className="min-w-0 w-full rounded-lg border border-border px-3 py-2 text-sm outline-none ring-accent focus:ring-2"
+                />
+                {status === "error" ? (
+                  <p className="text-xs text-danger">
+                    {errorMessage || "Add an email or phone so we can reach you."}
+                  </p>
+                ) : null}
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="w-full !bg-[#2F3F34] hover:!bg-[#1a241e] text-white shadow-md shadow-black/20 hover:shadow-lg transition-all"
+                  disabled={status === "loading"}
+                >
+                  {status === "loading" ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" /> Sending…
+                    </>
+                  ) : (
+                    formButton
+                  )}
+                </Button>
+                <p className="text-center text-[11px] text-muted">
+                  Or{" "}
+                  <a
+                    href={`tel:${phone.replace(/\s/g, "")}`}
+                    className="font-semibold text-accent hover:underline"
+                  >
+                    call {phone}
+                  </a>
+                </p>
+              </form>
+            )}
+          </aside>
+        )}
       </div>
 
       {/* Docked Trust Metrics Banner on First Fold */}
-      {metrics && metrics.length > 0 && (
+      {activeMetrics.length > 0 && (
         <div className="relative z-10 w-full border-t border-[#2F3F34] bg-[#2F3F34] pt-3 pb-3.5 shadow-sm text-white">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 gap-x-6 gap-y-2.5 sm:gap-x-8 md:grid-cols-4 md:gap-x-10">
-              {metrics.slice(0, 4).map((m) => (
-                <div key={m.label} className="flex items-start gap-2 sm:gap-2.5">
+            <div
+              className={`grid gap-x-4 gap-y-3 sm:gap-x-6 md:gap-x-8 ${
+                activeMetrics.length === 1
+                  ? "grid-cols-1 justify-items-center text-center"
+                  : activeMetrics.length === 2
+                  ? "grid-cols-2"
+                  : activeMetrics.length === 3
+                  ? "grid-cols-2 sm:grid-cols-3"
+                  : "grid-cols-2 md:grid-cols-4"
+              }`}
+            >
+              {activeMetrics.slice(0, 4).map((m, idx) => (
+                <div key={m.label || idx} className="flex items-start gap-2 sm:gap-2.5 min-w-0">
                   <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#b49339] sm:h-4.5 sm:w-4.5" />
-                  <div className="flex flex-col">
+                  <div className="flex flex-col min-w-0">
                     <MetricCounter
                       value={m.value}
                       suffix={m.suffix}
                       prefix={m.prefix}
                       className="text-base sm:text-lg md:text-xl font-bold tracking-tight text-white leading-tight"
                     />
-                    <span className="mt-0.5 text-xs sm:text-[13px] font-medium text-[#d1e0d7] leading-tight">
+                    <span className="mt-0.5 text-xs sm:text-[13px] font-medium text-[#d1e0d7] leading-tight break-words">
                       {m.label}
                     </span>
                   </div>

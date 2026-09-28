@@ -11,6 +11,16 @@ export async function createFaqAction(formData: FormData) {
       return { success: false, error: "Database connection unavailable." };
     }
 
+    const category = String(formData.get("category") || "Home").trim();
+
+    const categoryCount = await Faq.countDocuments({ category });
+    if (categoryCount >= 10) {
+      return {
+        success: false,
+        error: `Maximum limit reached. You can only create up to 10 FAQs in the '${category}' category.`,
+      };
+    }
+
     const question = String(formData.get("question") || "").trim();
     if (!question) {
       return { success: false, error: "Question is required." };
@@ -21,7 +31,6 @@ export async function createFaqAction(formData: FormData) {
       return { success: false, error: "Answer is required." };
     }
 
-    const category = String(formData.get("category") || "Basics").trim();
     const order = Number(formData.get("order") || 1);
 
     await Faq.create({
@@ -54,6 +63,19 @@ export async function updateFaqAction(formData: FormData) {
       return { success: false, error: "FAQ ID is missing." };
     }
 
+    const category = String(formData.get("category") || "Home").trim();
+
+    const existingFaq = await Faq.findById(id);
+    if (existingFaq && existingFaq.category !== category) {
+      const targetCategoryCount = await Faq.countDocuments({ category });
+      if (targetCategoryCount >= 10) {
+        return {
+          success: false,
+          error: `Maximum limit reached. The '${category}' category already has 10 FAQs.`,
+        };
+      }
+    }
+
     const question = String(formData.get("question") || "").trim();
     if (!question) {
       return { success: false, error: "Question is required." };
@@ -64,7 +86,6 @@ export async function updateFaqAction(formData: FormData) {
       return { success: false, error: "Answer is required." };
     }
 
-    const category = String(formData.get("category") || "Basics").trim();
     const order = Number(formData.get("order") || 1);
 
     await Faq.findByIdAndUpdate(id, {

@@ -77,8 +77,14 @@ export function CaseStudiesManager({
     }, 4000);
   };
 
+  const isLimitReached = cases.length >= 2;
+
   // Open Add Modal
   const handleOpenAddModal = () => {
+    if (isLimitReached) {
+      showToast("error", "Maximum limit reached. You can only create up to 2 Case Studies.");
+      return;
+    }
     setModalMetrics([
       { label: "Cost vs prior model", value: "-20%" },
       { label: "Time to launch", value: "90 days" },
@@ -295,8 +301,13 @@ export function CaseStudiesManager({
 
           <button
             onClick={handleOpenAddModal}
-            disabled={!isDbConnected}
-            className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-white shadow-xs transition hover:bg-accent/90 disabled:opacity-50"
+            disabled={!isDbConnected || isLimitReached}
+            title={
+              isLimitReached
+                ? "Maximum limit of 2 Case Studies reached. Delete or edit an existing item."
+                : "Add Case Study"
+            }
+            className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-white shadow-xs transition hover:bg-accent/90 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Plus className="h-4 w-4" />
             Add Case Study
@@ -317,7 +328,10 @@ export function CaseStudiesManager({
           />
         </div>
         <div className="text-sm font-medium text-muted">
-          Total: <span className="font-semibold text-navy">{filteredCases.length}</span>
+          Total:{" "}
+          <span className="font-semibold text-navy">
+            {cases.length} / 2
+          </span>
         </div>
       </div>
 

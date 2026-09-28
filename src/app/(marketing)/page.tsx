@@ -74,6 +74,7 @@ export default async function HomePage() {
         formDescription={settings.heroFormDescription}
         formButton={settings.heroFormButton}
         formSuccess={settings.heroFormSuccess}
+        showQuickCallForm={settings.showQuickCallForm}
       />
 
       <WhatWeDo />

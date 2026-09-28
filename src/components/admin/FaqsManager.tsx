@@ -26,16 +26,12 @@ export interface FaqItemData {
   order: number;
 }
 
-const DEFAULT_CATEGORIES = [
-  "Basics",
-  "Timeline",
-  "Commercial",
-  "Ownership",
-  "Talent",
-  "Location",
-  "Operations",
-  "Engagement",
-];
+const FAQ_CATEGORIES = [
+  "Home",
+  "Our Offerings",
+  "Insights",
+  "About Us",
+] as const;
 
 export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
   const [faqs, setFaqs] = useState<FaqItemData[]>(initialFaqs);
@@ -51,12 +47,7 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
   const [formQuestion, setFormQuestion] = useState("");
   const [formAnswer, setFormAnswer] = useState("");
   const [formOrder, setFormOrder] = useState<number>(1);
-
-  // Custom Category States
-  const [customCategories, setCustomCategories] = useState<string[]>([]);
-  const [formCategory, setFormCategory] = useState("Basics");
-  const [isCustomCategory, setIsCustomCategory] = useState(false);
-  const [customCategoryInput, setCustomCategoryInput] = useState("");
+  const [formCategory, setFormCategory] = useState<string>("Home");
 
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
@@ -65,15 +56,6 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
   if (initialFaqs !== faqs && !isModalOpen) {
     setFaqs(initialFaqs);
   }
-
-  // Collect unique categories dynamically
-  const dynamicCategories = Array.from(
-    new Set([
-      ...DEFAULT_CATEGORIES,
-      ...customCategories,
-      ...faqs.map((f) => f.category).filter(Boolean),
-    ])
-  );
 
   // Filter & Sort FAQs by order (ascending: 1, 2, 3...)
   const filteredFaqs = faqs
@@ -95,10 +77,7 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
     setFormQuestion("");
     setFormAnswer("");
     setFormOrder((faqs.length || 0) + 1);
-    const defaultCat = dynamicCategories[0] || "Basics";
-    setFormCategory(defaultCat);
-    setIsCustomCategory(false);
-    setCustomCategoryInput("");
+    setFormCategory(FAQ_CATEGORIES[0]);
     setMessage(null);
     setIsModalOpen(true);
   };
@@ -108,9 +87,7 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
     setFormQuestion(item.question);
     setFormAnswer(item.answer);
     setFormOrder(item.order || 1);
-    setFormCategory(item.category || dynamicCategories[0] || "Basics");
-    setIsCustomCategory(false);
-    setCustomCategoryInput("");
+    setFormCategory(item.category || FAQ_CATEGORIES[0]);
     setMessage(null);
     setIsModalOpen(true);
   };
@@ -131,11 +108,7 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-
-    const finalCat = isCustomCategory ? customCategoryInput.trim() : formCategory;
-    if (finalCat) {
-      formData.set("category", finalCat);
-    }
+    formData.set("category", formCategory);
 
     startTransition(async () => {
       const res = editingItem
@@ -143,9 +116,6 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
         : await createFaqAction(formData);
 
       if (res.success) {
-        if (isCustomCategory && finalCat && !dynamicCategories.includes(finalCat)) {
-          setCustomCategories((prev) => [...prev, finalCat]);
-        }
         setMessage({ type: "success", text: res.message || "Saved successfully!" });
         setIsModalOpen(false);
       } else {
@@ -164,6 +134,7 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
 
         <button
           onClick={openCreateModal}
+          title="Create FAQ"
           className="inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-white hover:bg-accent-hover transition shadow-xs cursor-pointer"
         >
           <Plus className="h-4 w-4" />
@@ -202,7 +173,7 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
         </div>
         <div className="rounded-2xl border border-border bg-surface-elevated p-4 shadow-xs">
           <p className="text-xs text-muted font-medium">Categories</p>
-          <p className="mt-1 text-2xl font-bold text-navy">{dynamicCategories.length}</p>
+          <p className="mt-1 text-2xl font-bold text-navy">{FAQ_CATEGORIES.length}</p>
         </div>
         <div className="rounded-2xl border border-border bg-surface-elevated p-4 shadow-xs">
           <p className="text-xs text-muted font-medium">Filtered FAQs</p>
@@ -230,14 +201,14 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="rounded-xl border border-border bg-surface px-3 py-1.5 text-xs text-navy focus:border-accent focus:outline-none cursor-pointer"
+            className="rounded-xl border border-border bg-surface px-3 py-1.5 text-xs text-navy focus:border-accent focus:outline-none cursor-pointer font-medium"
           >
             <option value="all">All Categories ({faqs.length})</option>
-            {dynamicCategories.map((cat) => {
+            {FAQ_CATEGORIES.map((cat) => {
               const count = faqs.filter((f) => f.category === cat).length;
               return (
                 <option key={cat} value={cat}>
-                  {cat} ({count})
+                  {cat} ({count}/10)
                 </option>
               );
             })}
@@ -285,7 +256,7 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
                   {/* Category Pill Tag */}
                   <td className="px-5 py-4 whitespace-nowrap">
                     <span className="inline-block rounded-md bg-slate-100 border border-slate-200/70 px-2.5 py-0.5 text-xs font-medium text-slate-700">
-                      {item.category || "Basics"}
+                      {item.category || "Home"}
                     </span>
                   </td>
 
@@ -372,62 +343,24 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
               {/* Category & Order Grid */}
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <label className="block text-xs font-semibold text-navy">Category</label>
-                    {isCustomCategory && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setIsCustomCategory(false);
-                          setCustomCategoryInput("");
-                        }}
-                        className="text-[11px] font-medium text-accent hover:underline cursor-pointer"
-                      >
-                        ← Select existing
-                      </button>
-                    )}
-                  </div>
-
-                  {!isCustomCategory ? (
-                    <select
-                      name="category"
-                      value={formCategory}
-                      onChange={(e) => {
-                        if (e.target.value === "__add_custom__") {
-                          setIsCustomCategory(true);
-                          setCustomCategoryInput("");
-                        } else {
-                          setFormCategory(e.target.value);
-                        }
-                      }}
-                      className="w-full rounded-xl border border-border px-3.5 py-2 text-xs text-navy focus:border-accent focus:outline-none bg-surface-elevated cursor-pointer font-medium"
-                    >
-                      {dynamicCategories.map((cat) => (
-                        <option key={cat} value={cat}>
-                          {cat}
+                  <label className="block text-xs font-semibold text-navy mb-1">Category</label>
+                  <select
+                    name="category"
+                    value={formCategory}
+                    onChange={(e) => setFormCategory(e.target.value)}
+                    className="w-full rounded-xl border border-border px-3.5 py-2 text-xs text-navy focus:border-accent focus:outline-none bg-surface-elevated cursor-pointer font-medium"
+                  >
+                    {FAQ_CATEGORIES.map((cat) => {
+                      const count = faqs.filter(
+                        (f) => f.category === cat && (!editingItem || editingItem._id !== f._id)
+                      ).length;
+                      return (
+                        <option key={cat} value={cat} disabled={count >= 10}>
+                          {cat} ({count}/10{count >= 10 ? " - Full" : ""})
                         </option>
-                      ))}
-                      <option value="__add_custom__" className="font-semibold text-accent">
-                        + Add Custom Category...
-                      </option>
-                    </select>
-                  ) : (
-                    <div>
-                      <input
-                        type="text"
-                        name="category"
-                        required
-                        autoFocus
-                        value={customCategoryInput}
-                        onChange={(e) => {
-                          setCustomCategoryInput(e.target.value);
-                          setFormCategory(e.target.value);
-                        }}
-                        placeholder="Type new category..."
-                        className="w-full rounded-xl border border-accent px-3.5 py-2 text-xs text-navy focus:border-accent focus:outline-none bg-surface font-medium"
-                      />
-                    </div>
-                  )}
+                      );
+                    })}
+                  </select>
                 </div>
 
                 <div>

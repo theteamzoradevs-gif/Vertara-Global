@@ -44,7 +44,6 @@ const navGroups: NavGroup[] = [
     items: [
       { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
       { href: "/admin/inquiries", label: "Inquiries", icon: Inbox },
-      { href: "/admin/chat-sessions", label: "Chat Sessions", icon: MessageSquare },
     ],
   },
   {

@@ -12,6 +12,14 @@ export async function createCaseStudyAction(formData: FormData) {
       return { success: false, error: "Database connection unavailable." };
     }
 
+    const count = await CaseStudy.countDocuments();
+    if (count >= 2) {
+      return {
+        success: false,
+        error: "Maximum limit reached. You can only create up to 2 Case Studies.",
+      };
+    }
+
     const title = String(formData.get("title") || "").trim();
     if (!title) {
       return { success: false, error: "Title is required." };
