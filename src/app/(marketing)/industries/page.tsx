@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Section, SectionHeader } from "@/components/ui/Section";
@@ -113,12 +113,12 @@ export default async function IndustriesHubPage() {
   const featuredCases = [
     ...cases.filter((c: { featured?: boolean }) => c.featured === true),
     ...cases.filter((c: { featured?: boolean }) => c.featured !== true),
-  ].slice(0, 2);
+  ].slice(0, 1);
 
   return (
     <>
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden text-white bg-[#0e3621]">
+      <section className="relative overflow-hidden text-white bg-[#2F3F34]">
         {/* Right-aligned Realistic Background Image */}
         <div className="absolute inset-0">
           <Image
@@ -130,9 +130,9 @@ export default async function IndustriesHubPage() {
             sizes="100vw"
           />
           {/* Subtle Emerald / Forest Green Soft Gradient & Shadow Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0d3320] via-[#0d3320]/95 via-40% sm:via-48% md:via-52% to-[#0d3320]/25 lg:to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0d3320] via-transparent to-[#0d3320]/40" />
-          <div className="absolute inset-0 bg-[#0d3320]/20 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#233027] via-[#233027]/95 via-40% sm:via-48% md:via-52% to-[#233027]/25 lg:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#233027] via-transparent to-[#233027]/40" />
+          <div className="absolute inset-0 bg-[#233027]/20 mix-blend-multiply" />
           <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
 
@@ -177,22 +177,28 @@ export default async function IndustriesHubPage() {
               <Link
                 key={item.id}
                 href={`/industries/${item.id}`}
-                className="group relative flex flex-col justify-between rounded-3xl border border-[#cddcd1] bg-[#edf5ef] p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1.5 hover:border-[#2e3f33] hover:bg-white hover:shadow-xl hover:shadow-[#2e3f33]/10 cursor-pointer"
+                className="group relative flex flex-col justify-between rounded-3xl border border-[#cddcd1] bg-[#edf5ef] p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1.5 hover:border-[#2F3F34] hover:bg-white hover:shadow-xl hover:shadow-[#2F3F34]/10 cursor-pointer"
               >
                 <div className="flex h-full flex-col">
                   <div className="flex items-start justify-start">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#2e3f33] text-[#b49339] shadow-md ring-4 ring-white group-hover:scale-110 group-hover:bg-[#0b1f3a] transition-all duration-300">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#2F3F34] text-[#b49339] shadow-md ring-4 ring-white transition-all duration-300 group-hover:scale-105 group-hover:bg-[#0b1f3a]">
                       <Icon className="h-6 w-6" />
                     </div>
                   </div>
 
-                  <h3 className="mt-5 flex min-h-[3.25rem] items-start text-lg font-bold leading-snug text-navy group-hover:text-[#2e3f33] transition-colors sm:min-h-[3.5rem]">
+                  <h3 className="mt-5 flex min-h-[3.25rem] items-start text-lg font-bold leading-snug text-navy transition-colors group-hover:text-[#2F3F34] sm:min-h-[3.5rem]">
                     {item.title}
                   </h3>
 
-                  <p className="mt-2 text-xs sm:text-sm text-slate leading-relaxed">
+                  <p className="mt-2 flex-1 text-xs leading-relaxed text-slate sm:text-sm">
                     {item.description}
                   </p>
+
+                  <div className="mt-6 flex items-center justify-start">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-[#2F3F34] text-[#2F3F34] transition-all duration-300 group-hover:bg-[#2F3F34] group-hover:text-[#b49339] group-hover:translate-x-1 group-hover:shadow-md">
+                      <ArrowRight className="h-5 w-5 stroke-[2.2]" />
+                    </div>
+                  </div>
                 </div>
               </Link>
             );
@@ -217,7 +223,7 @@ export default async function IndustriesHubPage() {
         <SectionHeader
           eyebrow="Outcomes"
           title="Case studies from live programmes"
-          description="Challenge → result with metric callouts — proven execution across enterprise domains."
+          description="Challenge â†’ result with metric callouts â€” proven execution across enterprise domains."
         />
         <HomeCaseStudies cases={featuredCases} />
         <div className="mt-8 flex justify-center sm:justify-start">
@@ -238,7 +244,7 @@ export default async function IndustriesHubPage() {
           {logos.map((logo) => (
             <div
               key={logo.name}
-              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2e3f33]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
+              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2F3F34]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
             >
               {logo.logoText}
             </div>

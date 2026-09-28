@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Section, SectionHeader } from "@/components/ui/Section";
@@ -23,7 +22,7 @@ import { ArrowRight } from "lucide-react";
 export const metadata = {
   title: "Engineering & ER&D GCC Setup in India | Vertara Global",
   description:
-    "From CAD seats to real product ownership. Build a dedicated Indian ER&D center engineered around your product architecture — systems design, embedded firmware, and simulation R&D.",
+    "From CAD seats to real product ownership. Build a dedicated Indian ER&D center engineered around your product architecture â€” systems design, embedded firmware, and simulation R&D.",
 };
 
 const erdFaqs = [
@@ -55,7 +54,7 @@ const erdFaqs = [
     id: "faq-5",
     title: "How quickly can we spin up an initial lighthouse engineering pod?",
     content:
-      "Under our Assisted Captive or EOR delivery models, we can have a vetted 10–25 person engineering pod operational in secure space with configured compute infrastructure in 60 to 90 days from project kickoff.",
+      "Under our Assisted Captive or EOR delivery models, we can have a vetted 10â€“25 person engineering pod operational in secure space with configured compute infrastructure in 60 to 90 days from project kickoff.",
   },
 ];
 
@@ -69,21 +68,12 @@ export default async function EngineeringErdPage() {
   return (
     <>
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden text-white bg-[#0e3621]">
-        {/* Right-aligned Realistic Background Image */}
+      <section className="relative overflow-hidden text-white bg-[#2F3F34]">
         <div className="absolute inset-0">
-          <Image
-            src="/images/engineering-erd.png"
-            alt="Engineering & ER&D Workspace"
-            fill
-            className="object-cover object-right lg:object-right"
-            priority
-            sizes="100vw"
-          />
           {/* Subtle Emerald / Forest Green Soft Gradient & Shadow Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0d3320] via-[#0d3320]/95 via-40% sm:via-48% md:via-52% to-[#0d3320]/25 lg:to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0d3320] via-transparent to-[#0d3320]/40" />
-          <div className="absolute inset-0 bg-[#0d3320]/20 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#233027] via-[#233027]/95 via-40% sm:via-48% md:via-52% to-[#233027]/25 lg:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#233027] via-transparent to-[#233027]/40" />
+          <div className="absolute inset-0 bg-[#233027]/20 mix-blend-multiply" />
           <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
 
@@ -103,20 +93,20 @@ export default async function EngineeringErdPage() {
 
           <p className="mt-4 max-w-xl text-base text-white/90 sm:text-lg leading-relaxed font-normal">
             An ER&D centre engineered around your product architecture not
-            someone else’s IT template. Own systems design, embedded firmware,
+            someone elseâ€™s IT template. Own systems design, embedded firmware,
             and simulation-driven R&D in India.
           </p>
 
           {/* Hero CTAs */}
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Button href="#enquire" variant="gold" size="lg">
-              Book an ER&D consultation <ArrowRight className="h-4 w-4" />
+              Book a consultation
             </Button>
           </div>
         </div>
       </section>
 
-      {/* 2. THE OPPORTUNITY — INTERACTIVE NUMBERED JOURNEY */}
+      {/* 2. THE OPPORTUNITY â€” INTERACTIVE NUMBERED JOURNEY */}
       <Section id="the-opportunity" tone="muted">
         <SectionHeader
           eyebrow="The Opportunity"
@@ -126,7 +116,7 @@ export default async function EngineeringErdPage() {
         <ErdOpportunityJourney />
       </Section>
 
-      {/* 3. WHAT THIS SECTOR NEEDS — INTERACTIVE 3-POINT SELECTOR */}
+      {/* 3. WHAT THIS SECTOR NEEDS â€” INTERACTIVE 3-POINT SELECTOR */}
       <Section>
         <SectionHeader
           eyebrow="What This Sector Needs"
@@ -148,7 +138,7 @@ export default async function EngineeringErdPage() {
         />
       </Section>
 
-      {/* 6. HOW VERTARA HELPS — INTERACTIVE CAPABILITY REVEAL */}
+      {/* 6. HOW VERTARA HELPS â€” INTERACTIVE CAPABILITY REVEAL */}
       <Section>
         <SectionHeader
           eyebrow="How Vertara Helps"
@@ -169,7 +159,7 @@ export default async function EngineeringErdPage() {
           {logos.map((logo) => (
             <div
               key={logo.name}
-              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2e3f33]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
+              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2F3F34]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
             >
               {logo.logoText}
             </div>

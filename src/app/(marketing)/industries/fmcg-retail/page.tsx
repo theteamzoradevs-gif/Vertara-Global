@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Section, SectionHeader } from "@/components/ui/Section";
@@ -23,7 +22,7 @@ import { ArrowRight } from "lucide-react";
 export const metadata = {
   title: "FMCG & Retail GCC Setup in India | Vertara Global",
   description:
-    "From order processing to demand intelligence. Build a dedicated Indian FMCG & Retail capability center engineered around your SKU data — consumer analytics, merchandising systems, and omnichannel supply chain.",
+    "From order processing to demand intelligence. Build a dedicated Indian FMCG & Retail capability center engineered around your SKU data â€” consumer analytics, merchandising systems, and omnichannel supply chain.",
 };
 
 const fmcgFaqs = [
@@ -55,7 +54,7 @@ const fmcgFaqs = [
     id: "faq-5",
     title: "How quickly can we launch an initial retail analytics pod?",
     content:
-      "Under our Assisted Captive or EOR delivery models, a dedicated pod of 10–25 vetted retail data engineers and category specialists can be operational in enterprise-grade workspace with full system integration within 60 to 90 days.",
+      "Under our Assisted Captive or EOR delivery models, a dedicated pod of 10â€“25 vetted retail data engineers and category specialists can be operational in enterprise-grade workspace with full system integration within 60 to 90 days.",
   },
 ];
 
@@ -69,21 +68,12 @@ export default async function FmcgRetailPage() {
   return (
     <>
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden text-white bg-[#0e3621]">
-        {/* Right-aligned Realistic Background Image */}
+      <section className="relative overflow-hidden text-white bg-[#2F3F34]">
         <div className="absolute inset-0">
-          <Image
-            src="/images/fmcg-retail.png"
-            alt="FMCG & Retail Workspace"
-            fill
-            className="object-cover object-right lg:object-right"
-            priority
-            sizes="100vw"
-          />
           {/* Subtle Emerald / Forest Green Soft Gradient & Shadow Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0d3320] via-[#0d3320]/95 via-40% sm:via-48% md:via-52% to-[#0d3320]/25 lg:to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0d3320] via-transparent to-[#0d3320]/40" />
-          <div className="absolute inset-0 bg-[#0d3320]/20 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#233027] via-[#233027]/95 via-40% sm:via-48% md:via-52% to-[#233027]/25 lg:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#233027] via-transparent to-[#233027]/40" />
+          <div className="absolute inset-0 bg-[#233027]/20 mix-blend-multiply" />
           <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
 
@@ -110,13 +100,13 @@ export default async function FmcgRetailPage() {
           {/* Hero CTAs */}
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Button href="#enquire" variant="gold" size="lg">
-              Book a Retail consultation <ArrowRight className="h-4 w-4" />
+              Book a consultation
             </Button>
           </div>
         </div>
       </section>
 
-      {/* 2. THE OPPORTUNITY — 3-STAGE FMCG & RETAIL JOURNEY */}
+      {/* 2. THE OPPORTUNITY â€” 3-STAGE FMCG & RETAIL JOURNEY */}
       <Section id="the-opportunity" tone="muted">
         <SectionHeader
           eyebrow="The Opportunity"
@@ -126,7 +116,7 @@ export default async function FmcgRetailPage() {
         <FmcgOpportunityJourney />
       </Section>
 
-      {/* 3. WHAT THIS SECTOR NEEDS — 3-POINT RETAIL ARCHITECTURE */}
+      {/* 3. WHAT THIS SECTOR NEEDS â€” 3-POINT RETAIL ARCHITECTURE */}
       <Section>
         <SectionHeader
           eyebrow="What This Sector Needs"
@@ -148,7 +138,7 @@ export default async function FmcgRetailPage() {
         />
       </Section>
 
-      {/* 6. HOW VERTARA HELPS — CONNECTED BLUEPRINT */}
+      {/* 6. HOW VERTARA HELPS â€” CONNECTED BLUEPRINT */}
       <Section>
         <SectionHeader
           eyebrow="How Vertara Helps"
@@ -169,7 +159,7 @@ export default async function FmcgRetailPage() {
           {logos.map((logo) => (
             <div
               key={logo.name}
-              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2e3f33]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
+              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2F3F34]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
             >
               {logo.logoText}
             </div>

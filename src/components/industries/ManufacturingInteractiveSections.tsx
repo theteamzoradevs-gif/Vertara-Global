@@ -1,4 +1,3 @@
-import Image from "next/image";
 import {
   Server,
   Lock,
@@ -15,7 +14,7 @@ import {
 import { MobileAutoSlider } from "@/components/ui/MobileAutoSlider";
 
 /* -------------------------------------------------------------------------
- * SECTION 1: THE OPPORTUNITY — 3-STAGE MANUFACTURING JOURNEY
+ * SECTION 1: THE OPPORTUNITY â€” 3-STAGE MANUFACTURING JOURNEY
  * ------------------------------------------------------------------------- */
 const manufacturingOpportunitySteps = [
   {
@@ -34,7 +33,7 @@ const manufacturingOpportunitySteps = [
     title: "Prove the Model. Scale Facility to Facility.",
     badge: "Plant-to-Plant Scale",
     description:
-      "Prove the model on one plant's operational data — OEE, downtime, predictive maintenance — then seamlessly extend the blueprint to the next facility.",
+      "Prove the model on one plant's operational data â€” OEE, downtime, predictive maintenance â€” then seamlessly extend the blueprint to the next facility.",
   },
 ];
 
@@ -53,7 +52,7 @@ export function ManufacturingOpportunityJourney() {
           >
             <div>
               <div className="flex items-center justify-between">
-                <span className="rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-white/80 border border-[#cddcd1] text-[#2e3f33] group-hover:bg-[#2e3f33] group-hover:text-[#b49339] transition-colors">
+                <span className="rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-white/80 border border-[#cddcd1] text-[#2F3F34] group-hover:bg-[#2F3F34] group-hover:text-[#b49339] transition-colors">
                   {step.badge}
                 </span>
               </div>
@@ -74,7 +73,7 @@ export function ManufacturingOpportunityJourney() {
 }
 
 /* -------------------------------------------------------------------------
- * SECTION 2: WHAT THIS SECTOR NEEDS — 3-POINT PRODUCTION ARCHITECTURE
+ * SECTION 2: WHAT THIS SECTOR NEEDS â€” 3-POINT PRODUCTION ARCHITECTURE
  * ------------------------------------------------------------------------- */
 const manufacturingSectorNeedsData = [
   {
@@ -133,7 +132,7 @@ export function ManufacturingSectorNeedsSelector() {
         return (
           <div
             key={item.id}
-            className="group relative rounded-2xl sm:rounded-3xl border border-[#cddcd1] bg-[#edf5ef] p-6 sm:p-7 transition-all duration-300 hover:border-[#2e3f33]/40 hover:bg-[#e5ebe6] hover:-translate-y-1.5 hover:shadow-lg flex flex-col justify-between h-full cursor-default"
+            className="relative rounded-2xl sm:rounded-3xl border border-[#cddcd1] bg-[#edf5ef] p-6 sm:p-7 flex flex-col justify-between h-full cursor-default"
           >
             <div>
               <div className="flex items-center justify-between gap-2">
@@ -142,7 +141,7 @@ export function ManufacturingSectorNeedsSelector() {
                 </p>
               </div>
 
-              <div className="mt-5 flex h-11 w-11 items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] text-[#2e3f33] shadow-xs group-hover:bg-[#2e3f33] group-hover:text-[#b49339] transition-colors">
+              <div className="mt-5 flex h-11 w-11 items-center justify-center rounded-xl bg-[#2F3F34] text-[#b49339] shadow-sm">
                 <Icon className="h-5 w-5" />
               </div>
 
@@ -162,7 +161,7 @@ export function ManufacturingSectorNeedsSelector() {
 }
 
 /* -------------------------------------------------------------------------
- * SECTION 3: HOW VERTARA HELPS — CONNECTED PRODUCTION BLUEPRINT
+ * SECTION 3: HOW VERTARA HELPS â€” CONNECTED PRODUCTION BLUEPRINT
  * ------------------------------------------------------------------------- */
 const manufacturingHowVertaraHelpsPillars = [
   {
@@ -204,45 +203,28 @@ const manufacturingHowVertaraHelpsPillars = [
 
 export function ManufacturingHowVertaraHelpsReveal() {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-      {/* Left side list */}
-      <div className="lg:col-span-7 space-y-6 sm:space-y-7">
-        {manufacturingHowVertaraHelpsPillars.map((item) => {
-          const Icon = item.icon;
-          return (
-            <div key={item.id} className="flex items-start gap-4 sm:gap-6">
-              {/* Light green rounded square icon container */}
-              <div className="flex h-12 w-12 sm:h-13 sm:w-13 shrink-0 items-center justify-center rounded-2xl border border-[#cddcd1] bg-[#e5ebe6] text-[#2e3f33] shadow-xs">
-                <Icon className="h-6 w-6" />
-              </div>
-
-              {/* Content block */}
-              <div className="flex-1 min-w-0 pt-0.5">
-                <h4 className="text-lg sm:text-xl font-bold text-navy tracking-tight">
-                  {item.title}
-                </h4>
-                <p className="mt-1 text-sm sm:text-base text-slate leading-relaxed">
-                  {item.tagline}
-                </p>
-              </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6 sm:gap-y-8">
+      {manufacturingHowVertaraHelpsPillars.map((item) => {
+        const Icon = item.icon;
+        return (
+          <div key={item.id} className="flex items-start gap-4 sm:gap-6">
+            {/* Light green rounded square icon container */}
+            <div className="flex h-12 w-12 sm:h-13 sm:w-13 shrink-0 items-center justify-center rounded-2xl border border-[#cddcd1] bg-[#e5ebe6] text-[#2F3F34] shadow-xs">
+              <Icon className="h-6 w-6" />
             </div>
-          );
-        })}
-      </div>
 
-      {/* Right side image */}
-      <div className="lg:col-span-5">
-        <div className="relative overflow-hidden rounded-3xl border border-[#cddcd1] bg-[#edf5ef] shadow-xl shadow-navy/5">
-          <Image
-            src="/images/manufacturing.png"
-            alt="One Accountable Operating System for Manufacturing"
-            width={1792}
-            height={1024}
-            className="h-auto w-full object-cover transition-transform duration-500 hover:scale-105"
-            sizes="(max-width: 1024px) 100vw, 550px"
-          />
-        </div>
-      </div>
+            {/* Content block */}
+            <div className="flex-1 min-w-0 pt-0.5">
+              <h4 className="text-lg sm:text-xl font-bold text-navy tracking-tight">
+                {item.title}
+              </h4>
+              <p className="mt-1 text-sm sm:text-base text-slate leading-relaxed">
+                {item.tagline}
+              </p>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

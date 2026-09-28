@@ -1,4 +1,3 @@
-import Image from "next/image";
 import {
   Server,
   Lock,
@@ -13,7 +12,7 @@ import {
 import { MobileAutoSlider } from "@/components/ui/MobileAutoSlider";
 
 /* -------------------------------------------------------------------------
- * SECTION 1: THE OPPORTUNITY — 3-STAGE FMCG & RETAIL JOURNEY
+ * SECTION 1: THE OPPORTUNITY â€” 3-STAGE FMCG & RETAIL JOURNEY
  * ------------------------------------------------------------------------- */
 const fmcgOpportunitySteps = [
   {
@@ -26,7 +25,7 @@ const fmcgOpportunitySteps = [
     title: "Access Category & RGM Talent",
     badge: "CPG Skillset",
     description:
-      "Direct access to top 1% category management and revenue-growth-management (RGM) practitioners in India's premier analytics clusters — without the heavy enterprise overhead.",
+      "Direct access to top 1% category management and revenue-growth-management (RGM) practitioners in India's premier analytics clusters â€” without the heavy enterprise overhead.",
   },
   {
     title: "Start Lean. Expand with Proof.",
@@ -51,7 +50,7 @@ export function FmcgOpportunityJourney() {
           >
             <div>
               <div className="flex items-center justify-between">
-                <span className="rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-white/80 border border-[#cddcd1] text-[#2e3f33] group-hover:bg-[#2e3f33] group-hover:text-[#b49339] transition-colors">
+                <span className="rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-white/80 border border-[#cddcd1] text-[#2F3F34] group-hover:bg-[#2F3F34] group-hover:text-[#b49339] transition-colors">
                   {step.badge}
                 </span>
               </div>
@@ -72,7 +71,7 @@ export function FmcgOpportunityJourney() {
 }
 
 /* -------------------------------------------------------------------------
- * SECTION 2: WHAT THIS SECTOR NEEDS — 3-POINT RETAIL ARCHITECTURE
+ * SECTION 2: WHAT THIS SECTOR NEEDS â€” 3-POINT RETAIL ARCHITECTURE
  * ------------------------------------------------------------------------- */
 const fmcgSectorNeedsData = [
   {
@@ -81,7 +80,7 @@ const fmcgSectorNeedsData = [
     tag: "POS & ERP Streaming",
     title: "Integrate POS, ERP and e-commerce platforms in real time",
     summary:
-      "Direct streaming connectors across SAP, Oracle Retail, and Shopify Plus — eliminating batch-and-wait reporting.",
+      "Direct streaming connectors across SAP, Oracle Retail, and Shopify Plus â€” eliminating batch-and-wait reporting.",
     details: [
       "Sub-second streaming pipelines capturing store POS receipts and digital checkout signals",
       "Bi-directional ERP sync preventing cross-channel stockout and inventory overselling",
@@ -131,7 +130,7 @@ export function FmcgSectorNeedsSelector() {
         return (
           <div
             key={item.id}
-            className="group relative rounded-2xl sm:rounded-3xl border border-[#cddcd1] bg-[#edf5ef] p-6 sm:p-7 transition-all duration-300 hover:border-[#2e3f33]/40 hover:bg-[#e5ebe6] hover:-translate-y-1.5 hover:shadow-lg flex flex-col justify-between h-full cursor-default"
+            className="relative rounded-2xl sm:rounded-3xl border border-[#cddcd1] bg-[#edf5ef] p-6 sm:p-7 flex flex-col justify-between h-full cursor-default"
           >
             <div>
               <div className="flex items-center justify-between gap-2">
@@ -140,7 +139,7 @@ export function FmcgSectorNeedsSelector() {
                 </p>
               </div>
 
-              <div className="mt-5 flex h-11 w-11 items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] text-[#2e3f33] shadow-xs group-hover:bg-[#2e3f33] group-hover:text-[#b49339] transition-colors">
+              <div className="mt-5 flex h-11 w-11 items-center justify-center rounded-xl bg-[#2F3F34] text-[#b49339] shadow-sm">
                 <Icon className="h-5 w-5" />
               </div>
 
@@ -160,7 +159,7 @@ export function FmcgSectorNeedsSelector() {
 }
 
 /* -------------------------------------------------------------------------
- * SECTION 3: HOW VERTARA HELPS — CONNECTED OPERATING BLUEPRINT
+ * SECTION 3: HOW VERTARA HELPS â€” CONNECTED OPERATING BLUEPRINT
  * ------------------------------------------------------------------------- */
 const fmcgHowVertaraHelpsPillars = [
   {
@@ -202,45 +201,28 @@ const fmcgHowVertaraHelpsPillars = [
 
 export function FmcgHowVertaraHelpsReveal() {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-      {/* Left side list */}
-      <div className="lg:col-span-7 space-y-6 sm:space-y-7">
-        {fmcgHowVertaraHelpsPillars.map((item) => {
-          const Icon = item.icon;
-          return (
-            <div key={item.id} className="flex items-start gap-4 sm:gap-6">
-              {/* Light green rounded square icon container */}
-              <div className="flex h-12 w-12 sm:h-13 sm:w-13 shrink-0 items-center justify-center rounded-2xl border border-[#cddcd1] bg-[#e5ebe6] text-[#2e3f33] shadow-xs">
-                <Icon className="h-6 w-6" />
-              </div>
-
-              {/* Content block */}
-              <div className="flex-1 min-w-0 pt-0.5">
-                <h4 className="text-lg sm:text-xl font-bold text-navy tracking-tight">
-                  {item.title}
-                </h4>
-                <p className="mt-1 text-sm sm:text-base text-slate leading-relaxed">
-                  {item.tagline}
-                </p>
-              </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6 sm:gap-y-8">
+      {fmcgHowVertaraHelpsPillars.map((item) => {
+        const Icon = item.icon;
+        return (
+          <div key={item.id} className="flex items-start gap-4 sm:gap-6">
+            {/* Light green rounded square icon container */}
+            <div className="flex h-12 w-12 sm:h-13 sm:w-13 shrink-0 items-center justify-center rounded-2xl border border-[#cddcd1] bg-[#e5ebe6] text-[#2F3F34] shadow-xs">
+              <Icon className="h-6 w-6" />
             </div>
-          );
-        })}
-      </div>
 
-      {/* Right side image */}
-      <div className="lg:col-span-5">
-        <div className="relative overflow-hidden rounded-3xl border border-[#cddcd1] bg-[#edf5ef] shadow-xl shadow-navy/5">
-          <Image
-            src="/images/fmcg-retail.png"
-            alt="One Accountable Operating System for FMCG & Retail"
-            width={1792}
-            height={1024}
-            className="h-auto w-full object-cover transition-transform duration-500 hover:scale-105"
-            sizes="(max-width: 1024px) 100vw, 550px"
-          />
-        </div>
-      </div>
+            {/* Content block */}
+            <div className="flex-1 min-w-0 pt-0.5">
+              <h4 className="text-lg sm:text-xl font-bold text-navy tracking-tight">
+                {item.title}
+              </h4>
+              <p className="mt-1 text-sm sm:text-base text-slate leading-relaxed">
+                {item.tagline}
+              </p>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

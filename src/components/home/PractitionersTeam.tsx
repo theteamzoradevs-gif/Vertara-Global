@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -18,7 +18,7 @@ export function PractitionersTeam() {
           </h2>
           <p className="mt-4 text-base leading-relaxed text-[#526171] sm:text-lg">
             Strategy, GCC execution and shared services under one senior-led
-            platform — with the bench expanding across practice areas.
+            platform â€” with the bench expanding across practice areas.
           </p>
         </div>
 
@@ -83,7 +83,7 @@ export function PractitionersTeam() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.4, delay: 0.35 }}
-          className="mt-16 flex flex-col items-center justify-between gap-4 rounded-2xl border border-[#3c5243] bg-[#2e3f33] px-6 py-5 sm:flex-row sm:px-8 sm:py-6 shadow-md"
+          className="mt-16 flex flex-col items-center justify-between gap-4 rounded-2xl border border-[#3c5243] bg-[#2F3F34] px-6 py-5 sm:flex-row sm:px-8 sm:py-6 shadow-md"
         >
           <p className="text-center text-base font-bold text-white sm:text-left md:text-lg">
             Let's build the right GCC and build it to last.

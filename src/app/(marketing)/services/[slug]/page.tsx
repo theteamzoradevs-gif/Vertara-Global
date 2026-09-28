@@ -1,303 +1,183 @@
+﻿import Link from "next/link";
 import Image from "next/image";
-import { notFound } from "next/navigation";
-import { Button } from "@/components/ui/Button";
+import { CmsImage } from "@/components/ui/CmsImage";
 import { Section, SectionHeader } from "@/components/ui/Section";
-import { MetricCounter } from "@/components/ui/MetricCounter";
-import { CTABand } from "@/components/ui/CTABand";
-import { ProcessSteps } from "@/components/services/ProcessSteps";
-import { SubServiceCards } from "@/components/services/SubServiceCards";
-import { ContactForm } from "@/components/leads/ContactForm";
-import { getServiceBySlug, getServices, getSettings, getTestimonials, getClientLogos, getFaqs } from "@/lib/content";
+import { Reveal } from "@/components/ui/Reveal";
 import { FlowThreads } from "@/components/ui/FlowThreads";
-import { CompetitiveComparison } from "@/components/home/CompetitiveComparison";
-import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
-import { Accordion } from "@/components/ui/Accordion";
-import { Mail, Phone } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { ArrowRight } from "lucide-react";
+import { getInsights } from "@/lib/content";
 
-const galleryBySlug: Record<string, string[]> = {
-  talent: [
-    "/images/talent-team.webp",
-    "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80",
-    "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200",
-    "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1200&q=80",
-  ],
-  workspace: [
-    "/images/workspace-blue.webp",
-    "/images/workspace-collab.jpg",
-    "/images/workspace-vibrant.jpg",
-    "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80",
-  ],
-  operations: [
-    "/images/gcc-ops.png",
-    "/images/gcc-floor.webp",
-    "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1200&q=80",
-    "https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  ],
-  advisory: [
-    "/images/workspace-collab.jpg",
-    "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1200&q=80",
-    "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1200&q=80",
-    "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  ],
+export const metadata = {
+  title: "Insights",
+  description: "Perspectives on GCC strategy, talent, location, and engagement models.",
 };
 
-export async function generateStaticParams() {
-  const services = await getServices();
-  return services.map((s: { slug: string }) => ({ slug: s.slug }));
-}
+export const dynamic = "force-dynamic";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
-  const service = await getServiceBySlug(slug);
-  if (!service) return {};
-  return {
-    title: service.name,
-    description: service.shortDescription,
-  };
-}
+export default async function InsightsPage() {
+  const insights = await getInsights();
 
-export default async function ServicePage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
-  const [service, settings, testimonials, logos, faqs] = await Promise.all([
-    getServiceBySlug(slug),
-    getSettings(),
-    getTestimonials(),
-    getClientLogos(),
-    getFaqs(),
-  ]);
-  if (!service) notFound();
+  const featuredInsights = insights.filter((i: { featured?: boolean }) => i.featured === true);
+  const regularInsights = insights.filter((i: { featured?: boolean }) => i.featured !== true);
 
-  const gallery = galleryBySlug[slug] ?? [service.image];
+  const displayFeatured =
+    featuredInsights.length > 0 ? featuredInsights : insights.length > 0 ? [insights[0]] : [];
+  const displayRegular =
+    featuredInsights.length > 0 ? regularInsights : insights.slice(1);
 
   return (
     <>
-      <section className="relative overflow-hidden text-white">
-        <div className="absolute inset-0">
-          <Image
-            src={service.image}
-            alt=""
-            fill
-            className="object-cover"
-            priority
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-navy/70" />
-          <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-navy/65 to-navy/40" />
-          <FlowThreads intensity="medium" onDark className="opacity-45" />
-        </div>
-        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-highlight">
-            Service
-          </p>
-          <h1 className="mt-3 max-w-3xl text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-            {service.name}
-          </h1>
-          <p className="mt-5 max-w-2xl text-base text-white/80 md:text-lg">
-            {service.valueProposition}
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button href="#enquire" size="lg">
-              Enquire about this service
-            </Button>
-            <Button
-              href="#how-it-works"
-              variant="outline"
-              size="lg"
-              className="border-white/30 bg-white/10 text-white hover:border-white hover:bg-white/20 hover:text-white"
-            >
-              How it works
-            </Button>
+      {/* 1. HERO SECTION */}
+      <section className="relative overflow-hidden text-white bg-[#2F3F34]">
+        {/* Soft Emerald Gradient & Threads */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#233027] via-[#233027]/95 to-[#233027]" />
+        <FlowThreads intensity="medium" onDark className="opacity-40" />
+
+        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20 lg:py-24 lg:px-8">
+          {/* Breadcrumb / Eyebrow */}
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
+            <span>Knowledge</span>
+            <span>/</span>
+            <span>Perspectives</span>
           </div>
+
+          <h1 className="mt-4 max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-[44px] xl:text-[48px] leading-tight text-white">
+            Insights
+          </h1>
+
+          <p className="mt-4 max-w-xl text-base text-white/90 sm:text-lg leading-relaxed font-normal">
+            Practical reading for CHROs, COOs, and global operations leaders.
+          </p>
         </div>
       </section>
 
-      <Section>
-        <div className="grid gap-4 rounded-2xl border border-border bg-surface-elevated p-5 sm:grid-cols-3 sm:p-8">
-          {service.metrics.map(
-            (m: {
-              label: string;
-              value: number;
-              suffix?: string;
-              prefix?: string;
+      {/* 2. INSIGHTS ARTICLES SECTION */}
+      <Section id="articles">
+        {/* FEATURED INSIGHT (HERO CARD) */}
+        {displayFeatured.length > 0 && (
+          <div className="space-y-12">
+            {displayFeatured.map((insight: {
+              slug: string;
+              title: string;
+              excerpt: string;
+              coverImage: string;
+              category: string;
             }) => (
-              <div
-                key={m.label}
-                className="rounded-xl bg-surface p-4 transition hover:border-accent hover:shadow-md sm:border sm:border-transparent"
-              >
-                <MetricCounter
-                  value={m.value}
-                  suffix={m.suffix}
-                  prefix={m.prefix}
-                  className="text-3xl font-bold text-accent md:text-4xl"
-                />
-                <p className="mt-1 text-sm text-muted">{m.label}</p>
-              </div>
-            ),
-          )}
-        </div>
-      </Section>
+              <Reveal key={insight.slug}>
+                <article className="relative overflow-hidden rounded-3xl border border-[#b49339]/35 bg-[#2F3F34] text-white shadow-xl p-6 sm:p-8 md:p-10 lg:p-12">
+                  {/* Right-aligned Background Image */}
+                  <div className="absolute inset-0">
+                    <CmsImage
+                      src={insight.coverImage?.trim() || "/images/gcc-ops.png"}
+                      alt={insight.title || "Featured Insight"}
+                      fill
+                      className="object-cover object-right"
+                      sizes="100vw"
+                    />
+                    {/* Soft Emerald Gradient Overlays */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#233027] via-[#233027]/92 via-40% md:via-48% lg:via-52% to-[#233027]/15 lg:to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#233027]/60 via-transparent to-[#233027]/25" />
+                  </div>
 
-      <Section tone="muted">
-        <SectionHeader
-          eyebrow="Environment"
-          title="What this looks like in practice"
-          description="Real workplaces, teams, and operating environments — the tangible side of GCC delivery."
-        />
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {gallery.map((src, i) => (
-            <div
-              key={`${src}-${i}`}
-              className="group relative h-44 overflow-hidden rounded-2xl border border-border sm:h-52"
-            >
-              <Image
-                src={src}
-                alt=""
-                fill
-                className="object-cover transition duration-500 group-hover:scale-105"
-                sizes="(max-width:768px) 100vw, 25vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-navy/40 to-transparent opacity-60" />
-            </div>
-          ))}
-        </div>
-      </Section>
+                  {/* Foreground Content */}
+                  <div className="relative z-10 max-w-2xl">
+                    {/* Featured Pill Badge */}
+                    <div>
+                      <span className="inline-flex items-center rounded-full bg-[#c89d3c] px-4 py-1.5 text-xs font-extrabold uppercase tracking-wider text-[#2F3F34] shadow-md">
+                        Featured Article
+                      </span>
+                    </div>
 
-      <Section id="how-it-works">
-        <SectionHeader
-          eyebrow="Process"
-          title="How this works"
-          description="A numbered path from strategy to scale — expand any step for detail."
-        />
-        <ProcessSteps steps={service.processSteps} />
-        <div className="mt-10">
-          <CTABand
-            title={`Ready to start on ${service.name}?`}
-            primaryHref="#enquire"
-            primaryLabel="Enquire now"
-            secondaryHref="/engagement-models"
-            secondaryLabel="See engagement models"
-          />
-        </div>
-      </Section>
+                    {/* Category Eyebrow */}
+                    <p className="mt-4 text-xs font-bold uppercase tracking-[0.2em] text-white/90 sm:text-sm">
+                      {insight.category || "TALENT"}
+                    </p>
 
-      <Section tone="muted">
-        <SectionHeader
-          eyebrow="Capabilities"
-          title="What’s included"
-          description="Tap any card for more detail without leaving the page."
-        />
-        <SubServiceCards items={service.subServices} />
-      </Section>
+                    {/* Title */}
+                    <h3 className="mt-3 text-2xl font-bold tracking-tight text-white sm:text-3xl md:text-4xl lg:text-[40px] leading-tight">
+                      <Link href={`/insights/${insight.slug}`} className="hover:underline">
+                        {insight.title}
+                      </Link>
+                    </h3>
 
-      <Section id="compare">
-        <SectionHeader
-          eyebrow="Compare"
-          title="How this stacks up"
-          description="See how a connected GCC partner differs from multi-vendor stacks and classic offshore models — then enquire below."
-        />
-        <CompetitiveComparison />
-      </Section>
+                    {/* Excerpt */}
+                    <p className="mt-4 text-sm leading-relaxed text-white/90 sm:text-base font-normal">
+                      {insight.excerpt}
+                    </p>
 
-      {/* TESTIMONIALS & TRUST */}
-      <Section tone="muted">
-        <SectionHeader
-          eyebrow="Trust & Track Record"
-          title="Enterprises building lasting India capability"
-          description="The capabilities we deliver, backed by the experiences of leaders building and scaling in India."
-        />
-        <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-6">
-          {logos.map((logo) => (
-            <div
-              key={logo.name}
-              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2e3f33]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
-            >
-              {logo.logoText}
-            </div>
-          ))}
-        </div>
-        <div className="mt-10">
-          <TestimonialMarquee items={testimonials} />
-        </div>
-      </Section>
-
-      {/* FAQ SECTION */}
-      <Section>
-        <SectionHeader
-          eyebrow="FAQ"
-          title={`Frequently asked questions about ${service.name.toLowerCase()}`}
-          description="Everything you need to know about timelines, ownership, and operations before starting."
-        />
-        <Accordion
-          items={faqs.slice(0, 5).map((f) => ({
-            id: f.question,
-            title: f.question,
-            content: f.answer,
-          }))}
-        />
-        <div className="mt-6 flex justify-center sm:justify-start">
-          <Button href="/faq" variant="primary">
-            View full FAQ
-          </Button>
-        </div>
-      </Section>
-
-      {/* ENQUIRY & CONTACT FORM */}
-      <Section id="enquire" tone="muted">
-        <SectionHeader
-          eyebrow="Enquire"
-          title={`Talk about ${service.name}`}
-          description="Tell us your timeline and intent. A partner will respond within one business day — commercials are discussed live, not as generic rates."
-        />
-        <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] items-stretch">
-          <div className="flex flex-col">
-            <ContactForm
-              source={`service_${slug}`}
-              defaultIntent={slug}
-              submitLabel="Request a partner call"
-            />
+                    {/* Read CTA */}
+                    <div className="mt-6 sm:mt-7">
+                      <Button href={`/insights/${insight.slug}`} variant="gold" size="lg" className="font-semibold shadow-md">
+                        Read full article <ArrowRight className="ml-1 h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </article>
+              </Reveal>
+            ))}
           </div>
-          <div className="flex flex-col justify-between gap-4">
-            <div className="relative min-h-[220px] flex-1 overflow-hidden rounded-2xl border border-border shadow-xs">
-              <Image
-                src={gallery[0]}
-                alt=""
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 40vw"
-              />
-            </div>
-            <div className="rounded-2xl border border-border bg-white p-6 shadow-xs">
-              <p className="text-base font-bold text-navy">Prefer a direct line?</p>
-              <div className="mt-4 space-y-2.5">
-                <a
-                  href={`mailto:${settings.contactEmail}`}
-                  className="flex items-center gap-2.5 text-sm text-slate hover:text-accent font-medium transition-colors"
-                >
-                  <Mail className="h-4 w-4 text-accent shrink-0" />
-                  {settings.contactEmail}
-                </a>
-                <a
-                  href={`tel:${settings.contactPhone.replace(/\s/g, "")}`}
-                  className="flex items-center gap-2.5 text-sm text-slate hover:text-accent font-medium transition-colors"
-                >
-                  <Phone className="h-4 w-4 text-accent shrink-0" />
-                  {settings.contactPhone}
-                </a>
-              </div>
-              <Button href="/contact" variant="outline" className="mt-5 w-full" size="sm">
-                Full consultation page
-              </Button>
+        )}
+
+        {/* REMAINING INSIGHTS (RESPONSIVE CARD GRID) */}
+        {displayRegular.length > 0 && (
+          <div className="mt-10">
+            <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {displayRegular.map((insight: {
+                slug: string;
+                title: string;
+                excerpt: string;
+                coverImage: string;
+                category: string;
+              }) => (
+                <Reveal key={insight.slug}>
+                  <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#cddcd1] bg-surface-elevated transition hover:-translate-y-1 hover:border-[#2F3F34]/40 hover:bg-[#edf5ef]/30 hover:shadow-lg">
+                    {/* Card Top Image */}
+                    <Link href={`/insights/${insight.slug}`} className="block">
+                      <div className="relative h-48 w-full overflow-hidden bg-surface sm:h-52">
+                        <CmsImage
+                          src={insight.coverImage?.trim() || "/images/gcc-ops.png"}
+                          alt={insight.title || "Insight cover"}
+                          fill
+                          className="object-cover transition duration-500 group-hover:scale-105"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                        <div className="absolute left-3 top-3 z-10">
+                          <span className="inline-flex items-center rounded-full border border-white/10 bg-[#0b1f3a]/85 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-white shadow-sm backdrop-blur-sm">
+                            {insight.category}
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+
+                    {/* Card Body */}
+                    <div className="flex flex-1 flex-col p-5 sm:p-6">
+                      <h3 className="text-lg font-bold leading-snug text-navy transition-colors group-hover:text-accent">
+                        <Link href={`/insights/${insight.slug}`} className="hover:underline">
+                          {insight.title}
+                        </Link>
+                      </h3>
+
+                      <p className="mt-3 flex-1 text-sm leading-relaxed text-muted line-clamp-3">
+                        {insight.excerpt}
+                      </p>
+
+                      <div className="mt-5 pt-4 border-t border-[#cddcd1]/60 flex items-center justify-between">
+                        <Link
+                          href={`/insights/${insight.slug}`}
+                          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-accent transition hover:text-accent-hover"
+                        >
+                          Read article
+                          <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
+                        </Link>
+                      </div>
+                    </div>
+                  </article>
+                </Reveal>
+              ))}
             </div>
           </div>
-        </div>
+        )}
       </Section>
     </>
   );

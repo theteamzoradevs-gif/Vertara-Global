@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef, ReactNode, Children, useCallback } from "react";
 import { cn } from "@/lib/utils";
@@ -125,7 +125,7 @@ export function MobileAutoSlider({
         return "bg-[#0b1f3a]";
       case "green":
       default:
-        return "bg-[#2e3f33]";
+        return "bg-[#2F3F34]";
     }
   };
 

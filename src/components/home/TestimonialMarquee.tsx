@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { cn } from "@/lib/utils";
 
@@ -48,7 +48,7 @@ function Row({
           return (
             <blockquote
               key={`${t.name}-${i}`}
-              className="group/card w-[min(85vw,340px)] shrink-0 overflow-hidden rounded-2xl border border-border bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#2e3f33]/40 hover:shadow-lg sm:w-[380px]"
+              className="group/card w-[min(85vw,340px)] shrink-0 overflow-hidden rounded-2xl border border-border bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#2F3F34]/40 hover:shadow-lg sm:w-[380px]"
             >
               <div className={cn("relative h-16 bg-gradient-to-br", tone)}>
                 <div className="absolute -bottom-6 left-5">
@@ -62,7 +62,7 @@ function Row({
                   </span>
                 </div>
                 <span className="absolute right-4 top-3 text-3xl font-serif leading-none text-white/25">
-                  “
+                  â€œ
                 </span>
               </div>
               <div className="px-5 pb-5 pt-8">

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Section, SectionHeader } from "@/components/ui/Section";
@@ -23,7 +22,7 @@ import { ArrowRight } from "lucide-react";
 export const metadata = {
   title: "Mining & Metals GCC Setup in India | Vertara Global",
   description:
-    "From site reporting to asset intelligence. Build a dedicated Indian Mining & Metals capability center — SCADA telemetry, SAP EAM, predictive reliability engineering, and GRI/SASB ESG reporting.",
+    "From site reporting to asset intelligence. Build a dedicated Indian Mining & Metals capability center â€” SCADA telemetry, SAP EAM, predictive reliability engineering, and GRI/SASB ESG reporting.",
 };
 
 const miningFaqs = [
@@ -37,7 +36,7 @@ const miningFaqs = [
     id: "faq-2",
     title: "How does the India hub support GRI, SASB, and ICMM sustainability reporting?",
     content:
-      "We establish automated environmental telemetry pipelines tracking tailings dam sensors, water reuse ratios, and Scope 1–3 emissions. Our team validates and compiles disclosure-ready data models matching the exact standards required by international institutional investors and regulatory bodies.",
+      "We establish automated environmental telemetry pipelines tracking tailings dam sensors, water reuse ratios, and Scope 1â€“3 emissions. Our team validates and compiles disclosure-ready data models matching the exact standards required by international institutional investors and regulatory bodies.",
   },
   {
     id: "faq-3",
@@ -49,7 +48,7 @@ const miningFaqs = [
     id: "faq-4",
     title: "Can a single-site or junior mining company start with a small, focused pod?",
     content:
-      "Yes. You do not need a multi-site enterprise mandate. We help single-site and mid-tier operators launch focused pods of 8–15 engineers dedicated to asset reliability modeling, critical spares procurement expediting, or ESG compliance, expanding as new deposits or processing lines come online.",
+      "Yes. You do not need a multi-site enterprise mandate. We help single-site and mid-tier operators launch focused pods of 8â€“15 engineers dedicated to asset reliability modeling, critical spares procurement expediting, or ESG compliance, expanding as new deposits or processing lines come online.",
   },
   {
     id: "faq-5",
@@ -69,21 +68,12 @@ export default async function MiningMetalsPage() {
   return (
     <>
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden text-white bg-[#0e3621]">
-        {/* Right-aligned Realistic Background Image */}
+      <section className="relative overflow-hidden text-white bg-[#2F3F34]">
         <div className="absolute inset-0">
-          <Image
-            src="/images/mining-metals.png"
-            alt="Mining & Metals Resource Operations"
-            fill
-            className="object-cover object-right lg:object-right"
-            priority
-            sizes="100vw"
-          />
           {/* Subtle Emerald / Forest Green Soft Gradient & Shadow Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0d3320] via-[#0d3320]/95 via-40% sm:via-48% md:via-52% to-[#0d3320]/25 lg:to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0d3320] via-transparent to-[#0d3320]/40" />
-          <div className="absolute inset-0 bg-[#0d3320]/20 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#233027] via-[#233027]/95 via-40% sm:via-48% md:via-52% to-[#233027]/25 lg:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#233027] via-transparent to-[#233027]/40" />
+          <div className="absolute inset-0 bg-[#233027]/20 mix-blend-multiply" />
           <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
 
@@ -110,13 +100,13 @@ export default async function MiningMetalsPage() {
           {/* Hero CTAs */}
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Button href="#enquire" variant="gold" size="lg">
-              Book a Mining consultation <ArrowRight className="h-4 w-4" />
+              Book a consultation
             </Button>
           </div>
         </div>
       </section>
 
-      {/* 2. THE OPPORTUNITY — 3-STAGE MINING JOURNEY */}
+      {/* 2. THE OPPORTUNITY â€” 3-STAGE MINING JOURNEY */}
       <Section id="the-opportunity" tone="muted">
         <SectionHeader
           eyebrow="The Opportunity"
@@ -126,7 +116,7 @@ export default async function MiningMetalsPage() {
         <MiningOpportunityJourney />
       </Section>
 
-      {/* 3. WHAT THIS SECTOR NEEDS — 3-POINT ASSET ARCHITECTURE */}
+      {/* 3. WHAT THIS SECTOR NEEDS â€” 3-POINT ASSET ARCHITECTURE */}
       <Section>
         <SectionHeader
           eyebrow="What This Sector Needs"
@@ -148,7 +138,7 @@ export default async function MiningMetalsPage() {
         />
       </Section>
 
-      {/* 6. HOW VERTARA HELPS — CONNECTED BLUEPRINT */}
+      {/* 6. HOW VERTARA HELPS â€” CONNECTED BLUEPRINT */}
       <Section>
         <SectionHeader
           eyebrow="How Vertara Helps"
@@ -169,7 +159,7 @@ export default async function MiningMetalsPage() {
           {logos.map((logo) => (
             <div
               key={logo.name}
-              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2e3f33]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
+              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2F3F34]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
             >
               {logo.logoText}
             </div>

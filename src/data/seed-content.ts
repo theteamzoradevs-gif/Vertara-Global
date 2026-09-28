@@ -29,16 +29,16 @@ export const DEFAULT_LIBRARY_IMAGES = [
 
 export const seedSettings = {
   brandName: "Vertara Global",
-  tagline: "Build, staff, and scale Global Capability Centers in India",
-  heroHeadline: "Your GCC in India designed, staffed, and scaled with clarity",
+  tagline: "GCC ADVISORY · MID-MARKET GCC SPECIALISTS — NANO TO MID-SCALE",
+  heroHeadline: "Building GCCs. Enabling scale — from Nano to mid-scale, 20 to 500 people.",
   heroSubheadline:
-    "We help CHROs, COOs, and Heads of Global Operations set up high-performing Global Capability Centers — talent, workspace, operations, and advisory — as one connected system.",
+    "Vertara Global is a practitioner-led advisory and build partner for mid-market organizations establishing or scaling a Global Capability Centre in India — from a lean, 20–100 person Nano GCC through a full mid-scale build of up to 500 people. From the first business case to a fully operating team, one integrated partner, not a handoff between vendors.",
   heroBackgroundImage: "/images/gcc-floor.webp",
   libraryImages: DEFAULT_LIBRARY_IMAGES,
   heroRotatingEyebrow: "Right now we can help you",
   heroRotatingLines: seedHeroRotatingLines,
-  heroPrimaryCta: "Get a quick call",
-  heroSecondaryCta: "Why enterprises choose us",
+  heroPrimaryCta: "Discuss Your GCC Mandate",
+  heroSecondaryCta: "See Our Offerings",
   heroFormEyebrow: "Start a conversation",
   heroFormTitle: "Get a quick call",
   heroFormDescription:
@@ -509,14 +509,14 @@ export const seedInsights = [
     title: "The CHRO’s checklist for a first India GCC",
     slug: "chro-checklist-first-india-gcc",
     excerpt:
-      "What people leaders should lock before the first offer letter goes out — governance, bands, and culture transfer.",
+      "What people leaders should lock before the first offer letter goes out governance, bands, and culture transfer.",
     category: "Talent",
     coverImage: "/images/talent-team.webp",
     published: true,
     featured: false,
     body: `## Start with outcomes, not headcount
 
-A GCC succeeds when the parent organisation is clear about what the centre owns — product modules, finance ops, analytics, or shared services — and how success will be measured in the first 18 months.
+A GCC succeeds when the parent organisation is clear about what the centre owns product modules, finance ops, analytics, or shared services and how success will be measured in the first 18 months.
 
 ## Governance before volume hiring
 

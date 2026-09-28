@@ -43,8 +43,8 @@ export function SiteFooter({
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-4 lg:px-8">
         <div>
           <div className="flex h-7 items-center">
-            <Link href="/" className="text-base sm:text-lg font-bold uppercase tracking-[0.2em] text-white">
-              VERTARA <span className="text-[#b49339]">GLOBAL</span>
+            <Link href="/" className="text-base sm:text-lg font-bold tracking-[0.2em] text-white">
+              VERTARA <span className="text-[#b49339] lowercase font-medium">global</span>
             </Link>
           </div>
           <p className="mt-3 text-sm leading-relaxed text-white/65">

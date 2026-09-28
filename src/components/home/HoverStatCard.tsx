@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { cn } from "@/lib/utils";
 
@@ -10,19 +10,19 @@ type HoverStatCardProps = {
   className?: string;
 };
 
-/** Soft fill + border shift on hover — used for Why-GCC and similar signal cards */
+/** Soft fill + border shift on hover â€” used for Why-GCC and similar signal cards */
 export function HoverStatCard({
   stat,
   title,
   detail,
-  hint = "We model this into your business case — not as a slogan, as a decision input.",
+  hint = "We model this into your business case â€” not as a slogan, as a decision input.",
   className,
 }: HoverStatCardProps) {
   return (
     <div
       className={cn(
         "group relative h-full overflow-hidden rounded-2xl border border-[#cddcd1] bg-[#e5ebe6] p-4 sm:p-6 transition-all duration-350",
-        "hover:-translate-y-1 hover:border-[#2e3f33]/50 hover:shadow-md",
+        "hover:-translate-y-1 hover:border-[#2F3F34]/50 hover:shadow-md",
         className,
       )}
     >

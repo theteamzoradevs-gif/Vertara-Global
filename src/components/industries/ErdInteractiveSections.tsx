@@ -1,4 +1,3 @@
-import Image from "next/image";
 import {
   Server,
   Lock,
@@ -11,7 +10,7 @@ import {
 import { MobileAutoSlider } from "@/components/ui/MobileAutoSlider";
 
 /* -------------------------------------------------------------------------
- * SECTION 1: THE OPPORTUNITY — INTERACTIVE NUMBERED JOURNEY
+ * SECTION 1: THE OPPORTUNITY â€” INTERACTIVE NUMBERED JOURNEY
  * ------------------------------------------------------------------------- */
 const journeySteps = [
   {
@@ -30,7 +29,7 @@ const journeySteps = [
     title: "Start Lean. Expand with Proof.",
     badge: "Scale & CoE",
     description:
-      "Avoid multi-year lock-ins. Launch a focused 10–25 engineer lighthouse pod to establish velocity and operating rhythm, then expand seamlessly into a global Center of Excellence.",
+      "Avoid multi-year lock-ins. Launch a focused 10â€“25 engineer lighthouse pod to establish velocity and operating rhythm, then expand seamlessly into a global Center of Excellence.",
   },
 ];
 
@@ -49,7 +48,7 @@ export function ErdOpportunityJourney() {
           >
             <div>
               <div className="flex items-center justify-between">
-                <span className="rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-white/80 border border-[#cddcd1] text-[#2e3f33] group-hover:bg-[#2e3f33] group-hover:text-[#b49339] transition-colors">
+                <span className="rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-white/80 border border-[#cddcd1] text-[#2F3F34] group-hover:bg-[#2F3F34] group-hover:text-[#b49339] transition-colors">
                   {step.badge}
                 </span>
               </div>
@@ -70,7 +69,7 @@ export function ErdOpportunityJourney() {
 }
 
 /* -------------------------------------------------------------------------
- * SECTION 2: WHAT THIS SECTOR NEEDS — INTERACTIVE 3-POINT SELECTOR WITH VISUAL
+ * SECTION 2: WHAT THIS SECTOR NEEDS â€” INTERACTIVE 3-POINT SELECTOR WITH VISUAL
  * ------------------------------------------------------------------------- */
 const sectorNeedsData = [
   {
@@ -129,7 +128,7 @@ export function ErdSectorNeedsSelector() {
         return (
           <div
             key={item.id}
-            className="group relative rounded-2xl sm:rounded-3xl border border-[#cddcd1] bg-[#edf5ef] p-6 sm:p-7 transition-all duration-300 hover:border-[#2e3f33]/40 hover:bg-[#e5ebe6] hover:-translate-y-1.5 hover:shadow-lg flex flex-col justify-between h-full cursor-default"
+            className="relative rounded-2xl sm:rounded-3xl border border-[#cddcd1] bg-[#edf5ef] p-6 sm:p-7 flex flex-col justify-between h-full cursor-default"
           >
             <div>
               <div className="flex items-center justify-between gap-2">
@@ -138,7 +137,7 @@ export function ErdSectorNeedsSelector() {
                 </p>
               </div>
 
-              <div className="mt-5 flex h-11 w-11 items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] text-[#2e3f33] shadow-xs group-hover:bg-[#2e3f33] group-hover:text-[#b49339] transition-colors">
+              <div className="mt-5 flex h-11 w-11 items-center justify-center rounded-xl bg-[#2F3F34] text-[#b49339] shadow-sm">
                 <Icon className="h-5 w-5" />
               </div>
 
@@ -158,7 +157,7 @@ export function ErdSectorNeedsSelector() {
 }
 
 /* -------------------------------------------------------------------------
- * SECTION 3: HOW VERTARA HELPS — CONNECTED OPERATING BLUEPRINT
+ * SECTION 3: HOW VERTARA HELPS â€” CONNECTED OPERATING BLUEPRINT
  * ------------------------------------------------------------------------- */
 const howVertaraHelpsPillars = [
   {
@@ -200,45 +199,28 @@ const howVertaraHelpsPillars = [
 
 export function ErdHowVertaraHelpsReveal() {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-      {/* Left side list */}
-      <div className="lg:col-span-7 space-y-6 sm:space-y-7">
-        {howVertaraHelpsPillars.map((item) => {
-          const Icon = item.icon;
-          return (
-            <div key={item.id} className="flex items-start gap-4 sm:gap-6">
-              {/* Light green rounded square icon container */}
-              <div className="flex h-12 w-12 sm:h-13 sm:w-13 shrink-0 items-center justify-center rounded-2xl border border-[#cddcd1] bg-[#e5ebe6] text-[#2e3f33] shadow-xs">
-                <Icon className="h-6 w-6" />
-              </div>
-
-              {/* Content block */}
-              <div className="flex-1 min-w-0 pt-0.5">
-                <h4 className="text-lg sm:text-xl font-bold text-navy tracking-tight">
-                  {item.title}
-                </h4>
-                <p className="mt-1 text-sm sm:text-base text-slate leading-relaxed">
-                  {item.tagline}
-                </p>
-              </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6 sm:gap-y-8">
+      {howVertaraHelpsPillars.map((item) => {
+        const Icon = item.icon;
+        return (
+          <div key={item.id} className="flex items-start gap-4 sm:gap-6">
+            {/* Light green rounded square icon container */}
+            <div className="flex h-12 w-12 sm:h-13 sm:w-13 shrink-0 items-center justify-center rounded-2xl border border-[#cddcd1] bg-[#e5ebe6] text-[#2F3F34] shadow-xs">
+              <Icon className="h-6 w-6" />
             </div>
-          );
-        })}
-      </div>
 
-      {/* Right side image */}
-      <div className="lg:col-span-5">
-        <div className="relative overflow-hidden rounded-3xl border border-[#cddcd1] bg-[#edf5ef] shadow-xl shadow-navy/5">
-          <Image
-            src="/images/engineering-erd.png"
-            alt="One Accountable Operating System for ER&D"
-            width={1792}
-            height={1024}
-            className="h-auto w-full object-cover transition-transform duration-500 hover:scale-105"
-            sizes="(max-width: 1024px) 100vw, 550px"
-          />
-        </div>
-      </div>
+            {/* Content block */}
+            <div className="flex-1 min-w-0 pt-0.5">
+              <h4 className="text-lg sm:text-xl font-bold text-navy tracking-tight">
+                {item.title}
+              </h4>
+              <p className="mt-1 text-sm sm:text-base text-slate leading-relaxed">
+                {item.tagline}
+              </p>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

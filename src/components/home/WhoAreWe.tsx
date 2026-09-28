@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 import { Reveal } from "@/components/ui/Reveal";
 import { Layers, Wrench, LayoutGrid, Compass } from "lucide-react";
@@ -12,7 +11,7 @@ const credibilityPoints = [
     number: "01",
     title: "Founded by GCC builders",
     description:
-      "Ex-KPMG, Rio Tinto leaders who built GCC from the ground up; 6 sectors, 10 GCC builds",
+      "Leaders from a Big 4 firm and one of the world’s largest mining companies who built GCCs from the ground up; 6 sectors, 10 GCC builds",
   },
   {
     number: "02",
@@ -55,11 +54,7 @@ const pillars = [
   },
 ];
 
-export function WhoAreWe({
-  image = "/images/who we are.jpeg",
-}: {
-  image?: string;
-}) {
+export function WhoAreWe() {
   const [activePillar, setActivePillar] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -81,9 +76,11 @@ export function WhoAreWe({
     if (trackRef.current && window.innerWidth < 640) {
       const container = trackRef.current;
       const card = container.children[activePillar] as HTMLElement;
+
       if (card) {
         const targetLeft =
           card.offsetLeft - (container.clientWidth - card.clientWidth) / 2;
+
         container.scrollTo({
           left: Math.max(0, targetLeft),
           behavior: "smooth",
@@ -93,7 +90,10 @@ export function WhoAreWe({
   }, [activePillar]);
 
   return (
-    <section id="who-are-we" className="relative overflow-hidden bg-surface-elevated py-16 md:py-20 border-t border-border">
+    <section
+      id="who-are-we"
+      className="relative overflow-hidden bg-surface-elevated py-16 md:py-20 border-t border-border"
+    >
       <div className="relative z-[1] mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Section Header: Eyebrow + Title + Subtitle */}
         <Reveal>
@@ -112,10 +112,9 @@ export function WhoAreWe({
           </div>
         </Reveal>
 
-        {/* Content Grid: 01/02/03 Editorial on Left, Office Photo on Right */}
-        <div className="mt-8 grid gap-8 lg:grid-cols-12 lg:items-center lg:gap-10">
-          {/* Left Column (7 cols on desktop): Editorial Numbered Layout */}
-          <div className="lg:col-span-7">
+        {/* Content Grid: Editorial 01/02/03 Layout */}
+        <div className="mt-8">
+          <div className="max-w-4xl">
             <div className="space-y-6 sm:space-y-7">
               {credibilityPoints.map((item, i) => (
                 <div key={item.number} className="cursor-default">
@@ -170,30 +169,14 @@ export function WhoAreWe({
               ))}
             </div>
           </div>
-
-          {/* Right Column (5 cols on desktop): Office Photo */}
-          <div className="lg:col-span-5">
-            <Reveal delay={0.12}>
-              <div className="relative w-full overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
-                <Image
-                  src={image}
-                  alt="Vertara Global practitioner team in modern capability centre office"
-                  width={562}
-                  height={360}
-                  sizes="(max-width: 1024px) 100vw, (max-width: 1280px) 45vw, 480px"
-                  className="h-auto w-full rounded-2xl object-cover"
-                  priority={false}
-                />
-              </div>
-            </Reveal>
-          </div>
         </div>
 
         {/* Value Proposition Pine Green Banner */}
         <Reveal delay={0.18}>
-          <div className="mt-8 overflow-hidden rounded-2xl border border-[#3c5243] bg-[#2e3f33] px-6 py-4.5 text-center text-white shadow-md sm:px-8 sm:py-5">
+          <div className="mt-8 overflow-hidden rounded-2xl border border-[#3c5243] bg-[#2F3F34] px-6 py-4.5 text-center text-white shadow-md sm:px-8 sm:py-5">
             <p className="text-sm font-semibold leading-relaxed tracking-wide sm:text-base md:text-lg">
-              Our Value Proposition, A partner who owns the whole journey from business case to operating GCC.
+              Our Value Proposition, A partner who owns the whole journey from
+              business case to operating GCC.
             </p>
           </div>
         </Reveal>
@@ -211,20 +194,21 @@ export function WhoAreWe({
             {pillars.map((pillar, i) => {
               const Icon = pillar.icon;
               const isActive = activePillar === i;
+
               return (
                 <div
                   key={pillar.title}
                   onClick={() => setActivePillar(i)}
                   className={cn(
-                    "flex w-[80vw] max-w-[290px] shrink-0 snap-start flex-col justify-between rounded-2xl border p-5 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-[#2e3f33]/40 hover:shadow-md sm:w-auto sm:max-w-none",
+                    "flex w-[80vw] max-w-[290px] shrink-0 snap-start flex-col justify-between rounded-2xl border p-5 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-[#2F3F34]/40 hover:shadow-md sm:w-auto sm:max-w-none",
                     isActive
-                      ? "border-[#2e3f33] bg-[#e5ebe6] shadow-sm"
-                      : "border-[#cddcd1] bg-[#e5ebe6]"
+                      ? "border-[#2F3F34] bg-[#e5ebe6] shadow-sm"
+                      : "border-[#cddcd1] bg-[#e5ebe6]",
                   )}
                 >
                   <div>
                     {/* Circular Dark Green Icon Container */}
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#2e3f33] text-white shadow-xs">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#2F3F34] text-white shadow-xs">
                       <Icon className="h-5 w-5 text-white stroke-[2.2]" />
                     </div>
 
@@ -250,7 +234,9 @@ export function WhoAreWe({
                 onClick={() => setActivePillar(idx)}
                 className={cn(
                   "h-1.5 rounded-full transition-all duration-300",
-                  activePillar === idx ? "w-6 bg-[#2e3f33]" : "w-1.5 bg-[#cddcd1]"
+                  activePillar === idx
+                    ? "w-6 bg-[#2F3F34]"
+                    : "w-1.5 bg-[#cddcd1]",
                 )}
                 aria-label={`Go to slide ${idx + 1}`}
               />

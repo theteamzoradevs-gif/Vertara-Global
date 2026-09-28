@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -20,7 +20,7 @@ const steps = [
     title: "Business case & design",
     summary: "Location, org shape, and a board-ready narrative.",
     detail:
-      "We pressure-test city mix, leadership roles, and cost/ownership scenarios so sponsors can decide with evidence — not generic market slides.",
+      "We pressure-test city mix, leadership roles, and cost/ownership scenarios so sponsors can decide with evidence â€” not generic market slides.",
   },
   {
     number: "03",
@@ -34,28 +34,28 @@ const steps = [
     title: "Operational launch",
     summary: "First cohorts productive with HR, IT, and delivery rhythm.",
     detail:
-      "Onboarding, facilities, and ops controls go live with the first wave — so the centre feels like part of the enterprise from day one.",
+      "Onboarding, facilities, and ops controls go live with the first wave â€” so the centre feels like part of the enterprise from day one.",
   },
   {
     number: "05",
     title: "Scale with quality",
     summary: "Waves of hiring timed to space and process capacity.",
     detail:
-      "We expand role pipelines and floors only as retention and delivery hold — protecting culture while you grow past the first hundred.",
+      "We expand role pipelines and floors only as retention and delivery hold â€” protecting culture while you grow past the first hundred.",
   },
   {
     number: "06",
     title: "Steady state & options",
     summary: "Transfer, partnership, or ongoing module support.",
     detail:
-      "Captive transfer when ready, or continued managed modules for talent, workspace, or ops — your ownership model, not ours.",
+      "Captive transfer when ready, or continued managed modules for talent, workspace, or ops â€” your ownership model, not ours.",
   },
 ];
 
 const HEADER = 68;
 
 /**
- * Scroll-locked journey: UI stays pinned; scrolling advances steps 01→06.
+ * Scroll-locked journey: UI stays pinned; scrolling advances steps 01â†’06.
  * Only after step 06 does the page move to the next section.
  */
 export function JourneySteps() {
@@ -113,7 +113,7 @@ export function JourneySteps() {
         className="relative"
         style={{ height: `${steps.length * 100}vh` }}
       >
-        {/* Pinned UI — stays on screen while user scrolls the runway */}
+        {/* Pinned UI â€” stays on screen while user scrolls the runway */}
         <div
           className="sticky z-[1] flex flex-col justify-center"
           style={{
@@ -160,7 +160,7 @@ export function JourneySteps() {
                         className={cn(
                           "relative z-[1] flex h-12 w-12 items-center justify-center rounded-full border-2 text-sm font-bold transition-all duration-300 lg:h-14 lg:w-14",
                           isActive
-                            ? "scale-110 border-[#b49339] bg-[#2e3f33] text-[#b49339] shadow-md shadow-[#2e3f33]/25"
+                            ? "scale-110 border-[#b49339] bg-[#2F3F34] text-[#b49339] shadow-md shadow-[#2F3F34]/25"
                             : isDone
                               ? "border-accent bg-accent text-white"
                               : "border-border bg-white text-navy",
@@ -194,7 +194,7 @@ export function JourneySteps() {
                   className={cn(
                     "flex h-8 w-8 items-center justify-center rounded-full border-2 text-[10px] font-bold transition",
                     i === active
-                      ? "scale-110 border-[#b49339] bg-[#2e3f33] text-[#b49339] shadow-md shadow-[#2e3f33]/25"
+                      ? "scale-110 border-[#b49339] bg-[#2F3F34] text-[#b49339] shadow-md shadow-[#2F3F34]/25"
                       : i < active
                         ? "border-accent bg-accent text-white"
                         : "border-border bg-white text-navy",
@@ -205,7 +205,7 @@ export function JourneySteps() {
               ))}
             </div>
 
-            {/* Detail — updates with scroll, CTA centered */}
+            {/* Detail â€” updates with scroll, CTA centered */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={step.number}
@@ -227,7 +227,7 @@ export function JourneySteps() {
                 <div className="mt-7 flex justify-center">
                   <Link
                     href="/contact"
-                    className="inline-flex items-center gap-2 rounded-full bg-[#2e3f33] px-7 py-3 text-sm font-semibold text-white transition hover:bg-[#212e25]"
+                    className="inline-flex items-center gap-2 rounded-full bg-[#2F3F34] px-7 py-3 text-sm font-semibold text-white transition hover:bg-[#233027]"
                   >
                     {active === steps.length - 1 ? "Contact us" : "Begin here"}
                     <ArrowRight className="h-4 w-4" />

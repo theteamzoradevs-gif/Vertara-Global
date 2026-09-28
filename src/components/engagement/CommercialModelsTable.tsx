@@ -1,6 +1,4 @@
-"use client";
-
-import { CheckCircle2, ArrowRight, ShieldCheck, UserCheck, Layers, Award, RefreshCw } from "lucide-react";
+﻿import { CheckCircle2, ArrowRight, ShieldCheck, UserCheck, Layers, Award, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface CommercialModel {
@@ -29,9 +27,9 @@ const commercialModels: CommercialModel[] = [
   {
     name: "Project-Based / Managed Workstream",
     covers: "A defined deliverable, or one functional pillar run end-to-end",
-    deliveryOwner: "Vertara (scoped)",
+    deliveryOwner: "Vertara",
     ownerType: "scoped",
-    bestFit: "Discrete builds — entity setup, location study, org design",
+    bestFit: "Discrete builds entity setup, location study, org design",
   },
   {
     name: "Milestone-Based Build",
@@ -43,7 +41,7 @@ const commercialModels: CommercialModel[] = [
   {
     name: "Long-Term / BOT Partner",
     covers: "Sustained operating support, or build-operate-transfer to full client ownership",
-    deliveryOwner: "Vertara → Client",
+    deliveryOwner: "Vertara â†’ Client",
     ownerType: "bot",
     bestFit: "Post-launch scaling, staged ownership handover",
   },
@@ -54,7 +52,7 @@ export function CommercialModelsTable() {
     switch (type) {
       case "client":
         return (
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-[#cddcd1] bg-[#f0f4f1] px-2.5 py-1 text-xs font-semibold text-[#2e3f33]">
+          <span className="inline-flex items-center gap-1.5 rounded-md border border-[#cddcd1] bg-[#f0f4f1] px-2.5 py-1 text-xs font-semibold text-[#2F3F34]">
             <UserCheck className="h-3.5 w-3.5 text-slate" />
             <span>{owner}</span>
           </span>
@@ -68,14 +66,14 @@ export function CommercialModelsTable() {
         );
       case "vertara":
         return (
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-[#2e3f33] bg-[#2e3f33] px-2.5 py-1 text-xs font-bold text-[#b49339] shadow-xs">
+          <span className="inline-flex items-center gap-1.5 rounded-md border border-[#2F3F34] bg-[#2F3F34] px-2.5 py-1 text-xs font-bold text-[#b49339] shadow-xs">
             <ShieldCheck className="h-3.5 w-3.5 text-[#b49339]" />
             <span>{owner}</span>
           </span>
         );
       case "bot":
         return (
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-[#b49339]/40 bg-[#b49339]/15 px-2.5 py-1 text-xs font-bold text-[#2e3f33] shadow-xs">
+          <span className="inline-flex items-center gap-1.5 rounded-md border border-[#b49339]/40 bg-[#b49339]/15 px-2.5 py-1 text-xs font-bold text-[#2F3F34] shadow-xs">
             <RefreshCw className="h-3.5 w-3.5 text-[#b49339]" />
             <span>{owner}</span>
           </span>
@@ -90,7 +88,7 @@ export function CommercialModelsTable() {
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left">
             <thead>
-              <tr className="border-b border-[#2e3f33]/30 bg-[#2e3f33] text-white">
+              <tr className="border-b border-[#2F3F34]/30 bg-[#2F3F34] text-white">
                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-[0.16em] text-[#b49339] w-[22%]">
                   Model
                 </th>
