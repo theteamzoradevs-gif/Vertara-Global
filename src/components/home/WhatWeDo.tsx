@@ -13,7 +13,7 @@ export function WhatWeDo() {
               Our Foundation
             </p>
 
-            <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#101C30] sm:text-4xl md:text-5xl">
+            <h2 className="mt-3 text-2xl font-bold tracking-tight text-[#101C30] sm:text-3xl lg:text-[1.875rem]">
               What we do
             </h2>
 

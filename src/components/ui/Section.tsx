@@ -55,19 +55,21 @@ export function SectionHeader({
   description,
   light,
   className,
+  titleClassName,
 }: {
   eyebrow?: string;
   title: string;
   description?: string;
   light?: boolean;
   className?: string;
+  titleClassName?: string;
 }) {
   return (
     <div className={cn("mb-10 max-w-3xl md:mb-14", className)}>
       {eyebrow ? (
         <p
           className={cn(
-            "mb-3 text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]",
+            "mb-3 text-xs font-bold uppercase tracking-[0.2em] text-[#B59439]",
           )}
         >
           {eyebrow}
@@ -75,8 +77,10 @@ export function SectionHeader({
       ) : null}
       <h2
         className={cn(
-          "text-3xl font-bold tracking-tight md:text-4xl",
-          light ? "text-white" : "text-navy",
+          titleClassName
+            ? cn("font-bold tracking-tight", titleClassName)
+            : "text-3xl font-bold tracking-tight md:text-4xl",
+          light ? "text-white" : "text-[#101C30]",
         )}
       >
         {title}

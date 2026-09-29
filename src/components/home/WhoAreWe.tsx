@@ -98,7 +98,7 @@ export function WhoAreWe() {
         {/* Section Header: Eyebrow + Title + Subtitle */}
         <Reveal>
           <div className="max-w-3xl">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#B59439]">
               Our Foundation
             </p>
 
@@ -129,7 +129,7 @@ export function WhoAreWe() {
                         delay: 0.12 + i * 0.12,
                         ease: "easeOut",
                       }}
-                      className="font-mono text-2xl sm:text-3xl font-bold tracking-tight text-[#b49339] shrink-0 w-8 sm:w-10 select-none pt-0.5"
+                      className="font-mono text-2xl sm:text-3xl font-bold tracking-tight text-[#B59439] shrink-0 w-8 sm:w-10 select-none pt-0.5"
                     >
                       {item.number}
                     </motion.span>

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { FlowThreads } from "@/components/ui/FlowThreads";
-import { CTABand } from "@/components/ui/CTABand";
+import { HomeCtaBanner } from "@/components/home/HomeCtaBanner";
 import { Accordion } from "@/components/ui/Accordion";
 import { ContactForm } from "@/components/leads/ContactForm";
 import { IndustryFormSideContent } from "@/components/industries/IndustryFormSideContent";
@@ -70,16 +70,12 @@ export default async function TechnologyAiPage() {
       {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden text-white bg-[#2F3F34]">
         <div className="absolute inset-0">
-          {/* Subtle Emerald / Forest Green Soft Gradient & Shadow Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#233027] via-[#233027]/95 via-40% sm:via-48% md:via-52% to-[#233027]/25 lg:to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#233027] via-transparent to-[#233027]/40" />
-          <div className="absolute inset-0 bg-[#233027]/20 mix-blend-multiply" />
           <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
 
         <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20 lg:py-24 lg:px-8">
           {/* Breadcrumb / Eyebrow */}
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#B59439]">
             <Link href="/industries" className="hover:underline">
               Industries
             </Link>
@@ -126,17 +122,6 @@ export default async function TechnologyAiPage() {
         <TechAiSectorNeedsSelector />
       </Section>
 
-      {/* 4. CTA BANNER */}
-      <Section>
-        <CTABand
-          title="Ready to talk through your Tech & AI GCC plans?"
-          description="Share your model architecture, compute requirements, and ML engineering headcount targets. A partner will map fit, timeline, and next steps."
-          primaryHref="#enquire"
-          primaryLabel="Talk through your case"
-          secondaryHref="/engagement-models"
-          secondaryLabel="Compare engagement models"
-        />
-      </Section>
 
       {/* 6. HOW VERTARA HELPS â€” CONNECTED BLUEPRINT */}
       <Section>
@@ -201,6 +186,9 @@ export default async function TechnologyAiPage() {
         />
         <Accordion items={techAiFaqs} />
       </Section>
+
+      {/* Gold Mandate Banner */}
+      <HomeCtaBanner />
     </>
   );
 }

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { FlowThreads } from "@/components/ui/FlowThreads";
-import { CTABand } from "@/components/ui/CTABand";
+import { HomeCtaBanner } from "@/components/home/HomeCtaBanner";
 import { Accordion } from "@/components/ui/Accordion";
 import { ContactForm } from "@/components/leads/ContactForm";
 import { IndustryFormSideContent } from "@/components/industries/IndustryFormSideContent";
@@ -70,16 +70,12 @@ export default async function EngineeringErdPage() {
       {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden text-white bg-[#2F3F34]">
         <div className="absolute inset-0">
-          {/* Subtle Emerald / Forest Green Soft Gradient & Shadow Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#233027] via-[#233027]/95 via-40% sm:via-48% md:via-52% to-[#233027]/25 lg:to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#233027] via-transparent to-[#233027]/40" />
-          <div className="absolute inset-0 bg-[#233027]/20 mix-blend-multiply" />
           <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
 
         <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20 lg:py-24 lg:px-8">
           {/* Breadcrumb / Eyebrow */}
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#B59439]">
             <Link href="/industries" className="hover:underline">
               Industries
             </Link>
@@ -93,7 +89,7 @@ export default async function EngineeringErdPage() {
 
           <p className="mt-4 max-w-xl text-base text-white/90 sm:text-lg leading-relaxed font-normal">
             An ER&D centre engineered around your product architecture not
-            someone elseâ€™s IT template. Own systems design, embedded firmware,
+            someone else IT template. Own systems design, embedded firmware,
             and simulation-driven R&D in India.
           </p>
 
@@ -126,17 +122,6 @@ export default async function EngineeringErdPage() {
         <ErdSectorNeedsSelector />
       </Section>
 
-      {/* 4. CTA BANNER */}
-      <Section>
-        <CTABand
-          title="Ready to talk through your ER&D GCC plans?"
-          description="Share your engineering disciplines, headcount goals, and compute requirements. A partner will map fit, timeline, and next steps."
-          primaryHref="#enquire"
-          primaryLabel="Talk through your case"
-          secondaryHref="/engagement-models"
-          secondaryLabel="Compare engagement models"
-        />
-      </Section>
 
       {/* 6. HOW VERTARA HELPS â€” INTERACTIVE CAPABILITY REVEAL */}
       <Section>
@@ -201,6 +186,9 @@ export default async function EngineeringErdPage() {
         />
         <Accordion items={erdFaqs} />
       </Section>
+
+      {/* Gold Mandate Banner */}
+      <HomeCtaBanner />
     </>
   );
 }

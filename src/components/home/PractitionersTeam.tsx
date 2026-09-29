@@ -52,7 +52,7 @@ export function PractitionersTeam() {
                           sizes="(max-width: 768px) 176px, 192px"
                         />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center text-2xl font-bold text-[#b49339]">
+                        <div className="flex h-full w-full items-center justify-center text-2xl font-bold text-[#B59439]">
                           {leader.initials}
                         </div>
                       )}

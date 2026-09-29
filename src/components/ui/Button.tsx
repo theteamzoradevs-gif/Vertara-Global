@@ -12,7 +12,7 @@ const variants: Record<Variant, string> = {
   ghost: "bg-transparent text-navy hover:bg-accent-soft",
   outline:
     "border border-border bg-surface-elevated text-navy hover:border-accent hover:text-accent",
-  gold: "bg-[#b49339] text-white hover:bg-[#9e7f2b] shadow-md shadow-[#b49339]/25",
+  gold: "bg-[#B59439] text-white hover:bg-[#9c7e2e] shadow-md shadow-[#B59439]/25",
 };
 
 const sizes: Record<Size, string> = {

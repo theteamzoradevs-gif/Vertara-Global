@@ -1,9 +1,9 @@
-﻿import Image from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { FlowThreads } from "@/components/ui/FlowThreads";
-import { CTABand } from "@/components/ui/CTABand";
+import { HomeCtaBanner } from "@/components/home/HomeCtaBanner";
 import { ContactForm } from "@/components/leads/ContactForm";
 import { IndustryFormSideContent } from "@/components/industries/IndustryFormSideContent";
 import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
@@ -130,15 +130,14 @@ export default async function IndustriesHubPage() {
             sizes="100vw"
           />
           {/* Subtle Emerald / Forest Green Soft Gradient & Shadow Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#233027] via-[#233027]/95 via-40% sm:via-48% md:via-52% to-[#233027]/25 lg:to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#233027] via-transparent to-[#233027]/40" />
-          <div className="absolute inset-0 bg-[#233027]/20 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#2F3F34] via-[#2F3F34]/95 via-40% sm:via-48% md:via-52% to-[#2F3F34]/30 lg:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#2F3F34] via-transparent to-[#2F3F34]/40" />
           <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
 
         <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20 lg:py-24 lg:px-8">
           {/* Breadcrumb / Eyebrow */}
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#B59439]">
             <span>Industries</span>
             <span>/</span>
             <span>Sector Specialization</span>
@@ -181,7 +180,7 @@ export default async function IndustriesHubPage() {
               >
                 <div className="flex h-full flex-col">
                   <div className="flex items-start justify-start">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#2F3F34] text-[#b49339] shadow-md ring-4 ring-white transition-all duration-300 group-hover:scale-105 group-hover:bg-[#0b1f3a]">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#2F3F34] text-[#B59439] shadow-md ring-4 ring-white transition-all duration-300 group-hover:scale-105 group-hover:bg-[#0b1f3a]">
                       <Icon className="h-6 w-6" />
                     </div>
                   </div>
@@ -195,7 +194,7 @@ export default async function IndustriesHubPage() {
                   </p>
 
                   <div className="mt-6 flex items-center justify-start">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-[#2F3F34] text-[#2F3F34] transition-all duration-300 group-hover:bg-[#2F3F34] group-hover:text-[#b49339] group-hover:translate-x-1 group-hover:shadow-md">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-[#2F3F34] text-[#2F3F34] transition-all duration-300 group-hover:bg-[#2F3F34] group-hover:text-[#B59439] group-hover:translate-x-1 group-hover:shadow-md">
                       <ArrowRight className="h-5 w-5 stroke-[2.2]" />
                     </div>
                   </div>
@@ -206,17 +205,6 @@ export default async function IndustriesHubPage() {
         </div>
       </Section>
 
-      {/* 3. CTA BANNER */}
-      <Section>
-        <CTABand
-          title="Don't see your exact industry listed?"
-          description="We design custom GCC capability architectures across financial services, digital commerce, logistics, and emerging deep-tech."
-          primaryHref="/contact"
-          primaryLabel="Discuss your sector case"
-          secondaryHref="/engagement-models"
-          secondaryLabel="Compare engagement models"
-        />
-      </Section>
 
       {/* 4. CASE STUDIES SECTION */}
       <Section id="outcomes" threads="light">
@@ -297,6 +285,9 @@ export default async function IndustriesHubPage() {
           </Button>
         </div>
       </Section>
+
+      {/* Gold Mandate Banner */}
+      <HomeCtaBanner />
     </>
   );
 }

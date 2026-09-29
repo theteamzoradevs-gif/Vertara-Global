@@ -127,20 +127,17 @@ export function Hero({
           <h1
             className="mt-2.5 sm:mt-3 md:mt-3.5 text-2xl sm:text-3xl md:text-[2.25rem] lg:text-[2.65rem] xl:text-[2.9rem] leading-[1.14] tracking-tight font-bold text-white"
           >
-            {headline.includes("Building GCCs.") ? (
+            {headline.includes("Building GCCs") ? (
               <>
-                <span className="block text-[#C5A55D]">
-                  Building GCCs.
+                <span className="block text-white">
+                  Building GCCs Enabling scale — from
                 </span>
-                <span className="block text-white mt-0.5">
-                  Enabling scale — from
-                </span>
-                <span className="block text-white mt-0.5">
-                  Nano to mid-scale, 20 to 500 people.
+                <span className="block text-white mt-1 sm:mt-1.5">
+                  Nano to mid-scale, 20 to 500 people
                 </span>
               </>
             ) : (
-              <span className="block text-white">{headline}</span>
+              <span className="block text-white">{headline.replace(/\./g, "")}</span>
             )}
           </h1>
 

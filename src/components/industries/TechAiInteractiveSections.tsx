@@ -50,11 +50,11 @@ export function TechAiOpportunityJourney() {
         return (
           <div
             key={step.title}
-            className="group relative rounded-2xl border border-[#cddcd1] bg-[#f0f4f1] p-6 sm:p-7 transition-all duration-300 hover:border-[#b49339] hover:bg-[#e5ebe6] hover:-translate-y-1 hover:shadow-md cursor-pointer flex flex-col justify-between h-full"
+            className="group relative rounded-2xl border border-[#cddcd1] bg-[#f0f4f1] p-6 sm:p-7 transition-all duration-300 hover:border-[#B59439] hover:bg-[#e5ebe6] hover:-translate-y-1 hover:shadow-md cursor-pointer flex flex-col justify-between h-full"
           >
             <div>
               <div className="flex items-center justify-between">
-                <span className="rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-white/80 border border-[#cddcd1] text-[#2F3F34] group-hover:bg-[#2F3F34] group-hover:text-[#b49339] transition-colors">
+                <span className="rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-white/80 border border-[#cddcd1] text-[#2F3F34] group-hover:bg-[#2F3F34] group-hover:text-[#B59439] transition-colors">
                   {step.badge}
                 </span>
               </div>
@@ -138,12 +138,12 @@ export function TechAiSectorNeedsSelector() {
           >
             <div>
               <div className="flex items-center justify-between gap-2">
-                <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#b49339]">
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#B59439]">
                   {item.tabTitle}
                 </p>
               </div>
 
-              <div className="mt-5 flex h-11 w-11 items-center justify-center rounded-xl bg-[#2F3F34] text-[#b49339] shadow-sm">
+              <div className="mt-5 flex h-11 w-11 items-center justify-center rounded-xl bg-[#2F3F34] text-[#B59439] shadow-sm">
                 <Icon className="h-5 w-5" />
               </div>
 

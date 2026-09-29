@@ -9,7 +9,7 @@ export function NanoGccExplainer() {
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         <Reveal>
           <div className="border-l-[3px] border-[#B59439] pl-5 sm:pl-7">
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#2F3F34]">
+            <h2 className="text-2xl font-bold tracking-tight text-[#101C30] sm:text-3xl lg:text-[1.875rem]">
               What’s a Nano GCC?
             </h2>
 

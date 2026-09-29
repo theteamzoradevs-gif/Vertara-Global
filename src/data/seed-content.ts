@@ -30,7 +30,7 @@ export const DEFAULT_LIBRARY_IMAGES = [
 export const seedSettings = {
   brandName: "Vertara Global",
   tagline: "GCC ADVISORY | MID-MARKET GCC SPECIALISTS | NANO TO MID-SCALE",
-  heroHeadline: "Building GCCs. Enabling scale — from Nano to mid-scale, 20 to 500 people.",
+  heroHeadline: "Building GCCs Enabling scale — from Nano to mid-scale, 20 to 500 people",
   heroSubheadline:
     "Vertara Global is a practitioner-led advisory and build partner for mid-market organizations establishing or scaling a Global Capability Centre in India — from a lean, 20–100 person Nano GCC through a full mid-scale build of up to 500 people. From the first business case to a fully operating team, one integrated partner, not a handoff between vendors.",
   heroBackgroundImage: "/images/gcc-floor.webp",

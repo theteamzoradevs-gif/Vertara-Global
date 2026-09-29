@@ -1,4 +1,3 @@
-﻿import Image from "next/image";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 import { Accordion } from "@/components/ui/Accordion";
@@ -33,26 +32,13 @@ export default async function AboutPage() {
     <>
       {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden text-white bg-[#2F3F34]">
-        {/* Right-aligned Realistic Background Image */}
         <div className="absolute inset-0">
-          <Image
-            src="/images/about us.png"
-            alt="About Vertara Global"
-            fill
-            className="object-cover object-right lg:object-right"
-            priority
-            sizes="100vw"
-          />
-          {/* Subtle Emerald / Forest Green Soft Gradient & Shadow Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#233027] via-[#233027]/95 via-40% sm:via-48% md:via-52% to-[#233027]/25 lg:to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#233027] via-transparent to-[#233027]/40" />
-          <div className="absolute inset-0 bg-[#233027]/20 mix-blend-multiply" />
           <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
 
         <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20 lg:py-24 lg:px-8">
           {/* Breadcrumb / Eyebrow */}
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#b49339]">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#B59439]">
             <span>About</span>
             <span>/</span>
             <span>Who We Are</span>
