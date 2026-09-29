@@ -9,6 +9,7 @@ import {
   ClientLogo,
 } from "@/models/CaseStudy";
 import { Faq } from "@/models/Faq";
+import { AboutContent } from "@/models/AboutContent";
 import {
   seedSettings,
   seedServices,
@@ -19,6 +20,7 @@ import {
   seedClientLogos,
   seedFaqs,
 } from "@/data/seed-content";
+import { seedAboutContent, type AboutContentData } from "@/data/seed-about";
 import type {
   Settings,
   ServiceItem,
@@ -210,4 +212,31 @@ export async function getFaqs(): Promise<FaqItem[]> {
       ? (JSON.parse(JSON.stringify(docs)) as FaqItem[])
       : seedFaqs;
   }, seedFaqs);
+}
+
+export async function getAboutContent(): Promise<AboutContentData> {
+  return withDB(async () => {
+    let doc = await AboutContent.findOne().lean();
+    if (!doc) {
+      const created = await AboutContent.create(seedAboutContent);
+      doc = created.toObject();
+    }
+    const parsed = JSON.parse(JSON.stringify(doc)) as Partial<AboutContentData>;
+    return {
+      intro: { ...seedAboutContent.intro, ...(parsed.intro || {}) },
+      story: { ...seedAboutContent.story, ...(parsed.story || {}) },
+      vision: { ...seedAboutContent.vision, ...(parsed.vision || {}) },
+      theName: { ...seedAboutContent.theName, ...(parsed.theName || {}) },
+      whatWeStandFor: Array.isArray(parsed.whatWeStandFor) && parsed.whatWeStandFor.length > 0
+        ? parsed.whatWeStandFor
+        : seedAboutContent.whatWeStandFor,
+      byTheNumbers: Array.isArray(parsed.byTheNumbers) && parsed.byTheNumbers.length > 0
+        ? parsed.byTheNumbers
+        : seedAboutContent.byTheNumbers,
+      theTeam: Array.isArray(parsed.theTeam) && parsed.theTeam.length > 0
+        ? parsed.theTeam
+        : seedAboutContent.theTeam,
+      closingCta: { ...seedAboutContent.closingCta, ...(parsed.closingCta || {}) },
+    };
+  }, seedAboutContent);
 }

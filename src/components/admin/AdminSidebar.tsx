@@ -20,6 +20,7 @@ import {
   Shield,
   User,
   ArrowRight,
+  Info,
 } from "lucide-react";
 
 interface AdminSidebarProps {
@@ -50,6 +51,7 @@ const navGroups: NavGroup[] = [
     title: "CMS Content",
     items: [
       { href: "/admin/hero", label: "Home Editor", icon: PanelTop },
+      { href: "/admin/about", label: "About Us", icon: Info },
       { href: "/admin/insights", label: "Insights", icon: FileText },
       { href: "/admin/faqs", label: "FAQs", icon: HelpCircle },
       { href: "/admin/testimonials", label: "Testimonials", icon: Quote },

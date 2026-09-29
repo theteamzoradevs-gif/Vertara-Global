@@ -8,6 +8,7 @@ import {
   ArrowRight,
   AlertCircle,
   Plus,
+  Info,
 } from "lucide-react";
 import { connectDB } from "@/lib/db";
 import { Lead } from "@/models/Lead";
@@ -143,6 +144,7 @@ export default async function AdminDashboard() {
     { title: "Add Testimonial", href: "/admin/testimonials", icon: Quote, primary: false },
     { title: "Create FAQ", href: "/admin/faqs", icon: HelpCircle, primary: false },
     { title: "Home Editor", href: "/admin/hero", icon: PanelTop, primary: false },
+    { title: "About Us Editor", href: "/admin/about", icon: Info, primary: false },
     { title: "View Inquiries", href: "/admin/inquiries", icon: Inbox, primary: false },
   ];
 
