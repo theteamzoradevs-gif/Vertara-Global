@@ -48,7 +48,7 @@ export function WhyUs() {
               </p>
 
               {/* Main Headline */}
-              <h2 className="mt-3 text-2xl sm:text-3xl lg:text-[2.25rem] font-bold tracking-tight text-[#101C30] leading-tight">
+              <h2 className="mt-3 text-2xl font-bold tracking-tight text-[#101C30] sm:text-3xl lg:text-[1.875rem] leading-tight">
                 More than a launch partner. A partner for what comes next.
               </h2>
 

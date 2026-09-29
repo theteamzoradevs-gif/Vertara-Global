@@ -101,6 +101,7 @@ export default async function HomePage() {
         <SectionHeader
           eyebrow="Who needs us"
           title="Our offerings, at a glance"
+          titleClassName="text-2xl font-bold tracking-tight text-[#101C30] sm:text-3xl lg:text-[1.875rem]"
           description="A six-stage build model, clear commercial principles, and deep expertise across eight sectors spanning Nano GCCs through 500-person mid-scale builds."
           className="mb-8 md:mb-10 max-w-none w-full"
         />
@@ -115,7 +116,7 @@ export default async function HomePage() {
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#B59439]">
             Sector Expertise
           </p>
-          <h3 className="mt-2 text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-[#101C30]">
+          <h3 className="mt-2 text-2xl font-bold tracking-tight text-[#101C30] sm:text-3xl lg:text-[1.875rem]">
             What we build for across eight mid-market sectors
           </h3>
         </div>
@@ -282,6 +283,7 @@ export default async function HomePage() {
         <SectionHeader
           eyebrow="FAQ"
           title="Questions enterprise buyers ask before the first call"
+          titleClassName="text-2xl font-bold tracking-tight text-[#101C30] sm:text-3xl lg:text-[1.875rem]"
           description="Timelines, ownership, cost, cities, and roles answered without the runaround."
         />
         <Accordion

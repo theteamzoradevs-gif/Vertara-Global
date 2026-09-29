@@ -119,9 +119,10 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
           </Link>
           <MegaTrigger
             label="Our Offerings"
-            active={menu === "services" || pathname.startsWith("/services")}
+            active={menu === "services" || pathname.startsWith("/services") || pathname.startsWith("/offerings")}
             onEnter={() => openMenu("services")}
             onLeave={scheduleClose}
+            href="/offerings"
           />
           {/* Industries menu disabled - to be added later */}
           <MegaTrigger
@@ -201,11 +202,11 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
                   </div>
                   <div>
                     <Link
-                      href="/#how-it-connects"
+                      href="/offerings"
                       className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#2F3F34] hover:text-[#b49339] transition-colors"
                       onClick={() => setMenu(null)}
                     >
-                      See how it connects <ArrowRight className="h-3.5 w-3.5" />
+                      Explore full offerings overview <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
                   </div>
                 </div>

@@ -28,7 +28,7 @@ export function IndustryFormSideContent() {
   return (
     <div className="h-full flex flex-col justify-between py-2 sm:py-3 lg:pl-2">
       <div>
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#b49339]">
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#B59439]">
           HOW VERTARA SUPPORTS YOUR INDUSTRY
         </p>
 
@@ -46,7 +46,7 @@ export function IndustryFormSideContent() {
               key={item.step}
               className="flex items-start gap-3.5 rounded-2xl border border-[#cddcd1] bg-white p-4 sm:p-4.5 shadow-xs transition-all duration-300 hover:border-[#2F3F34]/40 hover:shadow-sm"
             >
-              <span className="flex h-7 w-8 shrink-0 items-center justify-center rounded-lg bg-[#b49339] text-xs font-extrabold text-white shadow-xs">
+              <span className="flex h-7 w-8 shrink-0 items-center justify-center rounded-lg bg-[#B59439] text-xs font-extrabold text-white shadow-xs">
                 {item.step}
               </span>
               <div className="min-w-0 flex-1">
@@ -70,7 +70,7 @@ export function IndustryFormSideContent() {
         <div className="space-y-2">
           {assurances.map((item, idx) => (
             <div key={idx} className="flex items-center gap-2 text-xs font-medium text-[#2F3F34]">
-              <CheckCircle2 className="h-4 w-4 shrink-0 text-[#b49339]" />
+              <CheckCircle2 className="h-4 w-4 shrink-0 text-[#B59439]" />
               <span>{item}</span>
             </div>
           ))}
