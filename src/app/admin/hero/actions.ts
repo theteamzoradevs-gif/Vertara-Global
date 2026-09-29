@@ -22,7 +22,9 @@ export type HeroPayload = {
   heroFormDescription: string;
   heroFormButton: string;
   heroFormSuccess: string;
+  showQuickCallForm?: boolean;
   metrics: Metric[];
+  libraryImages?: string[];
 };
 
 async function requireAdmin() {
@@ -44,12 +46,16 @@ function cleanLines(lines: HeroRotatingLine[]): HeroRotatingLine[] {
 }
 
 function cleanMetrics(metrics: Metric[]): Metric[] {
-  return metrics.slice(0, 4).map((m) => ({
-    label: String(m.label || "").trim() || "Metric",
-    value: Number.isFinite(Number(m.value)) ? Number(m.value) : 0,
-    suffix: String(m.suffix || "").trim(),
-    prefix: String(m.prefix || "").trim(),
-  }));
+  if (!Array.isArray(metrics)) return [];
+  return metrics
+    .map((m) => ({
+      label: String(m.label || "").trim(),
+      value: Number.isFinite(Number(m.value)) ? Number(m.value) : 0,
+      suffix: String(m.suffix || "").trim(),
+      prefix: String(m.prefix || "").trim(),
+    }))
+    .filter((m) => m.label.length > 0)
+    .slice(0, 4);
 }
 
 export async function saveHeroAction(payload: HeroPayload) {
@@ -68,10 +74,6 @@ export async function saveHeroAction(payload: HeroPayload) {
     }
 
     const heroMetrics = cleanMetrics(payload.metrics);
-    const existing = await SiteSettings.findOne().lean();
-    const restMetrics = Array.isArray(existing?.metrics)
-      ? existing.metrics.slice(4)
-      : [];
 
     await SiteSettings.findOneAndUpdate(
       {},
@@ -103,9 +105,17 @@ export async function saveHeroAction(payload: HeroPayload) {
         heroFormSuccess:
           String(payload.heroFormSuccess || "").trim() ||
           seedSettings.heroFormSuccess,
-        metrics: [...heroMetrics, ...restMetrics],
+        showQuickCallForm: typeof payload.showQuickCallForm === "boolean" ? payload.showQuickCallForm : true,
+        metrics: heroMetrics,
+        ...(Array.isArray(payload.libraryImages)
+          ? {
+              libraryImages: payload.libraryImages
+                .map((s) => String(s).trim())
+                .filter(Boolean),
+            }
+          : {}),
       },
-      { upsert: true },
+      { upsert: true, new: true },
     );
 
     revalidatePath("/");
@@ -115,6 +125,37 @@ export async function saveHeroAction(payload: HeroPayload) {
     return { success: true, message: "Hero section saved. Homepage will show the new copy." };
   } catch (err: unknown) {
     const errorMessage = err instanceof Error ? err.message : "Failed to save hero.";
+    return { success: false, error: errorMessage };
+  }
+}
+
+export async function deleteLibraryImageAction(imageUrl: string) {
+  try {
+    const gate = await requireAdmin();
+    if (!gate.ok) return { success: false, error: gate.error };
+
+    const conn = await connectDB();
+    if (!conn) {
+      return { success: false, error: "Database is not connected." };
+    }
+
+    const doc = await SiteSettings.findOne().lean();
+    const currentList: string[] = Array.isArray(doc?.libraryImages)
+      ? (doc.libraryImages as string[])
+      : seedSettings.libraryImages;
+
+    const updatedList = currentList.filter((img) => img !== imageUrl);
+
+    await SiteSettings.findOneAndUpdate(
+      {},
+      { libraryImages: updatedList },
+      { upsert: true, new: true }
+    );
+
+    revalidatePath("/admin/hero");
+    return { success: true, libraryImages: updatedList };
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : "Failed to delete image.";
     return { success: false, error: errorMessage };
   }
 }

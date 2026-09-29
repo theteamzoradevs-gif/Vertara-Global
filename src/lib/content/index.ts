@@ -44,11 +44,14 @@ function mergeSettings(doc: Partial<Settings> | null): Settings {
   const settings: Settings = {
     ...seedSettings,
     ...(doc || {}),
-    metrics: doc?.metrics?.length ? doc.metrics : seedSettings.metrics,
+    metrics: Array.isArray(doc?.metrics) ? doc.metrics : seedSettings.metrics,
     leadership: doc?.leadership?.length ? doc.leadership : seedSettings.leadership,
     heroRotatingLines: doc?.heroRotatingLines?.length
       ? doc.heroRotatingLines
       : seedSettings.heroRotatingLines,
+    libraryImages: Array.isArray(doc?.libraryImages)
+      ? doc.libraryImages
+      : seedSettings.libraryImages,
   };
 
   if (!settings.heroBackgroundImage) {
@@ -65,7 +68,9 @@ function mergeSettings(doc: Partial<Settings> | null): Settings {
     settings.heroFormDescription = seedSettings.heroFormDescription;
   }
   if (!settings.heroFormButton) settings.heroFormButton = seedSettings.heroFormButton;
-  if (!settings.heroFormSuccess) settings.heroFormSuccess = seedSettings.heroFormSuccess;
+  if (typeof doc?.showQuickCallForm === "boolean") {
+    settings.showQuickCallForm = doc.showQuickCallForm;
+  }
 
   if (settings.brandName === "GCC Advisor") {
     settings.brandName = "Vertara Global";
@@ -194,7 +199,13 @@ export async function getClientLogos(): Promise<ClientLogoItem[]> {
 
 export async function getFaqs(): Promise<FaqItem[]> {
   return withDB(async () => {
-    const docs = await Faq.find().sort({ order: 1 }).lean();
+    const ALLOWED_CATEGORIES = ["Home", "Our Offerings", "Insights", "About Us"];
+    await Faq.deleteMany({ category: { $nin: ALLOWED_CATEGORIES } });
+    let docs = await Faq.find().sort({ order: 1 }).lean();
+    if (docs.length === 0) {
+      await Faq.insertMany(seedFaqs);
+      docs = await Faq.find().sort({ order: 1 }).lean();
+    }
     return docs.length
       ? (JSON.parse(JSON.stringify(docs)) as FaqItem[])
       : seedFaqs;
