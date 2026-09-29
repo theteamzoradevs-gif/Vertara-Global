@@ -8,13 +8,15 @@ export function Section({
   id,
   tone = "default",
   threads = "light",
+  style,
 }: {
   children: ReactNode;
   className?: string;
   id?: string;
-  tone?: "default" | "muted" | "navy" | "green" | "ink";
+  tone?: "default" | "muted" | "navy" | "green" | "ink" | "none";
   /** soft flowing threads; false to disable */
   threads?: false | "light" | "medium" | "strong";
+  style?: React.CSSProperties;
 }) {
   const tones = {
     default: "bg-surface",
@@ -22,6 +24,7 @@ export function Section({
     navy: "bg-navy text-white",
     green: "bg-[#2F3F34] text-white",
     ink: "bg-[#101C30] text-white",
+    none: "",
   };
 
   const isDark = tone === "navy" || tone === "green" || tone === "ink";
@@ -29,6 +32,7 @@ export function Section({
   return (
     <section
       id={id}
+      style={style}
       className={cn("relative overflow-hidden py-16 md:py-24", tones[tone], className)}
     >
       {threads ? (

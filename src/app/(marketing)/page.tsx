@@ -3,20 +3,24 @@ import { Button } from "@/components/ui/Button";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
 import { CTABand } from "@/components/ui/CTABand";
+import { HomeCtaBanner } from "@/components/home/HomeCtaBanner";
 import { Accordion } from "@/components/ui/Accordion";
 // import { OurVision } from "@/components/home/OurVision";
 // import { WhoAreWe } from "@/components/home/WhoAreWe";
 import { WhereWereStrongest } from "@/components/home/WhereWereStrongest";
-import { ConnectedModules } from "@/components/home/ConnectedModules";
-import { ServicesCarousel } from "@/components/home/ServicesCarousel";
+import { ScopeCards } from "@/components/home/ScopeCards";
 import { Hero } from "@/components/home/Hero";
+import { NanoGccExplainer } from "@/components/home/NanoGccExplainer";
 import { WhatWeDo } from "@/components/home/WhatWeDo";
 import { BuiltForMidMarket } from "@/components/home/BuiltForMidMarket";
+import { ChooseVertaraIf } from "@/components/home/ChooseVertaraIf";
 import { CompetitiveComparison } from "@/components/home/CompetitiveComparison";
 import { ImageStoryStrip } from "@/components/home/ImageStoryStrip";
 import { HoverStatCard } from "@/components/home/HoverStatCard";
 import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
 import { WhoWeServe } from "@/components/home/WhoWeServe";
+import { LedByPractitioners } from "@/components/home/LedByPractitioners";
+import { WhyUs } from "@/components/home/WhyUs";
 import { JourneySteps } from "@/components/home/JourneySteps";
 import { HomeCaseStudies } from "@/components/home/HomeCaseStudies";
 import { HomeInsights } from "@/components/home/HomeInsights";
@@ -77,65 +81,74 @@ export default async function HomePage() {
         showQuickCallForm={settings.showQuickCallForm}
       />
 
+      <NanoGccExplainer />
+
       <WhatWeDo />
 
       <BuiltForMidMarket />
 
+      <ChooseVertaraIf />
+
       {/* <WhoAreWe /> */}
 
-      <Section tone="muted" threads="light">
-        <SectionHeader
-          eyebrow="Services"
-          title="Four modules. One accountable plan."
-          description="From talent and workspace to operations and advisory, four capabilities working together under one accountable partner."
-        />
-        <ServicesCarousel services={services} />
-        <div className="mt-12">
-          <CTABand
-            title="Not sure which modules to start with?"
-            description="Most programmes begin with a short discovery call timeline, ownership, and the first 90 days."
-            primaryLabel="Start a conversation"
-            primaryHref="/contact"
-          />
-        </div>
-      </Section>
-
-      {/* <OurVision /> */}
-
-      <Section id="who-we-serve" tone="ink" threads="light">
+      <Section
+        id="who-we-serve"
+        tone="none"
+        threads="light"
+        className="border-b border-[#cddcd1]"
+        style={{ backgroundColor: "#e5ebe6" }}
+      >
         <SectionHeader
           eyebrow="Who needs us"
           title="Our offerings, at a glance"
-          description="A six-stage build model, clear commercial principles,
-and deep expertise across eight sectors spanning
-Nano GCCs through 500-person mid-scale builds."
-          className="mb-6 md:mb-8"
-          light
+          description="A six-stage build model, clear commercial principles, and deep expertise across eight sectors spanning Nano GCCs through 500-person mid-scale builds."
+          className="mb-8 md:mb-10 max-w-none w-full"
         />
+
+        {/* 4 Scope Cards (Nano, Mid-scale, Both scopes, Backed by research) placed before Industries */}
+        <div className="mb-8 sm:mb-10">
+          <ScopeCards />
+        </div>
+
+        {/* Text line between the cards */}
+        <div className="mt-12 sm:mt-14 pt-8 sm:pt-10 border-t border-[#cddcd1]/80 mb-6 sm:mb-8">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#B59439]">
+            Sector Expertise
+          </p>
+          <h3 className="mt-2 text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-[#101C30]">
+            What we build for across eight mid-market sectors
+          </h3>
+        </div>
+
         <WhoWeServe />
       </Section>
 
-      <WhereWereStrongest />
+      <LedByPractitioners />
 
-      <Section id="how-it-connects" threads="strong">
+      <WhyUs />
+
+      {/* Disabled sections per client narrative */}
+      {/* <WhereWereStrongest /> */}
+
+      {/* <Section id="how-it-connects" threads="strong">
         <SectionHeader
           eyebrow="Platform"
           title="How it all connects"
-          description="Talent, workspace, operations, and advisory as integrated modules of one GCC operating system â€” not disconnected vendor pages."
+          description="Talent, workspace, operations, and advisory as integrated modules of one GCC operating system — not disconnected vendor pages."
         />
         <ConnectedModules modules={services} />
-      </Section>
+      </Section> */}
 
-      <Section tone="muted" threads="light">
+      {/* <Section tone="muted" threads="light">
         <SectionHeader
           eyebrow="On the ground"
           title="Real floors. Real teams. Real operating rhythm."
           description="Infrastructure and environments that make a GCC feel like part of the parent enterprise not a distant vendor site."
         />
         <ImageStoryStrip />
-      </Section>
+      </Section> */}
 
-      <Section id="why-gcc" tone="muted" threads="light">
+      {/* <Section id="why-gcc" tone="muted" threads="light">
         <SectionHeader
           eyebrow="Strategic case"
           title="Why enterprises build GCCs"
@@ -152,20 +165,20 @@ Nano GCCs through 500-person mid-scale builds."
             </Reveal>
           ))}
         </div>
-      </Section>
+      </Section> */}
 
-      <Section id="why-us">
+      {/* <Section id="why-us">
         <SectionHeader
           eyebrow="Why GCC Advisor"
           title="Built to beat multi-vendor chaos"
           description="How we stack up against stitching vendors yourself or staying in a classic offshore model. Scan the table no taps required."
         />
         <CompetitiveComparison />
-      </Section>
+      </Section> */}
 
-      <JourneySteps />
+      {/* <JourneySteps /> */}
 
-      <Section
+      {/* <Section
         tone="green"
         threads="medium"
         className="relative shadow-[inset_0_2px_30px_rgba(0,0,0,0.35)] bg-gradient-to-r from-[#233027] via-[#2F3F34] to-[#233027]"
@@ -194,7 +207,7 @@ Nano GCCs through 500-person mid-scale builds."
                     Best fit: {m.bestFit}
                   </p>
                   <p className="mt-5 text-xs font-semibold uppercase tracking-wider text-[#b49339]">
-                    Setup Â· {m.setupTime}
+                    Setup · {m.setupTime}
                   </p>
                 </div>
               </Link>
@@ -211,13 +224,13 @@ Nano GCCs through 500-person mid-scale builds."
             Compare models & take the selector
           </Button>
         </div>
-      </Section>
+      </Section> */}
 
-      <Section id="outcomes" threads="light">
+      {/* <Section id="outcomes" threads="light">
         <SectionHeader
           eyebrow="Outcomes"
           title="Case studies from live programmes"
-          description="Challenge â†’ result with metric callouts â€” same storytelling language as our case studies page."
+          description="Challenge → result with metric callouts — same storytelling language as our case studies page."
         />
         <HomeCaseStudies cases={homepageCases} />
         <div className="mt-8 flex justify-center sm:justify-start">
@@ -225,14 +238,15 @@ Nano GCCs through 500-person mid-scale builds."
             View all case studies
           </Button>
         </div>
-      </Section>
+      </Section> */}
 
-      {homepageInsights.length > 0 ? (
+      {/* Disabled per client request */}
+      {/* {homepageInsights.length > 0 ? (
         <Section>
           <SectionHeader
             eyebrow="Insights"
             title="Practical reading for GCC leaders"
-            description="Perspectives on strategy, talent, location, and engagement â€” featured from the insights library."
+            description="Perspectives on strategy, talent, location, and engagement — featured from the insights library."
           />
           <HomeInsights insights={homepageInsights} />
           <div className="mt-8 flex justify-center sm:justify-start">
@@ -241,9 +255,9 @@ Nano GCCs through 500-person mid-scale builds."
             </Button>
           </div>
         </Section>
-      ) : null}
+      ) : null} */}
 
-      <Section tone="muted">
+      {/* <Section tone="muted">
         <SectionHeader
           eyebrow="Trust"
           title="Enterprises building lasting India capability"
@@ -262,7 +276,7 @@ Nano GCCs through 500-person mid-scale builds."
         <div className="mt-10">
           <TestimonialMarquee items={testimonials} />
         </div>
-      </Section>
+      </Section> */}
 
       <Section>
         <SectionHeader
@@ -282,10 +296,9 @@ Nano GCCs through 500-person mid-scale builds."
             View full FAQ
           </Button>
         </div>
-        <div className="mt-12">
-          <CTABand />
-        </div>
       </Section>
+
+      <HomeCtaBanner />
     </>
   );
 }

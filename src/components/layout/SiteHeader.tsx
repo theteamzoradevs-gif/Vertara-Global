@@ -5,13 +5,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
-  Building2,
   ChevronDown,
-  Compass,
-  FileText,
   Menu,
-  Settings2,
-  Users,
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -22,25 +17,21 @@ const services = [
     href: "/services/talent",
     label: "Talent Solutions",
     desc: "Hiring, leadership, and retention for GCC scale",
-    icon: Users,
   },
   {
     href: "/services/workspace",
     label: "Workspace",
-    desc: "Secure, branded floors in Indiaâ€™s talent hubs",
-    icon: Building2,
+    desc: "Secure, branded floors in India's talent hubs",
   },
   {
     href: "/services/operations",
     label: "Business Operations",
     desc: "EOR bridge, HR, payroll, compliance transfer",
-    icon: Settings2,
   },
   {
     href: "/services/advisory",
     label: "Research & Advisory",
     desc: "Location, org design, and board-ready cases",
-    icon: Compass,
   },
 ];
 
@@ -57,7 +48,7 @@ const insightLinks = [
     href: "/insights/build-transfer-vs-managed-team",
     label: "Build & transfer vs managed team",
   },
-  { href: "/insights", label: "View all insights â†’" },
+  { href: "/insights", label: "View all insights →" },
 ];
 
 /* Kept for future re-enabling if needed:
@@ -104,7 +95,7 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
   return (
     <header
       className="sticky top-0 z-50 w-full border-b border-border bg-white shadow-sm shadow-navy/5 font-sans"
-      style={{ fontFamily: 'Calibri, Candara, "Segoe UI", Optima, Arial, sans-serif' }}
+      style={{ fontFamily: 'Calibri' }}
     >
       <div className="mx-auto flex h-[4.25rem] w-full max-w-6xl items-center justify-between gap-2 px-3 sm:gap-4 sm:px-6 lg:px-8">
         <Link
@@ -161,7 +152,7 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
             size="sm"
             className="hidden sm:inline-flex shrink-0 whitespace-nowrap text-xs sm:text-sm px-3 sm:px-3.5 py-1.5 sm:py-2"
           >
-            Discuss your GCC mandate
+            Book a consultation
           </Button>
           <button
             type="button"
@@ -184,27 +175,19 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
             {menu === "services" ? (
               <>
                 <div className="grid gap-2 sm:grid-cols-2">
-                  {services.map((s) => {
-                    const Icon = s.icon;
-                    return (
-                      <Link
-                        key={s.href}
-                        href={s.href}
-                        className="group flex gap-3 rounded-xl border border-transparent p-3 transition hover:border-[#b49339]/30 hover:bg-[#e5ebe6]/60"
-                        onClick={() => setMenu(null)}
-                      >
-                        <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#e5ebe6] text-[#2F3F34] shadow-xs group-hover:bg-[#2F3F34] group-hover:text-[#b49339] transition-all">
-                          <Icon className="h-5 w-5 stroke-[2.2]" />
-                        </span>
-                        <span>
-                          <span className="block text-sm font-semibold text-navy group-hover:text-accent">
-                            {s.label}
-                          </span>
-                          <span className="mt-0.5 block text-xs text-muted">{s.desc}</span>
-                        </span>
-                      </Link>
-                    );
-                  })}
+                  {services.map((s) => (
+                    <Link
+                      key={s.href}
+                      href={s.href}
+                      className="group block rounded-xl border border-transparent p-3 transition hover:border-[#b49339]/30 hover:bg-[#e5ebe6]/60"
+                      onClick={() => setMenu(null)}
+                    >
+                      <span className="block text-sm font-semibold text-navy group-hover:text-accent">
+                        {s.label}
+                      </span>
+                      <span className="mt-0.5 block text-xs text-muted">{s.desc}</span>
+                    </Link>
+                  ))}
                 </div>
                 <div className="rounded-2xl border border-[#cddcd1] bg-[#e5ebe6] p-5 shadow-xs flex flex-col justify-between">
                   <div>
@@ -213,7 +196,7 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
                     </p>
                     <p className="mt-2 text-lg font-bold text-navy">One operating system for your GCC</p>
                     <p className="mt-2 text-sm text-slate leading-relaxed">
-                      Talent, workspace, ops, and advisory â€” planned together so nothing slips between vendors.
+                      Talent, workspace, ops, and advisory — planned together so nothing slips between vendors.
                     </p>
                   </div>
                   <div>
@@ -234,10 +217,9 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
                     <Link
                       key={item.href}
                       href={item.href}
-                      className="flex items-start gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-navy transition hover:bg-accent-soft"
+                      className="block rounded-xl px-3 py-2.5 text-sm font-medium text-navy transition hover:bg-accent-soft hover:text-accent"
                       onClick={() => setMenu(null)}
                     >
-                      <FileText className="mt-0.5 h-4 w-4 text-accent" />
                       {item.label}
                     </Link>
                   ))}
@@ -281,25 +263,17 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
             Our Offerings
           </p>
           <div className="mt-2 space-y-1">
-            {services.map((s) => {
-              const Icon = s.icon;
-              return (
-                <Link
-                  key={s.href}
-                  href={s.href}
-                  className="flex items-center gap-3 rounded-xl p-2 text-sm font-semibold text-navy transition hover:bg-[#e5ebe6]"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#e5ebe6] text-[#2F3F34]">
-                    <Icon className="h-4 w-4 stroke-[2.2]" />
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold text-navy leading-tight">{s.label}</p>
-                    <p className="text-xs font-normal text-muted truncate">{s.desc}</p>
-                  </div>
-                </Link>
-              );
-            })}
+            {services.map((s) => (
+              <Link
+                key={s.href}
+                href={s.href}
+                className="block rounded-xl p-2.5 text-sm font-semibold text-navy transition hover:bg-[#e5ebe6]"
+                onClick={() => setMobileOpen(false)}
+              >
+                <p className="text-sm font-semibold text-navy leading-tight">{s.label}</p>
+                <p className="mt-0.5 text-xs font-normal text-muted truncate">{s.desc}</p>
+              </Link>
+            ))}
           </div>
 
           {/* Industries section disabled for now */}

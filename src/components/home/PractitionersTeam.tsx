@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -9,7 +9,7 @@ import { practitionersTeam } from "@/data/practitioners-team";
 
 export function PractitionersTeam() {
   return (
-    <section className="relative w-full overflow-hidden bg-white py-16 md:py-24 text-[#0b1f3a]">
+    <section id="leadership" className="relative w-full overflow-hidden bg-white py-16 md:py-24 text-[#0b1f3a]">
       <div className="relative z-[1] mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="max-w-3xl text-left">
@@ -18,7 +18,7 @@ export function PractitionersTeam() {
           </h2>
           <p className="mt-4 text-base leading-relaxed text-[#526171] sm:text-lg">
             Strategy, GCC execution and shared services under one senior-led
-            platform â€” with the bench expanding across practice areas.
+            platform — with the bench expanding across practice areas.
           </p>
         </div>
 

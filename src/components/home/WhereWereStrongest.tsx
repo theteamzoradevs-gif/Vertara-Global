@@ -20,12 +20,6 @@ interface StrengthItem {
   icon: React.ComponentType<{ className?: string }>;
 }
 
-interface DecisionTrigger {
-  number: string;
-  title: string;
-  description: string;
-}
-
 const strengthItems: StrengthItem[] = [
   {
     number: "01",
@@ -68,34 +62,6 @@ const strengthItems: StrengthItem[] = [
     icon: GitBranch,
     description:
       "Engineering â€¢ Pharma â€¢ FMCG â€¢ Financial Services â€” same rigor, different starting point",
-  },
-];
-
-const chooseVertaraTriggers: DecisionTrigger[] = [
-  {
-    number: "01",
-    title: "You’re building your first India GCC",
-    description: "Whether that starts as a Nano pilot or a larger build",
-  },
-  {
-    number: "02",
-    title: "You’re scaling capability",
-    description: "From cost centre to capability hub to innovation centre",
-  },
-  {
-    number: "03",
-    title: "You’re opening a second location",
-    description: "Without duplicating governance",
-  },
-  {
-    number: "04",
-    title: "You’re investor-backed",
-    description: "Need rapid, compliant scale on a tight runway",
-  },
-  {
-    number: "05",
-    title: "You’re a digital-native business",
-    description: "Expanding engineering, analytics or AI",
   },
 ];
 
@@ -267,76 +233,6 @@ export function WhereWereStrongest() {
                   </motion.div>
                 </AnimatePresence>
               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* CHOOSE VERTARA IF: 5 Numbered Triggers */}
-        <div className="mt-14 border-t border-border pt-12 md:mt-18 md:pt-16">
-          <div className="max-w-3xl">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#b49339] sm:text-sm">
-              DECISION TRIGGERS
-            </p>
-            <h3 className="mt-2 text-2xl font-bold tracking-tight text-navy sm:text-3xl">
-              Choose Vertara if
-            </h3>
-          </div>
-
-          <div className="mt-8 max-w-4xl">
-            <div className="space-y-6 sm:space-y-7">
-              {chooseVertaraTriggers.map((item, i) => (
-                <div key={item.number} className="cursor-default">
-                  <div className="flex items-start gap-4 sm:gap-6">
-                    {/* Number 01 / 02 / 03 / 04 / 05 - Constant Golden */}
-                    <motion.span
-                      initial={{ opacity: 0, y: 14 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{
-                        duration: 0.45,
-                        delay: 0.08 + i * 0.08,
-                        ease: "easeOut",
-                      }}
-                      className="font-mono text-2xl sm:text-3xl font-bold tracking-tight text-[#b49339] shrink-0 w-8 sm:w-10 select-none pt-0.5"
-                    >
-                      {item.number}
-                    </motion.span>
-
-                    {/* Text block */}
-                    <div className="flex-1">
-                      <motion.h4
-                        initial={{ opacity: 0, y: 12 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{
-                          duration: 0.45,
-                          delay: 0.12 + i * 0.08,
-                          ease: "easeOut",
-                        }}
-                        className="text-base sm:text-lg font-bold text-navy tracking-tight"
-                      >
-                        {item.title}
-                      </motion.h4>
-
-                      {item.description ? (
-                        <motion.p
-                          initial={{ opacity: 0, y: 10 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{
-                            duration: 0.45,
-                            delay: 0.16 + i * 0.08,
-                            ease: "easeOut",
-                          }}
-                          className="mt-1 text-xs leading-relaxed text-slate sm:text-sm"
-                        >
-                          {item.description}
-                        </motion.p>
-                      ) : null}
-                    </div>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         </div>

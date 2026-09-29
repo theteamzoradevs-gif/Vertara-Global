@@ -28,7 +28,7 @@ export default function RootLayout({
       className="h-full antialiased"
       data-scroll-behavior="smooth"
     >
-      <body className="min-h-full flex flex-col font-sans" style={{ fontFamily: 'Calibri, Candara, "Segoe UI", Optima, Arial, sans-serif' }}>
+      <body className="min-h-full flex flex-col font-sans" style={{ fontFamily: 'Calibri' }}>
         <Providers>{children}</Providers>
       </body>
     </html>
