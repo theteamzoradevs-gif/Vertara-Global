@@ -7,19 +7,17 @@ import {
   AlertCircle,
   X,
   Loader2,
-  ImageIcon,
-  Type,
   Plus,
   Trash2,
   Upload,
   Users,
-  Compass,
   Award,
   BookOpen,
   Eye,
   Hash,
   Sparkles,
   ArrowRight,
+  Info,
 } from "lucide-react";
 import {
   saveAboutContentAction,
@@ -35,20 +33,17 @@ import type {
 const inputClass =
   "w-full rounded-xl border border-border px-4 py-2.5 text-xs text-navy font-medium focus:border-accent focus:outline-none transition bg-white";
 
-const ICONS = ["Layers", "Wrench", "LayoutGrid", "Compass", "Shield", "Target", "Users", "Award"];
-
 export function AboutUsManager({ initialContent }: { initialContent: AboutContentData }) {
   const [isPending, startTransition] = useTransition();
-  const [uploadingHero, setUploadingHero] = useState(false);
   const [uploadingTeamIdx, setUploadingTeamIdx] = useState<number | null>(null);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
-  // 1. Intro
-  const [intro, setIntro] = useState(initialContent.intro);
-  // 2. Story
-  const [story, setStory] = useState(initialContent.story);
-  // 3. Vision
-  const [vision, setVision] = useState(initialContent.vision);
+  // 1. About Us
+  const [aboutUs, setAboutUs] = useState(initialContent.aboutUs);
+  // 2. Our Story
+  const [ourStory, setOurStory] = useState(initialContent.ourStory);
+  // 3. Our Vision
+  const [ourVision, setOurVision] = useState(initialContent.ourVision);
   // 4. The Name
   const [theName, setTheName] = useState(initialContent.theName);
   // 5. What We Stand For
@@ -64,34 +59,14 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
   // 8. Closing CTA
   const [closingCta, setClosingCta] = useState(initialContent.closingCta);
 
-  // Active Tab for smooth navigation
+  // Navigation tab
   const [activeTab, setActiveTab] = useState<
-    "intro" | "story" | "vision" | "theName" | "standFor" | "numbers" | "team" | "cta"
-  >("intro");
+    "aboutUs" | "ourStory" | "ourVision" | "theName" | "standFor" | "numbers" | "team" | "cta"
+  >("aboutUs");
 
   const showMessage = (type: "success" | "error", text: string) => {
     setMessage({ type, text });
     window.setTimeout(() => setMessage(null), 5000);
-  };
-
-  // Upload hero image
-  const onUploadHeroImage = async (file: File) => {
-    setUploadingHero(true);
-    try {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await uploadAboutImageAction(fd);
-      if (res.success && res.url) {
-        setIntro((prev) => ({ ...prev, image: res.url! }));
-        showMessage("success", "Intro image uploaded. Remember to save changes.");
-      } else {
-        showMessage("error", res.error || "Could not upload image.");
-      }
-    } catch {
-      showMessage("error", "Could not upload image.");
-    } finally {
-      setUploadingHero(false);
-    }
   };
 
   // Upload team member image
@@ -120,7 +95,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
   const addStandForPoint = () => {
     setWhatWeStandFor((prev) => [
       ...prev,
-      { title: "", description: "", icon: "Layers" },
+      { title: "", description: "" },
     ]);
   };
 
@@ -205,14 +180,14 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
     );
   };
 
-  // On Save
+  // Save action
   const onSave = (e: React.FormEvent) => {
     e.preventDefault();
     startTransition(async () => {
       const res = await saveAboutContentAction({
-        intro,
-        story,
-        vision,
+        aboutUs,
+        ourStory,
+        ourVision,
         theName,
         whatWeStandFor,
         byTheNumbers,
@@ -229,9 +204,9 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
   };
 
   const tabs = [
-    { id: "intro", label: "1. Intro & Hero", icon: Type },
-    { id: "story", label: "2. Our Story", icon: BookOpen },
-    { id: "vision", label: "3. Our Vision", icon: Eye },
+    { id: "aboutUs", label: "1. About Us", icon: Info },
+    { id: "ourStory", label: "2. Our Story", icon: BookOpen },
+    { id: "ourVision", label: "3. Our Vision", icon: Eye },
     { id: "theName", label: "4. The Name", icon: Sparkles },
     { id: "standFor", label: "5. What We Stand For", icon: Award, count: whatWeStandFor.length },
     { id: "numbers", label: "6. By the Numbers", icon: Hash, count: byTheNumbers.length },
@@ -246,7 +221,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
         <div>
           <h1 className="text-2xl font-bold text-navy">About Us Editor</h1>
           <p className="mt-1 text-sm text-muted">
-            Manage all content for the About Us page — intro, story, vision, the name, pillars, credibility points, and team.
+            Manage the 8 official sections of About Us — story, vision, name, pillars, credibility points, team, and CTA.
           </p>
         </div>
         <button
@@ -260,7 +235,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
         </button>
       </div>
 
-      {/* Alert Banner */}
+      {/* Alert Notification */}
       {message ? (
         <div
           className={`flex items-center justify-between rounded-2xl px-5 py-3.5 text-xs font-medium border shadow-xs ${
@@ -287,7 +262,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
         </div>
       ) : null}
 
-      {/* Section Tabs */}
+      {/* 8 Clean Tabs */}
       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none border-b border-border">
         {tabs.map((tab) => {
           const Icon = tab.icon;
@@ -320,93 +295,46 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
       </div>
 
       <form onSubmit={onSave} className="space-y-6">
-        {/* 1. INTRO & HERO */}
-        {activeTab === "intro" && (
-          <Section icon={Type} title="About Us Intro & Hero">
-            <Field label="Eyebrow / Breadcrumb Tag">
+        {/* 1. ABOUT US */}
+        {activeTab === "aboutUs" && (
+          <Section icon={Info} title="1. About Us">
+            <Field label="Title">
               <input
                 className={inputClass}
-                value={intro.eyebrow}
-                onChange={(e) => setIntro({ ...intro, eyebrow: e.target.value })}
-                placeholder="About / Who We Are"
+                value={aboutUs.title}
+                onChange={(e) => setAboutUs({ ...aboutUs, title: e.target.value })}
+                placeholder="About Us"
               />
             </Field>
-            <Field label="Page Main Headline">
-              <input
-                className={inputClass}
-                value={intro.title}
-                onChange={(e) => setIntro({ ...intro, title: e.target.value })}
-                placeholder="About Vertara Global"
-              />
-            </Field>
-            <Field label="Mission / Intro Subtitle">
+            <Field label="Content">
               <textarea
                 className={inputClass}
-                rows={3}
-                value={intro.description}
-                onChange={(e) => setIntro({ ...intro, description: e.target.value })}
-                placeholder="Make India GCC setup predictable for enterprise buyers..."
+                rows={5}
+                value={aboutUs.content}
+                onChange={(e) => setAboutUs({ ...aboutUs, content: e.target.value })}
+                placeholder="To be the most trusted partner for organizations building Global Capability Centres..."
               />
             </Field>
-            <Field label="Hero Background Image URL" hint="Local paths start with /images/ or /uploads/, or paste external URL">
-              <div className="flex gap-2">
-                <input
-                  className={inputClass}
-                  value={intro.image}
-                  onChange={(e) => setIntro({ ...intro, image: e.target.value })}
-                  placeholder="/images/about us.png"
-                />
-                <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-border bg-white px-4 py-2.5 text-xs font-semibold text-navy hover:border-accent shrink-0">
-                  {uploadingHero ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
-                  <span>{uploadingHero ? "Uploading…" : "Upload"}</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    disabled={uploadingHero}
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) void onUploadHeroImage(file);
-                      e.target.value = "";
-                    }}
-                  />
-                </label>
-              </div>
-            </Field>
-            {intro.image && (
-              <div className="mt-2 overflow-hidden rounded-xl border border-border w-48 h-28 bg-slate-100">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={intro.image} alt="Hero preview" className="w-full h-full object-cover" />
-              </div>
-            )}
           </Section>
         )}
 
         {/* 2. OUR STORY */}
-        {activeTab === "story" && (
-          <Section icon={BookOpen} title="Our Story">
-            <Field label="Eyebrow">
-              <input
-                className={inputClass}
-                value={story.eyebrow}
-                onChange={(e) => setStory({ ...story, eyebrow: e.target.value })}
-                placeholder="Our Story"
-              />
-            </Field>
+        {activeTab === "ourStory" && (
+          <Section icon={BookOpen} title="2. Our Story">
             <Field label="Title">
               <input
                 className={inputClass}
-                value={story.title}
-                onChange={(e) => setStory({ ...story, title: e.target.value })}
-                placeholder="About Us"
+                value={ourStory.title}
+                onChange={(e) => setOurStory({ ...ourStory, title: e.target.value })}
+                placeholder="Our Story"
               />
             </Field>
             <Field label="Story Content">
               <textarea
                 className={inputClass}
                 rows={6}
-                value={story.content}
-                onChange={(e) => setStory({ ...story, content: e.target.value })}
+                value={ourStory.content}
+                onChange={(e) => setOurStory({ ...ourStory, content: e.target.value })}
                 placeholder="Vertara Global was founded by operators who have built and scaled..."
               />
             </Field>
@@ -414,21 +342,13 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
         )}
 
         {/* 3. OUR VISION */}
-        {activeTab === "vision" && (
-          <Section icon={Eye} title="Our Vision">
-            <Field label="Eyebrow">
-              <input
-                className={inputClass}
-                value={vision.eyebrow}
-                onChange={(e) => setVision({ ...vision, eyebrow: e.target.value })}
-                placeholder="Our Vision"
-              />
-            </Field>
+        {activeTab === "ourVision" && (
+          <Section icon={Eye} title="3. Our Vision">
             <Field label="Title">
               <input
                 className={inputClass}
-                value={vision.title}
-                onChange={(e) => setVision({ ...vision, title: e.target.value })}
+                value={ourVision.title}
+                onChange={(e) => setOurVision({ ...ourVision, title: e.target.value })}
                 placeholder="Our Vision"
               />
             </Field>
@@ -436,8 +356,8 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
               <textarea
                 className={inputClass}
                 rows={4}
-                value={vision.statement}
-                onChange={(e) => setVision({ ...vision, statement: e.target.value })}
+                value={ourVision.statement}
+                onChange={(e) => setOurVision({ ...ourVision, statement: e.target.value })}
                 placeholder="To be the most trusted partner for organizations building Global Capability Centres..."
               />
             </Field>
@@ -446,24 +366,16 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
 
         {/* 4. THE NAME */}
         {activeTab === "theName" && (
-          <Section icon={Sparkles} title="The Name & Etymology">
-            <Field label="Eyebrow">
-              <input
-                className={inputClass}
-                value={theName.eyebrow}
-                onChange={(e) => setTheName({ ...theName, eyebrow: e.target.value })}
-                placeholder="The name"
-              />
-            </Field>
-            <Field label="Section Title">
+          <Section icon={Sparkles} title="4. The Name">
+            <Field label="Title">
               <input
                 className={inputClass}
                 value={theName.title}
                 onChange={(e) => setTheName({ ...theName, title: e.target.value })}
-                placeholder="The Meaning of Vertara"
+                placeholder="The Name"
               />
             </Field>
-            <Field label="Origin / Meaning">
+            <Field label="Meaning / Etymology">
               <textarea
                 className={inputClass}
                 rows={3}
@@ -472,7 +384,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
                 placeholder="Vertara draws from Vertex, the summit... and Tara, the Sanskrit word for star..."
               />
             </Field>
-            <Field label="Synthesis / Combined Promise">
+            <Field label="Combined Promise / Description">
               <textarea
                 className={inputClass}
                 rows={3}
@@ -484,23 +396,23 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
           </Section>
         )}
 
-        {/* 5. WHAT WE STAND FOR */}
+        {/* 5. WHAT WE STAND FOR (3 Points) */}
         {activeTab === "standFor" && (
           <Section
             icon={Award}
-            title="What We Stand For (Foundation Pillars)"
+            title="5. What We Stand For"
             action={
               <button
                 type="button"
                 onClick={addStandForPoint}
                 className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-white px-3.5 py-1.5 text-xs font-semibold text-accent hover:border-accent transition cursor-pointer"
               >
-                <Plus className="h-4 w-4" /> Add Pillar
+                <Plus className="h-4 w-4" /> Add Point
               </button>
             }
           >
             {whatWeStandFor.length === 0 ? (
-              <p className="text-xs text-muted italic py-4">No pillars added yet. Click &quot;Add Pillar&quot; above.</p>
+              <p className="text-xs text-muted italic py-4">No points added yet. Click &quot;Add Point&quot; above.</p>
             ) : (
               <div className="space-y-4">
                 {whatWeStandFor.map((point, index) => (
@@ -510,43 +422,28 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold uppercase tracking-wider text-accent">
-                        Pillar #{index + 1}
+                        Point #{index + 1}
                       </span>
                       <button
                         type="button"
                         onClick={() => removeStandForPoint(index)}
                         className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border text-slate-400 hover:border-red-200 hover:text-red-600 transition cursor-pointer"
-                        title="Delete pillar"
+                        title="Delete point"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
 
-                    <div className="grid gap-3 sm:grid-cols-[1fr_160px]">
-                      <Field label="Pillar Title">
-                        <input
-                          className={inputClass}
-                          value={point.title}
-                          onChange={(e) => updateStandForPoint(index, { title: e.target.value })}
-                          placeholder="e.g. Operator mindset"
-                        />
-                      </Field>
-                      <Field label="Icon Style">
-                        <select
-                          className={inputClass}
-                          value={point.icon || "Layers"}
-                          onChange={(e) => updateStandForPoint(index, { icon: e.target.value })}
-                        >
-                          {ICONS.map((ic) => (
-                            <option key={ic} value={ic}>
-                              {ic}
-                            </option>
-                          ))}
-                        </select>
-                      </Field>
-                    </div>
+                    <Field label="Title">
+                      <input
+                        className={inputClass}
+                        value={point.title}
+                        onChange={(e) => updateStandForPoint(index, { title: e.target.value })}
+                        placeholder="e.g. Operator mindset"
+                      />
+                    </Field>
 
-                    <Field label="Pillar Description">
+                    <Field label="Description">
                       <textarea
                         className={inputClass}
                         rows={2}
@@ -564,23 +461,23 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
           </Section>
         )}
 
-        {/* 6. BY THE NUMBERS */}
+        {/* 6. BY THE NUMBERS (2 Points) */}
         {activeTab === "numbers" && (
           <Section
             icon={Hash}
-            title="By the Numbers (Credibility Points)"
+            title="6. By the Numbers"
             action={
               <button
                 type="button"
                 onClick={addNumberPoint}
                 className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-white px-3.5 py-1.5 text-xs font-semibold text-accent hover:border-accent transition cursor-pointer"
               >
-                <Plus className="h-4 w-4" /> Add Number Point
+                <Plus className="h-4 w-4" /> Add Stat Point
               </button>
             }
           >
             {byTheNumbers.length === 0 ? (
-              <p className="text-xs text-muted italic py-4">No points added yet. Click &quot;Add Number Point&quot; above.</p>
+              <p className="text-xs text-muted italic py-4">No points added yet. Click &quot;Add Stat Point&quot; above.</p>
             ) : (
               <div className="space-y-4">
                 {byTheNumbers.map((point, index) => (
@@ -590,20 +487,20 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold uppercase tracking-wider text-accent">
-                        Point #{index + 1}
+                        Stat #{index + 1}
                       </span>
                       <button
                         type="button"
                         onClick={() => removeNumberPoint(index)}
                         className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border text-slate-400 hover:border-red-200 hover:text-red-600 transition cursor-pointer"
-                        title="Delete point"
+                        title="Delete stat point"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
 
                     <div className="grid gap-3 sm:grid-cols-[100px_1fr]">
-                      <Field label="Number / Stat">
+                      <Field label="Number">
                         <input
                           className={inputClass}
                           value={point.number}
@@ -639,11 +536,11 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
           </Section>
         )}
 
-        {/* 7. THE TEAM */}
+        {/* 7. THE TEAM (3 Entries) */}
         {activeTab === "team" && (
           <Section
             icon={Users}
-            title="The Leadership & Practitioners Team"
+            title="7. The Team"
             action={
               <button
                 type="button"
@@ -797,15 +694,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
 
         {/* 8. CLOSING CTA */}
         {activeTab === "cta" && (
-          <Section icon={ArrowRight} title="Closing CTA Banner">
-            <Field label="Eyebrow">
-              <input
-                className={inputClass}
-                value={closingCta.eyebrow}
-                onChange={(e) => setClosingCta({ ...closingCta, eyebrow: e.target.value })}
-                placeholder="Enquire"
-              />
-            </Field>
+          <Section icon={ArrowRight} title="8. Closing CTA">
             <Field label="CTA Title">
               <input
                 className={inputClass}

@@ -1,7 +1,6 @@
 export type WhatWeStandForPoint = {
   title: string;
   description: string;
-  icon?: string;
 };
 
 export type ByTheNumbersPoint = {
@@ -20,24 +19,19 @@ export type TeamMember = {
 };
 
 export type AboutContentData = {
-  intro: {
-    eyebrow: string;
-    title: string;
-    description: string;
-    image: string;
-  };
-  story: {
-    eyebrow: string;
+  aboutUs: {
     title: string;
     content: string;
   };
-  vision: {
-    eyebrow: string;
+  ourStory: {
+    title: string;
+    content: string;
+  };
+  ourVision: {
     title: string;
     statement: string;
   };
   theName: {
-    eyebrow: string;
     title: string;
     meaning: string;
     description: string;
@@ -46,7 +40,6 @@ export type AboutContentData = {
   byTheNumbers: ByTheNumbersPoint[];
   theTeam: TeamMember[];
   closingCta: {
-    eyebrow: string;
     title: string;
     description: string;
     buttonText: string;
@@ -55,28 +48,23 @@ export type AboutContentData = {
 };
 
 export const seedAboutContent: AboutContentData = {
-  intro: {
-    eyebrow: "About / Who We Are",
-    title: "About Vertara Global",
-    description:
-      "Make India GCC setup predictable for enterprise buyers: clear ownership, honest timelines, and a single operating rhythm from first hire to steady-state scale.",
-    image: "/images/about us.png",
-  },
-  story: {
-    eyebrow: "Our Story",
+  aboutUs: {
     title: "About Us",
+    content:
+      "To be the most trusted partner for organizations building Global Capability Centres that create real enterprise value.",
+  },
+  ourStory: {
+    title: "Our Story",
     content:
       "Vertara Global was founded by operators who have built and scaled India capability centers from the inside — not decks, but delivery. We combine talent, workspace, business operations, and strategic advisory into one accountable partnership so enterprises can move from intent to a live, high-performing GCC without stitching together a dozen vendors.",
   },
-  vision: {
-    eyebrow: "Our Vision",
+  ourVision: {
     title: "Our Vision",
     statement:
       "To be the most trusted partner for organizations building Global Capability Centres that create real enterprise value.",
   },
   theName: {
-    eyebrow: "The Name",
-    title: "The Meaning of Vertara",
+    title: "The Name",
     meaning:
       "Vertara draws from Vertex, the summit, the highest point of capability and Tara, the Sanskrit word for star, guide and to cross over.",
     description:
@@ -87,25 +75,16 @@ export const seedAboutContent: AboutContentData = {
       title: "Operator mindset",
       description:
         "Focused on driving decision, implementation, and delivering results; not just recommendations.",
-      icon: "Layers",
     },
     {
       title: "Sector-led, function-driven approach",
       description:
         "Tailored solutions for sectors and functions; we bring expertise specific to requirements.",
-      icon: "Wrench",
     },
     {
       title: "India execution experts",
       description:
         "Our proprietary model brings location advantage - tier-1, tier 2 cities, expert talent, cost, scale, legal framework and future proofing delivery centres.",
-      icon: "LayoutGrid",
-    },
-    {
-      title: "Integrated delivery",
-      description:
-        "One team across strategy, legal, hiring, technology transformation and operational readiness.",
-      icon: "Compass",
     },
   ],
   byTheNumbers: [
@@ -120,12 +99,6 @@ export const seedAboutContent: AboutContentData = {
       title: "50+ years of GCC experience",
       description:
         "From business strategy, feasibility to steady state operations.",
-    },
-    {
-      number: "03",
-      title: "Practitioner DNA",
-      description:
-        "Lived the GCC journey, solved practical problems not just advised on it.",
     },
   ],
   theTeam: [
@@ -173,7 +146,6 @@ export const seedAboutContent: AboutContentData = {
     },
   ],
   closingCta: {
-    eyebrow: "Enquire",
     title: "Start a conversation with the team",
     description:
       "Share what you're building, we'll connect you with the right partner.",

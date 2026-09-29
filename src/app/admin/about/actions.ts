@@ -32,7 +32,6 @@ export async function saveAboutContentAction(payload: AboutContentData) {
           .map((item) => ({
             title: String(item.title || "").trim(),
             description: String(item.description || "").trim(),
-            icon: String(item.icon || "Layers").trim(),
           }))
           .filter((item) => item.title && item.description)
       : [];
@@ -67,25 +66,20 @@ export async function saveAboutContentAction(payload: AboutContentData) {
     await AboutContent.findOneAndUpdate(
       {},
       {
-        intro: {
-          eyebrow: String(payload.intro?.eyebrow || "").trim(),
-          title: String(payload.intro?.title || "").trim(),
-          description: String(payload.intro?.description || "").trim(),
-          image: String(payload.intro?.image || "").trim(),
+        aboutUs: {
+          title: String(payload.aboutUs?.title || "About Us").trim(),
+          content: String(payload.aboutUs?.content || "").trim(),
         },
-        story: {
-          eyebrow: String(payload.story?.eyebrow || "").trim(),
-          title: String(payload.story?.title || "").trim(),
-          content: String(payload.story?.content || "").trim(),
+        ourStory: {
+          title: String(payload.ourStory?.title || "Our Story").trim(),
+          content: String(payload.ourStory?.content || "").trim(),
         },
-        vision: {
-          eyebrow: String(payload.vision?.eyebrow || "").trim(),
-          title: String(payload.vision?.title || "").trim(),
-          statement: String(payload.vision?.statement || "").trim(),
+        ourVision: {
+          title: String(payload.ourVision?.title || "Our Vision").trim(),
+          statement: String(payload.ourVision?.statement || "").trim(),
         },
         theName: {
-          eyebrow: String(payload.theName?.eyebrow || "").trim(),
-          title: String(payload.theName?.title || "").trim(),
+          title: String(payload.theName?.title || "The Name").trim(),
           meaning: String(payload.theName?.meaning || "").trim(),
           description: String(payload.theName?.description || "").trim(),
         },
@@ -93,7 +87,6 @@ export async function saveAboutContentAction(payload: AboutContentData) {
         byTheNumbers: sanitizedByTheNumbers,
         theTeam: sanitizedTheTeam,
         closingCta: {
-          eyebrow: String(payload.closingCta?.eyebrow || "").trim(),
           title: String(payload.closingCta?.title || "").trim(),
           description: String(payload.closingCta?.description || "").trim(),
           buttonText: String(payload.closingCta?.buttonText || "").trim(),
@@ -140,7 +133,7 @@ export async function uploadAboutImageAction(formData: FormData) {
           : file.type === "image/webp"
             ? "webp"
             : "gif";
-    const filename = `about-${Date.now()}.${ext}`;
+    const filename = `team-${Date.now()}.${ext}`;
     const dir = path.join(process.cwd(), "public", "uploads");
     await mkdir(dir, { recursive: true });
     const buffer = Buffer.from(await file.arrayBuffer());

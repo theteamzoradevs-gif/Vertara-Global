@@ -4,7 +4,6 @@ const WhatWeStandForSchema = new Schema(
   {
     title: { type: String, required: true },
     description: { type: String, required: true },
-    icon: { type: String, default: "Layers" },
   },
   { _id: false }
 );
@@ -32,25 +31,20 @@ const TeamMemberSchema = new Schema(
 
 const AboutContentSchema = new Schema(
   {
-    intro: {
-      eyebrow: { type: String, default: "About / Who We Are" },
-      title: { type: String, default: "About Vertara Global" },
-      description: { type: String, default: "" },
-      image: { type: String, default: "/images/about us.png" },
-    },
-    story: {
-      eyebrow: { type: String, default: "Our Story" },
+    aboutUs: {
       title: { type: String, default: "About Us" },
       content: { type: String, default: "" },
     },
-    vision: {
-      eyebrow: { type: String, default: "Our Vision" },
+    ourStory: {
+      title: { type: String, default: "Our Story" },
+      content: { type: String, default: "" },
+    },
+    ourVision: {
       title: { type: String, default: "Our Vision" },
       statement: { type: String, default: "" },
     },
     theName: {
-      eyebrow: { type: String, default: "The Name" },
-      title: { type: String, default: "The Meaning of Vertara" },
+      title: { type: String, default: "The Name" },
       meaning: { type: String, default: "" },
       description: { type: String, default: "" },
     },
@@ -58,7 +52,6 @@ const AboutContentSchema = new Schema(
     byTheNumbers: [ByTheNumbersSchema],
     theTeam: [TeamMemberSchema],
     closingCta: {
-      eyebrow: { type: String, default: "Enquire" },
       title: { type: String, default: "Start a conversation with the team" },
       description: { type: String, default: "" },
       buttonText: { type: String, default: "Request a partner call" },

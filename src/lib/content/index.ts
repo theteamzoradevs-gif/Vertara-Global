@@ -223,9 +223,9 @@ export async function getAboutContent(): Promise<AboutContentData> {
     }
     const parsed = JSON.parse(JSON.stringify(doc)) as Partial<AboutContentData>;
     return {
-      intro: { ...seedAboutContent.intro, ...(parsed.intro || {}) },
-      story: { ...seedAboutContent.story, ...(parsed.story || {}) },
-      vision: { ...seedAboutContent.vision, ...(parsed.vision || {}) },
+      aboutUs: { ...seedAboutContent.aboutUs, ...(parsed.aboutUs || {}) },
+      ourStory: { ...seedAboutContent.ourStory, ...(parsed.ourStory || {}) },
+      ourVision: { ...seedAboutContent.ourVision, ...(parsed.ourVision || {}) },
       theName: { ...seedAboutContent.theName, ...(parsed.theName || {}) },
       whatWeStandFor: Array.isArray(parsed.whatWeStandFor) && parsed.whatWeStandFor.length > 0
         ? parsed.whatWeStandFor
