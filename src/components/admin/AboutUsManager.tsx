@@ -9,7 +9,6 @@ import {
   Loader2,
   Plus,
   Trash2,
-  Upload,
   Users,
   Award,
   BookOpen,
@@ -19,10 +18,7 @@ import {
   ArrowRight,
   Info,
 } from "lucide-react";
-import {
-  saveAboutContentAction,
-  uploadAboutImageAction,
-} from "@/app/admin/about/actions";
+import { saveAboutContentAction } from "@/app/admin/about/actions";
 import type {
   AboutContentData,
   WhatWeStandForPoint,
@@ -35,7 +31,6 @@ const inputClass =
 
 export function AboutUsManager({ initialContent }: { initialContent: AboutContentData }) {
   const [isPending, startTransition] = useTransition();
-  const [uploadingTeamIdx, setUploadingTeamIdx] = useState<number | null>(null);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   // 1. About Us
@@ -46,15 +41,15 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
   const [ourVision, setOurVision] = useState(initialContent.ourVision);
   // 4. The Name
   const [theName, setTheName] = useState(initialContent.theName);
-  // 5. What We Stand For
+  // 5. What We Stand For (3 points: Trust, Ownership, Craft)
   const [whatWeStandFor, setWhatWeStandFor] = useState<WhatWeStandForPoint[]>(
     initialContent.whatWeStandFor || []
   );
-  // 6. By the Numbers
+  // 6. By the Numbers (2 points)
   const [byTheNumbers, setByTheNumbers] = useState<ByTheNumbersPoint[]>(
     initialContent.byTheNumbers || []
   );
-  // 7. The Team
+  // 7. The Team (3 entries)
   const [theTeam, setTheTeam] = useState<TeamMember[]>(initialContent.theTeam || []);
   // 8. Closing CTA
   const [closingCta, setClosingCta] = useState(initialContent.closingCta);
@@ -67,28 +62,6 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
   const showMessage = (type: "success" | "error", text: string) => {
     setMessage({ type, text });
     window.setTimeout(() => setMessage(null), 5000);
-  };
-
-  // Upload team member image
-  const onUploadTeamImage = async (file: File, index: number) => {
-    setUploadingTeamIdx(index);
-    try {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await uploadAboutImageAction(fd);
-      if (res.success && res.url) {
-        setTheTeam((prev) =>
-          prev.map((member, i) => (i === index ? { ...member, image: res.url! } : member))
-        );
-        showMessage("success", "Team member photo uploaded. Remember to save changes.");
-      } else {
-        showMessage("error", res.error || "Could not upload image.");
-      }
-    } catch {
-      showMessage("error", "Could not upload image.");
-    } finally {
-      setUploadingTeamIdx(null);
-    }
   };
 
   // Dynamic handlers for What We Stand For
@@ -128,7 +101,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
     setByTheNumbers((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // Dynamic handlers for Team Members
+  // Dynamic handlers for Team Members (Only Name, Role, Bio)
   const addTeamMember = () => {
     setTheTeam((prev) => [
       ...prev,
@@ -136,9 +109,6 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
         name: "",
         role: "",
         bio: "",
-        bullets: [""],
-        image: "",
-        initials: "",
       },
     ]);
   };
@@ -152,32 +122,6 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
   const removeTeamMember = (index: number) => {
     if (!window.confirm("Are you sure you want to remove this team member?")) return;
     setTheTeam((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const updateTeamBullet = (memberIdx: number, bulletIdx: number, val: string) => {
-    setTheTeam((prev) =>
-      prev.map((m, i) => {
-        if (i !== memberIdx) return m;
-        const newBullets = [...(m.bullets || [])];
-        newBullets[bulletIdx] = val;
-        return { ...m, bullets: newBullets };
-      })
-    );
-  };
-
-  const addTeamBullet = (memberIdx: number) => {
-    setTheTeam((prev) =>
-      prev.map((m, i) => (i === memberIdx ? { ...m, bullets: [...(m.bullets || []), ""] } : m))
-    );
-  };
-
-  const removeTeamBullet = (memberIdx: number, bulletIdx: number) => {
-    setTheTeam((prev) =>
-      prev.map((m, i) => {
-        if (i !== memberIdx) return m;
-        return { ...m, bullets: m.bullets.filter((_, bi) => bi !== bulletIdx) };
-      })
-    );
   };
 
   // Save action
@@ -221,7 +165,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
         <div>
           <h1 className="text-2xl font-bold text-navy">About Us Editor</h1>
           <p className="mt-1 text-sm text-muted">
-            Manage the 8 official sections of About Us — story, vision, name, pillars, credibility points, team, and CTA.
+            Manage the official 8 sections of About Us matching your exact provided content.
           </p>
         </div>
         <button
@@ -235,7 +179,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
         </button>
       </div>
 
-      {/* Alert Notification */}
+      {/* Alert Banner */}
       {message ? (
         <div
           className={`flex items-center justify-between rounded-2xl px-5 py-3.5 text-xs font-medium border shadow-xs ${
@@ -262,7 +206,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
         </div>
       ) : null}
 
-      {/* 8 Clean Tabs */}
+      {/* Tabs */}
       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none border-b border-border">
         {tabs.map((tab) => {
           const Icon = tab.icon;
@@ -312,7 +256,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
                 rows={5}
                 value={aboutUs.content}
                 onChange={(e) => setAboutUs({ ...aboutUs, content: e.target.value })}
-                placeholder="To be the most trusted partner for organizations building Global Capability Centres..."
+                placeholder="To be the most trusted partner for organizations building Global Capability Centres that create real enterprise value."
               />
             </Field>
           </Section>
@@ -358,7 +302,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
                 rows={4}
                 value={ourVision.statement}
                 onChange={(e) => setOurVision({ ...ourVision, statement: e.target.value })}
-                placeholder="To be the most trusted partner for organizations building Global Capability Centres..."
+                placeholder="To be the most trusted partner for organizations building Global Capability Centres that create real enterprise value."
               />
             </Field>
           </Section>
@@ -375,32 +319,32 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
                 placeholder="The Name"
               />
             </Field>
-            <Field label="Meaning / Etymology">
+            <Field label="Meaning">
               <textarea
                 className={inputClass}
                 rows={3}
                 value={theName.meaning}
                 onChange={(e) => setTheName({ ...theName, meaning: e.target.value })}
-                placeholder="Vertara draws from Vertex, the summit... and Tara, the Sanskrit word for star..."
+                placeholder="Vertara draws from Vertex, the summit, the highest point of capability and Tara, the Sanskrit word for star, guide and to cross over."
               />
             </Field>
-            <Field label="Combined Promise / Description">
+            <Field label="Description">
               <textarea
                 className={inputClass}
                 rows={3}
                 value={theName.description}
                 onChange={(e) => setTheName({ ...theName, description: e.target.value })}
-                placeholder="Together: The guiding summit, a partner that leads organizations to the peak..."
+                placeholder="Together: The guiding summit, a partner that leads organizations to the peak of their GCC ambition."
               />
             </Field>
           </Section>
         )}
 
-        {/* 5. WHAT WE STAND FOR (3 Points) */}
+        {/* 5. WHAT WE STAND FOR (3 Points: Trust, Ownership, Craft) */}
         {activeTab === "standFor" && (
           <Section
             icon={Award}
-            title="5. What We Stand For"
+            title="5. What We Stand For (Trust, Ownership, Craft)"
             action={
               <button
                 type="button"
@@ -434,24 +378,24 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
                       </button>
                     </div>
 
-                    <Field label="Title">
+                    <Field label="Point Name">
                       <input
                         className={inputClass}
                         value={point.title}
                         onChange={(e) => updateStandForPoint(index, { title: e.target.value })}
-                        placeholder="e.g. Operator mindset"
+                        placeholder="e.g. Trust"
                       />
                     </Field>
 
-                    <Field label="Description">
+                    <Field label="Description (Optional)">
                       <textarea
                         className={inputClass}
                         rows={2}
-                        value={point.description}
+                        value={point.description || ""}
                         onChange={(e) =>
                           updateStandForPoint(index, { description: e.target.value })
                         }
-                        placeholder="Focused on driving decision, implementation, and delivering results..."
+                        placeholder="Description if applicable..."
                       />
                     </Field>
                   </div>
@@ -465,19 +409,19 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
         {activeTab === "numbers" && (
           <Section
             icon={Hash}
-            title="6. By the Numbers"
+            title="6. By the Numbers (2 Points)"
             action={
               <button
                 type="button"
                 onClick={addNumberPoint}
                 className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-white px-3.5 py-1.5 text-xs font-semibold text-accent hover:border-accent transition cursor-pointer"
               >
-                <Plus className="h-4 w-4" /> Add Stat Point
+                <Plus className="h-4 w-4" /> Add Point
               </button>
             }
           >
             {byTheNumbers.length === 0 ? (
-              <p className="text-xs text-muted italic py-4">No points added yet. Click &quot;Add Stat Point&quot; above.</p>
+              <p className="text-xs text-muted italic py-4">No points added yet. Click &quot;Add Point&quot; above.</p>
             ) : (
               <div className="space-y-4">
                 {byTheNumbers.map((point, index) => (
@@ -505,7 +449,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
                           className={inputClass}
                           value={point.number}
                           onChange={(e) => updateNumberPoint(index, { number: e.target.value })}
-                          placeholder="01 or 50+"
+                          placeholder="01 or 02"
                         />
                       </Field>
                       <Field label="Title">
@@ -536,11 +480,11 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
           </Section>
         )}
 
-        {/* 7. THE TEAM (3 Entries) */}
+        {/* 7. THE TEAM (3 Entries - Name, Role, Bio only) */}
         {activeTab === "team" && (
           <Section
             icon={Users}
-            title="7. The Team"
+            title="7. The Team (3 Entries)"
             action={
               <button
                 type="button"
@@ -561,19 +505,9 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
                     className="relative rounded-2xl border border-border bg-surface p-5 space-y-4"
                   >
                     <div className="flex items-center justify-between border-b border-border pb-3">
-                      <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-full bg-navy text-white flex items-center justify-center font-bold text-xs overflow-hidden">
-                          {member.image ? (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img src={member.image} alt={member.name} className="h-full w-full object-cover" />
-                          ) : (
-                            member.initials || member.name.slice(0, 2).toUpperCase() || "TM"
-                          )}
-                        </div>
-                        <div>
-                          <p className="font-bold text-navy text-sm">{member.name || `Member #${index + 1}`}</p>
-                          <p className="text-[11px] text-muted">{member.role || "Role not set"}</p>
-                        </div>
+                      <div>
+                        <p className="font-bold text-navy text-sm">{member.name || `Member #${index + 1}`}</p>
+                        <p className="text-[11px] text-muted">{member.role || "Role not set"}</p>
                       </div>
 
                       <button
@@ -586,7 +520,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
                       </button>
                     </div>
 
-                    <div className="grid gap-4 sm:grid-cols-3">
+                    <div className="grid gap-4 sm:grid-cols-2">
                       <Field label="Name">
                         <input
                           className={inputClass}
@@ -600,91 +534,20 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
                           className={inputClass}
                           value={member.role}
                           onChange={(e) => updateTeamMember(index, { role: e.target.value })}
-                          placeholder="e.g. Co-Founder, Former Mining Director"
-                        />
-                      </Field>
-                      <Field label="Initials">
-                        <input
-                          className={inputClass}
-                          value={member.initials || ""}
-                          onChange={(e) => updateTeamMember(index, { initials: e.target.value })}
-                          placeholder="e.g. N"
+                          placeholder="e.g. Co-Founder, Former Global Mining Director"
                         />
                       </Field>
                     </div>
 
-                    <Field label="Photo URL or Upload">
-                      <div className="flex gap-2">
-                        <input
-                          className={inputClass}
-                          value={member.image || ""}
-                          onChange={(e) => updateTeamMember(index, { image: e.target.value })}
-                          placeholder="Paste image URL"
-                        />
-                        <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-xl border border-border bg-white px-3 py-2 text-xs font-semibold text-navy hover:border-accent shrink-0">
-                          {uploadingTeamIdx === index ? (
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                          ) : (
-                            <Upload className="h-4 w-4" />
-                          )}
-                          <span>Upload</span>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            disabled={uploadingTeamIdx === index}
-                            onChange={(e) => {
-                              const file = e.target.files?.[0];
-                              if (file) void onUploadTeamImage(file, index);
-                              e.target.value = "";
-                            }}
-                          />
-                        </label>
-                      </div>
-                    </Field>
-
-                    <Field label="Bio / Summary">
+                    <Field label="Bio">
                       <textarea
                         className={inputClass}
-                        rows={3}
+                        rows={4}
                         value={member.bio}
                         onChange={(e) => updateTeamMember(index, { bio: e.target.value })}
-                        placeholder="Executive summary of past experience..."
+                        placeholder="Executive summary of experience..."
                       />
                     </Field>
-
-                    {/* Bullets List */}
-                    <div>
-                      <div className="flex items-center justify-between mb-1.5">
-                        <label className="text-xs font-semibold text-navy">Highlight Bullets</label>
-                        <button
-                          type="button"
-                          onClick={() => addTeamBullet(index)}
-                          className="inline-flex items-center gap-1 text-[11px] font-semibold text-accent hover:underline cursor-pointer"
-                        >
-                          <Plus className="h-3.5 w-3.5" /> Add Bullet
-                        </button>
-                      </div>
-                      <div className="space-y-2">
-                        {(member.bullets || []).map((b, bi) => (
-                          <div key={bi} className="flex items-center gap-2">
-                            <input
-                              className={inputClass}
-                              value={b}
-                              onChange={(e) => updateTeamBullet(index, bi, e.target.value)}
-                              placeholder={`Bullet point #${bi + 1}`}
-                            />
-                            <button
-                              type="button"
-                              onClick={() => removeTeamBullet(index, bi)}
-                              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border text-slate-400 hover:text-red-600 transition cursor-pointer"
-                            >
-                              <X className="h-4 w-4" />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
                   </div>
                 ))}
               </div>
@@ -695,21 +558,12 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
         {/* 8. CLOSING CTA */}
         {activeTab === "cta" && (
           <Section icon={ArrowRight} title="8. Closing CTA">
-            <Field label="CTA Title">
+            <Field label="CTA Headline">
               <input
                 className={inputClass}
                 value={closingCta.title}
                 onChange={(e) => setClosingCta({ ...closingCta, title: e.target.value })}
-                placeholder="Start a conversation with the team"
-              />
-            </Field>
-            <Field label="CTA Description">
-              <textarea
-                className={inputClass}
-                rows={3}
-                value={closingCta.description}
-                onChange={(e) => setClosingCta({ ...closingCta, description: e.target.value })}
-                placeholder="Share what you're building, we'll connect you with the right partner."
+                placeholder="Let’s build the right GCC — and build it to last."
               />
             </Field>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -718,7 +572,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
                   className={inputClass}
                   value={closingCta.buttonText}
                   onChange={(e) => setClosingCta({ ...closingCta, buttonText: e.target.value })}
-                  placeholder="Request a partner call"
+                  placeholder="Discuss your GCC mandate"
                 />
               </Field>
               <Field label="Button Link">

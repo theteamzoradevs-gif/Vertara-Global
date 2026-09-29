@@ -3,7 +3,7 @@ import mongoose, { Schema, models, model } from "mongoose";
 const WhatWeStandForSchema = new Schema(
   {
     title: { type: String, required: true },
-    description: { type: String, required: true },
+    description: { type: String, default: "" },
   },
   { _id: false }
 );
@@ -12,7 +12,7 @@ const ByTheNumbersSchema = new Schema(
   {
     number: { type: String, required: true },
     title: { type: String, required: true },
-    description: { type: String, required: true },
+    description: { type: String, default: "" },
   },
   { _id: false }
 );
@@ -22,9 +22,6 @@ const TeamMemberSchema = new Schema(
     name: { type: String, required: true },
     role: { type: String, required: true },
     bio: { type: String, required: true },
-    bullets: { type: [String], default: [] },
-    image: { type: String, default: "" },
-    initials: { type: String, default: "" },
   },
   { _id: false }
 );
@@ -52,9 +49,12 @@ const AboutContentSchema = new Schema(
     byTheNumbers: [ByTheNumbersSchema],
     theTeam: [TeamMemberSchema],
     closingCta: {
-      title: { type: String, default: "Start a conversation with the team" },
+      title: {
+        type: String,
+        default: "Let’s build the right GCC — and build it to last.",
+      },
       description: { type: String, default: "" },
-      buttonText: { type: String, default: "Request a partner call" },
+      buttonText: { type: String, default: "Discuss your GCC mandate" },
       buttonLink: { type: String, default: "/contact" },
     },
   },

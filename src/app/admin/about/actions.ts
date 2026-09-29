@@ -1,7 +1,5 @@
 "use server";
 
-import { mkdir, writeFile } from "fs/promises";
-import path from "path";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
@@ -26,14 +24,14 @@ export async function saveAboutContentAction(payload: AboutContentData) {
       return { success: false, error: "Database is not connected." };
     }
 
-    // Sanitize whatWeStandFor
+    // Sanitize whatWeStandFor (Title required, description optional)
     const sanitizedWhatWeStandFor = Array.isArray(payload.whatWeStandFor)
       ? payload.whatWeStandFor
           .map((item) => ({
             title: String(item.title || "").trim(),
             description: String(item.description || "").trim(),
           }))
-          .filter((item) => item.title && item.description)
+          .filter((item) => item.title)
       : [];
 
     // Sanitize byTheNumbers
@@ -44,21 +42,16 @@ export async function saveAboutContentAction(payload: AboutContentData) {
             title: String(item.title || "").trim(),
             description: String(item.description || "").trim(),
           }))
-          .filter((item) => item.title && item.description)
+          .filter((item) => item.title)
       : [];
 
-    // Sanitize theTeam
+    // Sanitize theTeam (Only name, role, bio)
     const sanitizedTheTeam = Array.isArray(payload.theTeam)
       ? payload.theTeam
           .map((member) => ({
             name: String(member.name || "").trim(),
             role: String(member.role || "").trim(),
             bio: String(member.bio || "").trim(),
-            bullets: Array.isArray(member.bullets)
-              ? member.bullets.map((b) => String(b).trim()).filter(Boolean)
-              : [],
-            image: String(member.image || "").trim(),
-            initials: String(member.initials || "").trim(),
           }))
           .filter((m) => m.name && m.role)
       : [];
@@ -87,10 +80,12 @@ export async function saveAboutContentAction(payload: AboutContentData) {
         byTheNumbers: sanitizedByTheNumbers,
         theTeam: sanitizedTheTeam,
         closingCta: {
-          title: String(payload.closingCta?.title || "").trim(),
+          title: String(
+            payload.closingCta?.title || "Let’s build the right GCC — and build it to last."
+          ).trim(),
           description: String(payload.closingCta?.description || "").trim(),
-          buttonText: String(payload.closingCta?.buttonText || "").trim(),
-          buttonLink: String(payload.closingCta?.buttonLink || "").trim(),
+          buttonText: String(payload.closingCta?.buttonText || "Discuss your GCC mandate").trim(),
+          buttonLink: String(payload.closingCta?.buttonLink || "/contact").trim(),
         },
       },
       { upsert: true, new: true }
@@ -103,45 +98,5 @@ export async function saveAboutContentAction(payload: AboutContentData) {
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : "Failed to save About Us content.";
     return { success: false, error: msg };
-  }
-}
-
-const ALLOWED_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
-const MAX_BYTES = 5 * 1024 * 1024;
-
-export async function uploadAboutImageAction(formData: FormData) {
-  try {
-    const gate = await requireAdmin();
-    if (!gate.ok) return { success: false, error: gate.error };
-
-    const file = formData.get("file");
-    if (!(file instanceof File) || file.size === 0) {
-      return { success: false, error: "Choose an image file to upload." };
-    }
-    if (!ALLOWED_TYPES.has(file.type)) {
-      return { success: false, error: "Use a JPG, PNG, WEBP, or GIF image." };
-    }
-    if (file.size > MAX_BYTES) {
-      return { success: false, error: "Image must be 5MB or smaller." };
-    }
-
-    const ext =
-      file.type === "image/jpeg"
-        ? "jpg"
-        : file.type === "image/png"
-          ? "png"
-          : file.type === "image/webp"
-            ? "webp"
-            : "gif";
-    const filename = `team-${Date.now()}.${ext}`;
-    const dir = path.join(process.cwd(), "public", "uploads");
-    await mkdir(dir, { recursive: true });
-    const buffer = Buffer.from(await file.arrayBuffer());
-    await writeFile(path.join(dir, filename), buffer);
-
-    return { success: true, url: `/uploads/${filename}` };
-  } catch (err: unknown) {
-    const errorMessage = err instanceof Error ? err.message : "Failed to upload image.";
-    return { success: false, error: errorMessage };
   }
 }
