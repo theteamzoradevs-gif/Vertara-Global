@@ -20,7 +20,13 @@ import {
   seedClientLogos,
   seedFaqs,
 } from "@/data/seed-content";
-import { seedAboutContent, type AboutContentData } from "@/data/seed-about";
+import {
+  seedAboutContent,
+  type AboutContentData,
+  type WhatWeStandForPoint,
+  type ByTheNumbersPoint,
+  type TeamMember,
+} from "@/data/seed-about";
 import type {
   Settings,
   ServiceItem,
@@ -221,22 +227,67 @@ export async function getAboutContent(): Promise<AboutContentData> {
       const created = await AboutContent.create(seedAboutContent);
       doc = created.toObject();
     }
-    const parsed = JSON.parse(JSON.stringify(doc)) as Partial<AboutContentData>;
+    const parsed = JSON.parse(JSON.stringify(doc)) as Record<string, unknown>;
+
+    // Safely parse whatWeStandFor
+    let whatWeStandFor = seedAboutContent.whatWeStandFor;
+    if (Array.isArray(parsed.whatWeStandFor) && parsed.whatWeStandFor.length > 0) {
+      const first = parsed.whatWeStandFor[0];
+      if (typeof first?.point === "string") {
+        whatWeStandFor = parsed.whatWeStandFor as WhatWeStandForPoint[];
+      }
+    }
+
+    // Safely parse byTheNumbers
+    let byTheNumbers = seedAboutContent.byTheNumbers;
+    if (Array.isArray(parsed.byTheNumbers) && parsed.byTheNumbers.length > 0) {
+      const first = parsed.byTheNumbers[0];
+      if (typeof first?.point === "string") {
+        byTheNumbers = parsed.byTheNumbers as ByTheNumbersPoint[];
+      }
+    }
+
+    // Safely parse theTeam
+    let theTeam = seedAboutContent.theTeam;
+    if (Array.isArray(parsed.theTeam) && parsed.theTeam.length > 0) {
+      // Check if it's the old team with Rajesh or missing full bio
+      const hasRajesh = (parsed.theTeam as Array<{ name?: string }>).some(
+        (m) => m?.name?.toLowerCase().includes("rajesh")
+      );
+      if (!hasRajesh) {
+        theTeam = parsed.theTeam as TeamMember[];
+      }
+    }
+
+    const parsedAboutUs = (parsed.aboutUs || {}) as Partial<AboutContentData["aboutUs"]>;
+    const parsedOurStory = (parsed.ourStory || {}) as Partial<AboutContentData["ourStory"]>;
+    const parsedOurVision = (parsed.ourVision || {}) as Partial<AboutContentData["ourVision"]>;
+    const parsedTheName = (parsed.theName || {}) as Partial<AboutContentData["theName"]>;
+    const parsedCta = (parsed.closingCta || {}) as Partial<AboutContentData["closingCta"]>;
+
     return {
-      aboutUs: { ...seedAboutContent.aboutUs, ...(parsed.aboutUs || {}) },
-      ourStory: { ...seedAboutContent.ourStory, ...(parsed.ourStory || {}) },
-      ourVision: { ...seedAboutContent.ourVision, ...(parsed.ourVision || {}) },
-      theName: { ...seedAboutContent.theName, ...(parsed.theName || {}) },
-      whatWeStandFor: Array.isArray(parsed.whatWeStandFor) && parsed.whatWeStandFor.length > 0
-        ? parsed.whatWeStandFor
-        : seedAboutContent.whatWeStandFor,
-      byTheNumbers: Array.isArray(parsed.byTheNumbers) && parsed.byTheNumbers.length > 0
-        ? parsed.byTheNumbers
-        : seedAboutContent.byTheNumbers,
-      theTeam: Array.isArray(parsed.theTeam) && parsed.theTeam.length > 0
-        ? parsed.theTeam
-        : seedAboutContent.theTeam,
-      closingCta: { ...seedAboutContent.closingCta, ...(parsed.closingCta || {}) },
+      aboutUs: {
+        title: parsedAboutUs.title || seedAboutContent.aboutUs.title,
+        description: parsedAboutUs.description || seedAboutContent.aboutUs.description,
+      },
+      ourStory: {
+        title: parsedOurStory.title || seedAboutContent.ourStory.title,
+        content: parsedOurStory.content || seedAboutContent.ourStory.content,
+      },
+      ourVision: {
+        title: parsedOurVision.title || seedAboutContent.ourVision.title,
+        statement: parsedOurVision.statement || seedAboutContent.ourVision.statement,
+      },
+      theName: {
+        title: parsedTheName.title || seedAboutContent.theName.title,
+        paragraph: parsedTheName.paragraph || seedAboutContent.theName.paragraph,
+      },
+      whatWeStandFor,
+      byTheNumbers,
+      theTeam,
+      closingCta: {
+        text: parsedCta.text || seedAboutContent.closingCta.text,
+      },
     };
   }, seedAboutContent);
 }

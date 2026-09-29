@@ -17,8 +17,12 @@ import {
   Sparkles,
   ArrowRight,
   Info,
+  Upload,
 } from "lucide-react";
-import { saveAboutContentAction } from "@/app/admin/about/actions";
+import {
+  saveAboutContentAction,
+  uploadTeamPhotoAction,
+} from "@/app/admin/about/actions";
 import type {
   AboutContentData,
   WhatWeStandForPoint,
@@ -32,6 +36,7 @@ const inputClass =
 export function AboutUsManager({ initialContent }: { initialContent: AboutContentData }) {
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
 
   // 1. About Us
   const [aboutUs, setAboutUs] = useState(initialContent.aboutUs);
@@ -68,13 +73,13 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
   const addStandForPoint = () => {
     setWhatWeStandFor((prev) => [
       ...prev,
-      { title: "", description: "" },
+      { point: "" },
     ]);
   };
 
-  const updateStandForPoint = (index: number, patch: Partial<WhatWeStandForPoint>) => {
+  const updateStandForPoint = (index: number, point: string) => {
     setWhatWeStandFor((prev) =>
-      prev.map((item, i) => (i === index ? { ...item, ...patch } : item))
+      prev.map((item, i) => (i === index ? { ...item, point } : item))
     );
   };
 
@@ -84,16 +89,15 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
 
   // Dynamic handlers for By The Numbers
   const addNumberPoint = () => {
-    const nextNum = String(byTheNumbers.length + 1).padStart(2, "0");
     setByTheNumbers((prev) => [
       ...prev,
-      { number: nextNum, title: "", description: "" },
+      { point: "" },
     ]);
   };
 
-  const updateNumberPoint = (index: number, patch: Partial<ByTheNumbersPoint>) => {
+  const updateNumberPoint = (index: number, point: string) => {
     setByTheNumbers((prev) =>
-      prev.map((item, i) => (i === index ? { ...item, ...patch } : item))
+      prev.map((item, i) => (i === index ? { ...item, point } : item))
     );
   };
 
@@ -101,7 +105,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
     setByTheNumbers((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // Dynamic handlers for Team Members (Only Name, Role, Bio)
+  // Dynamic handlers for Team Members
   const addTeamMember = () => {
     setTheTeam((prev) => [
       ...prev,
@@ -109,6 +113,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
         name: "",
         role: "",
         bio: "",
+        image: "",
       },
     ]);
   };
@@ -122,6 +127,25 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
   const removeTeamMember = (index: number) => {
     if (!window.confirm("Are you sure you want to remove this team member?")) return;
     setTheTeam((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handlePhotoUpload = async (index: number, file: File) => {
+    setUploadingIndex(index);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await uploadTeamPhotoAction(fd);
+      if (res.success && res.url) {
+        updateTeamMember(index, { image: res.url });
+        showMessage("success", "Photo uploaded successfully. Save to persist changes.");
+      } else {
+        showMessage("error", res.error || "Failed to upload photo.");
+      }
+    } catch {
+      showMessage("error", "Error uploading photo.");
+    } finally {
+      setUploadingIndex(null);
+    }
   };
 
   // Save action
@@ -165,7 +189,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
         <div>
           <h1 className="text-2xl font-bold text-navy">About Us Editor</h1>
           <p className="mt-1 text-sm text-muted">
-            Manage the official 8 sections of About Us matching your exact provided content.
+            Manage the official 8 sections of About Us matching your exact provided document.
           </p>
         </div>
         <button
@@ -242,7 +266,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
         {/* 1. ABOUT US */}
         {activeTab === "aboutUs" && (
           <Section icon={Info} title="1. About Us">
-            <Field label="Title">
+            <Field label="Section Title">
               <input
                 className={inputClass}
                 value={aboutUs.title}
@@ -250,13 +274,13 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
                 placeholder="About Us"
               />
             </Field>
-            <Field label="Content">
+            <Field label="Description">
               <textarea
                 className={inputClass}
-                rows={5}
-                value={aboutUs.content}
-                onChange={(e) => setAboutUs({ ...aboutUs, content: e.target.value })}
-                placeholder="To be the most trusted partner for organizations building Global Capability Centres that create real enterprise value."
+                rows={4}
+                value={aboutUs.description}
+                onChange={(e) => setAboutUs({ ...aboutUs, description: e.target.value })}
+                placeholder="Renamed from “Who We Are” and moved towards the end of the navigation..."
               />
             </Field>
           </Section>
@@ -265,7 +289,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
         {/* 2. OUR STORY */}
         {activeTab === "ourStory" && (
           <Section icon={BookOpen} title="2. Our Story">
-            <Field label="Title">
+            <Field label="Section Title">
               <input
                 className={inputClass}
                 value={ourStory.title}
@@ -273,13 +297,13 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
                 placeholder="Our Story"
               />
             </Field>
-            <Field label="Story Content">
+            <Field label="Story Paragraph">
               <textarea
                 className={inputClass}
                 rows={6}
                 value={ourStory.content}
                 onChange={(e) => setOurStory({ ...ourStory, content: e.target.value })}
-                placeholder="Vertara Global was founded by operators who have built and scaled..."
+                placeholder="Vertara Global was founded by GCC builders, not GCC advisors..."
               />
             </Field>
           </Section>
@@ -288,7 +312,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
         {/* 3. OUR VISION */}
         {activeTab === "ourVision" && (
           <Section icon={Eye} title="3. Our Vision">
-            <Field label="Title">
+            <Field label="Section Title">
               <input
                 className={inputClass}
                 value={ourVision.title}
@@ -302,7 +326,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
                 rows={4}
                 value={ourVision.statement}
                 onChange={(e) => setOurVision({ ...ourVision, statement: e.target.value })}
-                placeholder="To be the most trusted partner for organizations building Global Capability Centres that create real enterprise value."
+                placeholder="To be the most trusted partner for organizations building Global Capability Centres..."
               />
             </Field>
           </Section>
@@ -311,7 +335,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
         {/* 4. THE NAME */}
         {activeTab === "theName" && (
           <Section icon={Sparkles} title="4. The Name">
-            <Field label="Title">
+            <Field label="Section Title">
               <input
                 className={inputClass}
                 value={theName.title}
@@ -319,32 +343,23 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
                 placeholder="The Name"
               />
             </Field>
-            <Field label="Meaning">
+            <Field label="Paragraph">
               <textarea
                 className={inputClass}
-                rows={3}
-                value={theName.meaning}
-                onChange={(e) => setTheName({ ...theName, meaning: e.target.value })}
-                placeholder="Vertara draws from Vertex, the summit, the highest point of capability and Tara, the Sanskrit word for star, guide and to cross over."
-              />
-            </Field>
-            <Field label="Description">
-              <textarea
-                className={inputClass}
-                rows={3}
-                value={theName.description}
-                onChange={(e) => setTheName({ ...theName, description: e.target.value })}
-                placeholder="Together: The guiding summit, a partner that leads organizations to the peak of their GCC ambition."
+                rows={4}
+                value={theName.paragraph}
+                onChange={(e) => setTheName({ ...theName, paragraph: e.target.value })}
+                placeholder="Vertara draws on Vertex — the summit, the highest point of capability — and Tara, the Sanskrit word for star, guide, and “to cross over.” Together: the guiding summit, a partner that leads organizations to the peak of their GCC ambition."
               />
             </Field>
           </Section>
         )}
 
-        {/* 5. WHAT WE STAND FOR (3 Points: Trust, Ownership, Craft) */}
+        {/* 5. WHAT WE STAND FOR (Exactly 3 Points) */}
         {activeTab === "standFor" && (
           <Section
             icon={Award}
-            title="5. What We Stand For (Trust, Ownership, Craft)"
+            title="5. What We Stand For (Exactly 3 Points: Trust, Ownership, Craft)"
             action={
               <button
                 type="button"
@@ -359,7 +374,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
               <p className="text-xs text-muted italic py-4">No points added yet. Click &quot;Add Point&quot; above.</p>
             ) : (
               <div className="space-y-4">
-                {whatWeStandFor.map((point, index) => (
+                {whatWeStandFor.map((item, index) => (
                   <div
                     key={index}
                     className="relative rounded-2xl border border-border bg-surface p-4 space-y-3"
@@ -378,24 +393,13 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
                       </button>
                     </div>
 
-                    <Field label="Point Name">
-                      <input
-                        className={inputClass}
-                        value={point.title}
-                        onChange={(e) => updateStandForPoint(index, { title: e.target.value })}
-                        placeholder="e.g. Trust"
-                      />
-                    </Field>
-
-                    <Field label="Description (Optional)">
+                    <Field label="Point">
                       <textarea
                         className={inputClass}
                         rows={2}
-                        value={point.description || ""}
-                        onChange={(e) =>
-                          updateStandForPoint(index, { description: e.target.value })
-                        }
-                        placeholder="Description if applicable..."
+                        value={item.point}
+                        onChange={(e) => updateStandForPoint(index, e.target.value)}
+                        placeholder="e.g. Trust — transparent scoping, milestone-based terms, no silent scope creep."
                       />
                     </Field>
                   </div>
@@ -405,11 +409,11 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
           </Section>
         )}
 
-        {/* 6. BY THE NUMBERS (2 Points) */}
+        {/* 6. BY THE NUMBERS (Exactly 2 Points) */}
         {activeTab === "numbers" && (
           <Section
             icon={Hash}
-            title="6. By the Numbers (2 Points)"
+            title="6. By the Numbers (Exactly 2 Points)"
             action={
               <button
                 type="button"
@@ -424,53 +428,32 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
               <p className="text-xs text-muted italic py-4">No points added yet. Click &quot;Add Point&quot; above.</p>
             ) : (
               <div className="space-y-4">
-                {byTheNumbers.map((point, index) => (
+                {byTheNumbers.map((item, index) => (
                   <div
                     key={index}
                     className="relative rounded-2xl border border-border bg-surface p-4 space-y-3"
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold uppercase tracking-wider text-accent">
-                        Stat #{index + 1}
+                        Point #{index + 1}
                       </span>
                       <button
                         type="button"
                         onClick={() => removeNumberPoint(index)}
                         className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border text-slate-400 hover:border-red-200 hover:text-red-600 transition cursor-pointer"
-                        title="Delete stat point"
+                        title="Delete point"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
 
-                    <div className="grid gap-3 sm:grid-cols-[100px_1fr]">
-                      <Field label="Number">
-                        <input
-                          className={inputClass}
-                          value={point.number}
-                          onChange={(e) => updateNumberPoint(index, { number: e.target.value })}
-                          placeholder="01 or 02"
-                        />
-                      </Field>
-                      <Field label="Title">
-                        <input
-                          className={inputClass}
-                          value={point.title}
-                          onChange={(e) => updateNumberPoint(index, { title: e.target.value })}
-                          placeholder="e.g. Founded by GCC builders"
-                        />
-                      </Field>
-                    </div>
-
-                    <Field label="Description">
+                    <Field label="Point">
                       <textarea
                         className={inputClass}
                         rows={2}
-                        value={point.description}
-                        onChange={(e) =>
-                          updateNumberPoint(index, { description: e.target.value })
-                        }
-                        placeholder="Detail explaining this credibility metric..."
+                        value={item.point}
+                        onChange={(e) => updateNumberPoint(index, e.target.value)}
+                        placeholder="e.g. 50+ years of combined GCC experience across the founding team"
                       />
                     </Field>
                   </div>
@@ -480,11 +463,11 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
           </Section>
         )}
 
-        {/* 7. THE TEAM (3 Entries - Name, Role, Bio only) */}
+        {/* 7. THE TEAM (Namit, Neha, Joining the Team) */}
         {activeTab === "team" && (
           <Section
             icon={Users}
-            title="7. The Team (3 Entries)"
+            title="7. The Team (Namit, Neha, Joining the Team)"
             action={
               <button
                 type="button"
@@ -507,7 +490,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
                     <div className="flex items-center justify-between border-b border-border pb-3">
                       <div>
                         <p className="font-bold text-navy text-sm">{member.name || `Member #${index + 1}`}</p>
-                        <p className="text-[11px] text-muted">{member.role || "Role not set"}</p>
+                        <p className="text-[11px] text-muted">{member.role || "Role (Optional)"}</p>
                       </div>
 
                       <button
@@ -526,26 +509,93 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
                           className={inputClass}
                           value={member.name}
                           onChange={(e) => updateTeamMember(index, { name: e.target.value })}
-                          placeholder="e.g. Neha"
+                          placeholder="e.g. Namit Ganjisinghani"
                         />
                       </Field>
-                      <Field label="Role">
+                      <Field label="Role (Optional)">
                         <input
                           className={inputClass}
                           value={member.role}
                           onChange={(e) => updateTeamMember(index, { role: e.target.value })}
-                          placeholder="e.g. Co-Founder, Former Global Mining Director"
+                          placeholder="e.g. Co-Founder, Former Big 4 Partner"
                         />
                       </Field>
                     </div>
 
+                    {/* Photo Upload / URL field */}
+                    <Field
+                      label="Photo (Optional)"
+                      hint="Paste an image URL or upload a file (JPG, PNG, WEBP, GIF up to 5MB)."
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                        <div className="relative flex-1">
+                          <input
+                            className={inputClass}
+                            value={member.image || ""}
+                            onChange={(e) => updateTeamMember(index, { image: e.target.value })}
+                            placeholder="Paste photo URL or click Upload Photo"
+                          />
+                        </div>
+
+                        <label
+                          className={`inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-white px-4 py-2.5 text-xs font-semibold text-navy hover:border-accent hover:text-accent transition shadow-xs cursor-pointer shrink-0 ${
+                            uploadingIndex === index ? "opacity-60 pointer-events-none" : ""
+                          }`}
+                        >
+                          {uploadingIndex === index ? (
+                            <Loader2 className="h-4 w-4 animate-spin text-accent" />
+                          ) : (
+                            <Upload className="h-4 w-4 text-accent" />
+                          )}
+                          <span>{uploadingIndex === index ? "Uploading..." : "Upload Photo"}</span>
+                          <input
+                            type="file"
+                            accept="image/jpeg,image/png,image/webp,image/gif"
+                            className="hidden"
+                            disabled={uploadingIndex === index}
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) void handlePhotoUpload(index, file);
+                              e.target.value = "";
+                            }}
+                          />
+                        </label>
+                      </div>
+
+                      {member.image ? (
+                        <div className="mt-3 flex items-center gap-3 p-2.5 rounded-xl bg-white border border-border w-fit shadow-2xs">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={member.image}
+                            alt={member.name || "Team member preview"}
+                            className="h-12 w-12 rounded-lg object-cover border border-border"
+                            onError={(e) => {
+                              (e.currentTarget as HTMLImageElement).style.display = "none";
+                            }}
+                          />
+                          <div className="text-left pr-2">
+                            <p className="text-[11px] font-semibold text-navy truncate max-w-[220px]">
+                              {member.image.split("/").pop() || "Photo preview"}
+                            </p>
+                            <button
+                              type="button"
+                              onClick={() => updateTeamMember(index, { image: "" })}
+                              className="text-[11px] text-red-600 hover:underline cursor-pointer font-medium"
+                            >
+                              Remove photo
+                            </button>
+                          </div>
+                        </div>
+                      ) : null}
+                    </Field>
+
                     <Field label="Bio">
                       <textarea
                         className={inputClass}
-                        rows={4}
+                        rows={5}
                         value={member.bio}
                         onChange={(e) => updateTeamMember(index, { bio: e.target.value })}
-                        placeholder="Executive summary of experience..."
+                        placeholder="Exact founder bio or practice description..."
                       />
                     </Field>
                   </div>
@@ -558,32 +608,15 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
         {/* 8. CLOSING CTA */}
         {activeTab === "cta" && (
           <Section icon={ArrowRight} title="8. Closing CTA">
-            <Field label="CTA Headline">
-              <input
+            <Field label="Closing CTA Text">
+              <textarea
                 className={inputClass}
-                value={closingCta.title}
-                onChange={(e) => setClosingCta({ ...closingCta, title: e.target.value })}
+                rows={3}
+                value={closingCta.text}
+                onChange={(e) => setClosingCta({ ...closingCta, text: e.target.value })}
                 placeholder="Let’s build the right GCC — and build it to last."
               />
             </Field>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Button Text">
-                <input
-                  className={inputClass}
-                  value={closingCta.buttonText}
-                  onChange={(e) => setClosingCta({ ...closingCta, buttonText: e.target.value })}
-                  placeholder="Discuss your GCC mandate"
-                />
-              </Field>
-              <Field label="Button Link">
-                <input
-                  className={inputClass}
-                  value={closingCta.buttonLink}
-                  onChange={(e) => setClosingCta({ ...closingCta, buttonLink: e.target.value })}
-                  placeholder="/contact"
-                />
-              </Field>
-            </div>
           </Section>
         )}
 

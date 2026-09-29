@@ -1,10 +1,20 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { mkdir, writeFile } from "node:fs/promises";
+import path from "node:path";
 import { auth } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
 import { AboutContent } from "@/models/AboutContent";
 import type { AboutContentData } from "@/data/seed-about";
+
+const ALLOWED_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+]);
+const MAX_BYTES = 5 * 1024 * 1024; // 5MB
 
 async function requireAdmin() {
   const session = await auth();
@@ -12,6 +22,43 @@ async function requireAdmin() {
     return { ok: false as const, error: "Please sign in to save changes." };
   }
   return { ok: true as const };
+}
+
+export async function uploadTeamPhotoAction(formData: FormData) {
+  try {
+    const gate = await requireAdmin();
+    if (!gate.ok) return { success: false, error: gate.error };
+
+    const file = formData.get("file");
+    if (!(file instanceof File) || file.size === 0) {
+      return { success: false, error: "Choose an image file to upload." };
+    }
+    if (!ALLOWED_TYPES.has(file.type)) {
+      return { success: false, error: "Use a JPG, PNG, WEBP, or GIF image." };
+    }
+    if (file.size > MAX_BYTES) {
+      return { success: false, error: "Image must be 5MB or smaller." };
+    }
+
+    const ext =
+      file.type === "image/jpeg"
+        ? "jpg"
+        : file.type === "image/png"
+          ? "png"
+          : file.type === "image/webp"
+            ? "webp"
+            : "gif";
+    const filename = `team-${Date.now()}.${ext}`;
+    const dir = path.join(process.cwd(), "public", "uploads");
+    await mkdir(dir, { recursive: true });
+    const buffer = Buffer.from(await file.arrayBuffer());
+    await writeFile(path.join(dir, filename), buffer);
+
+    return { success: true, url: `/uploads/${filename}` };
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : "Failed to upload photo.";
+    return { success: false, error: errorMessage };
+  }
 }
 
 export async function saveAboutContentAction(payload: AboutContentData) {
@@ -24,36 +71,34 @@ export async function saveAboutContentAction(payload: AboutContentData) {
       return { success: false, error: "Database is not connected." };
     }
 
-    // Sanitize whatWeStandFor (Title required, description optional)
+    // Sanitize whatWeStandFor (Point text required)
     const sanitizedWhatWeStandFor = Array.isArray(payload.whatWeStandFor)
       ? payload.whatWeStandFor
           .map((item) => ({
-            title: String(item.title || "").trim(),
-            description: String(item.description || "").trim(),
+            point: String(item?.point || "").trim(),
           }))
-          .filter((item) => item.title)
+          .filter((item) => item.point)
       : [];
 
-    // Sanitize byTheNumbers
+    // Sanitize byTheNumbers (Point text required)
     const sanitizedByTheNumbers = Array.isArray(payload.byTheNumbers)
       ? payload.byTheNumbers
           .map((item) => ({
-            number: String(item.number || "").trim(),
-            title: String(item.title || "").trim(),
-            description: String(item.description || "").trim(),
+            point: String(item?.point || "").trim(),
           }))
-          .filter((item) => item.title)
+          .filter((item) => item.point)
       : [];
 
-    // Sanitize theTeam (Only name, role, bio)
+    // Sanitize theTeam (name and bio required, role and image optional)
     const sanitizedTheTeam = Array.isArray(payload.theTeam)
       ? payload.theTeam
           .map((member) => ({
-            name: String(member.name || "").trim(),
-            role: String(member.role || "").trim(),
-            bio: String(member.bio || "").trim(),
+            name: String(member?.name || "").trim(),
+            role: String(member?.role || "").trim(),
+            bio: String(member?.bio || "").trim(),
+            image: String(member?.image || "").trim(),
           }))
-          .filter((m) => m.name && m.role)
+          .filter((m) => m.name || m.bio)
       : [];
 
     await AboutContent.findOneAndUpdate(
@@ -61,7 +106,7 @@ export async function saveAboutContentAction(payload: AboutContentData) {
       {
         aboutUs: {
           title: String(payload.aboutUs?.title || "About Us").trim(),
-          content: String(payload.aboutUs?.content || "").trim(),
+          description: String(payload.aboutUs?.description || "").trim(),
         },
         ourStory: {
           title: String(payload.ourStory?.title || "Our Story").trim(),
@@ -73,19 +118,15 @@ export async function saveAboutContentAction(payload: AboutContentData) {
         },
         theName: {
           title: String(payload.theName?.title || "The Name").trim(),
-          meaning: String(payload.theName?.meaning || "").trim(),
-          description: String(payload.theName?.description || "").trim(),
+          paragraph: String(payload.theName?.paragraph || "").trim(),
         },
         whatWeStandFor: sanitizedWhatWeStandFor,
         byTheNumbers: sanitizedByTheNumbers,
         theTeam: sanitizedTheTeam,
         closingCta: {
-          title: String(
-            payload.closingCta?.title || "Let’s build the right GCC — and build it to last."
+          text: String(
+            payload.closingCta?.text || "Let’s build the right GCC — and build it to last."
           ).trim(),
-          description: String(payload.closingCta?.description || "").trim(),
-          buttonText: String(payload.closingCta?.buttonText || "Discuss your GCC mandate").trim(),
-          buttonLink: String(payload.closingCta?.buttonLink || "/contact").trim(),
         },
       },
       { upsert: true, new: true }
