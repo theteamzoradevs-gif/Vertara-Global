@@ -82,7 +82,7 @@ const allCards: CardItem[] = [
     id: "mining-metals",
     category: "buyer",
     title: "Mining & Metals",
-    blurb: "Asset analytics • engineering • procurement • ESG/HSE data",
+    blurb: "Asset analytics engineering procurement ESG/HSE data",
     detail:
       "Asset performance analytics, engineering & operational design CoEs, strategic global procurement hubs, and ESG/HSE compliance data systems.",
   },
@@ -128,19 +128,19 @@ export function WhoWeServe() {
             <Reveal
               key={card.id}
               delay={(colIdx * 3 + cardIdx) * 0.03}
-              className="flex flex-1 flex-col"
+              className="flex flex-col"
             >
-              <div className="flex h-full flex-1 flex-col justify-between rounded-2xl border border-[#3e5345] bg-[#2F3F34] p-5 shadow-md shadow-black/20 transition-all duration-300 hover:-translate-y-1 hover:border-[#B59439] hover:shadow-xl">
+              <div className="group flex h-[185px] sm:h-[190px] w-full flex-col justify-start overflow-hidden rounded-2xl border border-[#cddcd1] bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#2F3F34]/50 hover:shadow-md">
                 <div>
                   <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#B59439]">
                     {card.category === "sector" ? "Sector Vertical" : "Buyer Archetype"}
                   </p>
 
-                  <h3 className="mt-2 text-base sm:text-lg font-bold tracking-tight text-white">
+                  <h3 className="mt-2 text-base sm:text-lg font-bold tracking-tight text-[#101C30] group-hover:text-[#2F3F34] transition-colors leading-snug min-h-[44px] sm:min-h-[50px] line-clamp-2">
                     {card.title}
                   </h3>
 
-                  <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#d1e0d7]">
+                  <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#101C30]/80 line-clamp-3">
                     {card.blurb}
                   </p>
                 </div>

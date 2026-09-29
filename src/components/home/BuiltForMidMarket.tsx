@@ -39,22 +39,22 @@ export function BuiltForMidMarket() {
   return (
     <section
       id="built-for-mid-market"
-      className="relative overflow-hidden bg-[#D8D2C0] py-14 md:py-20 border-b border-[#c5beaa]"
+      className="relative overflow-hidden bg-[#F9F8F5] py-14 md:py-20 border-b border-[#E8E4D9]"
     >
       <div className="relative z-[1] mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <Reveal>
-          <div className="max-w-3xl">
+          <div className="w-full">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#B59439]">
               Our Focus
             </p>
 
-            <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#101C30] sm:text-4xl md:text-5xl">
+            <h2 className="mt-3 text-2xl font-bold tracking-tight text-[#101C30] sm:text-3xl lg:text-[1.875rem]">
               Built for mid-market from Nano to mid-scale
             </h2>
 
-            <p className="mt-3 text-sm sm:text-base md:text-lg leading-relaxed text-[#101C30]/85">
-              A GCC for a mid-market company needs different judgment than one for a Fortune 500 different pace, different budget discipline, different cities. We work the full range: a 20-person Nano GCC pilot at one end, a 400–500 person mid-scale capability hub at the other, and everything in between — without forcing every mandate through the same enterprise playbook.
+            <p className="mt-3 w-full text-base sm:text-lg leading-relaxed text-[#101C30]">
+              A GCC for a mid-market company needs different judgment than one for a Fortune 500 different pace, different budget discipline, different cities. We work the full range a 20-person Nano GCC pilot at one end, a 400–500 person mid-scale capability hub at the other, and everything in between without forcing every mandate through the same enterprise playbook.
             </p>
           </div>
         </Reveal>
@@ -63,13 +63,13 @@ export function BuiltForMidMarket() {
         <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:gap-6">
           {points.map((item, index) => (
             <Reveal key={item.title} delay={0.06 * index}>
-              <div className="flex h-full flex-col justify-between rounded-2xl border border-white/70 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#2F3F34] hover:shadow-md">
+              <div className="group flex h-full flex-col justify-between rounded-2xl border border-[#cddcd1] bg-[#e5ebe6] p-6 sm:p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#2F3F34]/50 hover:shadow-md">
                 <div>
-                  <h3 className="text-base sm:text-lg font-bold text-[#101C30] tracking-tight leading-snug">
+                  <h3 className="text-base sm:text-lg font-bold text-[#101C30] tracking-tight leading-snug group-hover:text-[#2F3F34] transition-colors">
                     {item.title}
                   </h3>
 
-                  <p className="mt-2.5 text-xs sm:text-sm leading-relaxed text-[#101C30]/75">
+                  <p className="mt-2.5 text-sm sm:text-base leading-relaxed text-[#101C30]/80">
                     {item.description}
                   </p>
                 </div>

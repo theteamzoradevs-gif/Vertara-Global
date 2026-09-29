@@ -1,8 +1,7 @@
-﻿"use client";
+"use client";
 
-import Image from "next/image";
+import React, { useState } from "react";
 import Link from "next/link";
-import { useState } from "react";
 import { Building2, Compass, Settings2, Users, ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/ui/Reveal";
 import { cn } from "@/lib/utils";
@@ -20,7 +19,7 @@ type ServiceCardProps = {
   shortDescription: string;
   valueProposition?: string;
   icon: string;
-  image: string;
+  image?: string;
 };
 
 export function ServiceCard({
@@ -29,7 +28,6 @@ export function ServiceCard({
   shortDescription,
   valueProposition,
   icon,
-  image,
 }: ServiceCardProps) {
   const Icon = icons[icon as keyof typeof icons] ?? Users;
   const [flipped, setFlipped] = useState(false);
@@ -37,7 +35,7 @@ export function ServiceCard({
   return (
     <Reveal>
       <div
-        className="group h-[400px] [perspective:1200px] sm:h-[420px]"
+        className="group h-[265px] [perspective:1200px] sm:h-[280px]"
         onMouseEnter={() => setFlipped(true)}
         onMouseLeave={() => setFlipped(false)}
       >
@@ -47,70 +45,71 @@ export function ServiceCard({
             flipped && "[transform:rotateY(180deg)]",
           )}
         >
-          {/* Front */}
-          <div className="absolute inset-0 flex flex-col overflow-hidden rounded-2xl border border-[#cddcd1] bg-[#e5ebe6] shadow-sm [backface-visibility:hidden]">
-            <div className="relative h-44 shrink-0 overflow-hidden sm:h-48">
-              <Image
-                src={image}
-                alt={name}
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-                sizes="(max-width:768px) 100vw, 25vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#233027]/75 via-[#233027]/20 to-transparent" />
-              <span className="absolute bottom-3 left-3 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-white text-accent shadow">
-                <Icon className="h-5 w-5" />
-              </span>
-            </div>
-            <div className="flex flex-1 flex-col p-5">
-              <h3 className="text-lg font-bold text-navy">{name}</h3>
-              <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted">
+          {/* Front — White card on light green section */}
+          <div className="absolute inset-0 flex flex-col justify-between overflow-hidden rounded-2xl border border-[#cddcd1] bg-white p-5 sm:p-6 shadow-sm [backface-visibility:hidden]">
+            <div>
+              <div>
+                <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[#e5ebe6] text-[#2F3F34] shadow-sm border border-[#cddcd1]">
+                  <Icon className="h-5 w-5" />
+                </span>
+              </div>
+
+              <h3 className="mt-4 text-base sm:text-lg font-bold text-[#101C30] tracking-tight leading-snug">
+                {name}
+              </h3>
+
+              <p className="mt-2 line-clamp-3 text-xs sm:text-sm leading-relaxed text-[#101C30]/80">
                 {shortDescription}
               </p>
-              <p className="mt-auto pt-4 text-xs font-semibold uppercase tracking-wide text-accent">
-                Hover to explore
-              </p>
+            </div>
+
+            <div className="pt-3 flex items-center justify-between text-xs font-bold text-[#2F3F34]">
+              <span className="hidden sm:inline">Hover to explore</span>
               <button
                 type="button"
-                className="mt-2 text-left text-sm font-semibold text-navy underline-offset-2 hover:underline sm:hidden"
+                className="sm:hidden underline underline-offset-2"
                 onClick={() => setFlipped(true)}
               >
                 Tap for details
               </button>
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
             </div>
           </div>
 
-          {/* Back â€” dark green theme */}
-          <div className="absolute inset-0 flex flex-col overflow-hidden rounded-2xl border border-white/15 bg-[#2F3F34] bg-gradient-to-br from-[#233027] via-[#2F3F34] to-[#082013] p-5 text-white shadow-xl shadow-black/30 [backface-visibility:hidden] [transform:rotateY(180deg)] sm:p-6">
-            <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 text-highlight">
-              <Icon className="h-5 w-5" />
+          {/* Back — Exact Forest Green #2F3F34 theme while hovered */}
+          <div className="absolute inset-0 flex flex-col justify-between overflow-hidden rounded-2xl border border-[#2F3F34] bg-[#2F3F34] p-5 sm:p-6 text-white shadow-xl shadow-black/25 [backface-visibility:hidden] [transform:rotateY(180deg)]">
+            <div>
+              <div>
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-[#B59439]">
+                  <Icon className="h-5 w-5" />
+                </span>
+              </div>
+
+              <h3 className="mt-3 text-base sm:text-lg font-bold text-white tracking-tight leading-snug">
+                {name}
+              </h3>
+
+              <p className="mt-2 line-clamp-3 text-xs sm:text-sm leading-relaxed text-white/85">
+                {valueProposition || shortDescription}
+              </p>
             </div>
-            <h3 className="mt-4 text-lg font-bold">{name}</h3>
-            <p className="mt-3 flex-1 text-sm leading-relaxed text-white/80">
-              {valueProposition || shortDescription}
-            </p>
-            <div className="mt-4 space-y-2">
+
+            <div className="pt-3 flex items-center gap-2">
               <Link
                 href={`/services/${slug}`}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-highlight px-4 py-2.5 text-sm font-semibold text-[#233027] transition hover:bg-white"
+                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#B59439] px-3.5 py-2 text-xs sm:text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#9c7e2d]"
               >
-                View service
+                <span>View module</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
-              <Link
-                href="/contact"
-                className="inline-flex w-full items-center justify-center rounded-full border border-white/25 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
+              <button
+                type="button"
+                className="sm:hidden rounded-lg border border-white/25 px-2.5 py-2 text-xs text-white/80"
+                onClick={() => setFlipped(false)}
               >
-                Get a quick call
-              </Link>
+                ←
+              </button>
             </div>
-            <button
-              type="button"
-              className="mt-3 text-center text-xs text-white/60 sm:hidden"
-              onClick={() => setFlipped(false)}
-            >
-              â† Back
-            </button>
           </div>
         </div>
       </div>

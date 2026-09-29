@@ -40,8 +40,8 @@
   --color-chat: var(--chat);
   --color-chat-hover: var(--chat-hover);
   --color-chat-soft: var(--chat-soft);
-  --font-sans: Calibri, Candara, "Segoe UI", Optima, Arial, sans-serif;
-  --font-display: Calibri, Candara, "Segoe UI", Optima, Arial, sans-serif;
+  --font-sans: 'Calibri', Calibri;
+  --font-display: 'Calibri', Calibri;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -56,14 +56,23 @@
   }
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
+html,
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+a,
+label,
+button,
+input,
+select,
+textarea {
+  font-family: 'Calibri', Calibri;
 }
 
 ::selection {

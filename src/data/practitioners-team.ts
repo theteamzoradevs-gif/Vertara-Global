@@ -11,34 +11,34 @@ export type Practitioner = {
 
 export const practitionersTeam: Practitioner[] = [
   {
-    name: "Neha",
-    role: "Co-Founder, Former Global Mining Director",
-    initials: "N",
-    bio: "20+ years in corporate real estate, workplace strategy and portfolio management; set up GCCs for one of the world's largest mining companies, with execution across a large enterprise footprint.",
-    bullets: [
-      "20+ years in corporate real estate",
-      "Workplace strategy & portfolio management",
-      "Set up GCCs for a leading global mining enterprise",
-      "Execution across large enterprise footprint",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=compress&cs=tinysrgb&w=800",
-    imagePosition: "object-[center_15%]",
-  },
-  {
-    name: "Namit G",
+    name: "Namit Ganjisinghani",
     role: "Co-Founder, Former Big 4 Partner",
     initials: "NG",
-    bio: "17+ years at a Big 4 firm; built and led a Big 4 Capability hub, enabled 10+ GCC set-ups; expert in GCC strategy, location assessment, and innovation-led CoEs.",
+    bio: "A GCC and commercial transformation leader with 20+ years of experience; built and led a Big 4 capability hub and has supported 10+ GCC set-ups.",
     bullets: [
-      "17+ years at a Big 4 firm",
-      "Built and led Big 4 capability hub",
-      "Enabled 10+ GCC set-ups",
-      "Expert in GCC strategy, location assessment, and innovation-led CoEs",
+      "Co-Founder, Former Big 4 Partner",
+      "20+ years of experience in GCC and commercial transformation",
+      "Built and led a Big 4 capability hub",
+      "Supported 10+ GCC set-ups",
     ],
     image:
       "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=compress&cs=tinysrgb&w=800",
     imagePosition: "object-[center_10%]",
+  },
+  {
+    name: "Neha Chauhan",
+    role: "Co-Founder, Corporate Real Estate and Workplace Leader",
+    initials: "NC",
+    bio: "An architect with 20+ years of experience, she enabled India GCC expansion at a global mining company through workplace strategy, site planning, delivery governance and operational readiness.",
+    bullets: [
+      "Co-Founder, Corporate Real Estate and Workplace Leader",
+      "Architect with 20+ years of experience",
+      "Enabled India GCC expansion at a global mining company",
+      "Workplace strategy, site planning, delivery governance and operational readiness",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=compress&cs=tinysrgb&w=800",
+    imagePosition: "object-[center_15%]",
   },
   {
     name: "Rajesh",

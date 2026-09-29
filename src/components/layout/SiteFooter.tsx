@@ -39,25 +39,28 @@ export function SiteFooter({
   phone?: string;
 }) {
   return (
-    <footer className="border-t border-border bg-navy-deep text-white">
+    <footer
+      className="border-t border-[#3c5243] bg-[#2F3F34] text-white font-sans"
+      style={{ fontFamily: 'Calibri' }}
+    >
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-4 lg:px-8">
         <div>
           <div className="flex h-7 items-center">
             <Link href="/" className="text-base sm:text-lg font-bold tracking-[0.2em] text-white">
-              VERTARA <span className="text-[#b49339] lowercase font-medium">global</span>
+              VERTARA <span className="text-[#B59439] lowercase font-medium">global</span>
             </Link>
           </div>
-          <p className="mt-3 text-sm leading-relaxed text-white/65">
+          <p className="mt-3 text-sm leading-relaxed text-white/75">
             Helping enterprises set up, staff, and scale Global Capability
             Centers in India — as one connected system.
           </p>
-          <p className="mt-4 text-sm text-white/80">{email}</p>
-          <p className="text-sm text-white/80">{phone}</p>
+          <p className="mt-4 text-sm text-white/90">{email}</p>
+          <p className="text-sm text-white/90">{phone}</p>
         </div>
         {columns.map((col) => (
           <div key={col.title}>
             <div className="flex h-7 items-center">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#b49339]">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#B59439]">
                 {col.title}
               </p>
             </div>
@@ -66,7 +69,7 @@ export function SiteFooter({
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-white/70 transition-colors hover:text-white"
+                    className="text-sm text-white/75 transition-colors hover:text-white"
                   >
                     {link.label}
                   </Link>
@@ -76,7 +79,7 @@ export function SiteFooter({
           </div>
         ))}
       </div>
-      <div className="border-t border-white/10 py-4 text-center text-xs text-white/45">
+      <div className="border-t border-white/10 bg-[#25332a] py-4 text-center text-xs text-white/60">
         © {new Date().getFullYear()} {brandName}. All rights reserved.
       </div>
     </footer>
