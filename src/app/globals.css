@@ -56,14 +56,18 @@
   }
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
+html,
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans);
+  font-family: Calibri, Candara, "Segoe UI", Optima, Arial, sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: Calibri, Candara, "Segoe UI", Optima, Arial, sans-serif;
 }
 
 ::selection {

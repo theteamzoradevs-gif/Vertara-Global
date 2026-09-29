@@ -102,7 +102,10 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
   }, [pathname]);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-white shadow-sm shadow-navy/5">
+    <header
+      className="sticky top-0 z-50 w-full border-b border-border bg-white shadow-sm shadow-navy/5 font-sans"
+      style={{ fontFamily: 'Calibri, Candara, "Segoe UI", Optima, Arial, sans-serif' }}
+    >
       <div className="mx-auto flex h-[4.25rem] w-full max-w-6xl items-center justify-between gap-2 px-3 sm:gap-4 sm:px-6 lg:px-8">
         <Link
           href="/"
