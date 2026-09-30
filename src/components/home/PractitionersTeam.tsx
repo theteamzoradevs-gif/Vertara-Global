@@ -1,104 +1,254 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { Mail } from "lucide-react";
+import { ArrowRight, ArrowUpRight, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { practitionersTeam } from "@/data/practitioners-team";
 
+const openPositions = [
+  {
+    number: "01",
+    title: "Legal & Entity Setup",
+    description:
+      "Entity structuring, statutory setup, contracts, compliance frameworks and governance for GCCs from Nano to mid-scale.",
+  },
+  {
+    number: "02",
+    title: "People & HR Advisory",
+    description:
+      "Org design, leadership hiring strategy, compensation, HR policies and workforce planning for newly built centres.",
+  },
+  {
+    number: "03",
+    title: "Digital & Technology",
+    description:
+      "Technology strategy, IT operating model, automation, data and AI, and cybersecurity for centres built digital from day one.",
+  },
+];
+
 export function PractitionersTeam() {
+  const [flippedCards, setFlippedCards] = useState<Record<number, boolean>>({});
+
+  const toggleFlip = (index: number) => {
+    setFlippedCards((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
+
   return (
-    <section id="leadership" className="relative w-full overflow-hidden bg-white py-16 md:py-24 text-[#0b1f3a]">
+    <section
+      id="leadership"
+      className="relative w-full overflow-hidden bg-white pt-6 sm:pt-8 pb-0 text-[#101C30] font-sans"
+      style={{ fontFamily: 'Calibri' }}
+    >
       <div className="relative z-[1] mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="max-w-3xl text-left">
-          <h2 className="text-3xl font-bold tracking-tight text-[#0b1f3a] sm:text-4xl md:text-5xl">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#B59439]">
+            Leadership
+          </p>
+          <h2 className="mt-3 text-2xl font-bold tracking-tight text-[#101C30] sm:text-3xl md:text-4xl">
             Led by practitioners. Built to grow.
           </h2>
           <p className="mt-4 text-base leading-relaxed text-[#526171] sm:text-lg">
             Strategy, GCC execution and shared services under one senior-led
-            platform — with the bench expanding across practice areas.
+            platform with the bench expanding across practice areas.
           </p>
         </div>
 
-        {/* Alternating Leaders List matching 2nd image */}
-        <div className="mt-16 space-y-16 md:mt-20 md:space-y-20">
+        {/* Uniform Height Cards Grid with 3D Flip & Centered Last Row */}
+        <div className="mt-12 sm:mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 sm:gap-8">
           {practitionersTeam.map((leader, index) => {
-            const isEven = index % 2 === 0;
+            const isFlipped = !!flippedCards[index];
+            const total = practitionersTeam.length;
+            const isLastRowTwoOnLg = total % 3 === 2;
+            const isFirstOfTwoOnLg = isLastRowTwoOnLg && index === total - 2;
+            const isLastSingleOnMd = total % 2 === 1 && index === total - 1;
 
             return (
-              <motion.div
+              <div
                 key={leader.name}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.12 }}
                 className={cn(
-                  "flex flex-col items-center justify-center gap-8 md:gap-14 lg:gap-20",
-                  isEven ? "md:flex-row" : "md:flex-row-reverse"
+                  "relative h-[310px] sm:h-[320px] w-full [perspective:1000px]",
+                  // On large screens (6-col grid): 3 cards per row (2 cols each).
+                  // If 2 cards in last row, the first starts at col 2 to perfectly center them.
+                  isFirstOfTwoOnLg ? "lg:[grid-column:2/span_2]" : "lg:col-span-2",
+                  // On tablet/medium screens (2-col grid): center single card in the last row
+                  isLastSingleOnMd
+                    ? "md:col-span-2 md:w-[calc(50%-1rem)] md:mx-auto lg:w-full lg:mx-0"
+                    : "md:col-span-1"
                 )}
+                onMouseLeave={() => {
+                  if (flippedCards[index]) {
+                    setFlippedCards((prev) => ({
+                      ...prev,
+                      [index]: false,
+                    }));
+                  }
+                }}
               >
-                {/* Large Circular Avatar with Outer Ring Border */}
-                <div className="relative shrink-0">
-                  <div className="relative flex h-36 w-36 items-center justify-center rounded-full border-2 border-[#0b1f3a] bg-white p-2.5 shadow-sm transition-transform duration-300 hover:scale-105 sm:h-44 sm:w-44 md:h-48 md:w-48">
-                    <div className="relative h-full w-full overflow-hidden rounded-full bg-slate-100">
+                <div
+                  className={cn(
+                    "relative h-full w-full transition-transform duration-500 [transform-style:preserve-3d]",
+                    isFlipped && "[transform:rotateY(180deg)]"
+                  )}
+                >
+                  {/* FRONT FACE (Uniform Compact Height, 4 lines, Snug Bottom Spacing) */}
+                  <div className="absolute inset-0 flex h-full w-full flex-col justify-start rounded-2xl border border-[#3E5245] bg-[#2F3F34] px-5 pt-4 pb-3 sm:px-6 sm:pt-4.5 sm:pb-3.5 shadow-md [backface-visibility:hidden]">
+                    {/* Circular Photo Avatar */}
+                    <div className="relative mx-auto h-16 w-16 sm:h-18 sm:w-18 shrink-0 overflow-hidden rounded-full border-2 border-[#B59439]/60 shadow-xs bg-[#243329]">
                       {leader.image ? (
                         <Image
                           src={leader.image}
                           alt={leader.name}
                           fill
-                          className={cn("object-cover", leader.imagePosition || "object-[center_12%]")}
-                          sizes="(max-width: 768px) 176px, 192px"
+                          className={cn(
+                            "object-cover",
+                            leader.imagePosition || "object-[center_15%]"
+                          )}
+                          sizes="(max-width: 640px) 64px, 72px"
                         />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center text-2xl font-bold text-[#B59439]">
+                        <div className="flex h-full w-full items-center justify-center bg-[#243329] text-xl font-bold text-[#B59439]">
                           {leader.initials}
                         </div>
                       )}
                     </div>
+
+                    {/* Name & Role Header */}
+                    <div className="mt-2.5 min-h-[3.1rem] sm:min-h-[3.3rem] flex flex-col justify-start text-center">
+                      <h3 className="text-base sm:text-lg font-bold tracking-tight text-white leading-snug">
+                        {leader.name}
+                      </h3>
+
+                      <p className="mt-0.5 text-xs sm:text-[13px] font-semibold italic text-[#B59439] leading-snug">
+                        {leader.role}
+                      </p>
+                    </div>
+
+                    {/* Bio Clamped: 4 lines with normal word spacing (no text-justify) */}
+                    <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-[#D8D2C0] text-left line-clamp-4">
+                      {leader.bio}
+                    </p>
+
+                    {/* Read more button directly below text with compact bottom margin */}
+                    <div className="mt-2 sm:mt-2.5 flex justify-center">
+                      <button
+                        type="button"
+                        onClick={() => toggleFlip(index)}
+                        className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#B59439] hover:text-[#D4AF37] transition-colors cursor-pointer"
+                        aria-label={`Read full bio for ${leader.name}`}
+                      >
+                        <span>Read more</span>
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* BACK FACE (Flipped: Full Complete Bio Text - auto returns on mouse leave) */}
+                  <div className="absolute inset-0 flex h-full w-full flex-col justify-between rounded-2xl border border-[#B59439]/70 bg-[#2F3F34] p-4 sm:p-5 shadow-lg [backface-visibility:hidden] [transform:rotateY(180deg)]">
+                    <div className="flex flex-col h-full overflow-hidden">
+                      {/* Top Header on Back */}
+                      <div className="flex items-start justify-between gap-2 pb-2.5 border-b border-[#3E5245]">
+                        <div className="text-left">
+                          <h4 className="text-base font-bold text-white leading-snug">
+                            {leader.name}
+                          </h4>
+                          <p className="text-xs font-semibold italic text-[#B59439]">
+                            {leader.role}
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => toggleFlip(index)}
+                          className="shrink-0 rounded-full p-1 text-[#D8D2C0]/70 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
+                          aria-label="Close"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+
+                      {/* Full Bio text with normal spacing, fills the card body without visible scrollbar */}
+                      <div className="mt-2.5 flex-1 overflow-y-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden pr-0.5">
+                        <p className="text-xs sm:text-sm leading-relaxed text-[#D8D2C0] text-left">
+                          {leader.bio}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-
-                {/* Text Content: Name, Role & Bio Paragraph */}
-                <div className="w-full flex-1 max-w-lg text-left">
-                  <h3 className="text-2xl font-bold tracking-tight text-[#0b1f3a] sm:text-3xl">
-                    {leader.name}
-                  </h3>
-                  <p className="mt-1 text-sm font-semibold text-[#b49339] sm:text-base">
-                    {leader.role}
-                  </p>
-                  <p className="mt-4 text-sm leading-relaxed text-[#475569] sm:text-base md:text-lg">
-                    {leader.bio}
-                  </p>
-                </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>
 
-        {/* Bottom Mandate Banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4, delay: 0.35 }}
-          className="mt-16 flex flex-col items-center justify-between gap-4 rounded-2xl border border-[#3c5243] bg-[#2F3F34] px-6 py-5 sm:flex-row sm:px-8 sm:py-6 shadow-md"
-        >
-          <p className="text-center text-base font-bold text-white sm:text-left md:text-lg">
-            Let's build the right GCC and build it to last.
+        {/* Join Vertara & Open Positions */}
+        <div className="mt-16 sm:mt-20 pt-10 sm:pt-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+            {/* Left Column (5 cols on lg) */}
+            <div className="lg:col-span-5">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#B59439]">
+                JOIN VERTARA
+              </p>
+              <h3 className="mt-3 text-2xl sm:text-3xl font-bold tracking-tight text-[#101C30] leading-snug">
+                We are growing the bench
+              </h3>
+              <p className="mt-2 text-base sm:text-lg font-medium text-[#101C30]/85 leading-relaxed">
+                Three practice-leadership roles are open
+                <br />
+                <br />
+                We're building practice leadership across the capabilities that
+                help GCCs get built and scaled.
+              </p>
+            </div>
+
+            {/* Right Column (7 cols on lg) */}
+            <div className="lg:col-span-7 space-y-7 sm:space-y-8">
+              {openPositions.map((pos) => (
+                <div key={pos.number}>
+                  <div className="flex items-baseline gap-3 pb-1">
+                    <span className="font-mono text-base sm:text-lg font-bold text-[#B59439]">
+                      {pos.number}
+                    </span>
+                    <h4 className="text-base sm:text-lg font-bold uppercase tracking-wider text-[#101C30]">
+                      {pos.title}
+                    </h4>
+                  </div>
+                  <p className="mt-2 text-sm sm:text-base leading-relaxed text-[#526171]">
+                    {pos.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Full-Width CTA Banner (Styled after Image 2: Gold #B59439 with Forest Green #2F3F34 CTA) */}
+      <div className="mt-16 sm:mt-20 w-full overflow-hidden bg-[#B59439] py-12 sm:py-14 md:py-16 text-[#101C30] border-t border-b border-[#a6862f]">
+        <div className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+          <h3 className="text-2xl font-bold tracking-tight text-[#101C30] sm:text-3xl md:text-4xl leading-tight">
+            Let’s build the right GCC — and build it to last.
+          </h3>
+
+          <p className="mt-3 sm:mt-4 text-base sm:text-lg leading-relaxed text-[#101C30]/90 max-w-2xl mx-auto">
+            Interested in joining Vertara? Discuss the role with us.
           </p>
 
-          <Link
-            href="/contact"
-            className="inline-flex items-center gap-2 rounded-full bg-[#b49339] px-6 py-2.5 text-sm font-bold text-[#0b1f3a] shadow-sm transition-all hover:bg-[#c4a44b] hover:shadow-md whitespace-nowrap"
-          >
-            <span>Discuss your GCC mandate</span>
-            <Mail className="h-4 w-4 stroke-[2.4]" />
-          </Link>
-        </motion.div>
+          <div className="mt-6 sm:mt-8 flex items-center justify-center">
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#2F3F34] px-7 py-3 sm:px-8 sm:py-3.5 text-base sm:text-lg font-bold text-white shadow-md transition-all duration-200 hover:bg-[#233027] hover:shadow-lg hover:-translate-y-0.5"
+            >
+              <span>Discuss Your GCC Mandate</span>
+              <ArrowUpRight className="h-5 w-5 stroke-[2.4]" />
+            </Link>
+          </div>
+        </div>
       </div>
     </section>
   );
 }
-

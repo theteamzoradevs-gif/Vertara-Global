@@ -88,7 +88,7 @@ export const seedAboutContent: AboutContentData = {
     {
       name: "Neha Chauhan",
       role: "Co-Founder, Corporate Real Estate and Workplace Leader",
-      bio: "Neha is an architect and corporate real estate leader with more than 20 years across India and APAC. At a major mining company, she enabled India GCC expansion from the workplace side: defining location and space needs, coordinating leasing and fit-out decisions with internal teams and delivery partners, and preparing facilities for occupation and growth. Her work links capacity, employee experience, safety and operational readiness. She brings expertise in portfolio strategy, design, project delivery, sustainability and facilities governance, alongside LEED AP, Green Mark Manager and ISO 9001 internal auditor credentials.",
+      bio: "Neha is an architect and corporate real estate leader with more than 20 years across India and APAC. At a major mining company, she enabled India GCC expansion from the workplace side defining location and space needs, coordinating leasing and fit-out decisions with internal teams and delivery partners, and preparing facilities for occupation and growth. Her work links capacity, employee experience, safety and operational readiness. She brings expertise in portfolio strategy, design, project delivery, sustainability and facilities governance, alongside LEED AP, Green Mark Manager and ISO 9001 internal auditor credentials.",
       image: "",
     },
     {

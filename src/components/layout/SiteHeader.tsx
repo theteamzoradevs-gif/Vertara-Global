@@ -117,13 +117,17 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
           >
             Home
           </Link>
-          <MegaTrigger
-            label="Our Offerings"
-            active={menu === "services" || pathname.startsWith("/services") || pathname.startsWith("/offerings")}
-            onEnter={() => openMenu("services")}
-            onLeave={scheduleClose}
+          <Link
             href="/offerings"
-          />
+            className={cn(
+              "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+              pathname.startsWith("/offerings") || pathname.startsWith("/services")
+                ? "bg-accent-soft text-accent font-semibold"
+                : "text-slate hover:bg-surface hover:text-navy",
+            )}
+          >
+            Our Offerings
+          </Link>
           {/* Industries menu disabled - to be added later */}
           <MegaTrigger
             label="Insights"
@@ -260,21 +264,19 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
             </Button>
           </div>
 
-          <p className="text-[11px] font-bold uppercase tracking-wider text-[#b49339]">
-            Our Offerings
-          </p>
-          <div className="mt-2 space-y-1">
-            {services.map((s) => (
-              <Link
-                key={s.href}
-                href={s.href}
-                className="block rounded-xl p-2.5 text-sm font-semibold text-navy transition hover:bg-[#e5ebe6]"
-                onClick={() => setMobileOpen(false)}
-              >
-                <p className="text-sm font-semibold text-navy leading-tight">{s.label}</p>
-                <p className="mt-0.5 text-xs font-normal text-muted truncate">{s.desc}</p>
-              </Link>
-            ))}
+          <div className="mb-2">
+            <Link
+              href="/offerings"
+              className={cn(
+                "block rounded-xl px-3 py-2.5 text-sm font-semibold transition hover:bg-[#e5ebe6]",
+                pathname.startsWith("/offerings") || pathname.startsWith("/services")
+                  ? "bg-accent-soft text-accent"
+                  : "text-navy",
+              )}
+              onClick={() => setMobileOpen(false)}
+            >
+              Our Offerings
+            </Link>
           </div>
 
           {/* Industries section disabled for now */}
