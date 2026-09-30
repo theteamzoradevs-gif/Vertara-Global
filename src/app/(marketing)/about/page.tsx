@@ -4,7 +4,6 @@ import { Accordion } from "@/components/ui/Accordion";
 import { ContactForm } from "@/components/leads/ContactForm";
 import { FlowThreads } from "@/components/ui/FlowThreads";
 import { OurVision } from "@/components/home/OurVision";
-import { WhoAreWe } from "@/components/home/WhoAreWe";
 import { PractitionersTeam } from "@/components/home/PractitionersTeam";
 import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
 import { ArrowRight } from "lucide-react";
@@ -31,7 +30,7 @@ export default async function AboutPage() {
   return (
     <>
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden text-white bg-[#2F3F34]">
+      <section className="relative overflow-hidden text-white bg-[#2F3F34] font-sans" style={{ fontFamily: 'Calibri' }}>
         <div className="absolute inset-0">
           <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
@@ -60,14 +59,11 @@ export default async function AboutPage() {
       {/* 2. Our Story & Vision */}
       <OurVision />
 
-      {/* 4. Foundation Pillars & Operator Mindset */}
-      <WhoAreWe />
-
-      {/* 5. Leadership Team */}
+      {/* 3. Leadership Team */}
       <PractitionersTeam />
 
-      {/* 6. Client Voices & Testimonials */}
-      <Section tone="muted">
+      {/* 4. Client Voices & Testimonials - disabled */}
+      {/* <Section tone="muted">
         <SectionHeader
           eyebrow="Trust"
           title="Enterprises building lasting India capability"
@@ -86,22 +82,22 @@ export default async function AboutPage() {
         <div className="mt-10">
           <TestimonialMarquee items={testimonials} />
         </div>
-      </Section>
+      </Section> */}
 
-      {/* 7. Contact & Enquiry */}
-      <Section>
+      {/* 5. Contact & Enquiry - disabled */}
+      {/* <Section>
         <SectionHeader
           eyebrow="Enquire"
           title="Start a conversation with the team"
-          description="Share what youâ€™re building, weâ€™ll connect you with the right partner."
+          description="Share what you're building, we'll connect you with the right partner."
         />
         <div className="mx-auto max-w-2xl">
           <ContactForm source="about" submitLabel="Request a partner call" />
         </div>
-      </Section>
+      </Section> */}
 
-      {/* 8. FAQ Section */}
-      <Section tone="muted">
+      {/* 6. FAQ Section - disabled */}
+      {/* <Section tone="muted">
         <SectionHeader
           eyebrow="FAQ"
           title="Frequently asked questions about Vertara"
@@ -119,7 +115,7 @@ export default async function AboutPage() {
             View full FAQ
           </Button>
         </div>
-      </Section>
+      </Section> */}
     </>
   );
 }
