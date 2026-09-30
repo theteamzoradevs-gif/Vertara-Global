@@ -37,16 +37,16 @@ const services = [
 
 const insightLinks = [
   {
-    href: "/insights/chro-checklist-first-india-gcc",
-    label: "CHRO checklist for a first India GCC",
+    href: "/insights#assessment",
+    label: "Run Your GCC Assessment",
   },
   {
-    href: "/insights/choosing-india-city-capability-hub",
-    label: "Choosing an India city for capability",
+    href: "/insights#market-research",
+    label: "Market Research",
   },
   {
-    href: "/insights/build-transfer-vs-managed-team",
-    label: "Build & transfer vs managed team",
+    href: "/insights#workplace-strategy",
+    label: "Workplace Strategy & Change Management",
   },
   { href: "/insights", label: "View all insights →" },
 ];
@@ -155,9 +155,9 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
           <Button
             href="/contact"
             size="sm"
-            className="hidden sm:inline-flex shrink-0 whitespace-nowrap text-xs sm:text-sm px-3 sm:px-3.5 py-1.5 sm:py-2"
+            className="hidden sm:inline-flex shrink-0 whitespace-nowrap text-xs sm:text-sm px-3 sm:px-3.5 py-1.5 sm:py-2 bg-[#2F3F34] hover:bg-[#233027] text-white"
           >
-            Book a consultation
+            Contact us
           </Button>
           <button
             type="button"
@@ -257,10 +257,10 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
             <Button
               href="/contact"
               size="md"
-              className="w-full justify-center"
+              className="w-full justify-center bg-[#2F3F34] hover:bg-[#233027] text-white"
               onClick={() => setMobileOpen(false)}
             >
-              Discuss your GCC mandate
+              Contact us
             </Button>
           </div>
 
