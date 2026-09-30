@@ -24,7 +24,7 @@ const columns = [
     title: "Engage",
     links: [
       { href: "/engagement-models", label: "Engagement models" },
-      { href: "/contact", label: "Book a consultation" },
+      { href: "/contact", label: "Contact us" },
     ],
   },
 ];
@@ -52,7 +52,7 @@ export function SiteFooter({
           </div>
           <p className="mt-3 text-sm leading-relaxed text-white/75">
             Helping enterprises set up, staff, and scale Global Capability
-            Centers in India — as one connected system.
+            Centers in India as one connected system.
           </p>
           <p className="mt-4 text-sm text-white/90">{email}</p>
           <p className="text-sm text-white/90">{phone}</p>

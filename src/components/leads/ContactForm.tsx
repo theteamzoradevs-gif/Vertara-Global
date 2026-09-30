@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
@@ -41,10 +41,14 @@ export function ContactForm({
           name: form.get("name"),
           company: form.get("company"),
           email: form.get("email"),
-          phone: form.get("phone"),
-          intent: form.get("intent"),
-          message: form.get("message"),
+          phone: form.get("phone") || "",
+          intent: form.get("journey") || form.get("intent") || "",
+          message: form.get("message") || "",
           source,
+          metadata: {
+            sector: form.get("sector") || "",
+            journeyStage: form.get("journey") || "",
+          },
         }),
       });
       if (!res.ok) throw new Error("fail");
@@ -57,15 +61,17 @@ export function ContactForm({
 
   if (status === "done") {
     return (
-      <div className="rounded-2xl border border-accent/40 bg-accent-soft p-5 text-navy shadow-sm sm:p-6">
-        <p className="font-semibold">Thank you â€” we received your enquiry.</p>
-        <p className="mt-2 text-sm text-slate">
+      <div
+        className="w-full max-w-[500px] rounded-[28px] border border-[#B59439]/40 bg-[#101C30] p-8 text-white shadow-2xl font-sans"
+        style={{ fontFamily: 'Calibri' }}
+      >
+        <p className="font-semibold text-xl text-white">Thank you — we received your enquiry.</p>
+        <p className="mt-2 text-sm text-[#D8D2C0]">
           A partner will respond within one business day.
         </p>
         <Button
           type="button"
-          className="mt-4"
-          variant="secondary"
+          className="mt-5 bg-[#B59439] hover:bg-[#9c7e2e] text-white font-sans rounded-xl px-6 py-2.5"
           size="sm"
           onClick={() => setStatus("idle")}
         >
@@ -78,75 +84,84 @@ export function ContactForm({
   return (
     <form
       onSubmit={onSubmit}
+      style={{ fontFamily: 'Calibri' }}
       className={cn(
-        "w-full min-w-0 max-w-full space-y-4 overflow-hidden rounded-3xl border border-[#cddcd1] bg-[#edf5ef] p-6 shadow-xl shadow-navy/5 sm:p-8 md:p-10",
+        "w-full max-w-[500px] space-y-4 rounded-[28px] border border-[#B59439]/20 bg-[#101C30] p-7 sm:p-8 shadow-2xl shadow-[#101C30]/30 font-sans",
         className,
       )}
     >
       {title || description ? (
-        <div className="mb-5">
+        <div className="mb-4">
           {title ? (
-            <h3 className="text-xl sm:text-2xl font-bold text-navy">{title}</h3>
+            <h3 className="text-xl sm:text-2xl font-bold text-white leading-tight">{title}</h3>
           ) : null}
           {description ? (
-            <p className="mt-1 text-sm text-slate">{description}</p>
+            <p className="mt-1 text-xs text-[#D8D2C0]">{description}</p>
           ) : null}
         </div>
       ) : null}
 
-      <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
-        <Field label="Name" name="name" placeholder="Your Name" />
-        <Field label="Company" name="company" placeholder="Company Name" />
+      {/* Row 1: Name & Work Email */}
+      <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+        <Field label="Name" name="name" placeholder="Your Name" required />
         <Field label="Work Email" name="email" type="email" placeholder="name@company.com" required />
-        <Field label="Phone" name="phone" type="tel" placeholder="+1 (555) 000-0000" />
       </div>
-      <div className="min-w-0">
-        <label className="mb-1.5 block text-sm font-medium text-navy">
-          What are you looking to do?
+
+      {/* Row 2: Company & Sector */}
+      <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+        <Field label="Company" name="company" placeholder="Company Name" required />
+        <Field label="Sector" name="sector" placeholder="e.g. Tech, Finance, Healthcare" />
+      </div>
+
+      {/* Row 3: Where are you in the GCC journey? */}
+      <div>
+        <label className="mb-1.5 block text-xs font-semibold text-white">
+          Where are you in the GCC journey?
         </label>
         <select
-          name="intent"
+          name="journey"
           defaultValue={defaultIntent || ""}
-          className="min-w-0 w-full max-w-full rounded-xl border border-[#cddcd1] bg-white px-3.5 py-2.5 text-sm text-navy outline-none transition-colors focus:border-[#2F3F34] focus:ring-2 focus:ring-[#2F3F34]/15"
+          className="w-full rounded-xl border border-transparent bg-white px-3.5 py-2.5 text-xs sm:text-sm text-[#101C30] outline-none transition-colors focus:border-[#B59439] focus:ring-2 focus:ring-[#B59439]"
         >
-          <option value="">
-            Select an option (optional)
-          </option>
-          <option value="full_gcc">Full GCC setup</option>
-          <option value="talent">Talent</option>
-          <option value="workspace">Workspace</option>
-          <option value="operations">Operations</option>
-          <option value="advisory">Advisory</option>
-          <option value="exploring">Exploring options</option>
+          <option value="">Select your current stage</option>
+          <option value="Exploring">Exploring</option>
+          <option value="Nano GCC pilot">Nano GCC pilot</option>
+          <option value="Business case">Business case</option>
+          <option value="Ready to build">Ready to build</option>
+          <option value="Scaling an existing centre">Scaling an existing centre</option>
         </select>
       </div>
-      <div className="min-w-0">
-        <label className="mb-1.5 block text-sm font-medium text-navy">
-          Message (optional)
+
+      {/* Row 4: What would you like help with? */}
+      <div>
+        <label className="mb-1.5 block text-xs font-semibold text-white">
+          What would you like help with?
         </label>
         <textarea
           name="message"
-          rows={4}
-          placeholder="Tell us about your requirementsâ€¦"
-          className="min-w-0 w-full max-w-full rounded-xl border border-[#cddcd1] bg-white px-3.5 py-2.5 text-sm text-navy placeholder:text-muted/70 outline-none transition-colors focus:border-[#2F3F34] focus:ring-2 focus:ring-[#2F3F34]/15"
+          rows={3}
+          placeholder="Tell us about your requirements..."
+          className="w-full rounded-xl border border-transparent bg-white px-3.5 py-2.5 text-xs sm:text-sm text-[#101C30] placeholder:text-[#526171]/70 outline-none transition-colors focus:border-[#B59439] focus:ring-2 focus:ring-[#B59439] resize-none"
         />
       </div>
+
       {status === "error" ? (
-        <p className="text-sm text-danger text-center">Could not send. Please try again.</p>
+        <p className="text-xs text-red-400 text-center font-medium">Could not send. Please check your fields and try again.</p>
       ) : null}
+
       <div className="flex justify-center pt-2">
         <Button
           type="submit"
-          variant={buttonVariant}
-          size="lg"
-          className={cn("w-full sm:w-auto", buttonClassName)}
+          variant="gold"
+          size="md"
+          className={cn("w-full sm:w-auto px-8 py-3 text-sm sm:text-base font-bold bg-[#B59439] hover:bg-[#9c7e2e] text-white rounded-xl shadow-lg shadow-[#B59439]/30 hover:shadow-xl hover:shadow-[#B59439]/40 transition-all", buttonClassName)}
           disabled={status === "loading"}
         >
           {status === "loading" ? (
-            "Sendingâ€¦"
+            "Sending..."
           ) : (
             <>
-              {submitLabel} <ArrowRight className="h-4 w-4" />
+              {submitLabel} <ArrowRight className="h-4 w-4 ml-2" />
             </>
           )}
         </Button>
@@ -169,17 +184,17 @@ function Field({
   placeholder?: string;
 }) {
   return (
-    <div className="min-w-0">
-      <label className="mb-1.5 block text-sm font-medium text-navy">
+    <div>
+      <label className="mb-1.5 block text-xs font-semibold text-white">
         {label}
-        {required ? <span className="ml-0.5 text-red-500 font-bold">*</span> : null}
+        {required ? <span className="ml-0.5 text-[#B59439] font-bold">*</span> : null}
       </label>
       <input
         name={name}
         type={type}
         required={required}
         placeholder={placeholder}
-        className="min-w-0 w-full max-w-full rounded-xl border border-[#cddcd1] bg-white px-3.5 py-2.5 text-sm text-navy placeholder:text-muted/70 outline-none transition-colors focus:border-[#2F3F34] focus:ring-2 focus:ring-[#2F3F34]/15"
+        className="w-full rounded-xl border border-transparent bg-white px-3.5 py-2.5 text-xs sm:text-sm text-[#101C30] placeholder:text-[#526171]/70 outline-none transition-colors focus:border-[#B59439] focus:ring-2 focus:ring-[#B59439]"
       />
     </div>
   );
