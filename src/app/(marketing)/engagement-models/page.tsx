@@ -1,4 +1,4 @@
-﻿import Image from "next/image";
+import Image from "next/image";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { CTABand } from "@/components/ui/CTABand";
 import { ModelSelector } from "@/components/engagement/ModelSelector";
@@ -198,7 +198,7 @@ export default async function EngagementModelsPage() {
           }))}
         />
         <div className="mt-6 flex justify-center sm:justify-start">
-          <Button href="/faq" variant="primary">
+          <Button href="/#faq" variant="primary">
             View full FAQ
           </Button>
         </div>

@@ -3,70 +3,23 @@ import { Button } from "@/components/ui/Button";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { FlowThreads } from "@/components/ui/FlowThreads";
 import { HomeCtaBanner } from "@/components/home/HomeCtaBanner";
-import { Accordion } from "@/components/ui/Accordion";
 import { ContactForm } from "@/components/leads/ContactForm";
 import { IndustryFormSideContent } from "@/components/industries/IndustryFormSideContent";
-import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
 import {
   WealthOpportunityJourney,
   WealthSectorNeedsSelector,
   WealthHowVertaraHelpsReveal,
 } from "@/components/industries/WealthInteractiveSections";
-import {
-  getSettings,
-  getTestimonials,
-  getClientLogos,
-} from "@/lib/content";
-import { ArrowRight } from "lucide-react";
 
 export const metadata = {
   title: "Wealth Management, PE & Insurance GCC Setup in India | Vertara Global",
   description:
-    "From back-office reconciliation to investment-grade operations. Build a dedicated Indian Wealth Management, PE & Insurance capability center â€” fund accounting, shadow NAV, actuarial support, and IFRS 17 regulatory reporting.",
+    "From back-office reconciliation to investment-grade operations. Build a dedicated Indian Wealth Management, PE & Insurance capability center — fund accounting, shadow NAV, actuarial support, and IFRS 17 regulatory reporting.",
 };
 
-const wealthFaqs = [
-  {
-    id: "faq-1",
-    title: "How do you protect LP confidentiality and enforce strict Chinese walls?",
-    content:
-      "We design an institutional-grade security perimeter before your first analyst is onboarded: air-gapped Virtual Desktop Infrastructure (VDI), role-based LP access permissions, disabled local print/export controls, and isolated networks for competing fund strategies. Legally, 100% of financial models and data covenants are directly assigned to your global parent entity.",
-  },
-  {
-    id: "faq-2",
-    title: "How do you handle real-time integration with custodians, PMS, and fund admin systems?",
-    content:
-      "We establish secure API and SFTP pipelines directly connecting with Bloomberg AIM, BlackRock Aladdin, Charles River, eFront, and Guidewire. This ensures daily shadow NAV reconciliation, automated cash break matching, and instant position updates without manual spreadsheet rekeying.",
-  },
-  {
-    id: "faq-3",
-    title: "Which Indian hubs offer the strongest Private Equity and Actuarial talent pools?",
-    content:
-      "Mumbai and NCR/Gurugram have India's densest concentration of chartered accountants, CFA charterholders, PE valuation modelers, and IFRS 17 actuarial specialists; Bengaluru and Hyderabad lead in quantitative finance, portfolio risk modeling algorithms, and FinTech data engineering.",
-  },
-  {
-    id: "faq-4",
-    title: "Can a mid-market fund start with a small, focused 5â€“15 person operations pod?",
-    content:
-      "Yes. You do not need a multi-million-dollar initial build. We help mid-market GPs and insurers launch focused pods for shadow NAV accounting, quarterly LP reporting, or actuarial reserve modeling, expanding seamlessly as AUM or policy count expands.",
-  },
-  {
-    id: "faq-5",
-    title: "How quickly can an institutional-grade financial operations pod go live?",
-    content:
-      "Under our Assisted Captive or EOR delivery models, a dedicated pod of vetted fund accountants and investment analysts with configured Bloomberg terminals and secure network architecture can be operational in 60 to 90 days.",
-  },
-];
-
-export default async function WealthManagementPeInsurancePage() {
-  const [settings, testimonials, logos] = await Promise.all([
-    getSettings(),
-    getTestimonials(),
-    getClientLogos(),
-  ]);
-
+export default function WealthManagementPeInsurancePage() {
   return (
-    <>
+    <main className="w-full font-sans" style={{ fontFamily: "Calibri" }}>
       {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden text-white bg-[#2F3F34]">
         <div className="absolute inset-0">
@@ -102,70 +55,47 @@ export default async function WealthManagementPeInsurancePage() {
         </div>
       </section>
 
-      {/* 2. THE OPPORTUNITY â€” 3-STAGE WEALTH & PE JOURNEY */}
+      {/* 2. THE OPPORTUNITY — 3-STAGE FINANCIAL SERVICES JOURNEY */}
       <Section id="the-opportunity" tone="muted">
         <SectionHeader
           eyebrow="The Opportunity"
-          title="From Back Office Support to Investment Grade Ownership"
-          description="A progressive 3-stage journey turning manual reconciliations into high precision fund accounting, actuarial modeling, and investment research."
+          title="From Transactional Reconciliation to Strategic Fund Oversight"
+          description="A progressive 3-stage roadmap turning offshore accounting support into autonomous shadow NAV calculations, actuarial modeling, and investor-ready reporting."
         />
         <WealthOpportunityJourney />
       </Section>
 
-      {/* 3. WHAT THIS SECTOR NEEDS â€” 3-POINT INSTITUTIONAL ARCHITECTURE */}
+      {/* 3. WHAT THIS SECTOR NEEDS — 3-POINT ARCHITECTURE */}
       <Section>
         <SectionHeader
           eyebrow="What This Sector Needs"
-          title="Engineered for Multi-Regulatory Rigor, Chinese Walls & Live Sync"
-          description="Explore the automated statutory reporting pipelines, zero-trust data segregation, and real-time portfolio interconnects required for institutional financial operations."
+          title="Engineered for Chinese Walls & Real-Time Portfolio Sync"
+          description="Explore the custodian integrations, air-gapped LP perimeters, and institutional financial talent required for modern asset managers and insurers."
         />
         <WealthSectorNeedsSelector />
       </Section>
 
-
-      {/* 6. HOW VERTARA HELPS â€” CONNECTED BLUEPRINT */}
+      {/* 4. HOW VERTARA HELPS — REVEAL */}
       <Section>
         <SectionHeader
           eyebrow="How Vertara Helps"
-          title="One Accountable Operating System for Wealth, PE & Insurance"
-          description="A connected capability engine spanning regulatory risk, fund accounting, LP covenants, specialized actuarial recruitment, and equity research."
+          title="An Institutional Operating Engine for Private Capital & Insurance"
+          description="Connected delivery across fund accounting platforms, CFA/actuarial recruitment, regulatory structuring, and air-gapped data security."
         />
         <WealthHowVertaraHelpsReveal />
       </Section>
 
-      {/* 7. CLIENT VOICES & TESTIMONIALS */}
-      <Section tone="muted">
-        <SectionHeader
-          eyebrow="Trust"
-          title="Enterprises building lasting India capability"
-          description="The capabilities we deliver, backed by the experiences of leaders building and scaling in India."
-        />
-        <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-6">
-          {logos.map((logo) => (
-            <div
-              key={logo.name}
-              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2F3F34]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
-            >
-              {logo.logoText}
-            </div>
-          ))}
-        </div>
-        <div className="mt-10">
-          <TestimonialMarquee items={testimonials} />
-        </div>
-      </Section>
-
-      {/* 8. ENQUIRY / CONTACT FORM */}
+      {/* 5. ENQUIRY / CONTACT FORM */}
       <Section id="enquire">
         <SectionHeader
           eyebrow="Enquire"
-          title="Let's build your investment-grade capability center"
-          description="Share your fund or insurance footprint, we'll connect you with our Wealth Management & PE practice lead."
+          title="Let's build your financial capability center"
+          description="Share your AUM scope and operational priorities, our financial services practice lead will connect with you."
         />
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-8 items-stretch">
           <div className="lg:col-span-7 flex flex-col">
             <ContactForm
-              source="industries-wealth-management-pe-insurance"
+              source="industries-wealth-pe-insurance"
               defaultIntent="talent"
               submitLabel="Request a call"
               className="h-full flex flex-col justify-between"
@@ -177,18 +107,8 @@ export default async function WealthManagementPeInsurancePage() {
         </div>
       </Section>
 
-      {/* 9. FAQ SECTION */}
-      <Section tone="muted">
-        <SectionHeader
-          eyebrow="FAQ"
-          title="Frequently asked questions about Wealth, PE & Insurance GCCs"
-          description="Regulatory disclosures, LP data protection, talent clusters, and fund admin integrations answered upfront."
-        />
-        <Accordion items={wealthFaqs} />
-      </Section>
-
       {/* Gold Mandate Banner */}
       <HomeCtaBanner />
-    </>
+    </main>
   );
 }

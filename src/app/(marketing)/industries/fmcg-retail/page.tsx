@@ -3,70 +3,23 @@ import { Button } from "@/components/ui/Button";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { FlowThreads } from "@/components/ui/FlowThreads";
 import { HomeCtaBanner } from "@/components/home/HomeCtaBanner";
-import { Accordion } from "@/components/ui/Accordion";
 import { ContactForm } from "@/components/leads/ContactForm";
 import { IndustryFormSideContent } from "@/components/industries/IndustryFormSideContent";
-import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
 import {
   FmcgOpportunityJourney,
   FmcgSectorNeedsSelector,
   FmcgHowVertaraHelpsReveal,
 } from "@/components/industries/FmcgRetailInteractiveSections";
-import {
-  getSettings,
-  getTestimonials,
-  getClientLogos,
-} from "@/lib/content";
-import { ArrowRight } from "lucide-react";
 
 export const metadata = {
   title: "FMCG & Retail GCC Setup in India | Vertara Global",
   description:
-    "From order processing to demand intelligence. Build a dedicated Indian FMCG & Retail capability center engineered around your SKU data â€” consumer analytics, merchandising systems, and omnichannel supply chain.",
+    "From order processing to demand intelligence. Build a dedicated Indian FMCG & Retail capability center engineered around your SKU data — consumer analytics, merchandising systems, and omnichannel supply chain.",
 };
 
-const fmcgFaqs = [
-  {
-    id: "faq-1",
-    title: "How do you protect customer loyalty PII and consumer data in compliance with global privacy laws?",
-    content:
-      "We design a zero-trust compliance perimeter from day one. All consumer and loyalty PII is stored in tokenized customer data lakes with field-level encryption and strict role-based access control (RBAC). Our infrastructure conforms strictly with GDPR, CCPA, and India's Digital Personal Data Protection (DPDP) Act, with 100% parent-company IP and data ownership covenants.",
-  },
-  {
-    id: "faq-2",
-    title: "How do you handle real-time POS data streaming across multi-country store networks?",
-    content:
-      "We build streaming ingestion pipelines using Apache Kafka, AWS Kinesis, or Azure Event Hubs directly connecting into your store POS (SAP, Oracle Retail, NCR) and e-commerce platforms (Shopify Plus, Salesforce Commerce Cloud). This eliminates batch-and-wait reporting, providing near-instantaneous inventory and sell-through visibility.",
-  },
-  {
-    id: "faq-3",
-    title: "Which Indian hubs have the strongest FMCG and Retail Analytics talent?",
-    content:
-      "Bengaluru leads in digital commerce, pricing algorithms, and predictive ML talent; NCR/Gurugram and Mumbai host the deepest concentration of FMCG category management, trade spend finance, and brand analytics leaders; Hyderabad offers high-throughput cloud data engineering expertise. We locate your team in the exact cluster matching your operational mandate.",
-  },
-  {
-    id: "faq-4",
-    title: "Can the India center manage Trade Spend and Promotion ROI modeling?",
-    content:
-      "Yes. We recruit specialized commercial finance and Revenue Growth Management (RGM) practitioners with proven experience modeling trade promotion elasticity, baseline sales decomposition, and joint business planning (JBP) analytics for global tier-1 CPG brands.",
-  },
-  {
-    id: "faq-5",
-    title: "How quickly can we launch an initial retail analytics pod?",
-    content:
-      "Under our Assisted Captive or EOR delivery models, a dedicated pod of 10â€“25 vetted retail data engineers and category specialists can be operational in enterprise-grade workspace with full system integration within 60 to 90 days.",
-  },
-];
-
-export default async function FmcgRetailPage() {
-  const [settings, testimonials, logos] = await Promise.all([
-    getSettings(),
-    getTestimonials(),
-    getClientLogos(),
-  ]);
-
+export default function FmcgRetailPage() {
   return (
-    <>
+    <main className="w-full font-sans" style={{ fontFamily: "Calibri" }}>
       {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden text-white bg-[#2F3F34]">
         <div className="absolute inset-0">
@@ -102,17 +55,17 @@ export default async function FmcgRetailPage() {
         </div>
       </section>
 
-      {/* 2. THE OPPORTUNITY â€” 3-STAGE FMCG & RETAIL JOURNEY */}
+      {/* 2. THE OPPORTUNITY — 3-STAGE FMCG & RETAIL JOURNEY */}
       <Section id="the-opportunity" tone="muted">
         <SectionHeader
           eyebrow="The Opportunity"
-          title="From Transaction Processing to Demand Intelligence"
-          description="A progressive 3-stage journey turning transactional retail data into predictive merchandising, pricing power, and commercial growth."
+          title="From Transaction Logging to Predictive Retail"
+          description="A proven 3-phase roadmap scaling India teams from basic sales data reporting to advanced price-pack architecture and global supply chain orchestration."
         />
         <FmcgOpportunityJourney />
       </Section>
 
-      {/* 3. WHAT THIS SECTOR NEEDS â€” 3-POINT RETAIL ARCHITECTURE */}
+      {/* 3. WHAT THIS SECTOR NEEDS — 3-POINT RETAIL ARCHITECTURE */}
       <Section>
         <SectionHeader
           eyebrow="What This Sector Needs"
@@ -122,45 +75,22 @@ export default async function FmcgRetailPage() {
         <FmcgSectorNeedsSelector />
       </Section>
 
-
-      {/* 6. HOW VERTARA HELPS â€” CONNECTED BLUEPRINT */}
+      {/* 4. HOW VERTARA HELPS — REVEAL */}
       <Section>
         <SectionHeader
           eyebrow="How Vertara Helps"
-          title="One Accountable Operating System for FMCG & Retail"
-          description="A connected capability engine spanning real-time cloud data pipelines, CPG cluster intelligence, commercial finance, loyalty PII compliance, and specialist hiring."
+          title="An Enterprise Engine for FMCG & Retail GCCs"
+          description="Integrated execution across data platform integration, commercial talent sourcing, corporate entity structuring, and enterprise security."
         />
         <FmcgHowVertaraHelpsReveal />
       </Section>
 
-      {/* 7. CLIENT VOICES & TESTIMONIALS */}
-      <Section tone="muted">
-        <SectionHeader
-          eyebrow="Trust"
-          title="Enterprises building lasting India capability"
-          description="The capabilities we deliver, backed by the experiences of leaders building and scaling in India."
-        />
-        <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-6">
-          {logos.map((logo) => (
-            <div
-              key={logo.name}
-              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2F3F34]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
-            >
-              {logo.logoText}
-            </div>
-          ))}
-        </div>
-        <div className="mt-10">
-          <TestimonialMarquee items={testimonials} />
-        </div>
-      </Section>
-
-      {/* 8. ENQUIRY / CONTACT FORM */}
+      {/* 5. ENQUIRY / CONTACT FORM */}
       <Section id="enquire">
         <SectionHeader
           eyebrow="Enquire"
-          title="Let's build your retail intelligence capability center"
-          description="Share what you're building, we'll connect you with our FMCG & Retail practice lead."
+          title="Build your retail & FMCG center in India"
+          description="Tell us your commercial priorities, our FMCG & retail practice team will assemble your build roadmap."
         />
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-8 items-stretch">
           <div className="lg:col-span-7 flex flex-col">
@@ -177,18 +107,8 @@ export default async function FmcgRetailPage() {
         </div>
       </Section>
 
-      {/* 9. FAQ SECTION */}
-      <Section tone="muted">
-        <SectionHeader
-          eyebrow="FAQ"
-          title="Frequently asked questions about FMCG & Retail GCCs"
-          description="POS streaming, loyalty data compliance, talent clusters, and trade spend ROI answered upfront."
-        />
-        <Accordion items={fmcgFaqs} />
-      </Section>
-
       {/* Gold Mandate Banner */}
       <HomeCtaBanner />
-    </>
+    </main>
   );
 }

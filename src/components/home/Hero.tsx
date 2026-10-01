@@ -90,20 +90,17 @@ export function Hero({
     (m) => m && m.label && String(m.label).trim() !== "",
   );
 
-  // Format eyebrow with pipe separators matching Image 2
-  const formattedEyebrow = tagline
-    ? tagline
-        .replace(/[·•]/g, "|")
-        .replace(/[—–]/g, "|")
-        .split("|")
-        .map((part) => part.trim())
-        .filter(Boolean)
-        .join("   |   ")
-    : "GCC ADVISORY   |   MID-MARKET GCC SPECIALISTS   |   NANO TO MID-SCALE";
+  // Format eyebrow with pipe separators matching brand guidelines
+  const eyebrowParts = (tagline || "GCC ADVISORY | MID-MARKET GCC SPECIALISTS | NANO TO MID-SCALE")
+    .replace(/[·•]/g, "|")
+    .replace(/[—–]/g, "|")
+    .split("|")
+    .map((part) => part.trim())
+    .filter(Boolean);
 
   return (
     <section
-      className="relative flex flex-col justify-between overflow-hidden border-b border-[#2F3F34] min-h-[calc(100svh-68px)] md:h-[calc(100svh-68px)] md:max-h-[850px] bg-[#2F3F34] font-sans"
+      className="relative flex flex-col justify-center md:justify-between overflow-hidden border-b border-[#2F3F34] py-14 sm:py-18 md:py-0 md:h-[calc(100svh-68px)] md:max-h-[850px] bg-[#2F3F34] font-sans"
       style={{ fontFamily: 'Calibri' }}
     >
       {/* Background Flow Threads */}
@@ -111,7 +108,7 @@ export function Hero({
 
       {/* Main Hero Content */}
       <div
-        className={`relative z-10 mx-auto my-auto w-full max-w-6xl px-4 py-4 sm:py-5 md:py-6 ${
+        className={`relative z-10 mx-auto w-full max-w-6xl px-4 py-2 sm:py-4 md:my-auto md:py-6 ${
           showQuickCallForm
             ? "grid items-center gap-6 md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:gap-10 text-left"
             : "flex flex-col items-center justify-center max-w-4xl text-center"
@@ -119,21 +116,29 @@ export function Hero({
       >
         <div className={showQuickCallForm ? "w-full min-w-0" : "w-full"}>
           {/* Eyebrow */}
-          <p className="text-[11px] sm:text-xs md:text-[13px] font-bold uppercase tracking-[0.2em] sm:tracking-[0.22em] text-[#C5A55D]">
-            {formattedEyebrow}
-          </p>
+          <div className="flex flex-wrap items-center justify-center gap-x-2 sm:gap-x-3 gap-y-1 text-[10px] sm:text-xs md:text-[13px] font-bold uppercase tracking-[0.14em] sm:tracking-[0.18em] md:tracking-[0.22em] text-[#C5A55D]">
+            {eyebrowParts.map((part, index) => (
+              <span key={index} className="inline-flex items-center">
+                <span>{part}</span>
+                {index < eyebrowParts.length - 1 && (
+                  <span className="ml-2 sm:ml-3 text-[#C5A55D]/50 select-none">|</span>
+                )}
+              </span>
+            ))}
+          </div>
 
           {/* Headline in Calibri matching brand guidelines */}
           <h1
-            className="mt-2.5 sm:mt-3 md:mt-3.5 text-2xl sm:text-3xl md:text-[2.25rem] lg:text-[2.65rem] xl:text-[2.9rem] leading-[1.14] tracking-tight font-bold text-white"
+            className="mt-3 sm:mt-3.5 md:mt-3.5 text-[21px] sm:text-2xl md:text-[2.25rem] lg:text-[2.65rem] xl:text-[2.9rem] leading-[1.25] sm:leading-[1.2] md:leading-[1.14] tracking-tight font-bold text-white max-w-sm sm:max-w-xl md:max-w-none mx-auto"
           >
             {headline.includes("Building GCCs") ? (
               <>
                 <span className="block text-white">
-                  Building GCCs Enabling scale — from
+                  Building GCCs Enabling scale <span className="hidden md:inline">— from</span>
+                  <span className="md:hidden">—</span>
                 </span>
                 <span className="block text-white mt-1 sm:mt-1.5">
-                  Nano to mid-scale, 20 to 500 people
+                  <span className="md:hidden">from </span>Nano to mid-scale, 20 to 500 people
                 </span>
               </>
             ) : (
@@ -143,8 +148,8 @@ export function Hero({
 
           {/* Subheadline / Description */}
           <p
-            className={`mt-3.5 sm:mt-4 md:mt-5 text-xs sm:text-sm md:text-[14px] lg:text-[15px] leading-relaxed text-[#e2e8e4] ${
-              showQuickCallForm ? "max-w-xl text-left" : "mx-auto max-w-2xl sm:max-w-3xl text-center"
+            className={`mt-3.5 sm:mt-4 md:mt-5 text-[13px] sm:text-sm md:text-[14px] lg:text-[15px] leading-relaxed text-[#e2e8e4]/95 px-1 sm:px-2 md:px-0 ${
+              showQuickCallForm ? "max-w-xl text-left" : "mx-auto max-w-xl sm:max-w-2xl md:max-w-3xl text-center"
             }`}
           >
             {subheadline}
@@ -152,20 +157,20 @@ export function Hero({
 
           {/* Action Buttons */}
           <div
-            className={`mt-4 sm:mt-5 md:mt-6 flex flex-wrap items-center gap-3 sm:gap-4 ${
-              showQuickCallForm ? "justify-start" : "justify-center"
+            className={`mt-5 sm:mt-6 md:mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-4 ${
+              showQuickCallForm ? "md:justify-start" : "justify-center"
             }`}
           >
             <Link
               href={showQuickCallForm ? "#hero-enquiry" : "/contact"}
-              className="inline-flex items-center justify-center rounded-lg border border-[#445b4c] bg-[#1E2922]/85 px-5 py-2.5 text-xs sm:text-sm md:text-base font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#152019] hover:border-[#B59439]/60"
+              className="inline-flex items-center justify-center rounded-lg border border-[#445b4c] bg-[#1E2922]/85 px-4.5 py-2.5 sm:px-5 sm:py-2.5 text-xs sm:text-sm md:text-base font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#152019] hover:border-[#B59439]/60 text-center"
             >
               <span>{primaryCta}</span>
             </Link>
 
             <Link
               href="/offerings"
-              className="inline-flex items-center justify-center rounded-lg bg-[#B59439] px-5 py-2.5 text-xs sm:text-sm md:text-base font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#9c7e2e] hover:shadow-md"
+              className="inline-flex items-center justify-center rounded-lg bg-[#B59439] px-4.5 py-2.5 sm:px-5 sm:py-2.5 text-xs sm:text-sm md:text-base font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#9c7e2e] hover:shadow-md text-center"
             >
               <span>{secondaryCta}</span>
             </Link>

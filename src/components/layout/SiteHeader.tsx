@@ -100,9 +100,14 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
       <div className="mx-auto flex h-[4.25rem] w-full max-w-6xl items-center justify-between gap-2 px-3 sm:gap-4 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="shrink-0 text-sm sm:text-base md:text-lg font-bold tracking-[0.14em] sm:tracking-[0.2em] text-navy transition hover:opacity-90"
+          className="shrink-0 flex flex-col justify-center transition hover:opacity-90"
         >
-          VERTARA <span className="text-[#b49339] lowercase font-medium">global</span>
+          <span className="text-sm sm:text-base md:text-lg font-bold tracking-[0.14em] sm:tracking-[0.2em] text-navy leading-tight">
+            VERTARA <span className="text-[#B59439] lowercase font-medium">global</span>
+          </span>
+          <span className="text-[8px] sm:text-[9.5px] font-bold tracking-[0.26em] sm:tracking-[0.32em] text-[#B59439] uppercase mt-0.5 leading-tight">
+            GCC ADVISORY
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">
@@ -129,12 +134,17 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
             Our Offerings
           </Link>
           {/* Industries menu disabled - to be added later */}
-          <MegaTrigger
-            label="Insights"
-            active={menu === "insights" || pathname.startsWith("/insights")}
-            onEnter={() => openMenu("insights")}
-            onLeave={scheduleClose}
-          />
+          <Link
+            href="/insights"
+            className={cn(
+              "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+              pathname.startsWith("/insights")
+                ? "bg-accent-soft text-accent font-semibold"
+                : "text-slate hover:bg-surface hover:text-navy",
+            )}
+          >
+            Insights
+          </Link>
           {simpleLinks.map((link) => (
             <Link
               key={link.href}
@@ -251,61 +261,38 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
       ) : null}
 
       {mobileOpen ? (
-        <div className="max-h-[85vh] w-full overflow-y-auto overflow-x-hidden border-t border-border bg-white px-4 py-5 shadow-lg lg:hidden">
-          {/* Prominent CTA on mobile */}
-          <div className="mb-4">
-            <Button
-              href="/contact"
-              size="md"
-              className="w-full justify-center bg-[#2F3F34] hover:bg-[#233027] text-white"
-              onClick={() => setMobileOpen(false)}
-            >
-              Contact us
-            </Button>
-          </div>
-
-          <div className="mb-2">
-            <Link
-              href="/offerings"
-              className={cn(
-                "block rounded-xl px-3 py-2.5 text-sm font-semibold transition hover:bg-[#e5ebe6]",
-                pathname.startsWith("/offerings") || pathname.startsWith("/services")
-                  ? "bg-accent-soft text-accent"
-                  : "text-navy",
-              )}
-              onClick={() => setMobileOpen(false)}
-            >
-              Our Offerings
-            </Link>
-          </div>
-
-          {/* Industries section disabled for now */}
-
-          <p className="mt-5 text-[11px] font-bold uppercase tracking-wider text-[#b49339]">
-            Explore
-          </p>
-          <div className="mt-2 grid grid-cols-2 gap-1.5">
+        <div className="w-full border-t border-border bg-white px-4 py-4 shadow-lg lg:hidden">
+          <nav className="flex flex-col space-y-1.5">
             {[
               { href: "/", label: "Home" },
+              { href: "/offerings", label: "Our Offerings" },
               { href: "/insights", label: "Insights" },
               { href: "/about", label: "About Us" },
-              { href: "/contact", label: "Contact" },
-            ].map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "block rounded-xl px-3 py-2 text-sm font-medium transition",
-                  pathname.startsWith(link.href)
-                    ? "bg-accent-soft text-accent font-semibold"
-                    : "text-navy hover:bg-surface",
-                )}
-                onClick={() => setMobileOpen(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
+            ].map((link) => {
+              const isActive =
+                link.href === "/"
+                  ? pathname === "/"
+                  : link.href === "/offerings"
+                  ? pathname.startsWith("/offerings") || pathname.startsWith("/services")
+                  : pathname.startsWith(link.href);
+
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "block rounded-xl px-4 py-3 text-base font-semibold transition-colors",
+                    isActive
+                      ? "bg-accent-soft text-accent font-bold"
+                      : "text-navy hover:bg-surface hover:text-accent"
+                  )}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
         </div>
       ) : null}
     </header>

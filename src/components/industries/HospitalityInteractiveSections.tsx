@@ -28,13 +28,13 @@ const hospitalityOpportunitySteps = [
     title: "Build Loyalty & Guest Personalization",
     badge: "Guest Personalization",
     description:
-      "Build guest-personalization and multi-tier loyalty capability â€” delivering the same high-touch guest experience bar set by global hospitality majors.",
+      "Build guest-personalization and multi-tier loyalty capability” delivering the same high-touch guest experience bar set by global hospitality majors.",
   },
   {
     title: "Start Lean. Scale Property by Property.",
     badge: "Portfolio Scaling",
     description:
-      "Start with one capability â€” revenue management, loyalty ops, or channel/OTA management â€” and extend seamlessly property by property across your portfolio.",
+      "Start with one capability ” revenue management, loyalty ops, or channel/OTA management ” and extend seamlessly property by property across your portfolio.",
   },
 ];
 
@@ -49,7 +49,7 @@ export function HospitalityOpportunityJourney() {
         return (
           <div
             key={step.title}
-            className="group relative rounded-2xl border border-[#cddcd1] bg-[#f0f4f1] p-6 sm:p-7 transition-all duration-300 hover:border-[#B59439] hover:bg-[#e5ebe6] hover:-translate-y-1 hover:shadow-md cursor-pointer flex flex-col justify-between h-full"
+            className="group relative rounded-2xl border border-[#cddcd1] bg-[#edf5ef] p-6 sm:p-7 transition-all duration-300 hover:border-[#B59439] hover:bg-[#e5ebe6] hover:-translate-y-1 hover:shadow-md cursor-pointer flex flex-col justify-between h-full"
           >
             <div>
               <div className="flex items-center justify-between">

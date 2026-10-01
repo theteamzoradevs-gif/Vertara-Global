@@ -5,6 +5,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { CTABand } from "@/components/ui/CTABand";
 import { HomeCtaBanner } from "@/components/home/HomeCtaBanner";
 import { Accordion } from "@/components/ui/Accordion";
+import { HomeFaqSection } from "@/components/home/HomeFaqSection";
 // import { OurVision } from "@/components/home/OurVision";
 // import { WhoAreWe } from "@/components/home/WhoAreWe";
 import { WhereWereStrongest } from "@/components/home/WhereWereStrongest";
@@ -279,26 +280,7 @@ export default async function HomePage() {
         </div>
       </Section> */}
 
-      <Section>
-        <SectionHeader
-          eyebrow="FAQ"
-          title="Questions enterprise buyers ask before the first call"
-          titleClassName="text-2xl font-bold tracking-tight text-[#101C30] sm:text-3xl lg:text-[1.875rem]"
-          description="Timelines, ownership, cost, cities, and roles answered without the runaround."
-        />
-        <Accordion
-          items={faqs.slice(0, 5).map((f) => ({
-            id: f.question,
-            title: f.question,
-            content: f.answer,
-          }))}
-        />
-        <div className="mt-6 flex justify-center sm:justify-start">
-          <Button href="/faq" variant="primary">
-            View full FAQ
-          </Button>
-        </div>
-      </Section>
+      <HomeFaqSection faqs={faqs} />
 
       <HomeCtaBanner />
     </>

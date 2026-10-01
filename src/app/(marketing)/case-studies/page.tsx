@@ -1,4 +1,4 @@
-﻿import Image from "next/image";
+import Image from "next/image";
 import { CmsImage } from "@/components/ui/CmsImage";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
@@ -349,7 +349,7 @@ export default async function CaseStudiesPage() {
           }))}
         />
         <div className="mt-6 flex justify-center sm:justify-start">
-          <Button href="/faq" variant="primary">
+          <Button href="/#faq" variant="primary">
             View full FAQ
           </Button>
         </div>

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
+import { MobileAutoSlider } from "@/components/ui/MobileAutoSlider";
 import { cn } from "@/lib/utils";
 
 type ScopeItem = {
@@ -167,12 +168,15 @@ function ScopeCardItem({ item }: { item: ScopeItem }) {
 
 export function ScopeCards() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 items-stretch">
-      {scopeItems.map((item, index) => (
-        <Reveal key={item.number} delay={index * 0.05} className="flex flex-col h-full">
-          <ScopeCardItem item={item} />
-        </Reveal>
+    <MobileAutoSlider
+      autoSlideInterval={3500}
+      desktopClassName="sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 items-stretch"
+      itemClassName="w-[84vw] max-w-[320px] shrink-0 snap-center sm:w-auto sm:max-w-none flex flex-col h-full"
+      dotTone="gold"
+    >
+      {scopeItems.map((item) => (
+        <ScopeCardItem key={item.number} item={item} />
       ))}
-    </div>
+    </MobileAutoSlider>
   );
 }
