@@ -239,7 +239,7 @@ export function TestimonialsManager({
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex items-center justify-between rounded-2xl border border-border bg-surface-elevated p-4 shadow-sm">
+      <div className="flex flex-col sm:flex-row gap-2.5 sm:items-center sm:justify-between rounded-xl sm:rounded-2xl border border-border bg-surface-elevated p-3 sm:p-4 shadow-xs">
         <div className="relative w-full max-w-md">
           <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
           <input
@@ -250,7 +250,7 @@ export function TestimonialsManager({
             className="w-full rounded-xl border border-border bg-surface pl-10 pr-4 py-2 text-sm text-navy placeholder:text-slate-400 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
           />
         </div>
-        <div className="text-sm font-medium text-muted">
+        <div className="text-xs sm:text-sm font-medium text-muted">
           Total: <span className="font-semibold text-navy">{filteredTestimonials.length}</span>
         </div>
       </div>

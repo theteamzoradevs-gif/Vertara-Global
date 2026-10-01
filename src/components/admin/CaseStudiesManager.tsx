@@ -316,8 +316,8 @@ export function CaseStudiesManager({
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex items-center justify-between rounded-2xl border border-border bg-surface-elevated p-4 shadow-xs">
-        <div className="relative w-full max-w-md">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-2xl border border-border bg-surface-elevated p-4 shadow-xs">
+        <div className="relative w-full sm:max-w-md">
           <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
           <input
             type="text"

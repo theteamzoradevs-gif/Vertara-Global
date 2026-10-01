@@ -52,6 +52,7 @@ const navGroups: NavGroup[] = [
     items: [
       { href: "/admin/hero", label: "Home Editor", icon: PanelTop },
       { href: "/admin/about", label: "About Us", icon: Info },
+      { href: "/admin/contact", label: "Contact Us", icon: MessageSquare },
       { href: "/admin/insights", label: "Insights", icon: FileText },
       { href: "/admin/faqs", label: "FAQs", icon: HelpCircle },
       { href: "/admin/testimonials", label: "Testimonials", icon: Quote },
@@ -184,31 +185,32 @@ export function AdminSidebar({ userEmail, signOutAction }: AdminSidebarProps) {
     <>
       {/* Mobile Bar Header */}
       <div className="sticky top-0 z-40 flex items-center justify-between border-b border-white/10 bg-[#061526] px-4 py-3 text-white md:hidden w-full">
-        <Link href="/admin" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-white shadow-xs">
-            <Shield className="h-4 w-4" />
-          </div>
-          <span className="font-bold text-sm tracking-tight text-white">Vertara Global Admin</span>
-        </Link>
-
-        <div className="flex items-center gap-2">
-          <Link
-            href="/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 rounded-lg border border-accent/40 bg-accent/15 px-2.5 py-1 text-xs font-semibold text-highlight hover:bg-accent/25 transition"
-          >
-            <span>View Site</span>
-            <ArrowRight className="h-3 w-3" />
-          </Link>
+        <div className="flex items-center gap-2.5 min-w-0">
           <button
             onClick={() => setMobileOpen(true)}
-            className="rounded-lg border border-white/10 p-1.5 text-white/80 hover:bg-white/10"
+            className="rounded-lg border border-white/10 p-1.5 text-white/80 hover:bg-white/10 cursor-pointer shrink-0"
             aria-label="Open navigation menu"
           >
             <Menu className="h-5 w-5" />
           </button>
+
+          <Link href="/admin" className="flex items-center gap-2 min-w-0">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-white shadow-xs shrink-0">
+              <Shield className="h-4 w-4" />
+            </div>
+            <span className="font-bold text-sm tracking-tight text-white truncate">Vertara Global Admin</span>
+          </Link>
         </div>
+
+        <Link
+          href="/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 rounded-lg border border-accent/40 bg-accent/15 px-2.5 py-1 text-xs font-semibold text-highlight hover:bg-accent/25 transition shrink-0"
+        >
+          <span>View Site</span>
+          <ArrowRight className="h-3 w-3" />
+        </Link>
       </div>
 
       {/* Desktop Persistent Sidebar */}
