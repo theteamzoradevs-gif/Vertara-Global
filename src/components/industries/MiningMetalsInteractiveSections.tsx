@@ -128,7 +128,6 @@ export function MiningSectorNeedsSelector() {
       dotTone="green"
     >
       {miningSectorNeedsData.map((item) => {
-        const Icon = item.icon;
         return (
           <div
             key={item.id}
@@ -139,10 +138,6 @@ export function MiningSectorNeedsSelector() {
                 <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#B59439]">
                   {item.tabTitle}
                 </p>
-              </div>
-
-              <div className="mt-5 flex h-11 w-11 items-center justify-center rounded-xl bg-[#2F3F34] text-[#B59439] shadow-sm">
-                <Icon className="h-5 w-5" />
               </div>
 
               <h3 className="mt-4 text-base sm:text-lg font-bold text-navy leading-snug">

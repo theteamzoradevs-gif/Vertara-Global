@@ -506,12 +506,11 @@ export const seedEngagementModels = [
 
 export const seedInsights = [
   {
-    title: "The CHRO’s checklist for a first India GCC",
+    title: "The Nano-Run Billion-Dollar Enterprise",
     slug: "chro-checklist-first-india-gcc",
     excerpt:
       "What people leaders should lock before the first offer letter goes out governance, bands, and culture transfer.",
-    category: "Talent",
-    coverImage: "/images/talent-team.webp",
+    category: "NANO GCC SERIES",
     published: true,
     featured: false,
     body: `## Start with outcomes, not headcount

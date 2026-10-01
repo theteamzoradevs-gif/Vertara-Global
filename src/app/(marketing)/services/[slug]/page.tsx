@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import Image from "next/image";
 import { CmsImage } from "@/components/ui/CmsImage";
 import { Section, SectionHeader } from "@/components/ui/Section";
@@ -61,7 +61,7 @@ export default async function InsightsPage() {
               slug: string;
               title: string;
               excerpt: string;
-              coverImage: string;
+              coverImage?: string;
               category: string;
             }) => (
               <Reveal key={insight.slug}>
@@ -127,7 +127,7 @@ export default async function InsightsPage() {
                 slug: string;
                 title: string;
                 excerpt: string;
-                coverImage: string;
+                coverImage?: string;
                 category: string;
               }) => (
                 <Reveal key={insight.slug}>
