@@ -3,70 +3,23 @@ import { Button } from "@/components/ui/Button";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { FlowThreads } from "@/components/ui/FlowThreads";
 import { HomeCtaBanner } from "@/components/home/HomeCtaBanner";
-import { Accordion } from "@/components/ui/Accordion";
 import { ContactForm } from "@/components/leads/ContactForm";
 import { IndustryFormSideContent } from "@/components/industries/IndustryFormSideContent";
-import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
 import {
   ManufacturingOpportunityJourney,
   ManufacturingSectorNeedsSelector,
   ManufacturingHowVertaraHelpsReveal,
 } from "@/components/industries/ManufacturingInteractiveSections";
-import {
-  getSettings,
-  getTestimonials,
-  getClientLogos,
-} from "@/lib/content";
-import { ArrowRight } from "lucide-react";
 
 export const metadata = {
   title: "Manufacturing & Industrial IoT GCC Setup in India | Vertara Global",
   description:
-    "From shop-floor support to production intelligence. Build a dedicated Indian Manufacturing capability center â€” SCADA, PLC telemetry, OT-IT convergence, IATF 16949 quality, and multi-plant supply chain operations.",
+    "From shop-floor support to production intelligence. Build a dedicated Indian Manufacturing capability center — SCADA, PLC telemetry, OT-IT convergence, IATF 16949 quality, and multi-plant supply chain operations.",
 };
 
-const manufacturingFaqs = [
-  {
-    id: "faq-1",
-    title: "How do you connect disparate factory floor SCADA and MES systems securely?",
-    content:
-      "We implement edge-to-cloud telemetry using standardized OPC UA and MQTT industrial protocols, air-gapping operational technology (OT) from public interfaces. Data from Siemens, Rockwell, Honeywell, and Beckhoff PLCs is sanitized and encrypted before feeding central predictive dashboards and ERP systems.",
-  },
-  {
-    id: "faq-2",
-    title: "How does the India center support IATF 16949 and ISO 9001 compliance across global plants?",
-    content:
-      "Our team centralizes digital PPAP documentation, APQP timelines, FMEA risk matrices, and 8D root-cause investigations into a unified digital quality management system (QMS). Quality workflows travel across facilities uniformly rather than being re-created plant by plant.",
-  },
-  {
-    id: "faq-3",
-    title: "Which Indian hubs have the strongest Industrial Engineering & OT-IT talent?",
-    content:
-      "Pune, Chennai, and NCR/Faridabad lead in discrete automotive manufacturing, tooling design, and IATF quality engineering; Bengaluru and Hyderabad excel in embedded Industrial IoT firmware, digital twins, and SCADA automation analytics.",
-  },
-  {
-    id: "faq-4",
-    title: "Can we start by piloting predictive maintenance on just one plant's equipment?",
-    content:
-      "Yes. We recommend proving the telemetry and analytics model on a lighthouse plant â€” focusing on critical bottlenecks (OEE, unscheduled downtime, vibration anomaly detection) â€” and then packaging the solution for rapid rollout across remaining facilities.",
-  },
-  {
-    id: "faq-5",
-    title: "How quickly can a dedicated manufacturing intelligence pod become operational?",
-    content:
-      "Under our Assisted Captive or EOR delivery models, a vetted team of industrial engineers, SCADA telemetry specialists, and procurement analysts can be operational with configured data pipelines in 60 to 90 days from project kickoff.",
-  },
-];
-
-export default async function ManufacturingPage() {
-  const [settings, testimonials, logos] = await Promise.all([
-    getSettings(),
-    getTestimonials(),
-    getClientLogos(),
-  ]);
-
+export default function ManufacturingPage() {
   return (
-    <>
+    <main className="w-full font-sans" style={{ fontFamily: "Calibri" }}>
       {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden text-white bg-[#2F3F34]">
         <div className="absolute inset-0">
@@ -103,65 +56,42 @@ export default async function ManufacturingPage() {
         </div>
       </section>
 
-      {/* 2. THE OPPORTUNITY â€” 3-STAGE MANUFACTURING JOURNEY */}
+      {/* 2. THE OPPORTUNITY — INTERACTIVE NUMBERED JOURNEY */}
       <Section id="the-opportunity" tone="muted">
         <SectionHeader
           eyebrow="The Opportunity"
-          title="From Shop-Floor Support to Production Intelligence"
-          description="A progressive 3-stage journey turning localized plant data into multi-site operational efficiency, predictive maintenance, and procurement leverage."
+          title="From Back-Office Reporting to Plant Operations Control"
+          description="A progressive 3-stage roadmap turning offshore manufacturing support into predictive OEE analytics, autonomous supply chain nodes, and global quality governance."
         />
         <ManufacturingOpportunityJourney />
       </Section>
 
-      {/* 3. WHAT THIS SECTOR NEEDS â€” 3-POINT PRODUCTION ARCHITECTURE */}
+      {/* 3. WHAT THIS SECTOR NEEDS — INTERACTIVE 3-POINT SELECTOR */}
       <Section>
         <SectionHeader
           eyebrow="What This Sector Needs"
-          title="Engineered for OT-IT Convergence, Standardized Quality & Multi-Plant Scale"
-          description="Explore the industrial telemetry streaming pipelines, uniform ISO/IATF quality workflows, and supply chain benchmarking required for multi-site manufacturing enterprises."
+          title="Engineered for OT-IT Convergence & Edge Telemetry"
+          description="Explore the industrial protocols, edge computing architectures, and zero-trust shop floor connectivity required for global manufacturing hubs."
         />
         <ManufacturingSectorNeedsSelector />
       </Section>
 
-
-      {/* 6. HOW VERTARA HELPS â€” CONNECTED BLUEPRINT */}
+      {/* 4. HOW VERTARA HELPS — REVEAL */}
       <Section>
         <SectionHeader
           eyebrow="How Vertara Helps"
-          title="One Accountable Operating System for Manufacturing"
-          description="A connected capability engine spanning digital plant twins, edge-to-cloud OT pipelines, ISO/IATF quality documentation, industrial talent clusters, and specialized hiring."
+          title="An Enterprise Operating System for Manufacturing GCCs"
+          description="Connected delivery spanning PLC data engineering, category procurement hiring, entity compliance, and multi-plant telemetry integration."
         />
         <ManufacturingHowVertaraHelpsReveal />
       </Section>
 
-      {/* 7. CLIENT VOICES & TESTIMONIALS */}
-      <Section tone="muted">
-        <SectionHeader
-          eyebrow="Trust"
-          title="Enterprises building lasting India capability"
-          description="The capabilities we deliver, backed by the experiences of leaders building and scaling in India."
-        />
-        <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-6">
-          {logos.map((logo) => (
-            <div
-              key={logo.name}
-              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2F3F34]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
-            >
-              {logo.logoText}
-            </div>
-          ))}
-        </div>
-        <div className="mt-10">
-          <TestimonialMarquee items={testimonials} />
-        </div>
-      </Section>
-
-      {/* 8. ENQUIRY / CONTACT FORM */}
+      {/* 5. ENQUIRY / CONTACT FORM */}
       <Section id="enquire">
         <SectionHeader
           eyebrow="Enquire"
           title="Let's build your manufacturing capability center"
-          description="Share your manufacturing footprint, we'll connect you with our Manufacturing & Industrial IoT practice lead."
+          description="Share your plant footprint and operational priorities, our industrial practice lead will connect with you."
         />
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-8 items-stretch">
           <div className="lg:col-span-7 flex flex-col">
@@ -178,18 +108,8 @@ export default async function ManufacturingPage() {
         </div>
       </Section>
 
-      {/* 9. FAQ SECTION */}
-      <Section tone="muted">
-        <SectionHeader
-          eyebrow="FAQ"
-          title="Frequently asked questions about Manufacturing GCCs"
-          description="SCADA/MES telemetry, multi-site quality documentation, industrial talent clusters, and plant launch timelines answered upfront."
-        />
-        <Accordion items={manufacturingFaqs} />
-      </Section>
-
       {/* Gold Mandate Banner */}
       <HomeCtaBanner />
-    </>
+    </main>
   );
 }

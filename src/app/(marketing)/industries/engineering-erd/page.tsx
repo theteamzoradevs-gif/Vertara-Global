@@ -3,70 +3,23 @@ import { Button } from "@/components/ui/Button";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { FlowThreads } from "@/components/ui/FlowThreads";
 import { HomeCtaBanner } from "@/components/home/HomeCtaBanner";
-import { Accordion } from "@/components/ui/Accordion";
 import { ContactForm } from "@/components/leads/ContactForm";
 import { IndustryFormSideContent } from "@/components/industries/IndustryFormSideContent";
-import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
 import {
   ErdOpportunityJourney,
   ErdSectorNeedsSelector,
   ErdHowVertaraHelpsReveal,
 } from "@/components/industries/ErdInteractiveSections";
-import {
-  getSettings,
-  getTestimonials,
-  getClientLogos,
-} from "@/lib/content";
-import { ArrowRight } from "lucide-react";
 
 export const metadata = {
   title: "Engineering & ER&D GCC Setup in India | Vertara Global",
   description:
-    "From CAD seats to real product ownership. Build a dedicated Indian ER&D center engineered around your product architecture â€” systems design, embedded firmware, and simulation R&D.",
+    "From CAD seats to real product ownership. Build a dedicated Indian ER&D center engineered around your product architecture — systems design, embedded firmware, and simulation R&D.",
 };
 
-const erdFaqs = [
-  {
-    id: "faq-1",
-    title: "How do you protect proprietary CAD models, blueprints, and IP from day one?",
-    content:
-      "We build a fortress-grade security perimeter before your first engineer logs in: air-gapped Virtual Desktop Infrastructure (VDI), disabled local USB/print perimeters, DLP agents, and physical biometric access controls. Legally, all employment contracts assign 100% of inventions and IP rights directly to your global parent company with clear jurisdiction clauses.",
-  },
-  {
-    id: "faq-2",
-    title: "How are CAD/PLM licenses and heavy simulation rendering handled?",
-    content:
-      "We work with your IT team and software vendors (Dassault, Siemens, ANSYS, PTC) to establish multi-region license server peering, dedicated MPLS/cloud interconnects, and local high-performance compute clusters. This ensures engineers experience near-zero latency when interacting with massive assembly files and simulation runs.",
-  },
-  {
-    id: "faq-3",
-    title: "Which Indian cities are best for specific engineering disciplines?",
-    content:
-      "Location matters deeply in ER&D: Bengaluru leads in Aerospace, Avionics, and Embedded Software; Pune and Chennai dominate Automotive, Powertrain, and Heavy Machinery; Hyderabad excels in MedTech and Semiconductor design; NCR/Gurugram offers strong industrial automation talent. We map your exact discipline requirements to the optimal talent cluster.",
-  },
-  {
-    id: "faq-4",
-    title: "Can we set up physical hardware testing and simulation benches in India?",
-    content:
-      "Yes. In addition to software workstations, we design and build secure hardware-in-the-loop (HIL) testing labs, ESD-safe electronics benches, cleanroom testing rooms, and 3D printing/rapid prototyping facilities with dedicated power and ventilation.",
-  },
-  {
-    id: "faq-5",
-    title: "How quickly can we spin up an initial lighthouse engineering pod?",
-    content:
-      "Under our Assisted Captive or EOR delivery models, we can have a vetted 10â€“25 person engineering pod operational in secure space with configured compute infrastructure in 60 to 90 days from project kickoff.",
-  },
-];
-
-export default async function EngineeringErdPage() {
-  const [settings, testimonials, logos] = await Promise.all([
-    getSettings(),
-    getTestimonials(),
-    getClientLogos(),
-  ]);
-
+export default function EngineeringErdPage() {
   return (
-    <>
+    <main className="w-full font-sans" style={{ fontFamily: "Calibri" }}>
       {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden text-white bg-[#2F3F34]">
         <div className="absolute inset-0">
@@ -102,7 +55,7 @@ export default async function EngineeringErdPage() {
         </div>
       </section>
 
-      {/* 2. THE OPPORTUNITY â€” INTERACTIVE NUMBERED JOURNEY */}
+      {/* 2. THE OPPORTUNITY — INTERACTIVE NUMBERED JOURNEY */}
       <Section id="the-opportunity" tone="muted">
         <SectionHeader
           eyebrow="The Opportunity"
@@ -112,7 +65,7 @@ export default async function EngineeringErdPage() {
         <ErdOpportunityJourney />
       </Section>
 
-      {/* 3. WHAT THIS SECTOR NEEDS â€” INTERACTIVE 3-POINT SELECTOR */}
+      {/* 3. WHAT THIS SECTOR NEEDS — INTERACTIVE 3-POINT SELECTOR */}
       <Section>
         <SectionHeader
           eyebrow="What This Sector Needs"
@@ -122,8 +75,7 @@ export default async function EngineeringErdPage() {
         <ErdSectorNeedsSelector />
       </Section>
 
-
-      {/* 6. HOW VERTARA HELPS â€” INTERACTIVE CAPABILITY REVEAL */}
+      {/* 4. HOW VERTARA HELPS — INTERACTIVE CAPABILITY REVEAL */}
       <Section>
         <SectionHeader
           eyebrow="How Vertara Helps"
@@ -133,29 +85,7 @@ export default async function EngineeringErdPage() {
         <ErdHowVertaraHelpsReveal />
       </Section>
 
-      {/* 7. CLIENT VOICES & TESTIMONIALS */}
-      <Section tone="muted">
-        <SectionHeader
-          eyebrow="Trust"
-          title="Enterprises building lasting India capability"
-          description="The capabilities we deliver, backed by the experiences of leaders building and scaling in India."
-        />
-        <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-6">
-          {logos.map((logo) => (
-            <div
-              key={logo.name}
-              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2F3F34]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
-            >
-              {logo.logoText}
-            </div>
-          ))}
-        </div>
-        <div className="mt-10">
-          <TestimonialMarquee items={testimonials} />
-        </div>
-      </Section>
-
-      {/* 8. ENQUIRY / CONTACT FORM */}
+      {/* 5. ENQUIRY / CONTACT FORM */}
       <Section id="enquire">
         <SectionHeader
           eyebrow="Enquire"
@@ -177,18 +107,8 @@ export default async function EngineeringErdPage() {
         </div>
       </Section>
 
-      {/* 9. FAQ SECTION */}
-      <Section tone="muted">
-        <SectionHeader
-          eyebrow="FAQ"
-          title="Frequently asked questions about ER&D GCCs"
-          description="IP governance, software licensing, testing labs, and location strategies answered upfront."
-        />
-        <Accordion items={erdFaqs} />
-      </Section>
-
       {/* Gold Mandate Banner */}
       <HomeCtaBanner />
-    </>
+    </main>
   );
 }

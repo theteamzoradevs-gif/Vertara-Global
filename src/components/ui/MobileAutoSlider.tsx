@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useRef, ReactNode, Children, useCallback } from "react";
 import { cn } from "@/lib/utils";
@@ -120,12 +120,24 @@ export function MobileAutoSlider({
   const getActiveDotColor = () => {
     switch (dotTone) {
       case "gold":
-        return "bg-[#b49339]";
+        return "bg-[#B59439]";
       case "navy":
         return "bg-[#0b1f3a]";
       case "green":
       default:
         return "bg-[#2F3F34]";
+    }
+  };
+
+  const getInactiveDotColor = () => {
+    switch (dotTone) {
+      case "gold":
+        return "bg-[#D8D2C0]";
+      case "navy":
+        return "bg-slate-300";
+      case "green":
+      default:
+        return "bg-[#cddcd1]";
     }
   };
 
@@ -170,7 +182,7 @@ export function MobileAutoSlider({
                 "h-1.5 rounded-full transition-all duration-300",
                 activeIndex === idx
                   ? cn("w-6", getActiveDotColor())
-                  : "w-1.5 bg-[#cddcd1]"
+                  : cn("w-1.5", getInactiveDotColor())
               )}
               aria-label={`Go to slide ${idx + 1}`}
             />

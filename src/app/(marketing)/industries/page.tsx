@@ -116,7 +116,7 @@ export default async function IndustriesHubPage() {
   ].slice(0, 1);
 
   return (
-    <>
+    <main className="w-full font-sans" style={{ fontFamily: "Calibri" }}>
       {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden text-white bg-[#2F3F34]">
         {/* Right-aligned Realistic Background Image */}
@@ -280,7 +280,7 @@ export default async function IndustriesHubPage() {
           }))}
         />
         <div className="mt-6 flex justify-center sm:justify-start">
-          <Button href="/faq" variant="primary">
+          <Button href="/#faq" variant="primary">
             View full FAQ
           </Button>
         </div>
@@ -288,6 +288,6 @@ export default async function IndustriesHubPage() {
 
       {/* Gold Mandate Banner */}
       <HomeCtaBanner />
-    </>
+    </main>
   );
 }

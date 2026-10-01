@@ -27,13 +27,13 @@ const miningOpportunitySteps = [
     title: "Build ESG & HSE Governance Capability",
     badge: "ESG / HSE Compliance",
     description:
-      "Build ESG/HSE reporting capability without the corporate sustainability function a major miner already has â€” covering carbon accounting, tailings monitoring, and worker safety metrics.",
+      "Build ESG/HSE reporting capability without the corporate sustainability function a major miner already has” covering carbon accounting, tailings monitoring, and worker safety metrics.",
   },
   {
     title: "Start Lean. Extend Across Sites.",
     badge: "Modular Scale",
     description:
-      "Start with one capability â€” asset analytics, ESG/HSE reporting, or critical spares procurement â€” and extend seamlessly to the next mine site or commodity line.",
+      "Start with one capability” asset analytics, ESG/HSE reporting, or critical spares procurement ” and extend seamlessly to the next mine site or commodity line.",
   },
 ];
 
@@ -48,7 +48,7 @@ export function MiningOpportunityJourney() {
         return (
           <div
             key={step.title}
-            className="group relative rounded-2xl border border-[#cddcd1] bg-[#f0f4f1] p-6 sm:p-7 transition-all duration-300 hover:border-[#B59439] hover:bg-[#e5ebe6] hover:-translate-y-1 hover:shadow-md cursor-pointer flex flex-col justify-between h-full"
+            className="group relative rounded-2xl border border-[#cddcd1] bg-[#edf5ef] p-6 sm:p-7 transition-all duration-300 hover:border-[#B59439] hover:bg-[#e5ebe6] hover:-translate-y-1 hover:shadow-md cursor-pointer flex flex-col justify-between h-full"
           >
             <div>
               <div className="flex items-center justify-between">

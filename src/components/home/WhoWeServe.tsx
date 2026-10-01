@@ -1,6 +1,7 @@
 "use client";
 
 import { Reveal } from "@/components/ui/Reveal";
+import { MobileAutoSlider } from "@/components/ui/MobileAutoSlider";
 
 interface CardItem {
   id: string;
@@ -121,34 +122,67 @@ const columns = [
 
 export function WhoWeServe() {
   return (
-    <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-4 sm:gap-5">
-      {columns.map((colCards, colIdx) => (
-        <div key={colIdx} className="flex flex-col gap-4 sm:gap-5">
-          {colCards.map((card, cardIdx) => (
-            <Reveal
+    <>
+      {/* Mobile: Auto and Manual Slider with dots only */}
+      <div className="sm:hidden">
+        <MobileAutoSlider
+          autoSlideInterval={3500}
+          itemClassName="w-[84vw] max-w-[320px] shrink-0 snap-center flex flex-col h-full"
+          dotTone="gold"
+        >
+          {allCards.map((card) => (
+            <div
               key={card.id}
-              delay={(colIdx * 3 + cardIdx) * 0.03}
-              className="flex flex-col"
+              className="group flex h-[185px] w-full flex-col justify-start overflow-hidden rounded-2xl border border-[#cddcd1] bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#2F3F34]/50 hover:shadow-md cursor-pointer"
             >
-              <div className="group flex h-[185px] sm:h-[190px] w-full flex-col justify-start overflow-hidden rounded-2xl border border-[#cddcd1] bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#2F3F34]/50 hover:shadow-md">
-                <div>
-                  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#B59439]">
-                    {card.category === "sector" ? "Sector Vertical" : "Buyer Archetype"}
-                  </p>
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#B59439]">
+                  {card.category === "sector" ? "Sector Vertical" : "Buyer Archetype"}
+                </p>
 
-                  <h3 className="mt-2 text-base sm:text-lg font-bold tracking-tight text-[#101C30] group-hover:text-[#2F3F34] transition-colors leading-snug min-h-[44px] sm:min-h-[50px] line-clamp-2">
-                    {card.title}
-                  </h3>
+                <h3 className="mt-2 text-base font-bold tracking-tight text-[#101C30] group-hover:text-[#2F3F34] transition-colors leading-snug min-h-[44px] line-clamp-2">
+                  {card.title}
+                </h3>
 
-                  <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#101C30]/80 line-clamp-3">
-                    {card.blurb}
-                  </p>
-                </div>
+                <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#101C30]/80 line-clamp-3">
+                  {card.blurb}
+                </p>
               </div>
-            </Reveal>
+            </div>
           ))}
-        </div>
-      ))}
-    </div>
+        </MobileAutoSlider>
+      </div>
+
+      {/* Desktop View: 4 Columns with 3 Cards each (completely unchanged) */}
+      <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 items-stretch sm:gap-5">
+        {columns.map((colCards, colIdx) => (
+          <div key={colIdx} className="flex flex-col gap-4 sm:gap-5">
+            {colCards.map((card, cardIdx) => (
+              <Reveal
+                key={card.id}
+                delay={(colIdx * 3 + cardIdx) * 0.03}
+                className="flex flex-col"
+              >
+                <div className="group flex h-[185px] sm:h-[190px] w-full flex-col justify-start overflow-hidden rounded-2xl border border-[#cddcd1] bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#2F3F34]/50 hover:shadow-md">
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#B59439]">
+                      {card.category === "sector" ? "Sector Vertical" : "Buyer Archetype"}
+                    </p>
+
+                    <h3 className="mt-2 text-base sm:text-lg font-bold tracking-tight text-[#101C30] group-hover:text-[#2F3F34] transition-colors leading-snug min-h-[44px] sm:min-h-[50px] line-clamp-2">
+                      {card.title}
+                    </h3>
+
+                    <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#101C30]/80 line-clamp-3">
+                      {card.blurb}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        ))}
+      </div>
+    </>
   );
 }

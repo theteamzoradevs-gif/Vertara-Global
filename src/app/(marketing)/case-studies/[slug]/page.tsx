@@ -1,4 +1,4 @@
-﻿import Image from "next/image";
+import Image from "next/image";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 import { Accordion } from "@/components/ui/Accordion";
@@ -129,7 +129,7 @@ export default async function AboutPage() {
           }))}
         />
         <div className="mt-6 flex justify-center sm:justify-start">
-          <Button href="/faq" variant="primary">
+          <Button href="/#faq" variant="primary">
             View full FAQ
           </Button>
         </div>

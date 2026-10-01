@@ -2,28 +2,30 @@ import Link from "next/link";
 
 const columns = [
   {
-    title: "Services",
+    title: "Insights",
     links: [
-      { href: "/services/talent", label: "Talent Solutions" },
-      { href: "/services/workspace", label: "Workspace" },
-      { href: "/services/operations", label: "Business Operations" },
-      { href: "/services/advisory", label: "Research & Advisory" },
+      { href: "/insights#assessment", label: "Run Your GCC Assessment" },
+      { href: "/insights#market-research", label: "Market Research" },
+      { href: "/insights#workplace-strategy", label: "Workplace Strategy & Change Management" },
     ],
   },
   {
-    title: "Company",
+    title: "Explore",
     links: [
-      { href: "/about", label: "About" },
-      { href: "/industries", label: "Industries" },
-      { href: "/case-studies", label: "Case Studies" },
+      { href: "/", label: "Home" },
       { href: "/insights", label: "Insights" },
-      { href: "/faq", label: "FAQ" },
+      { href: "/#faq", label: "FAQ" },
+      //{ href: "/industries", label: "Industries" },
+      //{ href: "/case-studies", label: "Case Studies" },
+
+
     ],
   },
   {
     title: "Engage",
     links: [
-      { href: "/engagement-models", label: "Engagement models" },
+      //{ href: "/engagement-models", label: "Engagement models" },
+      { href: "/about", label: "About Us" },
       { href: "/contact", label: "Contact us" },
     ],
   },
@@ -45,9 +47,14 @@ export function SiteFooter({
     >
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-4 lg:px-8">
         <div>
-          <div className="flex h-7 items-center">
-            <Link href="/" className="text-base sm:text-lg font-bold tracking-[0.2em] text-white">
-              VERTARA <span className="text-[#B59439] lowercase font-medium">global</span>
+          <div className="flex items-center">
+            <Link href="/" className="inline-flex flex-col transition hover:opacity-90">
+              <span className="text-base sm:text-lg font-bold tracking-[0.2em] text-white leading-tight">
+                VERTARA <span className="text-[#B59439] lowercase font-medium">global</span>
+              </span>
+              <span className="text-[9px] sm:text-[10px] font-bold tracking-[0.28em] sm:tracking-[0.34em] text-[#B59439] uppercase mt-1 leading-tight">
+                GCC ADVISORY
+              </span>
             </Link>
           </div>
           <p className="mt-3 text-sm leading-relaxed text-white/75">

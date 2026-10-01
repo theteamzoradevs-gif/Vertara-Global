@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
+import { MobileAutoSlider } from "@/components/ui/MobileAutoSlider";
 import { offeringsData } from "../../data/offerings-data";
 
 export function OfferingsSectors() {
@@ -31,13 +32,19 @@ export function OfferingsSectors() {
           </div>
         </Reveal>
 
-        {/* Compact 4x2 Grid of 8 Clickable Sector Cards linked to specific industry routes */}
-        <div className="mt-12 sm:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 items-stretch">
-          {sectors.items.map((sector, index) => (
-            <Reveal key={sector.id} delay={index * 0.04} className="flex flex-col">
+        {/* 8 Clickable Sector Cards: Mobile Auto + Manual Slider with dots alone, Desktop 4x2 Grid */}
+        <div className="mt-10 sm:mt-14">
+          <MobileAutoSlider
+            autoSlideInterval={3500}
+            desktopClassName="md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-5 items-stretch"
+            itemClassName="w-[84vw] max-w-[320px] shrink-0 snap-center md:w-auto md:max-w-none flex flex-col h-full"
+            dotTone="gold"
+          >
+            {sectors.items.map((sector, index) => (
               <Link
+                key={sector.id}
                 href={sector.route}
-                className="group flex h-[190px] sm:h-[195px] w-full flex-col justify-between rounded-2xl border border-[#cddcd1] bg-white p-5 text-left shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#2F3F34] hover:shadow-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#2F3F34]/30"
+                className="group flex h-[195px] w-full flex-col justify-between rounded-2xl border border-[#cddcd1] bg-white p-5 text-left shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#2F3F34] hover:shadow-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#2F3F34]/30"
               >
                 <div>
                   {/* Category Eyebrow */}
@@ -64,8 +71,8 @@ export function OfferingsSectors() {
                   </span>
                 </div>
               </Link>
-            </Reveal>
-          ))}
+            ))}
+          </MobileAutoSlider>
         </div>
       </div>
     </section>

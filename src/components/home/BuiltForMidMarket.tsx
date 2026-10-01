@@ -1,6 +1,7 @@
 "use client";
 
 import { Reveal } from "@/components/ui/Reveal";
+import { MobileAutoSlider } from "@/components/ui/MobileAutoSlider";
 
 const points = [
   {
@@ -59,11 +60,19 @@ export function BuiltForMidMarket() {
           </div>
         </Reveal>
 
-        {/* 6 Cards (3 in a row on desktop) */}
-        <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:gap-6">
-          {points.map((item, index) => (
-            <Reveal key={item.title} delay={0.06 * index}>
-              <div className="group flex h-full flex-col justify-between rounded-2xl border border-[#cddcd1] bg-[#e5ebe6] p-6 sm:p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#2F3F34]/50 hover:shadow-md">
+        {/* 6 Cards: Mobile Auto + Manual Slider with dots, Desktop Grid */}
+        <div className="mt-10">
+          <MobileAutoSlider
+            autoSlideInterval={3500}
+            desktopClassName="sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-6"
+            itemClassName="w-[84vw] max-w-[340px] shrink-0 snap-center sm:w-auto sm:max-w-none flex flex-col h-full"
+            dotTone="gold"
+          >
+            {points.map((item) => (
+              <div
+                key={item.title}
+                className="group flex h-full flex-col justify-between rounded-2xl border border-[#cddcd1] bg-[#e5ebe6] p-6 sm:p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#2F3F34]/50 hover:shadow-md cursor-pointer"
+              >
                 <div>
                   <h3 className="text-base sm:text-lg font-bold text-[#101C30] tracking-tight leading-snug group-hover:text-[#2F3F34] transition-colors">
                     {item.title}
@@ -74,8 +83,8 @@ export function BuiltForMidMarket() {
                   </p>
                 </div>
               </div>
-            </Reveal>
-          ))}
+            ))}
+          </MobileAutoSlider>
         </div>
       </div>
     </section>

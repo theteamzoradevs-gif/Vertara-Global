@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
+import { MobileAutoSlider } from "@/components/ui/MobileAutoSlider";
 import { offeringsData } from "../../data/offerings-data";
 
 export function OfferingsScope() {
@@ -32,51 +33,58 @@ export function OfferingsScope() {
             </p>
           </div>
 
-          {/* 4 Cards Grid: covers all 4 items cleanly in a single row on desktop, 2x2 on tablet, 1-col on mobile */}
-          <div className="mt-10 sm:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-            {scope.items.map((item) => (
-              <div
-                key={item.title}
-                id={item.id}
-                className="group relative flex flex-col justify-between rounded-2xl border border-[#D8D2C0] bg-[#F9F8F5]/70 p-6 transition-all duration-300 hover:border-[#2F3F34] hover:bg-white hover:shadow-lg"
-              >
-                <div>
-                  {/* Top Bar: Number & Tag */}
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-sm font-bold text-[#B59439]">
-                      {item.number}
-                    </span>
-                    <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#8C7026] bg-white px-2 py-0.5 rounded border border-[#D8D2C0]">
-                      {item.tag}
-                    </span>
+          {/* 4 Cards: Mobile Auto + Manual Slider with dots, Desktop Grid */}
+          <div className="mt-10 sm:mt-12">
+            <MobileAutoSlider
+              autoSlideInterval={3500}
+              desktopClassName="md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6"
+              itemClassName="w-[84vw] max-w-[320px] shrink-0 snap-center md:w-auto md:max-w-none flex flex-col h-full"
+              dotTone="gold"
+            >
+              {scope.items.map((item) => (
+                <div
+                  key={item.title}
+                  id={item.id}
+                  className="group relative flex flex-col justify-between rounded-2xl border border-[#D8D2C0] bg-[#F9F8F5]/70 p-6 transition-all duration-300 hover:border-[#2F3F34] hover:bg-white hover:shadow-lg cursor-pointer h-full"
+                >
+                  <div>
+                    {/* Top Bar: Number & Tag */}
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-sm font-bold text-[#B59439]">
+                        {item.number}
+                      </span>
+                      <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#8C7026] bg-white px-2 py-0.5 rounded border border-[#D8D2C0]">
+                        {item.tag}
+                      </span>
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="mt-4 text-lg font-bold tracking-tight text-[#101C30] leading-snug">
+                      {item.title}
+                    </h3>
+
+                    {/* Description */}
+                    <p className="mt-2.5 text-sm leading-relaxed text-[#101C30]/80">
+                      {item.description}
+                    </p>
                   </div>
 
-                  {/* Title */}
-                  <h3 className="mt-4 text-lg font-bold tracking-tight text-[#101C30] leading-snug">
-                    {item.title}
-                  </h3>
-
-                  {/* Description */}
-                  <p className="mt-2.5 text-sm leading-relaxed text-[#101C30]/80">
-                    {item.description}
-                  </p>
+                  {/* Bottom link (for Card 4 research or interactive hover) */}
+                  {item.linkHref ? (
+                    <div className="mt-6 pt-4 border-t border-[#D8D2C0]/60">
+                      <Link
+                        href={item.linkHref}
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-[#2F3F34] hover:text-[#B59439] transition-colors"
+                      >
+                        <span>{item.linkText || "Explore Insights →"}</span>
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="mt-6 pt-4 border-t border-transparent" />
+                  )}
                 </div>
-
-                {/* Bottom link (for Card 4 research or interactive hover) */}
-                {item.linkHref ? (
-                  <div className="mt-6 pt-4 border-t border-[#D8D2C0]/60">
-                    <Link
-                      href={item.linkHref}
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-[#2F3F34] hover:text-[#B59439] transition-colors"
-                    >
-                      <span>{item.linkText || "Explore Insights →"}</span>
-                    </Link>
-                  </div>
-                ) : (
-                  <div className="mt-6 pt-4 border-t border-transparent" />
-                )}
-              </div>
-            ))}
+              ))}
+            </MobileAutoSlider>
           </div>
         </Reveal>
       </div>

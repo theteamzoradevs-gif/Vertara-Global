@@ -3,70 +3,23 @@ import { Button } from "@/components/ui/Button";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { FlowThreads } from "@/components/ui/FlowThreads";
 import { HomeCtaBanner } from "@/components/home/HomeCtaBanner";
-import { Accordion } from "@/components/ui/Accordion";
 import { ContactForm } from "@/components/leads/ContactForm";
 import { IndustryFormSideContent } from "@/components/industries/IndustryFormSideContent";
-import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
 import {
   MiningOpportunityJourney,
   MiningSectorNeedsSelector,
   MiningHowVertaraHelpsReveal,
 } from "@/components/industries/MiningMetalsInteractiveSections";
-import {
-  getSettings,
-  getTestimonials,
-  getClientLogos,
-} from "@/lib/content";
-import { ArrowRight } from "lucide-react";
 
 export const metadata = {
   title: "Mining & Metals GCC Setup in India | Vertara Global",
   description:
-    "From site reporting to asset intelligence. Build a dedicated Indian Mining & Metals capability center â€” SCADA telemetry, SAP EAM, predictive reliability engineering, and GRI/SASB ESG reporting.",
+    "From site reporting to asset intelligence. Build a dedicated Indian Mining & Metals capability center — SCADA telemetry, SAP EAM, predictive reliability engineering, and GRI/SASB ESG reporting.",
 };
 
-const miningFaqs = [
-  {
-    id: "faq-1",
-    title: "How do you connect remote mine SCADA and fleet systems into a centralized India GCC?",
-    content:
-      "We design low-bandwidth, satellite-compatible edge telemetry pipelines using MQTT and OPC UA protocols. Data from heavy mobile equipment (Caterpillar MineStar, Komatsu Modular) and fixed processing plant SCADA is securely streamed and indexed into SAP EAM and IBM Maximo in real time.",
-  },
-  {
-    id: "faq-2",
-    title: "How does the India hub support GRI, SASB, and ICMM sustainability reporting?",
-    content:
-      "We establish automated environmental telemetry pipelines tracking tailings dam sensors, water reuse ratios, and Scope 1â€“3 emissions. Our team validates and compiles disclosure-ready data models matching the exact standards required by international institutional investors and regulatory bodies.",
-  },
-  {
-    id: "faq-3",
-    title: "Which Indian clusters offer the best Mining, Metallurgical, and Asset Engineering talent?",
-    content:
-      "Kolkata, Jamshedpur, and Dhanbad have historic depth in mineral processing, heavy metallurgy, and mine planning software (Datamine, Micromine, Surpac); Bengaluru and Hyderabad lead in heavy equipment IoT telemetry and predictive asset health algorithms.",
-  },
-  {
-    id: "faq-4",
-    title: "Can a single-site or junior mining company start with a small, focused pod?",
-    content:
-      "Yes. You do not need a multi-site enterprise mandate. We help single-site and mid-tier operators launch focused pods of 8â€“15 engineers dedicated to asset reliability modeling, critical spares procurement expediting, or ESG compliance, expanding as new deposits or processing lines come online.",
-  },
-  {
-    id: "faq-5",
-    title: "How quickly can a dedicated mining asset intelligence pod become operational?",
-    content:
-      "Under our Assisted Captive or EOR delivery models, a vetted team of reliability engineers, fleet data analysts, and SAP EAM specialists can be fully operational with secure infrastructure in 60 to 90 days from project kickoff.",
-  },
-];
-
-export default async function MiningMetalsPage() {
-  const [settings, testimonials, logos] = await Promise.all([
-    getSettings(),
-    getTestimonials(),
-    getClientLogos(),
-  ]);
-
+export default function MiningMetalsPage() {
   return (
-    <>
+    <main className="w-full font-sans" style={{ fontFamily: "Calibri" }}>
       {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden text-white bg-[#2F3F34]">
         <div className="absolute inset-0">
@@ -102,65 +55,42 @@ export default async function MiningMetalsPage() {
         </div>
       </section>
 
-      {/* 2. THE OPPORTUNITY â€” 3-STAGE MINING JOURNEY */}
+      {/* 2. THE OPPORTUNITY — INTERACTIVE NUMBERED JOURNEY */}
       <Section id="the-opportunity" tone="muted">
         <SectionHeader
           eyebrow="The Opportunity"
-          title="From Site Reporting to Asset Intelligence"
-          description="A progressive 3-stage journey turning localized site telemetry into multi-site reliability engineering, ESG governance, and supply chain control."
+          title="From Back-Office Reporting to Site Asset Autonomy"
+          description="A progressive 3-stage roadmap turning offshore mining support into predictive fleet telemetry, remote maintenance scheduling, and real-time ESG disclosure."
         />
         <MiningOpportunityJourney />
       </Section>
 
-      {/* 3. WHAT THIS SECTOR NEEDS â€” 3-POINT ASSET ARCHITECTURE */}
+      {/* 3. WHAT THIS SECTOR NEEDS — INTERACTIVE 3-POINT SELECTOR */}
       <Section>
         <SectionHeader
           eyebrow="What This Sector Needs"
-          title="Engineered for SCADA Fleet Sync, ESG Compliance & Remote Supply"
-          description="Explore the standardized heavy fleet interconnects, audit-grade sustainability pipelines, and critical spares buffering required for remote extractive operations."
+          title="Engineered for Remote Telemetry & Enterprise EAM"
+          description="Explore the low-bandwidth satellite links, edge telemetry architectures, and structural engineering talent required for global mining operations."
         />
         <MiningSectorNeedsSelector />
       </Section>
 
-
-      {/* 6. HOW VERTARA HELPS â€” CONNECTED BLUEPRINT */}
+      {/* 4. HOW VERTARA HELPS — REVEAL */}
       <Section>
         <SectionHeader
           eyebrow="How Vertara Helps"
-          title="One Accountable Operating System for Mining & Metals"
-          description="A connected capability engine spanning structural site design, GRI/SASB compliance, unified asset data layers, mining talent clusters, and remote capex finance."
+          title="An Integrated Operating Engine for Mining & Metals"
+          description="Connected capability delivery across edge telemetry, SAP EAM expertise, environmental legal covenants, and mining equipment hiring."
         />
         <MiningHowVertaraHelpsReveal />
       </Section>
 
-      {/* 7. CLIENT VOICES & TESTIMONIALS */}
-      <Section tone="muted">
-        <SectionHeader
-          eyebrow="Trust"
-          title="Enterprises building lasting India capability"
-          description="The capabilities we deliver, backed by the experiences of leaders building and scaling in India."
-        />
-        <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-6">
-          {logos.map((logo) => (
-            <div
-              key={logo.name}
-              className="flex min-h-[64px] items-center justify-center rounded-xl border border-[#cddcd1] bg-[#e5ebe6] px-2 py-2 text-center text-xs font-semibold text-navy transition hover:-translate-y-0.5 hover:border-[#2F3F34]/40 hover:shadow-md sm:min-h-[80px] sm:rounded-2xl sm:px-3 sm:text-sm"
-            >
-              {logo.logoText}
-            </div>
-          ))}
-        </div>
-        <div className="mt-10">
-          <TestimonialMarquee items={testimonials} />
-        </div>
-      </Section>
-
-      {/* 8. ENQUIRY / CONTACT FORM */}
+      {/* 5. ENQUIRY / CONTACT FORM */}
       <Section id="enquire">
         <SectionHeader
           eyebrow="Enquire"
-          title="Let's build your asset intelligence capability center"
-          description="Share your mining operations footprint, we'll connect you with our Mining & Metals practice lead."
+          title="Let's build your mining & metals asset intelligence center"
+          description="Share your asset footprint and operational priorities, our mining practice lead will connect with you."
         />
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-8 items-stretch">
           <div className="lg:col-span-7 flex flex-col">
@@ -177,18 +107,8 @@ export default async function MiningMetalsPage() {
         </div>
       </Section>
 
-      {/* 9. FAQ SECTION */}
-      <Section tone="muted">
-        <SectionHeader
-          eyebrow="FAQ"
-          title="Frequently asked questions about Mining & Metals GCCs"
-          description="Fleet telemetry, remote site procurement, GRI/SASB compliance, and engineering talent hubs answered upfront."
-        />
-        <Accordion items={miningFaqs} />
-      </Section>
-
       {/* Gold Mandate Banner */}
       <HomeCtaBanner />
-    </>
+    </main>
   );
 }
