@@ -166,25 +166,25 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
       )}
 
       {/* Metrics Row */}
-      <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 max-w-2xl">
-        <div className="rounded-2xl border border-border bg-surface-elevated p-4 shadow-xs">
-          <p className="text-xs text-muted font-medium">Total FAQs</p>
-          <p className="mt-1 text-2xl font-bold text-navy">{faqs.length}</p>
+      <div className="grid gap-2 sm:gap-4 grid-cols-3 max-w-2xl">
+        <div className="rounded-xl sm:rounded-2xl border border-border bg-surface-elevated p-3 sm:p-4 shadow-xs">
+          <p className="text-[11px] sm:text-xs text-muted font-medium">Total FAQs</p>
+          <p className="mt-1 text-lg sm:text-2xl font-bold text-navy">{faqs.length}</p>
         </div>
-        <div className="rounded-2xl border border-border bg-surface-elevated p-4 shadow-xs">
-          <p className="text-xs text-muted font-medium">Categories</p>
-          <p className="mt-1 text-2xl font-bold text-navy">{FAQ_CATEGORIES.length}</p>
+        <div className="rounded-xl sm:rounded-2xl border border-border bg-surface-elevated p-3 sm:p-4 shadow-xs">
+          <p className="text-[11px] sm:text-xs text-muted font-medium">Categories</p>
+          <p className="mt-1 text-lg sm:text-2xl font-bold text-navy">{FAQ_CATEGORIES.length}</p>
         </div>
-        <div className="rounded-2xl border border-border bg-surface-elevated p-4 shadow-xs">
-          <p className="text-xs text-muted font-medium">Filtered FAQs</p>
-          <p className="mt-1 text-2xl font-bold text-navy">{filteredFaqs.length}</p>
+        <div className="rounded-xl sm:rounded-2xl border border-border bg-surface-elevated p-3 sm:p-4 shadow-xs">
+          <p className="text-[11px] sm:text-xs text-muted font-medium">Filtered</p>
+          <p className="mt-1 text-lg sm:text-2xl font-bold text-navy">{filteredFaqs.length}</p>
         </div>
       </div>
 
       {/* Filter & Search Toolbar */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-2xl border border-border bg-surface-elevated p-3 shadow-xs">
         {/* Search Bar */}
-        <div className="relative flex-1 max-w-sm">
+        <div className="relative flex-1 sm:max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
           <input
             type="text"
@@ -218,7 +218,8 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
 
       {/* FAQs Table List View */}
       <div className="overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-xs">
-        <table className="w-full text-left text-xs text-slate">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs text-slate min-w-[500px]">
           <thead className="border-b border-border bg-surface text-[11px] font-semibold uppercase tracking-wider text-muted">
             <tr>
               <th className="px-5 py-3.5 w-16 text-center">Order</th>
@@ -287,6 +288,7 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
             )}
           </tbody>
         </table>
+        </div>
       </div>
 
       {/* Create / Edit Modal */}

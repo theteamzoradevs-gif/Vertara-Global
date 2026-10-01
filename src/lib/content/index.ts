@@ -10,6 +10,7 @@ import {
 } from "@/models/CaseStudy";
 import { Faq } from "@/models/Faq";
 import { AboutContent } from "@/models/AboutContent";
+import { ContactContent } from "@/models/ContactContent";
 import {
   seedSettings,
   seedServices,
@@ -27,6 +28,10 @@ import {
   type ByTheNumbersPoint,
   type TeamMember,
 } from "@/data/seed-about";
+import {
+  seedContactContent,
+  type ContactContentData,
+} from "@/data/seed-contact";
 import type {
   Settings,
   ServiceItem,
@@ -290,4 +295,27 @@ export async function getAboutContent(): Promise<AboutContentData> {
       },
     };
   }, seedAboutContent);
+}
+
+export async function getContactContent(): Promise<ContactContentData> {
+  return withDB(async () => {
+    let doc = await ContactContent.findOne().lean();
+    if (!doc) {
+      const created = await ContactContent.create(seedContactContent);
+      doc = created.toObject();
+    }
+    const parsed = JSON.parse(JSON.stringify(doc)) as Partial<ContactContentData>;
+    return {
+      eyebrow: parsed.eyebrow || seedContactContent.eyebrow,
+      headline: parsed.headline || seedContactContent.headline,
+      description: parsed.description || seedContactContent.description,
+      formTitle: parsed.formTitle || seedContactContent.formTitle,
+      formSubmitLabel: parsed.formSubmitLabel || seedContactContent.formSubmitLabel,
+      companyName: parsed.companyName || seedContactContent.companyName,
+      contactEmail: parsed.contactEmail || seedContactContent.contactEmail,
+      contactPhone: parsed.contactPhone || seedContactContent.contactPhone,
+      officeAddress: parsed.officeAddress ?? seedContactContent.officeAddress,
+      calendlyUrl: parsed.calendlyUrl ?? seedContactContent.calendlyUrl,
+    };
+  }, seedContactContent);
 }

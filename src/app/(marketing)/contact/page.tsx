@@ -1,5 +1,6 @@
 import { Section } from "@/components/ui/Section";
 import { ContactForm } from "@/components/leads/ContactForm";
+import { getContactContent } from "@/lib/content";
 
 export const metadata = {
   title: "Contact",
@@ -7,7 +8,8 @@ export const metadata = {
 };
 
 export default async function ContactPage() {
-  const calendly = process.env.NEXT_PUBLIC_CALENDLY_URL;
+  const content = await getContactContent();
+  const calendly = content.calendlyUrl || process.env.NEXT_PUBLIC_CALENDLY_URL;
 
   return (
     <div className="w-full bg-[#edf5ef] font-sans" style={{ fontFamily: 'Calibri' }}>
@@ -19,14 +21,14 @@ export default async function ContactPage() {
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#B59439]">
-                  CONTACT US
+                  {content.eyebrow}
                 </span>
               </div>
               <h1 className="mt-3 text-2xl sm:text-3xl lg:text-[38px] font-bold tracking-tight text-[#101C30] leading-tight">
-                Let’s talk about what yours should look like.
+                {content.headline}
               </h1>
               <p className="mt-3 text-sm sm:text-base leading-relaxed text-[#2F3F34]/85">
-                Tell us where you are exploring a Nano GCC pilot, building the full business case, or ready to launch and we’ll come to the first call with a point of view, not a pitch deck.
+                {content.description}
               </p>
             </div>
           </div>
@@ -35,8 +37,8 @@ export default async function ContactPage() {
           <div className="lg:col-span-7 flex justify-center lg:justify-end">
             <ContactForm
               source="contact"
-              title="Send us a message"
-              submitLabel="Book a consultation"
+              title={content.formTitle}
+              submitLabel={content.formSubmitLabel}
               buttonVariant="gold"
               className="w-full max-w-[500px]"
             />

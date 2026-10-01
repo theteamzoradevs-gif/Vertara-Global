@@ -357,7 +357,8 @@ export function InsightsManager({ initialInsights }: { initialInsights: InsightI
 
       {/* Insights Table */}
       <div className="overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-xs">
-        <table className="w-full text-left text-xs text-slate">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs text-slate min-w-[620px]">
           <thead className="border-b border-border bg-surface text-[11px] font-semibold uppercase tracking-wider text-muted">
             <tr>
               <th className="px-5 py-3.5">Article</th>
@@ -533,6 +534,7 @@ export function InsightsManager({ initialInsights }: { initialInsights: InsightI
             )}
           </tbody>
         </table>
+        </div>
       </div>
 
       {/* Create / Edit Modal */}

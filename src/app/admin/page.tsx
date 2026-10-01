@@ -9,6 +9,7 @@ import {
   AlertCircle,
   Plus,
   Info,
+  Mail,
 } from "lucide-react";
 import { connectDB } from "@/lib/db";
 import { Lead } from "@/models/Lead";
@@ -124,7 +125,7 @@ export default async function AdminDashboard() {
     { label: "Total Inquiries", value: leadCount, href: "/admin/inquiries", valueClass: "text-navy" },
     { label: "New Inquiries", value: newLeads, href: "/admin/inquiries", valueClass: "text-teal-600" },
     {
-      label: "Contacted Inquiries",
+      label: "Contacted",
       value: contactedLeads,
       href: "/admin/inquiries",
       valueClass: "text-blue-600",
@@ -145,61 +146,70 @@ export default async function AdminDashboard() {
     { title: "Create FAQ", href: "/admin/faqs", icon: HelpCircle, primary: false },
     { title: "Home Editor", href: "/admin/hero", icon: PanelTop, primary: false },
     { title: "About Us Editor", href: "/admin/about", icon: Info, primary: false },
+    { title: "Contact Editor", href: "/admin/contact", icon: Mail, primary: false },
     { title: "View Inquiries", href: "/admin/inquiries", icon: Inbox, primary: false },
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6 max-w-7xl mx-auto">
       {!conn ? (
-        <div className="flex items-center gap-3 rounded-xl border border-amber-300/80 bg-amber-50 p-4 text-amber-900 shadow-xs">
-          <AlertCircle className="h-5 w-5 shrink-0 text-amber-600" />
-          <p className="text-sm font-medium">
+        <div className="flex items-center gap-2.5 sm:gap-3 rounded-xl border border-amber-300/80 bg-amber-50 p-3.5 sm:p-4 text-amber-900 shadow-xs">
+          <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-amber-600" />
+          <p className="text-xs sm:text-sm font-medium">
             Database is offline. Counts will appear when connected.
           </p>
         </div>
       ) : null}
 
       <div>
-        <h1 className="text-2xl font-bold text-navy">Dashboard</h1>
-        <p className="mt-1 text-sm text-muted">
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-navy">Dashboard</h1>
+        <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-muted">
           Overview of leads, content, and recent activity.
         </p>
       </div>
 
-      {/* Operations metrics */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      {/* Operations metrics (compact 3-col on all screens) */}
+      <div className="grid grid-cols-3 gap-2 sm:gap-4">
         {primaryMetrics.map((metric) => (
           <Link
             key={metric.label}
             href={metric.href}
-            className="rounded-2xl border border-border bg-surface-elevated p-4 shadow-xs"
+            className="group rounded-xl sm:rounded-2xl border border-border bg-surface-elevated p-2.5 sm:p-4 shadow-2xs hover:border-accent/40 hover:shadow-xs transition active:scale-[0.98]"
           >
-            <p className="text-xs text-muted font-medium">{metric.label}</p>
-            <p className={`mt-1 text-2xl font-bold ${metric.valueClass}`}>{metric.value}</p>
+            <p className="text-[10px] sm:text-xs text-muted font-medium truncate leading-tight">
+              {metric.label}
+            </p>
+            <p className={`mt-0.5 sm:mt-1 text-lg sm:text-2xl font-bold tracking-tight ${metric.valueClass}`}>
+              {metric.value}
+            </p>
           </Link>
         ))}
       </div>
 
-      {/* Content summary */}
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+      {/* Content summary metrics */}
+      <div className="grid grid-cols-2 gap-2 sm:gap-4 md:grid-cols-4">
         {contentMetrics.map((metric) => (
           <Link
             key={metric.label}
             href={metric.href}
-            className="rounded-2xl border border-border bg-surface-elevated p-4 shadow-xs"
+            className="group rounded-xl sm:rounded-2xl border border-border bg-surface-elevated p-2.5 sm:p-4 shadow-2xs hover:border-accent/40 hover:shadow-xs transition active:scale-[0.98]"
           >
-            <p className="text-xs text-muted font-medium">{metric.label}</p>
-            <p className="mt-1 text-2xl font-bold text-navy">{metric.value}</p>
+            <p className="text-[11px] sm:text-xs text-muted font-medium truncate">
+              {metric.label}
+            </p>
+            <p className="mt-0.5 sm:mt-1 text-lg sm:text-2xl font-bold text-navy">
+              {metric.value}
+            </p>
           </Link>
         ))}
       </div>
 
-      {/* Quick actions — toolbar style */}
-      <div className="flex flex-col gap-3 rounded-2xl border border-border bg-surface-elevated p-4 shadow-xs sm:flex-row sm:items-center sm:justify-between">
-        <p className="shrink-0 text-xs font-semibold uppercase tracking-wider text-muted">
+      {/* Quick actions toolbar */}
+      <div className="flex flex-col gap-2.5 rounded-xl sm:rounded-2xl border border-border bg-surface-elevated p-3.5 sm:p-4 shadow-xs sm:flex-row sm:items-center sm:justify-between">
+        <p className="shrink-0 text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-muted">
           Quick actions
         </p>
-        <div className="flex flex-wrap items-center gap-2 sm:justify-end">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 sm:justify-end">
           {quickActions.map((action) => {
             const Icon = action.icon;
             if (action.primary) {
@@ -207,9 +217,9 @@ export default async function AdminDashboard() {
                 <Link
                   key={action.href + action.title}
                   href={action.href}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-white shadow-xs transition hover:bg-accent-hover"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-accent px-3 py-1.5 sm:px-4 sm:py-2 text-[11px] sm:text-xs font-semibold text-white shadow-xs transition hover:bg-accent-hover active:scale-[0.98]"
                 >
-                  <Icon className="h-4 w-4" />
+                  <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   <span>{action.title}</span>
                 </Link>
               );
@@ -218,9 +228,9 @@ export default async function AdminDashboard() {
               <Link
                 key={action.href + action.title}
                 href={action.href}
-                className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface px-3 py-2 text-xs font-semibold text-navy transition hover:bg-surface-elevated"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-surface px-2.5 py-1.5 sm:px-3 sm:py-2 text-[11px] sm:text-xs font-semibold text-navy transition hover:bg-surface-elevated hover:border-accent/30 active:scale-[0.98]"
               >
-                <Icon className="h-3.5 w-3.5 text-muted" />
+                <Icon className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-muted" />
                 <span>{action.title}</span>
               </Link>
             );
@@ -228,90 +238,140 @@ export default async function AdminDashboard() {
         </div>
       </div>
 
-      {/* Latest Inquiries Table */}
-      <div className="overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-xs">
-        <div className="flex items-center justify-between border-b border-border bg-surface px-5 py-3.5">
-          <h2 className="text-sm font-bold text-navy">Latest Inquiries</h2>
+      {/* Latest Inquiries Container */}
+      <div className="overflow-hidden rounded-xl sm:rounded-2xl border border-border bg-surface-elevated shadow-xs">
+        <div className="flex items-center justify-between border-b border-border bg-surface px-4 py-3 sm:px-5 sm:py-3.5">
+          <h2 className="text-xs sm:text-sm font-bold text-navy">Latest Inquiries</h2>
           <Link
             href="/admin/inquiries"
-            className="inline-flex items-center gap-1 text-xs font-semibold text-accent hover:text-accent-hover"
+            className="inline-flex items-center gap-1 text-[11px] sm:text-xs font-semibold text-accent hover:text-accent-hover transition"
           >
-            View all
+            <span>View all</span>
             <ArrowRight className="h-3 w-3" />
           </Link>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm text-slate">
-            <thead className="border-b border-border bg-surface text-xs font-semibold uppercase tracking-wider text-muted">
-              <tr>
-                <th className="px-5 py-3.5">Lead Name</th>
-                <th className="px-5 py-3.5">Source</th>
-                <th className="px-5 py-3.5">Status</th>
-                <th className="px-5 py-3.5 text-right">Received</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {recentLeads.length === 0 ? (
-                <tr>
-                  <td colSpan={4} className="px-5 py-12 text-center text-muted">
-                    <div className="flex flex-col items-center justify-center">
-                      <Inbox className="h-10 w-10 text-slate-300" />
-                      <p className="mt-3 text-base font-semibold text-navy">No inquiries yet</p>
-                      <p className="mt-1 text-xs text-muted">New leads will appear here.</p>
-                    </div>
-                  </td>
-                </tr>
-              ) : (
-                recentLeads.map((lead) => {
-                  const sourceConfig = SOURCE_LABELS[lead.source || ""] || {
-                    label: lead.source || "—",
-                    style: "bg-surface text-muted border-border",
-                  };
-                  return (
-                    <tr key={lead._id} className="transition hover:bg-surface/50">
-                      <td className="px-5 py-4">
-                        <Link href="/admin/inquiries" className="block min-w-0">
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold text-navy">{lead.name}</span>
-                            {lead.status === "new" ? (
-                              <span className="h-2 w-2 shrink-0 rounded-full bg-teal-500" />
-                            ) : null}
-                          </div>
-                          {lead.email ? (
-                            <p className="mt-0.5 truncate text-xs text-muted">{lead.email}</p>
+
+        {recentLeads.length === 0 ? (
+          <div className="px-5 py-10 sm:py-12 text-center text-muted">
+            <div className="flex flex-col items-center justify-center">
+              <Inbox className="h-8 w-8 sm:h-10 sm:w-10 text-slate-300" />
+              <p className="mt-2.5 text-sm sm:text-base font-semibold text-navy">No inquiries yet</p>
+              <p className="mt-0.5 text-xs text-muted">New leads will appear here.</p>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Mobile list view (< 640px) */}
+            <div className="divide-y divide-border sm:hidden">
+              {recentLeads.map((lead) => {
+                const sourceConfig = SOURCE_LABELS[lead.source || ""] || {
+                  label: lead.source || "—",
+                  style: "bg-surface text-muted border-border",
+                };
+                return (
+                  <div key={lead._id} className="p-3.5 transition hover:bg-surface/50 active:bg-surface">
+                    <Link href="/admin/inquiries" className="block space-y-2">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <span className="font-bold text-navy text-xs truncate">{lead.name}</span>
+                          {lead.status === "new" ? (
+                            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-teal-500 ring-2 ring-teal-200" />
                           ) : null}
-                        </Link>
-                      </td>
-                      <td className="px-5 py-4">
-                        <span
-                          className={`inline-block rounded-lg border px-2.5 py-1 text-xs font-bold ${sourceConfig.style}`}
-                        >
+                        </div>
+                        <span className="text-[10px] text-muted shrink-0 whitespace-nowrap">
+                          {relativeTime(lead.createdAt)}
+                        </span>
+                      </div>
+
+                      {lead.email ? (
+                        <p className="truncate text-[11px] text-muted">{lead.email}</p>
+                      ) : null}
+
+                      <div className="flex items-center gap-2 pt-0.5">
+                        <span className={`inline-block rounded-md border px-2 py-0.5 text-[10px] font-bold ${sourceConfig.style}`}>
                           {sourceConfig.label}
                         </span>
-                      </td>
-                      <td className="px-5 py-4">
                         <span
-                          className={`inline-block rounded-lg px-2.5 py-1 text-xs font-semibold capitalize ${
+                          className={`inline-block rounded-md px-2 py-0.5 text-[10px] font-semibold capitalize ${
                             lead.status === "new"
-                              ? "bg-teal-600 text-white shadow-xs"
+                              ? "bg-teal-600 text-white shadow-2xs"
                               : lead.status === "contacted"
-                                ? "bg-blue-600 text-white shadow-xs"
+                                ? "bg-blue-600 text-white shadow-2xs"
                                 : "border border-border bg-surface text-slate-500"
                           }`}
                         >
                           {lead.status || "—"}
                         </span>
-                      </td>
-                      <td className="whitespace-nowrap px-5 py-4 text-right text-xs text-muted">
-                        {relativeTime(lead.createdAt)}
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
+                      </div>
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Desktop / Tablet table view (>= 640px) */}
+            <div className="hidden sm:block overflow-x-auto">
+              <table className="w-full text-left text-sm text-slate">
+                <thead className="border-b border-border bg-surface text-xs font-semibold uppercase tracking-wider text-muted">
+                  <tr>
+                    <th className="px-5 py-3.5">Lead Name</th>
+                    <th className="px-5 py-3.5">Source</th>
+                    <th className="px-5 py-3.5">Status</th>
+                    <th className="px-5 py-3.5 text-right">Received</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {recentLeads.map((lead) => {
+                    const sourceConfig = SOURCE_LABELS[lead.source || ""] || {
+                      label: lead.source || "—",
+                      style: "bg-surface text-muted border-border",
+                    };
+                    return (
+                      <tr key={lead._id} className="transition hover:bg-surface/50">
+                        <td className="px-5 py-4">
+                          <Link href="/admin/inquiries" className="block min-w-0">
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold text-navy">{lead.name}</span>
+                              {lead.status === "new" ? (
+                                <span className="h-2 w-2 shrink-0 rounded-full bg-teal-500" />
+                              ) : null}
+                            </div>
+                            {lead.email ? (
+                              <p className="mt-0.5 truncate text-xs text-muted">{lead.email}</p>
+                            ) : null}
+                          </Link>
+                        </td>
+                        <td className="px-5 py-4">
+                          <span
+                            className={`inline-block rounded-lg border px-2.5 py-1 text-xs font-bold ${sourceConfig.style}`}
+                          >
+                            {sourceConfig.label}
+                          </span>
+                        </td>
+                        <td className="px-5 py-4">
+                          <span
+                            className={`inline-block rounded-lg px-2.5 py-1 text-xs font-semibold capitalize ${
+                              lead.status === "new"
+                                ? "bg-teal-600 text-white shadow-xs"
+                                : lead.status === "contacted"
+                                  ? "bg-blue-600 text-white shadow-xs"
+                                  : "border border-border bg-surface text-slate-500"
+                            }`}
+                          >
+                            {lead.status || "—"}
+                          </span>
+                        </td>
+                        <td className="whitespace-nowrap px-5 py-4 text-right text-xs text-muted">
+                          {relativeTime(lead.createdAt)}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
