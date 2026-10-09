@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { connectDB } from "@/lib/db";
 import { Faq } from "@/models/Faq";
+import { canonicalFaqCategory, isFaqCategory } from "@/lib/faq-categories";
 
 export async function createFaqAction(formData: FormData) {
   try {
@@ -42,6 +43,7 @@ export async function createFaqAction(formData: FormData) {
 
     revalidatePath("/faq");
     revalidatePath("/admin/faqs");
+    revalidatePath("/admin/hero");
     revalidatePath("/");
 
     return { success: true, message: "FAQ created successfully!" };
@@ -97,6 +99,7 @@ export async function updateFaqAction(formData: FormData) {
 
     revalidatePath("/faq");
     revalidatePath("/admin/faqs");
+    revalidatePath("/admin/hero");
     revalidatePath("/");
 
     return { success: true, message: "FAQ updated successfully!" };
@@ -117,6 +120,7 @@ export async function deleteFaqAction(id: string) {
 
     revalidatePath("/faq");
     revalidatePath("/admin/faqs");
+    revalidatePath("/admin/hero");
     revalidatePath("/");
 
     return { success: true, message: "FAQ deleted successfully." };

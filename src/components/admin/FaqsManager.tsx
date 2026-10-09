@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
+import Link from "next/link";
 import {
   Plus,
   Search,
@@ -34,7 +35,10 @@ export const FAQ_CATEGORIES = [
 ] as const;
 
 export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
-  const [faqs, setFaqs] = useState<FaqItemData[]>(initialFaqs);
+  const globalFaqs = initialFaqs.filter((f) => (f.category || "").toLowerCase() !== "home");
+  const homeCount = initialFaqs.filter((f) => (f.category || "").toLowerCase() === "home").length;
+
+  const [faqs, setFaqs] = useState<FaqItemData[]>(globalFaqs);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
 
@@ -53,9 +57,9 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   // Sync state when props update
-  if (initialFaqs !== faqs && !isModalOpen) {
-    setFaqs(initialFaqs);
-  }
+  useEffect(() => {
+    setFaqs(initialFaqs.filter((f) => (f.category || "").toLowerCase() !== "home"));
+  }, [initialFaqs]);
 
   // Filter & Sort FAQs by order (ascending: 1, 2, 3...)
   const filteredFaqs = faqs
@@ -130,6 +134,9 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-navy">FAQs Manager</h1>
+          <p className="mt-1 text-xs text-muted">
+            Manage global FAQs categorized for the main FAQ page.
+          </p>
         </div>
 
         <button
@@ -140,6 +147,23 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
           <Plus className="h-4 w-4" />
           <span>Create FAQ</span>
         </button>
+      </div>
+
+      {/* Notice Banner for Home FAQs */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border border-accent/20 bg-accent-soft/30 p-4 shadow-xs">
+        <div className="flex items-center gap-2.5 text-xs text-navy font-medium">
+          <HelpCircle className="h-4 w-4 text-accent shrink-0" />
+          <span>
+            Homepage FAQs ({homeCount} items) are managed inside{" "}
+            <strong className="text-navy">Home Editor → Home FAQs</strong>.
+          </span>
+        </div>
+        <Link
+          href="/admin/hero?tab=faqs"
+          className="inline-flex items-center gap-1 text-xs font-semibold text-accent hover:underline shrink-0"
+        >
+          Manage Home FAQs →
+        </Link>
       </div>
 
       {/* Alert Notifications */}
@@ -204,7 +228,7 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
             className="rounded-xl border border-border bg-surface px-3 py-1.5 text-xs text-navy focus:border-accent focus:outline-none cursor-pointer font-medium"
           >
             <option value="all">All Categories ({faqs.length})</option>
-            {Array.from(new Set([...FAQ_CATEGORIES, ...faqs.map((f) => f.category).filter(Boolean)])).map((cat) => {
+            {FAQ_CATEGORIES.map((cat) => {
               const count = faqs.filter((f) => f.category === cat).length;
               return (
                 <option key={cat} value={cat}>

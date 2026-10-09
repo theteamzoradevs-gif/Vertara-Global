@@ -15,7 +15,6 @@ import {
   seedSettings,
   seedServices,
   seedEngagementModels,
-  seedInsights,
   seedCaseStudies,
   seedTestimonials,
   seedClientLogos,
@@ -32,6 +31,7 @@ import {
   seedContactContent,
   type ContactContentData,
 } from "@/data/seed-contact";
+import { FAQ_TOPIC_CATEGORIES } from "@/lib/faq-categories";
 import type {
   Settings,
   ServiceItem,
@@ -137,11 +137,8 @@ export async function getInsights(): Promise<InsightItem[]> {
     const docs = await Insight.find({ published: true })
       .sort({ publishedAt: -1 })
       .lean();
-    const items = docs.length
-      ? (JSON.parse(JSON.stringify(docs)) as InsightItem[])
-      : seedInsights;
-    return sortFeaturedFirst(items);
-  }, sortFeaturedFirst([...seedInsights]));
+    return sortFeaturedFirst(JSON.parse(JSON.stringify(docs)) as InsightItem[]);
+  }, []);
 }
 
 export async function getInsightBySlug(
@@ -210,18 +207,55 @@ export async function getClientLogos(): Promise<ClientLogoItem[]> {
   }, seedClientLogos);
 }
 
+const ORIGINAL_FAQ_CATEGORY: Record<string, (typeof FAQ_TOPIC_CATEGORIES)[number]> = {
+  "What is a Global Capability Center (GCC)?": "The basics",
+  "What roles can we hire through a GCC?": "The basics",
+  "Can we own the GCC outright?": "Working with Vertara",
+  "Do you provide a bridge while our entity is forming?": "Working with Vertara",
+  "How long does it take to set up a GCC in India?": "Time, cost and cities",
+  "What does a GCC cost compared to an offshore vendor?": "Time, cost and cities",
+  "Which Indian city should we choose?": "Time, cost and cities",
+  "How do engagement models differ?": "Getting started",
+};
+
+async function syncFaqRecords() {
+  const initialized = await Faq.exists({ catalogVersion: 2 });
+  if (initialized) return;
+
+  await Faq.deleteOne({ question: "test", answer: "atoz" });
+
+  const docs = await Faq.find().sort({ order: 1, createdAt: 1 });
+  for (const doc of docs) {
+    const original = ORIGINAL_FAQ_CATEGORY[doc.question];
+    if (original) doc.category = original;
+  }
+
+  const selected: typeof docs = [];
+  for (const heading of FAQ_TOPIC_CATEGORIES) {
+    const item = docs.find(
+      (doc) => doc.category === heading && !selected.some((chosen) => chosen._id.equals(doc._id)),
+    );
+    if (item && selected.length < 5) selected.push(item);
+  }
+  for (const doc of docs) {
+    if (selected.length >= 5) break;
+    if (!selected.some((chosen) => chosen._id.equals(doc._id))) selected.push(doc);
+  }
+
+  for (const doc of docs) {
+    if (selected.some((chosen) => chosen._id.equals(doc._id))) {
+      doc.category = "Home";
+    }
+    doc.catalogVersion = 2;
+    await doc.save();
+  }
+}
+
 export async function getFaqs(): Promise<FaqItem[]> {
   return withDB(async () => {
-    const ALLOWED_CATEGORIES = ["Home", "Our Offerings", "Insights", "About Us"];
-    await Faq.deleteMany({ category: { $nin: ALLOWED_CATEGORIES } });
-    let docs = await Faq.find().sort({ order: 1 }).lean();
-    if (docs.length === 0) {
-      await Faq.insertMany(seedFaqs);
-      docs = await Faq.find().sort({ order: 1 }).lean();
-    }
-    return docs.length
-      ? (JSON.parse(JSON.stringify(docs)) as FaqItem[])
-      : seedFaqs;
+    await syncFaqRecords();
+    const docs = await Faq.find().sort({ order: 1, createdAt: 1 }).lean();
+    return JSON.parse(JSON.stringify(docs)) as FaqItem[];
   }, seedFaqs);
 }
 
