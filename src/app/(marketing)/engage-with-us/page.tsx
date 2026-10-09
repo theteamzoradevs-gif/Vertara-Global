@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ThreeWaysToStart } from "@/components/engage/ThreeWaysToStart";
+import { FreeFeasibilityAssessmentSection } from "@/components/engage/FreeFeasibilityAssessmentSection";
 
 export const metadata: Metadata = {
   title: "Engage with Us — Vertara Global",
@@ -35,6 +36,9 @@ export default function EngageWithUsPage() {
 
       {/* 2. THREE WAYS TO START (With pop-up modal for Request a call & Discuss research) */}
       <ThreeWaysToStart />
+
+      {/* 3. FREE FEASIBILITY ASSESSMENT / RUN YOUR GCC ASSESSMENT SECTION */}
+      <FreeFeasibilityAssessmentSection />
     </main>
   );
 }

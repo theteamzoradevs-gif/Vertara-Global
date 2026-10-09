@@ -15,6 +15,15 @@ export const metadata: Metadata = {
   },
   description:
     "Enterprise GCC advisory and services: talent, workspace, business operations, and research & advisory — one connected system for India capability centers.",
+  icons: {
+    icon: [
+      { url: "/fav%20icon.png" },
+      { url: "/fav icon.png" },
+      { url: "/favicon.png" },
+    ],
+    shortcut: "/fav%20icon.png",
+    apple: "/fav%20icon.png",
+  },
 };
 
 export default function RootLayout({
