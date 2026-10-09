@@ -1,12 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
-import { CmsImage } from "@/components/ui/CmsImage";
-import { Section, SectionHeader } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
 import { FlowThreads } from "@/components/ui/FlowThreads";
 import { Button } from "@/components/ui/Button";
 import { ArrowRight } from "lucide-react";
-import { getInsights } from "@/lib/content";
 import { MobileAutoSlider } from "@/components/ui/MobileAutoSlider";
 import { Accordion } from "@/components/ui/Accordion";
 
@@ -18,15 +15,6 @@ export const metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function InsightsPage() {
-  const insights = await getInsights();
-
-  const featuredInsights = insights.filter((i: { featured?: boolean }) => i.featured === true);
-  const regularInsights = insights.filter((i: { featured?: boolean }) => i.featured !== true);
-
-  const displayFeatured =
-    featuredInsights.length > 0 ? featuredInsights : insights.length > 0 ? [insights[0]] : [];
-  const displayRegular =
-    featuredInsights.length > 0 ? regularInsights : insights.slice(1);
 
   const assessmentFaqs = [
     {
@@ -107,141 +95,58 @@ export default async function InsightsPage() {
 
           </div>
 
-          {/* Cards: Auto & Manual Slider on mobile (no arrows, dots only), 3-column Grid on desktop */}
+          {/* Cards: Auto & Manual Slider on mobile (no arrows, dots only), 4-column Grid on desktop */}
           <MobileAutoSlider
             autoSlideInterval={3500}
-            desktopClassName="md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-6 lg:gap-7"
+            desktopClassName="md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-6 lg:gap-6"
             itemClassName="w-[85vw] max-w-[340px] shrink-0 snap-center md:w-auto md:max-w-none flex flex-col h-full"
             dotTone="gold"
           >
-            {/* Card 01 */}
+            {/* Card 01: Nano GCC Intelligence */}
             <div
-              id="card-assessment"
-              className="flex flex-col justify-between rounded-2xl border border-[#cddcd1] border-t-4 border-t-[#B59439] bg-white p-6 sm:p-7 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 h-full"
+              id="card-nano-gcc-intelligence"
+              className="flex flex-col justify-center rounded-2xl border border-[#cddcd1] border-t-4 border-t-[#B59439] bg-white p-6 sm:p-7 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 h-full min-h-[120px]"
             >
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#B59439]">
-                    Tools & Expertise
-                  </span>
-                  <span className="text-sm font-bold text-[#B59439] font-mono">01</span>
-                </div>
-                <h3 className="mt-3 text-lg sm:text-xl font-bold text-[#101C30] leading-snug">
-                  Run Your GCC Assessment
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-[#101C30]/75">
-                  A free feasibility assessment, delivered within 2 business days.
-                </p>
-              </div>
+              <h3 className="text-lg sm:text-xl font-bold text-[#101C30] leading-snug">
+                Nano GCC Intelligence
+              </h3>
             </div>
 
-            {/* Card 02 */}
+            {/* Card 02: Infrastructure Studies */}
             <div
-              id="card-market-research"
-              className="flex flex-col justify-between rounded-2xl border border-[#cddcd1] border-t-4 border-t-[#B59439] bg-white p-6 sm:p-7 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 h-full"
+              id="card-infrastructure-studies"
+              className="flex flex-col justify-center rounded-2xl border border-[#cddcd1] border-t-4 border-t-[#B59439] bg-white p-6 sm:p-7 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 h-full min-h-[120px]"
             >
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#B59439]">
-                    Tools & Expertise
-                  </span>
-                  <span className="text-sm font-bold text-[#B59439] font-mono">02</span>
-                </div>
-                <h3 className="mt-3 text-lg sm:text-xl font-bold text-[#101C30] leading-snug">
-                  Market Research
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-[#101C30]/75">
-                  A standing, expert-delivered service.
-                </p>
-              </div>
+              <h3 className="text-lg sm:text-xl font-bold text-[#101C30] leading-snug">
+                Infrastructure Studies
+              </h3>
             </div>
 
-            {/* Card 03 */}
+            {/* Card 03: GCC Strategy */}
             <div
-              id="card-workplace-strategy"
-              className="flex flex-col justify-between rounded-2xl border border-[#cddcd1] border-t-4 border-t-[#B59439] bg-white p-6 sm:p-7 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 h-full"
+              id="card-gcc-strategy"
+              className="flex flex-col justify-center rounded-2xl border border-[#cddcd1] border-t-4 border-t-[#B59439] bg-white p-6 sm:p-7 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 h-full min-h-[120px]"
             >
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#B59439]">
-                    Tools & Expertise
-                  </span>
-                  <span className="text-sm font-bold text-[#B59439] font-mono">03</span>
-                </div>
-                <h3 className="mt-3 text-lg sm:text-xl font-bold text-[#101C30] leading-snug">
-                  Workplace Strategy & Change Management
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-[#101C30]/75">
-                  A standing, expert-delivered service.
-                </p>
-              </div>
+              <h3 className="text-lg sm:text-xl font-bold text-[#101C30] leading-snug">
+                GCC Strategy
+              </h3>
             </div>
 
-            {/* Card 04 */}
+            {/* Card 04: Short Client Guides */}
             <div
-              id="card-nano-gcc-series"
-              className="flex flex-col justify-between rounded-2xl border border-[#cddcd1] border-t-4 border-t-[#B59439] bg-white p-6 sm:p-7 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 h-full"
+              id="card-short-client-guides"
+              className="flex flex-col justify-center rounded-2xl border border-[#cddcd1] border-t-4 border-t-[#B59439] bg-white p-6 sm:p-7 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 h-full min-h-[120px]"
             >
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#B59439]">
-                    Research
-                  </span>
-                  <span className="text-sm font-bold text-[#B59439] font-mono">04</span>
-                </div>
-                <h3 className="mt-3 text-lg sm:text-xl font-bold text-[#101C30] leading-snug">
-                  Nano GCC series
-                </h3>
-
-              </div>
-            </div>
-
-            {/* Card 05 */}
-            <div
-              id="white-papers"
-              className="flex flex-col justify-between rounded-2xl border border-[#cddcd1] border-t-4 border-t-[#B59439] bg-white p-6 sm:p-7 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 h-full"
-            >
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#B59439]">
-                    Research & Perspective
-                  </span>
-                  <span className="text-sm font-bold text-[#B59439] font-mono">05</span>
-                </div>
-                <h3 className="mt-3 text-lg sm:text-xl font-bold text-[#101C30] leading-snug">
-                  White papers
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-[#101C30]/75">
-                  Longer research pieces, starting with the Japan–India GCC corridor paper.
-                </p>
-              </div>
-            </div>
-
-            {/* Card 06 */}
-            <div
-              id="linkedin-digest"
-              className="flex flex-col justify-between rounded-2xl border border-[#cddcd1] border-t-4 border-t-[#B59439] bg-white p-6 sm:p-7 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 h-full"
-            >
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#B59439]">
-                    Research & Perspective
-                  </span>
-                  <span className="text-sm font-bold text-[#B59439] font-mono">06</span>
-                </div>
-                <h3 className="mt-3 text-lg sm:text-xl font-bold text-[#101C30] leading-snug">
-                  LinkedIn digest
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-[#101C30]/75">
-                  A rolling roundup of the weekly and monthly LinkedIn updates, kept on-site so they don’t disappear into a feed.
-                </p>
-              </div>
+              <h3 className="text-lg sm:text-xl font-bold text-[#101C30] leading-snug">
+                Short Client Guides
+              </h3>
             </div>
           </MobileAutoSlider>
         </div>
       </section>
 
-      {/* 3. RUN YOUR GCC ASSESSMENT SECTION */}
+      {/* 3. RUN YOUR GCC ASSESSMENT SECTION (DISABLED) */}
+      {false && (
       <section
         id="assessment"
         className="relative overflow-hidden w-full bg-[#F5F2EA] py-14 sm:py-16 md:py-20 border-b border-[#D8D2C0] font-sans scroll-mt-20"
@@ -457,10 +362,10 @@ export default async function InsightsPage() {
           <div className="mt-10 sm:mt-12">
             <div className="mb-6 sm:mb-8">
               <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#B59439]">
-                FAQ
+                Frequently Asked Questions
               </span>
               <h3 className="mt-2 text-xl sm:text-2xl md:text-[26px] font-bold text-[#101C30] tracking-tight">
-                Assessment FAQ
+                Questions we often hear before the first call
               </h3>
             </div>
 
@@ -471,6 +376,7 @@ export default async function InsightsPage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* 4. CTA BANNER (What should your GCC look like?) */}
       <section
@@ -511,7 +417,8 @@ export default async function InsightsPage() {
         </div>
       </section>
 
-      {/* 5. MARKET RESEARCH SECTION (2nd Insight / Commissioned Service) */}
+      {/* 5. MARKET RESEARCH SECTION (2nd Insight / Commissioned Service) (DISABLED) */}
+      {false && (
       <section
         id="market-research"
         className="relative overflow-hidden w-full font-sans scroll-mt-20"
@@ -613,8 +520,10 @@ export default async function InsightsPage() {
           </div>
         </div>
       </section>
+      )}
 
-      {/* 6. WORKPLACE STRATEGY & CHANGE MANAGEMENT SECTION (3rd Insight / Standing Service) */}
+      {/* 6. WORKPLACE STRATEGY & CHANGE MANAGEMENT SECTION (3rd Insight / Standing Service) (DISABLED) */}
+      {false && (
       <section
         id="workplace-strategy"
         className="relative overflow-hidden w-full font-sans scroll-mt-20"
@@ -724,134 +633,7 @@ export default async function InsightsPage() {
           </div>
         </div>
       </section>
-
-      {/* 7. INSIGHTS ARTICLES SECTION / NANO GCC SERIES */}
-      <Section id="nano-gcc-series" className="scroll-mt-20">
-        {/* Section Header: Nano GCC Series */}
-        <div className="mb-8 sm:mb-12">
-          <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#B59439]">
-            Research
-          </span>
-          <h2 className="mt-2 text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-[#101C30]">
-            Nano GCC Series
-          </h2>
-
-        </div>
-
-        {/* FEATURED INSIGHT (HERO CARD) */}
-        {displayFeatured.length > 0 && (
-          <div className="space-y-12">
-            {displayFeatured.map((insight: {
-              slug: string;
-              title: string;
-              excerpt: string;
-              coverImage?: string;
-              category: string;
-            }) => (
-              <Reveal key={insight.slug}>
-                <article
-                  className="relative overflow-hidden rounded-3xl border border-[#B59439]/30 bg-gradient-to-br from-[#14233c] via-[#101C30] to-[#0b1424] text-white shadow-2xl shadow-[#101C30]/30 p-6 sm:p-8 md:p-10 lg:p-12"
-                  style={{ fontFamily: 'Calibri' }}
-                >
-                  {/* Foreground Content */}
-                  <div className="relative z-10 max-w-3xl">
-                    {/* Featured Pill Badge */}
-                    <div className="flex items-center gap-3">
-                      <span className="inline-flex items-center rounded-full bg-[#B59439] px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-white shadow-sm">
-                        Featured Paper
-                      </span>
-                    </div>
-
-                    {/* Category Eyebrow */}
-                    <p className="mt-4 text-xs font-bold uppercase tracking-[0.2em] text-[#B59439] sm:text-sm">
-                      {insight.category || "TALENT"}
-                    </p>
-
-                    {/* Title */}
-                    <h3 className="mt-3 text-2xl font-bold tracking-tight text-white sm:text-3xl md:text-4xl lg:text-[40px] leading-tight">
-                      <Link href={`/insights/${insight.slug}`} className="hover:text-[#B59439] transition-colors">
-                        {insight.title}
-                      </Link>
-                    </h3>
-
-                    {/* Excerpt */}
-                    <p className="mt-4 text-base sm:text-lg leading-relaxed text-white/85 font-normal max-w-2xl">
-                      {insight.excerpt}
-                    </p>
-
-                    {/* Read CTA */}
-                    <div className="mt-7 sm:mt-8">
-                      <Button href={`/insights/${insight.slug}`} variant="gold" size="lg" className="font-bold shadow-md">
-                        Read full article <ArrowRight className="ml-1 h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                </article>
-              </Reveal>
-            ))}
-          </div>
-        )}
-
-        {/* REMAINING INSIGHTS (RESPONSIVE CARD GRID) */}
-        {displayRegular.length > 0 && (
-          <div className="mt-10">
-            <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {displayRegular.map((insight: {
-                slug: string;
-                title: string;
-                excerpt: string;
-                coverImage?: string;
-                category: string;
-              }) => (
-                <Reveal key={insight.slug}>
-                  <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#cddcd1] bg-surface-elevated transition hover:-translate-y-1 hover:border-[#2F3F34]/40 hover:bg-[#edf5ef]/30 hover:shadow-lg">
-                    {/* Card Top Image */}
-                    <Link href={`/insights/${insight.slug}`} className="block">
-                      <div className="relative h-48 w-full overflow-hidden bg-surface sm:h-52">
-                        <CmsImage
-                          src={insight.coverImage?.trim() || "/images/gcc-ops.png"}
-                          alt={insight.title || "Insight cover"}
-                          fill
-                          className="object-cover transition duration-500 group-hover:scale-105"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        />
-                        <div className="absolute left-3 top-3 z-10">
-                          <span className="inline-flex items-center rounded-full border border-white/10 bg-[#0b1f3a]/85 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-white shadow-sm backdrop-blur-sm">
-                            {insight.category}
-                          </span>
-                        </div>
-                      </div>
-                    </Link>
-
-                    {/* Card Body */}
-                    <div className="flex flex-1 flex-col p-5 sm:p-6">
-                      <h3 className="text-lg font-bold leading-snug text-navy transition-colors group-hover:text-accent">
-                        <Link href={`/insights/${insight.slug}`} className="hover:underline">
-                          {insight.title}
-                        </Link>
-                      </h3>
-
-                      <p className="mt-3 flex-1 text-sm leading-relaxed text-muted line-clamp-3">
-                        {insight.excerpt}
-                      </p>
-
-                      <div className="mt-5 pt-4 border-t border-[#cddcd1]/60 flex items-center justify-between">
-                        <Link
-                          href={`/insights/${insight.slug}`}
-                          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-accent transition hover:text-accent-hover"
-                        >
-                          Read article
-                          <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
-                        </Link>
-                      </div>
-                    </div>
-                  </article>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        )}
-      </Section>
+      )}
     </div>
   );
 }

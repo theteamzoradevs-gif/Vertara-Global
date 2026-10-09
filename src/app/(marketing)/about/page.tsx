@@ -2,7 +2,6 @@ import { Section, SectionHeader } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 import { Accordion } from "@/components/ui/Accordion";
 import { ContactForm } from "@/components/leads/ContactForm";
-import { FlowThreads } from "@/components/ui/FlowThreads";
 import { OurVision } from "@/components/home/OurVision";
 import { PractitionersTeam } from "@/components/home/PractitionersTeam";
 import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
@@ -31,10 +30,6 @@ export default async function AboutPage() {
     <>
       {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden text-white bg-[#2F3F34] font-sans" style={{ fontFamily: 'Calibri' }}>
-        <div className="absolute inset-0">
-          <FlowThreads intensity="medium" onDark className="opacity-40" />
-        </div>
-
         <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20 lg:py-24 lg:px-8">
           {/* Breadcrumb / Eyebrow */}
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#B59439]">

@@ -10,6 +10,7 @@ import {
   X,
   CheckCircle2,
   Loader2,
+  RotateCw,
 } from "lucide-react";
 
 interface WayToStartItem {
@@ -46,7 +47,7 @@ const waysToStart: WayToStartItem[] = [
     title: "Market research",
     description:
       "Commissioned research on sector GCC feasibility, workforce strategy, location assessment, talent insights, infrastructure, government policies, or another topic of interest.",
-    cta: "Discuss research",
+    cta: "Discuss Market Research",
     type: "modal",
     intent: "Market research",
   },
@@ -65,6 +66,7 @@ export function ThreeWaysToStart() {
   const [modalIntent, setModalIntent] = useState<
     "Talk to a Vertara Practice Leader" | "Market research"
   >("Talk to a Vertara Practice Leader");
+  const [gccFlipped, setGccFlipped] = useState(false);
 
   // Form State
   const [name, setName] = useState("");
@@ -229,14 +231,149 @@ export function ThreeWaysToStart() {
           <div className="mt-10 sm:mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
             {waysToStart.map((item, index) => {
               const Icon = item.icon;
+              const isGccCard = item.title === "Run your GCC assessment";
+
+              if (isGccCard) {
+                return (
+                  <div
+                    key={index}
+                    className="group relative min-h-[430px] rounded-2xl [perspective:1200px] cursor-pointer"
+                    onMouseEnter={() => setGccFlipped(true)}
+                    onMouseLeave={() => setGccFlipped(false)}
+                    onClick={(e) => {
+                      if ((e.target as HTMLElement).closest("a, button")) return;
+                      setGccFlipped((prev) => !prev);
+                    }}
+                  >
+                    <div
+                      className={`relative h-full w-full transition-transform duration-700 [transform-style:preserve-3d] ${
+                        gccFlipped ? "[transform:rotateY(180deg)]" : ""
+                      }`}
+                    >
+                      {/* FRONT FACE */}
+                      <div className="h-full w-full rounded-2xl border border-[#cddcd1] bg-[#edf5ef] p-7 sm:p-8 flex flex-col justify-between transition-all duration-300 group-hover:border-[#2F3F34] group-hover:shadow-xl [backface-visibility:hidden] [webkit-backface-visibility:hidden]">
+                        <div>
+                          {/* Icon Badge & Flip hint */}
+                          <div className="flex items-center justify-between">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#2F3F34]/10 text-[#2F3F34] border border-[#2F3F34]/20 transition-colors duration-300 group-hover:bg-[#2F3F34] group-hover:text-white">
+                              <Icon className="h-6 w-6 transition-colors" />
+                            </div>
+                            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#8C7026] bg-[#B59439]/15 px-2.5 py-1 rounded-full border border-[#B59439]/30">
+                              <span>Hover to flip</span>
+                              <RotateCw className="h-3 w-3" />
+                            </span>
+                          </div>
+
+                          {/* Card Title */}
+                          <h3 className="mt-5 text-xl sm:text-2xl font-bold tracking-tight text-[#101C30] leading-snug">
+                            {item.title}
+                          </h3>
+
+                          {/* Card Description */}
+                          <p className="mt-3.5 text-base sm:text-[1.05rem] leading-relaxed text-[#101C30]/80 italic">
+                            {item.description}
+                          </p>
+                        </div>
+
+                        {/* Front CTA Button */}
+                        <div className="mt-8 pt-1 flex justify-center w-full">
+                          <Link
+                            href={item.href || "/assessment"}
+                            className="inline-flex items-center gap-2.5 rounded-xl bg-[#2F3F34] px-6 py-3 text-sm sm:text-base font-bold text-white shadow-sm transition-all duration-200 hover:bg-[#233027] hover:shadow-md active:scale-[0.98]"
+                          >
+                            <span>{item.cta}</span>
+                            <ArrowRight className="h-4 w-4 text-white transition-transform duration-200 group-hover:translate-x-0.5" />
+                          </Link>
+                        </div>
+                      </div>
+
+                      {/* BACK FACE */}
+                      <div className="absolute inset-0 h-full w-full rounded-2xl border-2 border-[#2F3F34] bg-[#edf5ef] p-6 sm:p-7 flex flex-col justify-between shadow-2xl [backface-visibility:hidden] [webkit-backface-visibility:hidden] [transform:rotateY(180deg)]">
+                        <div>
+                          {/* Back Header - No straight line */}
+                          <div className="flex items-center justify-between pb-1">
+                            <div>
+                              <span className="text-[10px] font-bold uppercase tracking-widest text-[#B59439]">
+                                What You Receive
+                              </span>
+                              <h4 className="text-base sm:text-lg font-bold text-[#101C30] leading-tight mt-0.5">
+                                Confidential Feasibility Report
+                              </h4>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setGccFlipped(false);
+                              }}
+                              className="cursor-pointer p-1.5 rounded-lg text-[#101C30]/60 hover:text-[#101C30] hover:bg-black/5 transition-colors"
+                              title="Flip back"
+                              aria-label="Flip back"
+                            >
+                              <RotateCw className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
+
+                          {/* 4 Feature Points - Kept short & readable */}
+                          <ul className="mt-3.5 space-y-2.5 text-xs sm:text-[13px] text-[#101C30] leading-snug">
+                            <li className="flex items-start gap-2">
+                              <span className="h-1.5 w-1.5 rounded-full bg-[#B59439] shrink-0 mt-1.5" />
+                              <div>
+                                <strong className="font-bold text-[#101C30]">10 Minutes:</strong>{" "}
+                                <span className="text-[#101C30]/80">Short, structured questions about your business mandate.</span>
+                              </div>
+                            </li>
+
+                            <li className="flex items-start gap-2">
+                              <span className="h-1.5 w-1.5 rounded-full bg-[#B59439] shrink-0 mt-1.5" />
+                              <div>
+                                <strong className="font-bold text-[#101C30]">AI Engine + Expert Validated:</strong>{" "}
+                                <span className="text-[#101C30]/80">Proprietary modeling personally validated by GCC practitioners.</span>
+                              </div>
+                            </li>
+
+                            <li className="flex items-start gap-2">
+                              <span className="h-1.5 w-1.5 rounded-full bg-[#B59439] shrink-0 mt-1.5" />
+                              <div>
+                                <strong className="font-bold text-[#101C30]">Delivered in 2 Business Days:</strong>{" "}
+                                <span className="text-[#101C30]/80">Delivered directly to your inbox with a clear point of view.</span>
+                              </div>
+                            </li>
+
+                            <li className="flex items-start gap-2">
+                              <span className="h-1.5 w-1.5 rounded-full bg-[#B59439] shrink-0 mt-1.5" />
+                              <div>
+                                <strong className="font-bold text-[#101C30]">Strictly Confidential:</strong>{" "}
+                                <span className="text-[#101C30]/80">Never used for marketing or sold to any third party.</span>
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
+
+                        {/* Back CTA Button - Centered in middle, no top divider line */}
+                        <div className="mt-4 pt-1 flex justify-center w-full">
+                          <Link
+                            href={item.href || "/assessment"}
+                            className="inline-flex items-center gap-2 rounded-xl bg-[#2F3F34] px-6 py-3 text-xs sm:text-sm font-bold text-white shadow-sm transition-all duration-200 hover:bg-[#233027] hover:shadow-md active:scale-[0.98]"
+                          >
+                            <span>{item.cta}</span>
+                            <ArrowRight className="h-3.5 w-3.5 text-white" />
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+
               return (
                 <div
                   key={index}
-                  className="group relative flex flex-col justify-between rounded-2xl border border-[#D8D2C0] bg-white p-7 sm:p-8 transition-all duration-300 hover:border-[#2F3F34] hover:shadow-xl hover:-translate-y-1"
+                  className="group relative min-h-[430px] flex flex-col justify-between rounded-2xl border border-[#cddcd1] bg-[#edf5ef] p-7 sm:p-8 transition-all duration-300 hover:border-[#2F3F34] hover:shadow-xl hover:-translate-y-1"
                 >
                   <div>
                     {/* Icon Badge */}
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#2F3F34]/8 text-[#2F3F34] border border-[#2F3F34]/15 transition-colors duration-300 group-hover:bg-[#2F3F34] group-hover:text-white">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#2F3F34]/10 text-[#2F3F34] border border-[#2F3F34]/20 transition-colors duration-300 group-hover:bg-[#2F3F34] group-hover:text-white">
                       <Icon className="h-6 w-6 transition-colors" />
                     </div>
 
@@ -251,24 +388,24 @@ export function ThreeWaysToStart() {
                     </p>
                   </div>
 
-                  {/* CTA Action */}
-                  <div className="mt-8 pt-5 border-t border-[#D8D2C0]/70">
+                  {/* CTA Action - Button centered in middle */}
+                  <div className="mt-8 pt-1 flex justify-center w-full">
                     {item.type === "modal" ? (
                       <button
                         type="button"
                         onClick={() => item.intent && handleOpenModal(item.intent)}
-                        className="cursor-pointer inline-flex items-center gap-2 text-base font-bold text-[#2F3F34] transition-colors duration-200 group-hover:text-[#B59439]"
+                        className="cursor-pointer inline-flex items-center gap-2.5 rounded-xl bg-[#2F3F34] px-6 py-3 text-sm sm:text-base font-bold text-white shadow-sm transition-all duration-200 hover:bg-[#233027] hover:shadow-md active:scale-[0.98]"
                       >
                         <span>{item.cta}</span>
-                        <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+                        <ArrowRight className="h-4 w-4 text-white transition-transform duration-200 group-hover:translate-x-0.5" />
                       </button>
                     ) : (
                       <Link
-                        href={item.href || "/insights#assessment"}
-                        className="inline-flex items-center gap-2 text-base font-bold text-[#2F3F34] transition-colors duration-200 group-hover:text-[#B59439]"
+                        href={item.href || "/assessment"}
+                        className="inline-flex items-center gap-2.5 rounded-xl bg-[#2F3F34] px-6 py-3 text-sm sm:text-base font-bold text-white shadow-sm transition-all duration-200 hover:bg-[#233027] hover:shadow-md active:scale-[0.98]"
                       >
                         <span>{item.cta}</span>
-                        <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+                        <ArrowRight className="h-4 w-4 text-white transition-transform duration-200 group-hover:translate-x-0.5" />
                       </Link>
                     )}
                   </div>
