@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
 import { MetricCounter } from "@/components/ui/MetricCounter";
-import { FlowThreads } from "@/components/ui/FlowThreads";
 import type { Metric } from "@/data/seed-content";
 import { seedSettings } from "@/data/seed-content";
 
@@ -103,9 +102,6 @@ export function Hero({
       className="relative flex flex-col justify-center md:justify-between overflow-hidden border-b border-[#2F3F34] py-14 sm:py-18 md:py-0 md:h-[calc(100svh-68px)] md:max-h-[850px] bg-[#2F3F34] font-sans"
       style={{ fontFamily: 'Calibri' }}
     >
-      {/* Background Flow Threads */}
-      <FlowThreads intensity="medium" onDark className="opacity-40" />
-
       {/* Main Hero Content */}
       <div
         className={`relative z-10 mx-auto w-full max-w-6xl px-4 py-2 sm:py-4 md:my-auto md:py-6 ${

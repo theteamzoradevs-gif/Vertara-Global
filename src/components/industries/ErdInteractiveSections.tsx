@@ -29,7 +29,7 @@ const journeySteps = [
     title: "Start Lean. Expand with Proof.",
     badge: "Scale & CoE",
     description:
-      "Avoid multi-year lock-ins. Launch a focused 10â€“25 engineer lighthouse pod to establish velocity and operating rhythm, then expand seamlessly into a global Center of Excellence.",
+      "Avoid multi-year lock-ins. Launch a focused engineer lighthouse pod to establish velocity and operating rhythm, then expand seamlessly into a global Center of Excellence.",
   },
 ];
 

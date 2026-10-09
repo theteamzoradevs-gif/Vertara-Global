@@ -26,9 +26,9 @@ export interface SectorItem {
 export const offeringsData = {
   hero: {
     eyebrow: "Capabilities & Practice",
-    title: "Our Offerings",
+    title: "Our Services",
     description:
-      "This is the merged services hub: how we build (the six-stage model), the principles behind how we engage commercially, and what we build for sector by sector across the full range Vertara serves, from Nano GCCs to 500-person mid-scale centres.",
+      "We help you decide whether India is the right place for your next capability centre, where it should be and what it should look like. Then we build it with you. Whether you start with 20 people or plan for 500, every engagement is shaped around your business, your pace and your budget.",
   },
 
   scope: {
@@ -103,28 +103,28 @@ export const offeringsData = {
       },
       {
         number: "04",
-        name: "Operate / Scale",
+        name: "Launch & stabilise",
         deliverables:
-          "Process redesign, automation, data & analytics, digital operating model, transformation roadmap",
+          "Work moves from HQ, the first teams become productive, and SOPs and KPIs are set.",
       },
       {
         number: "05",
-        name: "Monitor",
+        name: "Scale",
         deliverables:
-          "Technology strategy, IT operating model, architecture, workplace technology, cybersecurity & support",
+          "Grow headcount and scope, add automation and analytics, and stand up new centres of excellence.",
       },
       {
         number: "06",
-        name: "Transfer",
+        name: "Sustain",
         deliverables:
-          "Functional CoE design, transition, SOPs, SLAs/KPIs, vendor ecosystem, continuous improvement",
+          "Health checks after handover and a year-two review, so problems are caught early.",
       },
     ] as BuildStage[],
   },
 
   disciplines: {
     eyebrow: "Core Capability",
-    title: "Six disciplines run across every stage",
+    title: "Six disciplines run across every sector",
     items: [
       {
         title: "GCC Strategy & Design",

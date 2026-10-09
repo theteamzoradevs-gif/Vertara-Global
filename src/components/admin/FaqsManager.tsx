@@ -26,11 +26,11 @@ export interface FaqItemData {
   order: number;
 }
 
-const FAQ_CATEGORIES = [
-  "Home",
-  "Our Offerings",
-  "Insights",
-  "About Us",
+export const FAQ_CATEGORIES = [
+  "The basics",
+  "Working with Vertara",
+  "Time, cost and cities",
+  "Getting started",
 ] as const;
 
 export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
@@ -47,7 +47,7 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
   const [formQuestion, setFormQuestion] = useState("");
   const [formAnswer, setFormAnswer] = useState("");
   const [formOrder, setFormOrder] = useState<number>(1);
-  const [formCategory, setFormCategory] = useState<string>("Home");
+  const [formCategory, setFormCategory] = useState<string>("The basics");
 
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
@@ -204,7 +204,7 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
             className="rounded-xl border border-border bg-surface px-3 py-1.5 text-xs text-navy focus:border-accent focus:outline-none cursor-pointer font-medium"
           >
             <option value="all">All Categories ({faqs.length})</option>
-            {FAQ_CATEGORIES.map((cat) => {
+            {Array.from(new Set([...FAQ_CATEGORIES, ...faqs.map((f) => f.category).filter(Boolean)])).map((cat) => {
               const count = faqs.filter((f) => f.category === cat).length;
               return (
                 <option key={cat} value={cat}>

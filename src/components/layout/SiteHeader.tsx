@@ -69,6 +69,7 @@ const industryCol2 = [
 
 const simpleLinks = [
   { href: "/about", label: "About Us" },
+  { href: "/engage-with-us", label: "Engage with us" },
 ];
 
 export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: string }) {
@@ -100,13 +101,10 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
       <div className="mx-auto flex h-[4.25rem] w-full max-w-6xl items-center justify-between gap-2 px-3 sm:gap-4 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="shrink-0 flex flex-col justify-center transition hover:opacity-90"
+          className="shrink-0 flex items-center transition hover:opacity-90"
         >
           <span className="text-sm sm:text-base md:text-lg font-bold tracking-[0.14em] sm:tracking-[0.2em] text-navy leading-tight">
             VERTARA <span className="text-[#B59439] lowercase font-medium">global</span>
-          </span>
-          <span className="text-[8px] sm:text-[9.5px] font-bold tracking-[0.26em] sm:tracking-[0.32em] text-[#B59439] uppercase mt-0.5 leading-tight">
-            GCC ADVISORY
           </span>
         </Link>
 
@@ -114,51 +112,58 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
           <Link
             href="/"
             className={cn(
-              "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+              "rounded-lg px-3.5 py-2 text-base font-bold transition-colors",
               pathname === "/"
-                ? "bg-accent-soft text-accent font-semibold"
+                ? "bg-accent-soft text-accent"
                 : "text-slate hover:bg-surface hover:text-navy",
             )}
           >
             Home
           </Link>
           <Link
-            href="/offerings"
+            href="/services"
             className={cn(
-              "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-              pathname.startsWith("/offerings") || pathname.startsWith("/services")
-                ? "bg-accent-soft text-accent font-semibold"
+              "rounded-lg px-3.5 py-2 text-base font-bold transition-colors",
+              pathname.startsWith("/services") || pathname.startsWith("/offerings")
+                ? "bg-accent-soft text-accent"
                 : "text-slate hover:bg-surface hover:text-navy",
             )}
           >
-            Our Offerings
+            Our Services
           </Link>
           {/* Industries menu disabled - to be added later */}
           <Link
             href="/insights"
             className={cn(
-              "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+              "rounded-lg px-3.5 py-2 text-base font-bold transition-colors",
               pathname.startsWith("/insights")
-                ? "bg-accent-soft text-accent font-semibold"
+                ? "bg-accent-soft text-accent"
                 : "text-slate hover:bg-surface hover:text-navy",
             )}
           >
             Insights
           </Link>
-          {simpleLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                pathname.startsWith(link.href)
-                  ? "bg-accent-soft text-accent"
-                  : "text-slate hover:bg-surface hover:text-navy",
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {simpleLinks.map((link) => {
+            const isActive =
+              link.href === "/engage-with-us"
+                ? pathname.startsWith("/engage-with-us") || pathname.startsWith("/engage")
+                : pathname.startsWith(link.href);
+
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  "rounded-lg px-3.5 py-2 text-base font-bold transition-colors",
+                  isActive
+                    ? "bg-accent-soft text-accent"
+                    : "text-slate hover:bg-surface hover:text-navy",
+                )}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
@@ -216,11 +221,11 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
                   </div>
                   <div>
                     <Link
-                      href="/offerings"
+                      href="/services"
                       className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#2F3F34] hover:text-[#b49339] transition-colors"
                       onClick={() => setMenu(null)}
                     >
-                      Explore full offerings overview <ArrowRight className="h-3.5 w-3.5" />
+                      Explore full services overview <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
                   </div>
                 </div>
@@ -265,16 +270,19 @@ export function SiteHeader({ brandName = "Vertara Global" }: { brandName?: strin
           <nav className="flex flex-col space-y-1.5">
             {[
               { href: "/", label: "Home" },
-              { href: "/offerings", label: "Our Offerings" },
+              { href: "/services", label: "Our Services" },
               { href: "/insights", label: "Insights" },
               { href: "/about", label: "About Us" },
+              { href: "/engage-with-us", label: "Engage with us" },
             ].map((link) => {
               const isActive =
                 link.href === "/"
                   ? pathname === "/"
-                  : link.href === "/offerings"
-                  ? pathname.startsWith("/offerings") || pathname.startsWith("/services")
-                  : pathname.startsWith(link.href);
+                  : link.href === "/services"
+                    ? pathname.startsWith("/services") || pathname.startsWith("/offerings")
+                    : link.href === "/engage-with-us"
+                      ? pathname.startsWith("/engage-with-us") || pathname.startsWith("/engage")
+                      : pathname.startsWith(link.href);
 
               return (
                 <Link
