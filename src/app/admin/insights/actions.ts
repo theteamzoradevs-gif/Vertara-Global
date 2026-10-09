@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import mongoose from "mongoose";
 import { connectDB } from "@/lib/db";
 import { Insight } from "@/models/Insight";
 
@@ -206,6 +207,10 @@ export async function deleteInsightAction(id: string) {
     const conn = await connectDB();
     if (!conn) {
       return { success: false, error: "Database connection unavailable." };
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return { success: false, error: "This insight is not stored and cannot be deleted." };
     }
 
     await Insight.findByIdAndDelete(id);
