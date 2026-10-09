@@ -1,16 +1,16 @@
 "use client";
 
-import { Search, Pencil, Flag, Wrench, TrendingUp } from "lucide-react";
+import { Search, Pencil, Flag, Rocket, TrendingUp, ShieldCheck } from "lucide-react";
 import { Reveal } from "@/components/ui/Reveal";
 import { offeringsData } from "../../data/offerings-data";
 
 const STAGE_ICONS = [
-  Search,      // 01 Discover
-  Pencil,      // 02 Design
-  Flag,        // 03 Build
-  Wrench,      // 04 Operate / Scale
-  TrendingUp,  // 05 Monitor
-  TrendingUp,  // 06 Transfer
+  Search,       // 01 Discover
+  Pencil,       // 02 Design
+  Flag,         // 03 Build
+  Rocket,       // 04 Launch & stabilise
+  TrendingUp,   // 05 Scale
+  ShieldCheck,  // 06 Sustain
 ];
 
 export function OfferingsBuildModel() {

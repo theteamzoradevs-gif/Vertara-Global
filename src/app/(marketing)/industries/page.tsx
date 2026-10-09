@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Section, SectionHeader } from "@/components/ui/Section";
-import { FlowThreads } from "@/components/ui/FlowThreads";
 import { HomeCtaBanner } from "@/components/home/HomeCtaBanner";
 import { ContactForm } from "@/components/leads/ContactForm";
 import { IndustryFormSideContent } from "@/components/industries/IndustryFormSideContent";
@@ -132,7 +131,6 @@ export default async function IndustriesHubPage() {
           {/* Subtle Emerald / Forest Green Soft Gradient & Shadow Overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#2F3F34] via-[#2F3F34]/95 via-40% sm:via-48% md:via-52% to-[#2F3F34]/30 lg:to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#2F3F34] via-transparent to-[#2F3F34]/40" />
-          <FlowThreads intensity="medium" onDark className="opacity-40" />
         </div>
 
         <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20 lg:py-24 lg:px-8">

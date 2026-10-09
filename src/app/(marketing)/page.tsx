@@ -9,9 +9,7 @@ import { HomeFaqSection } from "@/components/home/HomeFaqSection";
 // import { OurVision } from "@/components/home/OurVision";
 // import { WhoAreWe } from "@/components/home/WhoAreWe";
 import { WhereWereStrongest } from "@/components/home/WhereWereStrongest";
-import { ScopeCards } from "@/components/home/ScopeCards";
 import { Hero } from "@/components/home/Hero";
-import { NanoGccExplainer } from "@/components/home/NanoGccExplainer";
 import { WhatWeDo } from "@/components/home/WhatWeDo";
 import { BuiltForMidMarket } from "@/components/home/BuiltForMidMarket";
 import { ChooseVertaraIf } from "@/components/home/ChooseVertaraIf";
@@ -19,7 +17,6 @@ import { CompetitiveComparison } from "@/components/home/CompetitiveComparison";
 import { ImageStoryStrip } from "@/components/home/ImageStoryStrip";
 import { HoverStatCard } from "@/components/home/HoverStatCard";
 import { TestimonialMarquee } from "@/components/home/TestimonialMarquee";
-import { WhoWeServe } from "@/components/home/WhoWeServe";
 import { LedByPractitioners } from "@/components/home/LedByPractitioners";
 import { WhyUs } from "@/components/home/WhyUs";
 import { JourneySteps } from "@/components/home/JourneySteps";
@@ -82,8 +79,6 @@ export default async function HomePage() {
         showQuickCallForm={settings.showQuickCallForm}
       />
 
-      <NanoGccExplainer />
-
       <WhatWeDo />
 
       <BuiltForMidMarket />
@@ -91,39 +86,6 @@ export default async function HomePage() {
       <ChooseVertaraIf />
 
       {/* <WhoAreWe /> */}
-
-      <Section
-        id="who-we-serve"
-        tone="none"
-        threads="light"
-        className="border-b border-[#cddcd1]"
-        style={{ backgroundColor: "#e5ebe6" }}
-      >
-        <SectionHeader
-          eyebrow="Who needs us"
-          title="Our offerings, at a glance"
-          titleClassName="text-2xl font-bold tracking-tight text-[#101C30] sm:text-3xl lg:text-[1.875rem]"
-          description="A six-stage build model, clear commercial principles, and deep expertise across eight sectors spanning Nano GCCs through 500-person mid-scale builds."
-          className="mb-8 md:mb-10 max-w-none w-full"
-        />
-
-        {/* 4 Scope Cards (Nano, Mid-scale, Both scopes, Backed by research) placed before Industries */}
-        <div className="mb-8 sm:mb-10">
-          <ScopeCards />
-        </div>
-
-        {/* Text line between the cards */}
-        <div className="mt-12 sm:mt-14 pt-8 sm:pt-10 border-t border-[#cddcd1]/80 mb-6 sm:mb-8">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#B59439]">
-            Sector Expertise
-          </p>
-          <h3 className="mt-2 text-2xl font-bold tracking-tight text-[#101C30] sm:text-3xl lg:text-[1.875rem]">
-            What we build for across eight mid-market sectors
-          </h3>
-        </div>
-
-        <WhoWeServe />
-      </Section>
 
       <LedByPractitioners />
 

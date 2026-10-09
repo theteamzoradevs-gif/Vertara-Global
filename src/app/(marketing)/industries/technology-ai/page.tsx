@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Section, SectionHeader } from "@/components/ui/Section";
-import { FlowThreads } from "@/components/ui/FlowThreads";
 import { HomeCtaBanner } from "@/components/home/HomeCtaBanner";
 import { ContactForm } from "@/components/leads/ContactForm";
 import { IndustryFormSideContent } from "@/components/industries/IndustryFormSideContent";
@@ -22,10 +21,6 @@ export default function TechnologyAiPage() {
     <main className="w-full font-sans" style={{ fontFamily: "Calibri" }}>
       {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden text-white bg-[#2F3F34]">
-        <div className="absolute inset-0">
-          <FlowThreads intensity="medium" onDark className="opacity-40" />
-        </div>
-
         <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20 lg:py-24 lg:px-8">
           {/* Breadcrumb / Eyebrow */}
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#B59439]">

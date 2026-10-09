@@ -677,56 +677,56 @@ export const seedFaqs = [
     question: "What is a Global Capability Center (GCC)?",
     answer:
       "A GCC is a captive (or captive-bound) offshore centre that the parent enterprise owns and operates — typically in India — to deliver engineering, product, AI/ML, finance, analytics, or shared services. Unlike a pure vendor relationship, the goal is lasting capability, IP control, and cultural alignment with the parent.",
-    category: "Home",
+    category: "The basics",
     order: 1,
-  },
-  {
-    question: "How long does it take to set up a GCC in India?",
-    answer:
-      "Timelines depend on entity type, city, headcount, and compliance surface. A managed team can be productive in 2–6 weeks. A build-and-transfer captive path commonly reaches operational launch in roughly 8–14 weeks for the seed phase, with scale continuing over subsequent quarters. We agree milestones in writing after discovery.",
-    category: "Our Offerings",
-    order: 2,
-  },
-  {
-    question: "What does a GCC cost compared to an offshore vendor?",
-    answer:
-      "Setup investment covers entity, legal, infrastructure, and recruitment. At steady state, captive centres typically achieve a lower run-rate than vendor models once past a threshold headcount — often modelled around 40+ roles within 12–18 months. We build a tailored business case rather than quoting generic day rates.",
-    category: "Insights",
-    order: 3,
   },
   {
     question: "Can we own the GCC outright?",
     answer:
       "Yes. In Build & Transfer and Flexible Partnership paths, the entity, IP, and eventual employment relationship are designed for your ownership. We facilitate setup and optional ongoing services — we do not take equity in your centre.",
-    category: "About Us",
+    category: "Working with Vertara",
+    order: 2,
+  },
+  {
+    question: "How long does it take to set up a GCC in India?",
+    answer:
+      "Timelines depend on entity type, city, headcount, and compliance surface. A managed team can be productive in 2–6 weeks. A build-and-transfer captive path commonly reaches operational launch in roughly 8–14 weeks for the seed phase, with scale continuing over subsequent quarters. We agree milestones in writing after discovery.",
+    category: "Time, cost and cities",
+    order: 3,
+  },
+  {
+    question: "How do engagement models differ?",
+    answer:
+      "Flexible Partnership is an ongoing multi-module relationship. Build & Transfer stands up a captive and hands it over. Managed Team delivers a dedicated pod quickly under our employment envelope. Use our engagement selector to see which fits your team size, timeline, and ownership preference.",
+    category: "Getting started",
     order: 4,
   },
   {
     question: "What roles can we hire through a GCC?",
     answer:
       "Engineering, AI/ML, product, design, QA, DevOps, finance and accounting operations, analytics, customer operations, and specialist domain roles. India’s talent pools support both deep technical centres and multi-function hubs.",
-    category: "Home",
+    category: "The basics",
     order: 5,
-  },
-  {
-    question: "Which Indian city should we choose?",
-    answer:
-      "It depends on role mix, cost targets, and retention risk. Bengaluru for engineering/AI depth; Hyderabad and Pune for strong engineering at moderated cost; NCR for diverse functions and time-zone overlap; Chennai and Mumbai for specific domain strengths. We run a structured location study against your org chart.",
-    category: "Our Offerings",
-    order: 6,
   },
   {
     question: "Do you provide a bridge while our entity is forming?",
     answer:
       "Yes. An Employer-of-Record (managed employment) bridge lets you hire and deliver under your management while incorporation and registrations complete, then transfer employees cleanly to your captive entity.",
-    category: "Insights",
+    category: "Working with Vertara",
+    order: 6,
+  },
+  {
+    question: "What does a GCC cost compared to an offshore vendor?",
+    answer:
+      "Setup investment covers entity, legal, infrastructure, and recruitment. At steady state, captive centres typically achieve a lower run-rate than vendor models once past a threshold headcount — often modelled around 40+ roles within 12–18 months. We build a tailored business case rather than quoting generic day rates.",
+    category: "Time, cost and cities",
     order: 7,
   },
   {
-    question: "How do engagement models differ?",
+    question: "Which Indian city should we choose?",
     answer:
-      "Flexible Partnership is an ongoing multi-module relationship. Build & Transfer stands up a captive and hands it over. Managed Team delivers a dedicated pod quickly under our employment envelope. Use our engagement selector to see which fits your team size, timeline, and ownership preference.",
-    category: "About Us",
+      "It depends on role mix, cost targets, and retention risk. Bengaluru for engineering/AI depth; Hyderabad and Pune for strong engineering at moderated cost; NCR for diverse functions and time-zone overlap; Chennai and Mumbai for specific domain strengths. We run a structured location study against your org chart.",
+    category: "Time, cost and cities",
     order: 8,
   },
 ];
