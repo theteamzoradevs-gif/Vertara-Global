@@ -70,8 +70,6 @@ export default async function HomePage() {
         metrics={settings.metrics}
         phone={settings.contactPhone}
         backgroundImage={settings.heroBackgroundImage}
-        rotatingEyebrow={settings.heroRotatingEyebrow}
-        rotatingLines={settings.heroRotatingLines}
         primaryCta={settings.heroPrimaryCta}
         secondaryCta={settings.heroSecondaryCta}
         formEyebrow={settings.heroFormEyebrow}

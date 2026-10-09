@@ -18,6 +18,7 @@ import {
   Menu,
   X,
   Shield,
+  ClipboardList,
   User,
   ArrowRight,
   Info,
@@ -45,6 +46,7 @@ const navGroups: NavGroup[] = [
     items: [
       { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
       { href: "/admin/inquiries", label: "Inquiries", icon: Inbox },
+      { href: "/admin/gcc-assessment", label: "GCC Assessment", icon: ClipboardList },
     ],
   },
   {

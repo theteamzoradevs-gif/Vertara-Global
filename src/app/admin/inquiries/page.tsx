@@ -1,6 +1,6 @@
 import { connectDB } from "@/lib/db";
 import { Lead } from "@/models/Lead";
-import { LeadsManager, LeadItemData } from "@/components/admin/LeadsManager";
+import { LeadsManager, type LeadItemData } from "@/components/admin/LeadsManager";
 
 export const dynamic = "force-dynamic";
 

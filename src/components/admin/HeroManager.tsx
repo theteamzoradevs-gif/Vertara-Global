@@ -9,7 +9,6 @@ import {
   Loader2,
   ImageIcon,
   Type,
-  Megaphone,
   MousePointerClick,
   MessageSquareText,
   Plus,
@@ -22,13 +21,20 @@ import {
   deleteLibraryImageAction,
 } from "@/app/admin/hero/actions";
 import type { Settings } from "@/lib/content/types";
-import type { HeroRotatingLine, Metric } from "@/data/seed-content";
+import type { Metric } from "@/data/seed-content";
 import { seedSettings, DEFAULT_LIBRARY_IMAGES } from "@/data/seed-content";
 
 const inputClass =
   "w-full rounded-xl border border-border px-4 py-2.5 text-xs text-navy font-medium focus:border-accent focus:outline-none transition bg-white";
 
-const MAX_ROTATING_LINES = 7;
+const CLIENT_HERO_HEADLINE =
+  "Your India capability centre, built by people who've done it before.";
+
+function resolveHeadline(value?: string) {
+  const current = (value || "").trim();
+  if (!current || current.includes("Building GCCs")) return CLIENT_HERO_HEADLINE;
+  return value || "";
+}
 
 export function HeroManager({ initialSettings }: { initialSettings: Settings }) {
   const [isPending, startTransition] = useTransition();
@@ -38,7 +44,7 @@ export function HeroManager({ initialSettings }: { initialSettings: Settings }) 
   );
 
   const [tagline, setTagline] = useState(initialSettings.tagline || "");
-  const [headline, setHeadline] = useState(initialSettings.heroHeadline || "");
+  const [headline, setHeadline] = useState(resolveHeadline(initialSettings.heroHeadline));
   const [subheadline, setSubheadline] = useState(initialSettings.heroSubheadline || "");
   const [backgroundImage, setBackgroundImage] = useState(
     initialSettings.heroBackgroundImage || seedSettings.heroBackgroundImage,
@@ -49,14 +55,6 @@ export function HeroManager({ initialSettings }: { initialSettings: Settings }) 
       : DEFAULT_LIBRARY_IMAGES,
   );
   const [deletingImage, setDeletingImage] = useState<string | null>(null);
-  const [rotatingEyebrow, setRotatingEyebrow] = useState(
-    initialSettings.heroRotatingEyebrow || seedSettings.heroRotatingEyebrow,
-  );
-  const [rotatingLines, setRotatingLines] = useState<HeroRotatingLine[]>(
-    initialSettings.heroRotatingLines?.length
-      ? initialSettings.heroRotatingLines
-      : seedSettings.heroRotatingLines,
-  );
   const [primaryCta, setPrimaryCta] = useState(
     initialSettings.heroPrimaryCta || seedSettings.heroPrimaryCta,
   );
@@ -88,12 +86,6 @@ export function HeroManager({ initialSettings }: { initialSettings: Settings }) 
   const showMessage = (type: "success" | "error", text: string) => {
     setMessage({ type, text });
     window.setTimeout(() => setMessage(null), 5000);
-  };
-
-  const updateLine = (index: number, key: keyof HeroRotatingLine, value: string) => {
-    setRotatingLines((lines) =>
-      lines.map((line, i) => (i === index ? { ...line, [key]: value } : line)),
-    );
   };
 
   const updateMetric = (index: number, patch: Partial<Metric>) => {
@@ -162,8 +154,6 @@ export function HeroManager({ initialSettings }: { initialSettings: Settings }) 
         heroHeadline: headline,
         heroSubheadline: subheadline,
         heroBackgroundImage: backgroundImage,
-        heroRotatingEyebrow: rotatingEyebrow,
-        heroRotatingLines: rotatingLines,
         heroPrimaryCta: primaryCta,
         heroSecondaryCta: secondaryCta,
         heroFormEyebrow: formEyebrow,
@@ -183,14 +173,20 @@ export function HeroManager({ initialSettings }: { initialSettings: Settings }) 
     });
   };
 
-  const previewLine = rotatingLines[0] || seedSettings.heroRotatingLines[0];
+  const eyebrowParts = (tagline || seedSettings.tagline)
+    .replace(/[·•]/g, "|")
+    .replace(/[—–]/g, "|")
+    .split("|")
+    .map((part) => part.trim())
+    .filter(Boolean);
+  const previewMetrics = metrics.filter((m) => m.label && m.label.trim() !== "").slice(0, 4);
 
   return (
     <div className="w-full max-w-7xl space-y-6">
       <div className="border-b border-border pb-4">
         <h1 className="text-2xl font-bold text-navy">Home Editor</h1>
         <p className="mt-1 text-sm text-muted">
-          Edit the homepage banner — copy, image, rotating help lines, buttons, form, and stats.
+          Edit the homepage banner — copy, image, buttons, form, and stats.
         </p>
       </div>
 
@@ -338,66 +334,6 @@ export function HeroManager({ initialSettings }: { initialSettings: Settings }) 
             </div>
           </Section>
 
-          <Section icon={Megaphone} title="Rotating help box">
-            <Field label="Box label">
-              <input
-                className={inputClass}
-                value={rotatingEyebrow}
-                onChange={(e) => setRotatingEyebrow(e.target.value)}
-              />
-            </Field>
-            <div className="space-y-3">
-              {rotatingLines.map((line, index) => (
-                <div
-                  key={index}
-                  className="grid gap-2 rounded-xl border border-border bg-surface p-3 sm:grid-cols-[1fr_1.4fr_auto]"
-                >
-                  <input
-                    className={inputClass}
-                    value={line.label}
-                    placeholder="Title"
-                    onChange={(e) => updateLine(index, "label", e.target.value)}
-                  />
-                  <input
-                    className={inputClass}
-                    value={line.detail}
-                    placeholder="Short detail"
-                    onChange={(e) => updateLine(index, "detail", e.target.value)}
-                  />
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setRotatingLines((lines) =>
-                        lines.length > 1 ? lines.filter((_, i) => i !== index) : lines,
-                      )
-                    }
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-border text-slate-400 hover:border-red-200 hover:text-red-600"
-                    aria-label="Remove line"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </div>
-              ))}
-            </div>
-            {rotatingLines.length >= MAX_ROTATING_LINES ? (
-              <p className="text-xs font-medium text-muted">Maximum 7 lines allowed</p>
-            ) : (
-              <button
-                type="button"
-                onClick={() =>
-                  setRotatingLines((lines) =>
-                    lines.length >= MAX_ROTATING_LINES
-                      ? lines
-                      : [...lines, { label: "", detail: "" }],
-                  )
-                }
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent"
-              >
-                <Plus className="h-4 w-4" /> Add rotating line
-              </button>
-            )}
-          </Section>
-
           <Section icon={MousePointerClick} title="Buttons">
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Primary button">
@@ -533,61 +469,58 @@ export function HeroManager({ initialSettings }: { initialSettings: Settings }) 
         <aside className="xl:sticky xl:top-24 space-y-3">
           <p className="text-[11px] font-semibold uppercase tracking-wider text-muted">Live preview</p>
           <div className="overflow-hidden rounded-2xl border border-border shadow-sm">
-            <div className="relative min-h-[420px] bg-[#061526] p-4 text-white">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={backgroundImage || seedSettings.heroBackgroundImage}
-                alt=""
-                className="absolute inset-0 h-full w-full object-cover opacity-50"
-              />
-              <div className="absolute inset-0 bg-[#061526]/55" />
-              <div className="relative space-y-3">
-                <p className="text-[9px] font-semibold uppercase tracking-[0.16em] text-teal-200">
-                  {tagline || "Tagline"}
+            <div className="flex min-h-[420px] flex-col bg-[#2F3F34] text-white">
+              <div className="flex flex-1 flex-col items-center justify-center px-4 py-8 text-center sm:px-6">
+                <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[9px] font-bold uppercase tracking-[0.16em] text-[#C5A55D] sm:text-[10px]">
+                  {eyebrowParts.map((part, index) => (
+                    <span key={`${part}-${index}`} className="inline-flex items-center">
+                      <span>{part}</span>
+                      {index < eyebrowParts.length - 1 ? (
+                        <span className="ml-2 text-[#C5A55D]/50 select-none">|</span>
+                      ) : null}
+                    </span>
+                  ))}
+                </div>
+                <p className="mt-3 max-w-xl text-[15px] font-bold leading-snug tracking-tight text-white sm:text-lg md:text-xl">
+                  {headline || "Headline"}
                 </p>
-                <p className="text-lg font-bold leading-tight">{headline || "Headline"}</p>
-                <p className="text-[11px] leading-relaxed text-white/80 line-clamp-3">
+                <p className="mt-3 max-w-xl text-[11px] leading-relaxed text-[#e2e8e4]/95 sm:text-xs">
                   {subheadline || "Subheadline"}
                 </p>
-                <div className="rounded-xl border border-white/20 bg-white/10 p-3 backdrop-blur-sm">
-                  <p className="text-[9px] uppercase tracking-wider text-white/60">{rotatingEyebrow}</p>
-                  <p className="mt-1 text-sm font-bold">{previewLine?.label || "Line title"}</p>
-                  <p className="text-[11px] text-white/75">{previewLine?.detail || "Line detail"}</p>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <span className="rounded-lg bg-accent px-3 py-1.5 text-[10px] font-semibold">
+                <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+                  <span className="inline-flex items-center justify-center rounded-lg border border-[#445b4c] bg-[#1E2922]/85 px-3 py-2 text-[10px] font-semibold text-white sm:text-xs">
                     {primaryCta || "Primary"}
                   </span>
-                  <span className="rounded-lg border border-white/35 px-3 py-1.5 text-[10px] font-semibold">
+                  <span className="inline-flex items-center justify-center rounded-lg bg-[#B59439] px-3 py-2 text-[10px] font-semibold text-white sm:text-xs">
                     {secondaryCta || "Secondary"}
                   </span>
                 </div>
-                {metrics.filter((m) => m.label && m.label.trim() !== "").length > 0 && (
-                  <div className="flex flex-wrap gap-x-3 gap-y-1 text-[10px] text-white/85">
-                    {metrics
-                      .filter((m) => m.label && m.label.trim() !== "")
-                      .map((m) => (
-                        <span key={m.label}>
-                          {m.prefix}
-                          {m.value}
-                          {m.suffix} {m.label.toLowerCase()}
-                        </span>
-                      ))}
-                  </div>
-                )}
-                {showQuickCallForm && (
-                  <div className="rounded-xl bg-white p-3 text-navy shadow-lg">
-                    <p className="text-[9px] font-bold uppercase tracking-wider text-accent">{formEyebrow}</p>
-                    <p className="text-sm font-bold">{formTitle}</p>
-                    <p className="mt-1 text-[10px] text-slate-500">{formDescription}</p>
-                    <div className="mt-2 h-7 rounded-md bg-slate-100" />
-                    <div className="mt-1.5 h-7 rounded-md bg-slate-100" />
-                    <div className="mt-2 rounded-md bg-navy px-3 py-1.5 text-center text-[10px] font-semibold text-white">
-                      {formButton}
-                    </div>
-                  </div>
-                )}
               </div>
+              {previewMetrics.length > 0 ? (
+                <div className="border-t border-white/10 bg-[#2F3F34] px-4 py-3">
+                  <div
+                    className={`grid gap-x-3 gap-y-2 ${
+                      previewMetrics.length === 1
+                        ? "grid-cols-1 justify-items-center"
+                        : "grid-cols-2"
+                    }`}
+                  >
+                    {previewMetrics.map((metric) => (
+                      <div key={metric.label} className="flex min-w-0 items-center gap-2">
+                        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#B59439]" />
+                        <p className="min-w-0 text-[10px] leading-none text-white sm:text-[11px]">
+                          <span className="font-bold">
+                            {metric.prefix}
+                            {metric.value}
+                            {metric.suffix}
+                          </span>{" "}
+                          <span className="font-medium text-[#d1e0d7]">{metric.label}</span>
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
             </div>
           </div>
         </aside>

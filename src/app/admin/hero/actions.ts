@@ -6,15 +6,13 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
 import { SiteSettings } from "@/models/SiteSettings";
-import { seedSettings, type HeroRotatingLine, type Metric } from "@/data/seed-content";
+import { seedSettings, type Metric } from "@/data/seed-content";
 
 export type HeroPayload = {
   tagline: string;
   heroHeadline: string;
   heroSubheadline: string;
   heroBackgroundImage: string;
-  heroRotatingEyebrow: string;
-  heroRotatingLines: HeroRotatingLine[];
   heroPrimaryCta: string;
   heroSecondaryCta: string;
   heroFormEyebrow: string;
@@ -33,16 +31,6 @@ async function requireAdmin() {
     return { ok: false as const, error: "Please sign in to save changes." };
   }
   return { ok: true as const };
-}
-
-function cleanLines(lines: HeroRotatingLine[]): HeroRotatingLine[] {
-  return lines
-    .map((line) => ({
-      label: String(line.label || "").trim(),
-      detail: String(line.detail || "").trim(),
-    }))
-    .filter((line) => line.label || line.detail)
-    .slice(0, 7);
 }
 
 function cleanMetrics(metrics: Metric[]): Metric[] {
@@ -68,11 +56,6 @@ export async function saveHeroAction(payload: HeroPayload) {
       return { success: false, error: "Database is not connected." };
     }
 
-    const rotatingLines = cleanLines(payload.heroRotatingLines);
-    if (rotatingLines.length === 0) {
-      return { success: false, error: "Add at least one rotating line." };
-    }
-
     const heroMetrics = cleanMetrics(payload.metrics);
 
     await SiteSettings.findOneAndUpdate(
@@ -85,10 +68,6 @@ export async function saveHeroAction(payload: HeroPayload) {
         heroBackgroundImage:
           String(payload.heroBackgroundImage || "").trim() ||
           seedSettings.heroBackgroundImage,
-        heroRotatingEyebrow:
-          String(payload.heroRotatingEyebrow || "").trim() ||
-          seedSettings.heroRotatingEyebrow,
-        heroRotatingLines: rotatingLines,
         heroPrimaryCta:
           String(payload.heroPrimaryCta || "").trim() || seedSettings.heroPrimaryCta,
         heroSecondaryCta:
