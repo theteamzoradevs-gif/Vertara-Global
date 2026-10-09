@@ -84,7 +84,7 @@ export default async function InsightsPage() {
           </h1>
 
           <p className="mt-4 max-w-xl text-base text-white/90 sm:text-lg leading-relaxed font-normal">
-            The home for Vertara’s point of view written for founders and operators evaluating a GCC, not for search engines. This page is structured to launch light and grow as new pieces are published, it should not ship empty.
+            Practical thinking on building and running capability centres in India, from people who've done it. Read our Nano GCC intelligence, Infrastructure Studies; GCC Strategy white papers and Short Guides on the decisions that matter most: where to build, how big to start and which operating model fits.
           </p>
         </div>
       </section>

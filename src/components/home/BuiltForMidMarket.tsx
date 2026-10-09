@@ -51,7 +51,7 @@ export function BuiltForMidMarket() {
             </p>
 
             <h2 className="mt-3 text-2xl font-bold tracking-tight text-[#101C30] sm:text-3xl lg:text-[1.875rem]">
-              Built for mid-market from Nano to mid-scale
+              Built for mid-market, focussing on establishing and scaling Nano GCCs
             </h2>
 
             <p className="mt-3 w-full text-base sm:text-lg leading-relaxed text-[#101C30]">

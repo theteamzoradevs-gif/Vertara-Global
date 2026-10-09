@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { FlowThreads } from "@/components/ui/FlowThreads";
 import { offeringsData } from "../../data/offerings-data";
 
 export function OfferingsHero() {
@@ -12,9 +11,6 @@ export function OfferingsHero() {
       className="relative flex flex-col justify-between overflow-hidden border-b border-[#2F3F34] bg-[#2F3F34] text-white py-16 sm:py-20 md:py-24 font-sans"
       style={{ fontFamily: "Calibri" }}
     >
-      {/* Background Flow Threads */}
-      <FlowThreads intensity="medium" onDark className="opacity-40" />
-
       <div className="relative z-10 mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 text-center sm:text-left">
         {/* Eyebrow */}
         <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.22em] text-[#B59439]">

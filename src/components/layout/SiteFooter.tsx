@@ -48,12 +48,9 @@ export function SiteFooter({
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-4 lg:px-8">
         <div>
           <div className="flex items-center">
-            <Link href="/" className="inline-flex flex-col transition hover:opacity-90">
+            <Link href="/" className="inline-flex items-center transition hover:opacity-90">
               <span className="text-base sm:text-lg font-bold tracking-[0.2em] text-white leading-tight">
                 VERTARA <span className="text-[#B59439] lowercase font-medium">global</span>
-              </span>
-              <span className="text-[9px] sm:text-[10px] font-bold tracking-[0.28em] sm:tracking-[0.34em] text-[#B59439] uppercase mt-1 leading-tight">
-                GCC ADVISORY
               </span>
             </Link>
           </div>

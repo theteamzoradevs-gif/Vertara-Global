@@ -25,7 +25,7 @@ const fmcgOpportunitySteps = [
     title: "Access Category & RGM Talent",
     badge: "CPG Skillset",
     description:
-      "Direct access to top 1% category management and revenue-growth-management (RGM) practitioners in India's premier analytics clusters â€” without the heavy enterprise overhead.",
+      "Direct access to top 1% category management and revenue-growth-management (RGM) practitioners in India's premier analytics clusters” without the heavy enterprise overhead.",
   },
   {
     title: "Start Lean. Expand with Proof.",
