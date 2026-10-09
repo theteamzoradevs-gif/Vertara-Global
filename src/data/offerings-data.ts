@@ -33,7 +33,7 @@ export const offeringsData = {
 
   scope: {
     eyebrow: "Scale Scope",
-    title: "Nano to mid-scale GCCs the range we build for",
+    title: "Built for mid-market, focussing on establishing and scaling Nano GCCs ",
     intro:
       "Vertara isn’t a Nano-only shop. We work the full mid-market range: a 20–100 person Nano GCC for companies proving a capability before committing further, and full mid-scale builds up to 400–500 people for companies ready to commit at scale from the outset. Both use the same six-stage build model and the same governance discipline sized to the mandate, never a generic template.",
     researchNote:
