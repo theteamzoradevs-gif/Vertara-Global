@@ -114,34 +114,37 @@ export function OurVision({
                     By the numbers
                   </h3>
 
-                  {/* Stat 1: 50+ */}
-                  <div className="lg:order-4">
-                    <p className="font-mono text-2xl sm:text-3xl font-bold tracking-tight text-navy">
-                      50+
-                    </p>
-                    <p className="mt-2 text-sm sm:text-base leading-relaxed text-[#526171]">
-                      Years of combined GCC experience across the founding team
-                    </p>
-                  </div>
+                  {/* 3 Stats in a single row on mobile (grid-cols-3), unpacked into desktop grid via lg:contents */}
+                  <div className="grid grid-cols-3 gap-3 sm:gap-4 lg:contents">
+                    {/* Stat 1: 50+ */}
+                    <div className="text-center lg:text-left lg:order-4">
+                      <p className="font-mono text-2xl sm:text-3xl font-bold tracking-tight text-navy">
+                        50+
+                      </p>
+                      <p className="mt-1 sm:mt-2 text-xs sm:text-sm lg:text-base leading-snug lg:leading-relaxed text-[#526171]">
+                        Years of combined GCC experience across the founding team
+                      </p>
+                    </div>
 
-                  {/* Stat 2: 6 */}
-                  <div className="lg:order-6">
-                    <p className="font-mono text-2xl sm:text-3xl font-bold tracking-tight text-navy">
-                      6
-                    </p>
-                    <p className="mt-2 text-sm sm:text-base leading-relaxed text-[#526171]">
-                      Sectors
-                    </p>
-                  </div>
+                    {/* Stat 2: 6 */}
+                    <div className="text-center lg:text-left lg:order-6">
+                      <p className="font-mono text-2xl sm:text-3xl font-bold tracking-tight text-navy">
+                        6
+                      </p>
+                      <p className="mt-1 sm:mt-2 text-xs sm:text-sm lg:text-base leading-snug lg:leading-relaxed text-[#526171]">
+                        Sectors
+                      </p>
+                    </div>
 
-                  {/* Stat 3: 10 */}
-                  <div className="lg:order-8">
-                    <p className="font-mono text-2xl sm:text-3xl font-bold tracking-tight text-navy">
-                      10
-                    </p>
-                    <p className="mt-2 text-sm sm:text-base leading-relaxed text-[#526171]">
-                      GCC builds led by our founders before Vertara existed
-                    </p>
+                    {/* Stat 3: 10 */}
+                    <div className="text-center lg:text-left lg:order-8">
+                      <p className="font-mono text-2xl sm:text-3xl font-bold tracking-tight text-navy">
+                        10
+                      </p>
+                      <p className="mt-1 sm:mt-2 text-xs sm:text-sm lg:text-base leading-snug lg:leading-relaxed text-[#526171]">
+                        GCC builds led by our founders before Vertara existed
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>

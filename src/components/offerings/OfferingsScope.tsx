@@ -38,16 +38,16 @@ export function OfferingsScope() {
             <MobileAutoSlider
               autoSlideInterval={3500}
               desktopClassName="md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6"
-              itemClassName="w-[84vw] max-w-[320px] shrink-0 snap-center md:w-auto md:max-w-none flex flex-col h-full"
+              itemClassName="w-[84vw] max-w-[320px] shrink-0 snap-center md:w-auto md:max-w-none flex flex-col h-full min-h-[270px] sm:min-h-[280px]"
               dotTone="gold"
             >
               {scope.items.map((item) => (
                 <div
                   key={item.title}
                   id={item.id}
-                  className="group relative flex flex-col justify-between rounded-2xl border border-[#D8D2C0] bg-[#F9F8F5]/70 p-6 transition-all duration-300 hover:border-[#2F3F34] hover:bg-white hover:shadow-lg cursor-pointer h-full"
+                  className="group relative flex flex-col justify-between rounded-2xl border border-[#D8D2C0] bg-[#F9F8F5]/70 p-6 transition-all duration-300 hover:border-[#2F3F34] hover:bg-white hover:shadow-lg cursor-pointer h-full min-h-[270px] sm:min-h-[280px]"
                 >
-                  <div>
+                  <div className="flex-1 flex flex-col">
                     {/* Top Bar: Number & Tag */}
                     <div className="flex items-center justify-between">
                       <span className="font-mono text-sm font-bold text-[#B59439]">
@@ -69,9 +69,9 @@ export function OfferingsScope() {
                     </p>
                   </div>
 
-                  {/* Bottom link (for Card 4 research or interactive hover) */}
+                  {/* Bottom link without dividing line */}
                   {item.linkHref ? (
-                    <div className="mt-6 pt-4 border-t border-[#D8D2C0]/60">
+                    <div className="mt-auto pt-4">
                       <Link
                         href={item.linkHref}
                         className="inline-flex items-center gap-1.5 text-xs font-bold text-[#2F3F34] hover:text-[#B59439] transition-colors"
@@ -80,7 +80,7 @@ export function OfferingsScope() {
                       </Link>
                     </div>
                   ) : (
-                    <div className="mt-6 pt-4 border-t border-transparent" />
+                    <div className="mt-auto pt-4" />
                   )}
                 </div>
               ))}

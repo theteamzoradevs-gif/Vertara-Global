@@ -1,14 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CheckCircle2, Loader2, Send } from "lucide-react";
 
 export function AssessmentContactForm() {
+  const [hasStoredLead, setHasStoredLead] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
   const [businessContext, setBusinessContext] = useState("");
+
+  useEffect(() => {
+    try {
+      if (typeof window !== "undefined") {
+        const stored = sessionStorage.getItem("vertara_gcc_assessment_lead");
+        if (stored) {
+          setHasStoredLead(true);
+        }
+      }
+    } catch {}
+  }, []);
 
   const [errors, setErrors] = useState<{
     name?: string;
@@ -68,6 +80,19 @@ export function AssessmentContactForm() {
         throw new Error("Unable to submit. Please try again.");
       }
 
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem(
+          "vertara_gcc_assessment_lead",
+          JSON.stringify({
+            name: name.trim(),
+            email: email.trim(),
+            company: company.trim(),
+            role: role.trim() || undefined,
+            businessContext: businessContext.trim() || undefined,
+          })
+        );
+      }
+
       setStatus("success");
     } catch (err: unknown) {
       setStatus("error");
@@ -75,6 +100,10 @@ export function AssessmentContactForm() {
         err instanceof Error ? err.message : "Something went wrong. Please try again."
       );
     }
+  }
+
+  if (hasStoredLead) {
+    return null;
   }
 
   return (

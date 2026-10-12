@@ -19,9 +19,10 @@ export function OfferingsBuildModel() {
   return (
     <section
       id="build-model"
-      className="relative w-full overflow-hidden bg-[#F9F8F5] py-14 sm:py-16 md:py-20 border-b border-[#D8D2C0] font-sans"
+      className="relative w-full scroll-mt-20 overflow-hidden bg-[#F9F8F5] py-14 sm:py-16 md:py-20 border-b border-[#D8D2C0] font-sans"
       style={{ fontFamily: "Calibri" }}
     >
+      <div id="operating-model" className="absolute -top-20" aria-hidden="true" />
       <div className="relative z-[1] mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <Reveal>

@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Accordion } from "@/components/ui/Accordion";
 import { ArrowRight } from "lucide-react";
@@ -181,6 +183,7 @@ export function FreeFeasibilityAssessmentSection() {
 
             <Accordion
               items={assessmentFaqs}
+              allowMultiple={true}
               className="border-[#D8D2C0] divide-[#e2e8f0] bg-white shadow-xs"
             />
           </div>
