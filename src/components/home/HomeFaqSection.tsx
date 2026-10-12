@@ -19,7 +19,9 @@ export function normalizeFaqCategory(category?: string): FaqSubheading {
   const trimmed = category.trim();
   const lower = trimmed.toLowerCase();
 
-  if (lower === "home" || lower === "the basics" || lower === "basics") return "The basics";
+  if (lower === "home" || lower === "the basics" || lower === "basics") {
+    return "The basics";
+  }
   if (lower === "working with vertara" || lower === "about us" || lower === "vertara") {
     return "Working with Vertara";
   }
@@ -59,43 +61,16 @@ interface HomeFaqSectionProps {
 }
 
 export function HomeFaqSection({ faqs, scope = "home" }: HomeFaqSectionProps) {
-  const source = faqs.filter(
+  const displayedFaqs = faqs.filter(
     (faq) => resolveFaqPage(faq) === (scope === "home" ? "Home" : "FAQ"),
   );
 
-  let displayedFaqs: FaqItem[];
-  if (scope === "all" || source.length <= 5) {
-    displayedFaqs = source;
-  } else {
-    const selected: FaqItem[] = [];
-    for (const heading of FAQ_SUBHEADINGS) {
-      const item = source.find(
-        (f) =>
-          normalizeFaqCategory(f.category) === heading &&
-          !selected.some((s) => (s._id && s._id === f._id) || s.question === f.question)
-      );
-      if (item && selected.length < 5) {
-        selected.push(item);
-      }
-    }
-    for (const f of source) {
-      if (selected.length >= 5) break;
-      if (!selected.some((s) => (s._id && s._id === f._id) || s.question === f.question)) {
-        selected.push(f);
-      }
-    }
-    displayedFaqs = selected;
-  }
-
-  const groups =
-    scope === "home"
-      ? [{ subheading: "FAQs" as const, items: displayedFaqs }]
-      : FAQ_SUBHEADINGS.map((subheading) => ({
-          subheading,
-          items: displayedFaqs.filter(
-            (f) => normalizeFaqCategory(f.category) === subheading
-          ),
-        })).filter((group) => group.items.length > 0);
+  const groups = FAQ_SUBHEADINGS.map((subheading) => ({
+    subheading,
+    items: displayedFaqs.filter(
+      (f) => normalizeFaqCategory(f.category) === subheading
+    ),
+  })).filter((group) => group.items.length > 0);
 
   return (
     <Section id="faq">
@@ -109,14 +84,12 @@ export function HomeFaqSection({ faqs, scope = "home" }: HomeFaqSectionProps) {
       <div className="space-y-8 sm:space-y-10" style={{ fontFamily: "Calibri" }}>
         {groups.map((group) => (
           <div key={group.subheading} className="space-y-3 sm:space-y-4">
-            {scope !== "home" && (
-              <h3
-                className="text-lg sm:text-xl md:text-[1.35rem] font-bold tracking-tight text-[#101C30]"
-                style={{ fontFamily: "Calibri" }}
-              >
-                {group.subheading}
-              </h3>
-            )}
+            <h3
+              className="text-lg sm:text-xl md:text-[1.35rem] font-bold tracking-tight text-[#101C30]"
+              style={{ fontFamily: "Calibri" }}
+            >
+              {group.subheading}
+            </h3>
             <Accordion
               items={group.items.map((f, idx) => ({
                 id: f._id || f.id || f.question || `${group.subheading}-${idx}`,

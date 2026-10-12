@@ -74,7 +74,7 @@ function mergeSettings(doc: Partial<Settings> | null): Settings {
     settings.heroRotatingEyebrow = seedSettings.heroRotatingEyebrow;
   }
   settings.heroPrimaryCta = "Discuss Your GCC Mandate";
-  settings.heroSecondaryCta = "See Our Offerings";
+  settings.heroSecondaryCta = "See Our Services";
   if (!settings.heroFormEyebrow) settings.heroFormEyebrow = seedSettings.heroFormEyebrow;
   if (!settings.heroFormTitle) settings.heroFormTitle = seedSettings.heroFormTitle;
   if (!settings.heroFormDescription) {

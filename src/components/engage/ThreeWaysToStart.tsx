@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Users,
   ClipboardCheck,
@@ -19,7 +20,7 @@ interface WayToStartItem {
   description: string;
   cta: string;
   type: "modal" | "link";
-  intent?: "Talk to a Vertara Practice Leader" | "Market research";
+  intent?: "Talk to a Vertara Practice Leader" | "Market research" | "Run your GCC assessment";
   href?: string;
 }
 
@@ -39,8 +40,8 @@ const waysToStart: WayToStartItem[] = [
     description:
       "10 minutes of questions; a feasibility report within 2 business days, reviewed and approved by a Vertara practice expert. The assessment is free.",
     cta: "Start GCC assessment",
-    type: "link",
-    href: "/assessment",
+    type: "modal",
+    intent: "Run your GCC assessment",
   },
   {
     icon: Search,
@@ -62,9 +63,10 @@ const journeyOptions = [
 ];
 
 export function ThreeWaysToStart() {
+  const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
   const [modalIntent, setModalIntent] = useState<
-    "Talk to a Vertara Practice Leader" | "Market research"
+    "Talk to a Vertara Practice Leader" | "Market research" | "Run your GCC assessment"
   >("Talk to a Vertara Practice Leader");
   const [gccFlipped, setGccFlipped] = useState(false);
 
@@ -118,9 +120,22 @@ export function ThreeWaysToStart() {
   }, [modalOpen]);
 
   function handleOpenModal(
-    intent: "Talk to a Vertara Practice Leader" | "Market research"
+    intent: "Talk to a Vertara Practice Leader" | "Market research" | "Run your GCC assessment"
   ) {
     setModalIntent(intent);
+    if (intent === "Run your GCC assessment" && typeof window !== "undefined") {
+      try {
+        const saved = sessionStorage.getItem("vertara_gcc_assessment_lead");
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.name) setName(parsed.name);
+          if (parsed.email) setEmail(parsed.email);
+          if (parsed.company) setCompany(parsed.company);
+          if (parsed.role) setRole(parsed.role);
+          if (parsed.businessContext) setBusinessContext(parsed.businessContext);
+        }
+      } catch {}
+    }
     setModalOpen(true);
     setStatus("idle");
     setServerError("");
@@ -161,6 +176,35 @@ export function ThreeWaysToStart() {
     }
 
     return newErrors;
+  }
+
+  // Handle assessment redirect without submitting to backend yet
+  function handleStartAssessment(e: React.FormEvent) {
+    e.preventDefault();
+    setTouched({ name: true, email: true, company: true });
+    const validationErrors = validate({ name, email, company });
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
+
+    // Save lead details into sessionStorage
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem(
+        "vertara_gcc_assessment_lead",
+        JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          company: company.trim(),
+          role: role.trim() || undefined,
+          businessContext: businessContext.trim() || undefined,
+        })
+      );
+    }
+
+    setModalOpen(false);
+    router.push("/assessment#gcc-assessment");
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -277,13 +321,17 @@ export function ThreeWaysToStart() {
 
                         {/* Front CTA Button */}
                         <div className="mt-8 pt-1 flex justify-center w-full">
-                          <Link
-                            href={item.href || "/assessment"}
-                            className="inline-flex items-center gap-2.5 rounded-xl bg-[#2F3F34] px-6 py-3 text-sm sm:text-base font-bold text-white shadow-sm transition-all duration-200 hover:bg-[#233027] hover:shadow-md active:scale-[0.98]"
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleOpenModal("Run your GCC assessment");
+                            }}
+                            className="cursor-pointer inline-flex items-center gap-2.5 rounded-xl bg-[#2F3F34] px-6 py-3 text-sm sm:text-base font-bold text-white shadow-sm transition-all duration-200 hover:bg-[#233027] hover:shadow-md active:scale-[0.98]"
                           >
                             <span>{item.cta}</span>
                             <ArrowRight className="h-4 w-4 text-white transition-transform duration-200 group-hover:translate-x-0.5" />
-                          </Link>
+                          </button>
                         </div>
                       </div>
 
@@ -352,13 +400,17 @@ export function ThreeWaysToStart() {
 
                         {/* Back CTA Button - Centered in middle, no top divider line */}
                         <div className="mt-4 pt-1 flex justify-center w-full">
-                          <Link
-                            href={item.href || "/assessment"}
-                            className="inline-flex items-center gap-2 rounded-xl bg-[#2F3F34] px-6 py-3 text-xs sm:text-sm font-bold text-white shadow-sm transition-all duration-200 hover:bg-[#233027] hover:shadow-md active:scale-[0.98]"
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleOpenModal("Run your GCC assessment");
+                            }}
+                            className="cursor-pointer inline-flex items-center gap-2 rounded-xl bg-[#2F3F34] px-6 py-3 text-xs sm:text-sm font-bold text-white shadow-sm transition-all duration-200 hover:bg-[#233027] hover:shadow-md active:scale-[0.98]"
                           >
                             <span>{item.cta}</span>
                             <ArrowRight className="h-3.5 w-3.5 text-white" />
-                          </Link>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -435,7 +487,9 @@ export function ThreeWaysToStart() {
             <div
               role="dialog"
               aria-modal="true"
-              className="relative z-10 w-full max-w-[490px] my-4 sm:my-8 rounded-[24px] bg-white p-6 sm:p-8 shadow-2xl border border-[#D8D2C0] transition-all"
+              className={`relative z-10 w-full my-4 sm:my-8 rounded-[24px] bg-white p-6 sm:p-8 md:p-9 shadow-2xl border border-[#D8D2C0] transition-all ${
+                modalIntent === "Run your GCC assessment" ? "max-w-4xl" : "max-w-[490px]"
+              }`}
             >
               {/* Close Button */}
               <button
@@ -467,9 +521,175 @@ export function ThreeWaysToStart() {
                     Close
                   </button>
                 </div>
-              ) : (
+              ) : modalIntent === "Run your GCC assessment" ? (
+                /* 2ND IMAGE MODAL: GCC Assessment Details Form */
                 <div>
-                  {/* Eyebrow & Title - Exactly as Image 2 */}
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#B59439]">
+                    FEASIBILITY ASSESSMENT
+                  </p>
+                  <h3 className="mt-1 text-2xl sm:text-3xl font-bold tracking-tight text-[#101C30] leading-snug">
+                    Start your GCC assessment
+                  </h3>
+                  <p className="mt-1.5 text-sm sm:text-base text-[#101C30]/75">
+                    Please provide your details before starting the structured questions.
+                  </p>
+
+                  <form onSubmit={handleStartAssessment} className="mt-5 sm:mt-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 items-stretch">
+                      {/* Left Column: 4 Inputs */}
+                      <div className="space-y-3.5 flex flex-col justify-between">
+                        {/* Name* */}
+                        <div>
+                          <label className="block text-xs sm:text-sm font-bold text-[#101C30]">
+                            Name <span className="text-[#B59439]">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            value={name}
+                            onChange={(e) => {
+                              setName(e.target.value);
+                              if (touched.name) {
+                                setErrors(validate({ name: e.target.value, email, company }));
+                              }
+                            }}
+                            onBlur={() => {
+                              setTouched((prev) => ({ ...prev, name: true }));
+                              setErrors(validate({ name, email, company }));
+                            }}
+                            placeholder="E.g. Sarah Jenkins"
+                            className={`mt-1.5 w-full rounded-xl border px-3.5 py-2.5 text-sm sm:text-base outline-none transition-colors ${
+                              touched.name && errors.name
+                                ? "border-red-500 bg-red-50/20 focus:border-red-500"
+                                : "border-[#D8D2C0] bg-white focus:border-[#2F3F34]"
+                            }`}
+                          />
+                          {touched.name && errors.name && (
+                            <p className="mt-1 text-xs font-medium text-red-600">
+                              {errors.name}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Work email* */}
+                        <div>
+                          <label className="block text-xs sm:text-sm font-bold text-[#101C30]">
+                            Work email <span className="text-[#B59439]">*</span>
+                          </label>
+                          <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => {
+                              setEmail(e.target.value);
+                              if (touched.email) {
+                                setErrors(validate({ name, email: e.target.value, company }));
+                              }
+                            }}
+                            onBlur={() => {
+                              setTouched((prev) => ({ ...prev, email: true }));
+                              setErrors(validate({ name, email, company }));
+                            }}
+                            placeholder="sarah@company.com"
+                            className={`mt-1.5 w-full rounded-xl border px-3.5 py-2.5 text-sm sm:text-base outline-none transition-colors ${
+                              touched.email && errors.email
+                                ? "border-red-500 bg-red-50/20 focus:border-red-500"
+                                : "border-[#D8D2C0] bg-white focus:border-[#2F3F34]"
+                            }`}
+                          />
+                          {touched.email && errors.email && (
+                            <p className="mt-1 text-xs font-medium text-red-600">
+                              {errors.email}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Company* & Your role (optional) */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5">
+                          {/* Company* */}
+                          <div>
+                            <label className="block text-xs sm:text-sm font-bold text-[#101C30]">
+                              Company <span className="text-[#B59439]">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              value={company}
+                              onChange={(e) => {
+                                setCompany(e.target.value);
+                                if (touched.company) {
+                                  setErrors(validate({ name, email, company: e.target.value }));
+                                }
+                              }}
+                              onBlur={() => {
+                                setTouched((prev) => ({ ...prev, company: true }));
+                                setErrors(validate({ name, email, company }));
+                              }}
+                              placeholder="E.g. Acme Corp"
+                              className={`mt-1.5 w-full rounded-xl border px-3.5 py-2.5 text-sm sm:text-base outline-none transition-colors ${
+                                touched.company && errors.company
+                                  ? "border-red-500 bg-red-50/20 focus:border-red-500"
+                                  : "border-[#D8D2C0] bg-white focus:border-[#2F3F34]"
+                              }`}
+                            />
+                            {touched.company && errors.company && (
+                              <p className="mt-1 text-xs font-medium text-red-600">
+                                {errors.company}
+                              </p>
+                            )}
+                          </div>
+
+                          {/* Your role (optional) */}
+                          <div>
+                            <label className="block text-xs sm:text-sm font-bold text-[#101C30]">
+                              Your role{" "}
+                              <span className="text-xs font-normal text-[#101C30]/60">
+                                (optional)
+                              </span>
+                            </label>
+                            <input
+                              type="text"
+                              value={role}
+                              onChange={(e) => setRole(e.target.value)}
+                              placeholder="E.g. CTO, VP Operations"
+                              className="mt-1.5 w-full rounded-xl border border-[#D8D2C0] bg-white px-3.5 py-2.5 text-sm sm:text-base outline-none transition-colors focus:border-[#2F3F34]"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Right Column: Business Context, CTA Button, Disclaimers */}
+                      <div className="flex flex-col justify-between space-y-4">
+                        <div>
+                          <label className="block text-xs sm:text-sm font-bold text-[#101C30]">
+                            Business Context
+                          </label>
+                          <textarea
+                            rows={4}
+                            value={businessContext}
+                            onChange={(e) => setBusinessContext(e.target.value)}
+                            placeholder="e.g. We're a 2,000-person engineering firm considering a 30-person team in India next year."
+                            className="mt-1.5 w-full min-h-[110px] sm:min-h-[125px] rounded-xl border border-[#D8D2C0] bg-white px-3.5 py-2.5 text-sm sm:text-base outline-none transition-colors focus:border-[#2F3F34] resize-none"
+                          />
+                        </div>
+
+                        <div>
+                          <button
+                            type="submit"
+                            className="cursor-pointer w-full rounded-xl bg-[#2F3F34] px-6 py-3.5 text-base font-bold text-white transition-all hover:bg-[#233027] active:scale-[0.99] shadow-md flex items-center justify-center gap-2"
+                          >
+                            <span>Start your GCC assessment</span>
+                            <ArrowRight className="h-4 w-4 text-white" />
+                          </button>
+
+                          <p className="mt-2.5 text-center sm:text-left text-[11px] sm:text-xs leading-relaxed text-[#101C30]/75">
+                            We'll reply within two business days. Your details stay confidential and are never shared or used for any marketing purposes. We won’t send any marketing emails after closing
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              ) : (
+                /* DIRECT CONSULTATION & MARKET RESEARCH FORM */
+                <div>
                   <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#B59439]">
                     DIRECT CONSULTATION
                   </p>
@@ -505,10 +725,11 @@ export function ThreeWaysToStart() {
                           setErrors(validate({ name, email, company }));
                         }}
                         placeholder="E.g. Sarah Jenkins"
-                        className={`mt-1 w-full rounded-xl border px-3.5 py-2 sm:py-2.5 text-sm sm:text-base outline-none transition-colors ${touched.name && errors.name
-                          ? "border-red-500 bg-red-50/20 focus:border-red-500"
-                          : "border-[#D8D2C0] bg-white focus:border-[#2F3F34]"
-                          }`}
+                        className={`mt-1 w-full rounded-xl border px-3.5 py-2 sm:py-2.5 text-sm sm:text-base outline-none transition-colors ${
+                          touched.name && errors.name
+                            ? "border-red-500 bg-red-50/20 focus:border-red-500"
+                            : "border-[#D8D2C0] bg-white focus:border-[#2F3F34]"
+                        }`}
                       />
                       {touched.name && errors.name && (
                         <p className="mt-1 text-xs font-medium text-red-600">
@@ -538,10 +759,11 @@ export function ThreeWaysToStart() {
                             setErrors(validate({ name, email, company }));
                           }}
                           placeholder="sarah@company.com"
-                          className={`mt-1 w-full rounded-xl border px-3.5 py-2 sm:py-2.5 text-sm sm:text-base outline-none transition-colors ${touched.email && errors.email
-                            ? "border-red-500 bg-red-50/20 focus:border-red-500"
-                            : "border-[#D8D2C0] bg-white focus:border-[#2F3F34]"
-                            }`}
+                          className={`mt-1 w-full rounded-xl border px-3.5 py-2 sm:py-2.5 text-sm sm:text-base outline-none transition-colors ${
+                            touched.email && errors.email
+                              ? "border-red-500 bg-red-50/20 focus:border-red-500"
+                              : "border-[#D8D2C0] bg-white focus:border-[#2F3F34]"
+                          }`}
                         />
                         {touched.email && errors.email && (
                           <p className="mt-1 text-xs font-medium text-red-600">
@@ -569,10 +791,11 @@ export function ThreeWaysToStart() {
                             setErrors(validate({ name, email, company }));
                           }}
                           placeholder="E.g. Acme Corp"
-                          className={`mt-1 w-full rounded-xl border px-3.5 py-2 sm:py-2.5 text-sm sm:text-base outline-none transition-colors ${touched.company && errors.company
-                            ? "border-red-500 bg-red-50/20 focus:border-red-500"
-                            : "border-[#D8D2C0] bg-white focus:border-[#2F3F34]"
-                            }`}
+                          className={`mt-1 w-full rounded-xl border px-3.5 py-2 sm:py-2.5 text-sm sm:text-base outline-none transition-colors ${
+                            touched.company && errors.company
+                              ? "border-red-500 bg-red-50/20 focus:border-red-500"
+                              : "border-[#D8D2C0] bg-white focus:border-[#2F3F34]"
+                          }`}
                         />
                         {touched.company && errors.company && (
                           <p className="mt-1 text-xs font-medium text-red-600">

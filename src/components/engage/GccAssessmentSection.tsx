@@ -231,18 +231,44 @@ export function GccAssessmentSection() {
     if (!validateStep(3)) return;
 
     setStatus("loading");
-    const name = submitter.name.trim();
-    const email = submitter.email.trim();
-    const company = submitter.company.trim();
+    setServerError("");
+
+    let leadContact: {
+      name?: string;
+      email?: string;
+      company?: string;
+      role?: string;
+      businessContext?: string;
+    } | null = null;
+
+    if (typeof window !== "undefined") {
+      try {
+        const stored = sessionStorage.getItem("vertara_gcc_assessment_lead");
+        if (stored) {
+          leadContact = JSON.parse(stored);
+        }
+      } catch (err) {
+        console.error("Failed to parse stored lead contact", err);
+      }
+    }
+
+    const typedName = submitter.name.trim();
+    const typedEmail = submitter.email.trim();
+    const typedCompany = submitter.company.trim();
+    const name = typedName || leadContact?.name?.trim() || "";
+    const email = typedEmail || leadContact?.email?.trim() || "";
+    const company = typedCompany || leadContact?.company?.trim() || "";
+    const role = submitter.role.trim() || leadContact?.role?.trim() || "";
+    const businessContext =
+      submitter.businessContext.trim() || leadContact?.businessContext?.trim() || "";
+    const contactCameFromStoredLead = !typedName && !typedEmail && !typedCompany && Boolean(name);
+
     if (!name || !email || !company || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setStatus("error");
       setServerError("Enter your name, work email, and company in the form above before submitting the assessment.");
       document.getElementById("assessment-form")?.scrollIntoView({ behavior: "smooth" });
       return;
     }
-
-    setStatus("loading");
-    setServerError("");
 
     const sectorAnswer = q1Sector === "Other / not listed" ? `Other: ${q1Other.trim()}` : q1Sector;
     const purposeAnswer = q4Purpose.map((item) => (item === "Other" ? `Other: ${q4Other.trim()}` : item));
@@ -268,6 +294,17 @@ export function GccAssessmentSection() {
       { question: GCC_ASSESSMENT_QUESTIONS[11], answer: constraintAnswer },
     ];
 
+    const messageParts = [];
+    if (businessContext) {
+      messageParts.push(`Business Context: ${businessContext}`);
+    }
+    if (q5CapabilityGap) {
+      messageParts.push(`Key Capability Gap: ${q5CapabilityGap}`);
+    }
+    if (q12Constraints) {
+      messageParts.push(`Constraints: ${q12Constraints}`);
+    }
+
     try {
       const res = await fetch("/api/assessments", {
         method: "POST",
@@ -276,8 +313,8 @@ export function GccAssessmentSection() {
           name,
           email,
           company,
-          role: submitter.role.trim() || undefined,
-          businessContext: submitter.businessContext.trim() || undefined,
+          role: role || undefined,
+          businessContext: businessContext || undefined,
           submissionKey,
           answers,
         }),
@@ -286,7 +323,52 @@ export function GccAssessmentSection() {
       if (!res.ok) {
         throw new Error(typeof data.error === "string" ? data.error : "Could not submit assessment. Please try again.");
       }
+
+      if (contactCameFromStoredLead) {
+        const leadRes = await fetch("/api/leads", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name,
+            email,
+            company,
+            intent: "GCC Feasibility Assessment",
+            source: "gcc_assessment",
+            message:
+              messageParts.join("\n\n") ||
+              `Key Capability Gap: ${q5CapabilityGap}\nConstraints: ${q12Constraints}`,
+            metadata: {
+              role: role || undefined,
+              businessContext: businessContext || undefined,
+              leadContact: leadContact || undefined,
+              assessmentId: typeof data.id === "string" ? data.id : undefined,
+              assessmentAnswers: {
+                q1_sector: sectorAnswer,
+                q2_stage: q2Stage,
+                q3_size: q3Size,
+                q4_purpose: purposeAnswer,
+                q5_capabilityGap: q5CapabilityGap,
+                q6_functions: functionAnswer,
+                q7_localKnowledge: q7LocalKnowledge,
+                q8_regulated: q8Regulated,
+                q9_operatingModel: q9OperatingModel,
+                q10_timeline: q10Timeline,
+                q11_truth: q11Truth,
+                q12_constraints: q12Constraints,
+              },
+            },
+          }),
+        });
+        if (!leadRes.ok) {
+          throw new Error("Could not submit assessment. Please try again.");
+        }
+      }
+
       window.sessionStorage.setItem(storageKey, crypto.randomUUID());
+      if (typeof window !== "undefined") {
+        sessionStorage.removeItem("vertara_gcc_assessment_lead");
+      }
+      setStatus("success");
       document.getElementById("gcc-assessment")?.scrollIntoView({ behavior: "smooth" });
     } catch (err: unknown) {
       setStatus("error");
@@ -384,7 +466,6 @@ export function GccAssessmentSection() {
                         1
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        Which sector best describes your business? <span className="text-[#B59439]">*</span>
                         {GCC_ASSESSMENT_QUESTIONS[0]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
@@ -749,7 +830,6 @@ export function GccAssessmentSection() {
                         8
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        Is any of this work regulated, licensed or restricted from being done offshore? <span className="text-[#B59439]">*</span>
                         {GCC_ASSESSMENT_QUESTIONS[7]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
@@ -857,7 +937,6 @@ export function GccAssessmentSection() {
                         11
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        Which of these is true today? <span className="text-[#B59439]">*</span>
                         {GCC_ASSESSMENT_QUESTIONS[10]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>

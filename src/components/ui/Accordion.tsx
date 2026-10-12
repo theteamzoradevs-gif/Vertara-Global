@@ -14,24 +14,42 @@ export type AccordionItem = {
 export function Accordion({
   items,
   className,
+  allowMultiple = true,
+  defaultOpenId,
 }: {
   items: AccordionItem[];
   className?: string;
+  allowMultiple?: boolean;
+  defaultOpenId?: string | null;
 }) {
-  const [openId, setOpenId] = useState<string | null>(items[0]?.id ?? null);
+  const [openIds, setOpenIds] = useState<string[]>(() => {
+    if (defaultOpenId === null) return [];
+    if (typeof defaultOpenId === "string") return [defaultOpenId];
+    return items[0]?.id ? [items[0].id] : [];
+  });
   const reduce = useReducedMotion();
+
+  const toggleItem = (id: string) => {
+    setOpenIds((prev) => {
+      const isOpen = prev.includes(id);
+      if (allowMultiple) {
+        return isOpen ? prev.filter((item) => item !== id) : [...prev, id];
+      }
+      return isOpen ? [] : [id];
+    });
+  };
 
   return (
     <div className={cn("divide-y divide-border rounded-xl border border-border bg-surface-elevated", className)}>
       {items.map((item) => {
-        const open = openId === item.id;
+        const open = openIds.includes(item.id);
         return (
           <div key={item.id}>
             <button
               type="button"
               aria-expanded={open}
               className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors hover:bg-surface"
-              onClick={() => setOpenId(open ? null : item.id)}
+              onClick={() => toggleItem(item.id)}
             >
               <span className="text-base font-semibold text-navy md:text-lg">
                 {item.title}
