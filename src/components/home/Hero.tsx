@@ -31,7 +31,7 @@ export function Hero({
   metrics,
   phone = "+91 80 4000 1200",
   primaryCta = "Discuss Your GCC Mandate",
-  secondaryCta = "See Our Offerings",
+  secondaryCta = "See Our Services",
   formEyebrow = seedSettings.heroFormEyebrow,
   formTitle = seedSettings.heroFormTitle,
   formDescription = seedSettings.heroFormDescription,
@@ -102,11 +102,10 @@ export function Hero({
     >
       {/* Main Hero Content */}
       <div
-        className={`relative z-10 mx-auto w-full max-w-6xl px-4 py-2 sm:py-4 md:my-auto md:py-6 ${
-          showQuickCallForm
+        className={`relative z-10 mx-auto w-full max-w-6xl px-4 py-2 sm:py-4 md:my-auto md:py-6 ${showQuickCallForm
             ? "grid items-center gap-6 md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:gap-10 text-left"
             : "flex flex-col items-center justify-center max-w-4xl text-center"
-        }`}
+          }`}
       >
         <div className={showQuickCallForm ? "w-full min-w-0" : "w-full"}>
           {/* Eyebrow */}
@@ -135,6 +134,15 @@ export function Hero({
                   <span className="md:hidden">from </span>Nano to mid-scale, 20 to 500 people
                 </span>
               </>
+            ) : /who['’]ve done it before/i.test(headline) ? (
+              <>
+                <span className="block text-white">
+                  {headline.split(/who['’]ve done it before/i)[0].trim().replace(/\.$/, "")}
+                </span>
+                <span className="block text-white mt-1 sm:mt-1.5">
+                  who've done it before
+                </span>
+              </>
             ) : (
               <span className="block text-white">{headline.replace(/\./g, "")}</span>
             )}
@@ -142,18 +150,16 @@ export function Hero({
 
           {/* Subheadline / Description */}
           <p
-            className={`mt-3.5 sm:mt-4 md:mt-5 text-[13px] sm:text-sm md:text-[14px] lg:text-[15px] leading-relaxed text-[#e2e8e4]/95 px-1 sm:px-2 md:px-0 ${
-              showQuickCallForm ? "max-w-xl text-left" : "mx-auto max-w-xl sm:max-w-2xl md:max-w-3xl text-center"
-            }`}
+            className={`mt-3.5 sm:mt-4 md:mt-5 text-[13px] sm:text-sm md:text-[14px] lg:text-[15px] leading-relaxed text-[#e2e8e4]/95 px-1 sm:px-2 md:px-0 ${showQuickCallForm ? "max-w-xl text-left" : "mx-auto max-w-xl sm:max-w-2xl md:max-w-3xl text-center"
+              }`}
           >
             {subheadline}
           </p>
 
           {/* Action Buttons */}
           <div
-            className={`mt-5 sm:mt-6 md:mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-4 ${
-              showQuickCallForm ? "md:justify-start" : "justify-center"
-            }`}
+            className={`mt-5 sm:mt-6 md:mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-4 ${showQuickCallForm ? "md:justify-start" : "justify-center"
+              }`}
           >
             <Link
               href={showQuickCallForm ? "#hero-enquiry" : "/contact"}
@@ -256,15 +262,14 @@ export function Hero({
         <div className="relative z-10 w-full shrink-0 border-t border-white/10 bg-[#2F3F34] py-2 sm:py-2.5 shadow-sm text-white">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div
-              className={`grid gap-x-4 gap-y-1.5 sm:gap-x-6 md:gap-x-8 ${
-                activeMetrics.length === 1
+              className={`grid gap-x-4 gap-y-1.5 sm:gap-x-6 md:gap-x-8 ${activeMetrics.length === 1
                   ? "grid-cols-1 justify-items-center text-center"
                   : activeMetrics.length === 2
-                  ? "grid-cols-2"
-                  : activeMetrics.length === 3
-                  ? "grid-cols-2 sm:grid-cols-3"
-                  : "grid-cols-2 md:grid-cols-4"
-              }`}
+                    ? "grid-cols-2"
+                    : activeMetrics.length === 3
+                      ? "grid-cols-2 sm:grid-cols-3"
+                      : "grid-cols-2 md:grid-cols-4"
+                }`}
             >
               {activeMetrics.slice(0, 4).map((m, idx) => (
                 <div key={m.label || idx} className="flex items-center gap-2 min-w-0">

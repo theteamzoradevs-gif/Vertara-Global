@@ -2,10 +2,8 @@
 
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { Accordion } from "@/components/ui/Accordion";
-import { Button } from "@/components/ui/Button";
 
 export const FAQ_SUBHEADINGS = [
-  "Home",
   "The basics",
   "Working with Vertara",
   "Time, cost and cities",
@@ -19,8 +17,9 @@ export function normalizeFaqCategory(category?: string): FaqSubheading {
   const trimmed = category.trim();
   const lower = trimmed.toLowerCase();
 
-  if (lower === "home") return "Home";
-  if (lower === "the basics" || lower === "basics") return "The basics";
+  if (lower === "home" || lower === "the basics" || lower === "basics") {
+    return "The basics";
+  }
   if (lower === "working with vertara" || lower === "about us" || lower === "vertara") {
     return "Working with Vertara";
   }
@@ -59,35 +58,8 @@ interface HomeFaqSectionProps {
   scope?: "home" | "all";
 }
 
-export function HomeFaqSection({ faqs, scope = "home" }: HomeFaqSectionProps) {
-  const source =
-    scope === "home"
-      ? faqs.filter((faq) => normalizeFaqCategory(faq.category) === "Home")
-      : faqs;
-
-  let displayedFaqs: FaqItem[];
-  if (scope === "all" || source.length <= 5) {
-    displayedFaqs = source;
-  } else {
-    const selected: FaqItem[] = [];
-    for (const heading of FAQ_SUBHEADINGS) {
-      const item = source.find(
-        (f) =>
-          normalizeFaqCategory(f.category) === heading &&
-          !selected.some((s) => (s._id && s._id === f._id) || s.question === f.question)
-      );
-      if (item && selected.length < 5) {
-        selected.push(item);
-      }
-    }
-    for (const f of source) {
-      if (selected.length >= 5) break;
-      if (!selected.some((s) => (s._id && s._id === f._id) || s.question === f.question)) {
-        selected.push(f);
-      }
-    }
-    displayedFaqs = selected;
-  }
+export function HomeFaqSection({ faqs }: HomeFaqSectionProps) {
+  const displayedFaqs = faqs;
 
   // Group displayed FAQs by the 4 subheadings
   const groups = FAQ_SUBHEADINGS.map((subheading) => ({
@@ -109,14 +81,12 @@ export function HomeFaqSection({ faqs, scope = "home" }: HomeFaqSectionProps) {
       <div className="space-y-8 sm:space-y-10" style={{ fontFamily: "Calibri" }}>
         {groups.map((group) => (
           <div key={group.subheading} className="space-y-3 sm:space-y-4">
-            {scope !== "home" && (
-              <h3
-                className="text-lg sm:text-xl md:text-[1.35rem] font-bold tracking-tight text-[#101C30]"
-                style={{ fontFamily: "Calibri" }}
-              >
-                {group.subheading}
-              </h3>
-            )}
+            <h3
+              className="text-lg sm:text-xl md:text-[1.35rem] font-bold tracking-tight text-[#101C30]"
+              style={{ fontFamily: "Calibri" }}
+            >
+              {group.subheading}
+            </h3>
             <Accordion
               items={group.items.map((f, idx) => ({
                 id: f._id || f.id || f.question || `${group.subheading}-${idx}`,
@@ -127,14 +97,6 @@ export function HomeFaqSection({ faqs, scope = "home" }: HomeFaqSectionProps) {
           </div>
         ))}
       </div>
-
-      {scope === "home" ? (
-        <div className="mt-8 sm:mt-10 flex justify-center sm:justify-start">
-          <Button href="/faq" variant="primary">
-            View full FAQ
-          </Button>
-        </div>
-      ) : null}
     </Section>
   );
 }

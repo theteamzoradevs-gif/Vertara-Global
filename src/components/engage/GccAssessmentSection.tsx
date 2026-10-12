@@ -230,14 +230,53 @@ export function GccAssessmentSection() {
     setStatus("loading");
     setServerError("");
 
+    let leadContact: {
+      name?: string;
+      email?: string;
+      company?: string;
+      role?: string;
+      businessContext?: string;
+    } | null = null;
+
+    if (typeof window !== "undefined") {
+      try {
+        const stored = sessionStorage.getItem("vertara_gcc_assessment_lead");
+        if (stored) {
+          leadContact = JSON.parse(stored);
+        }
+      } catch (err) {
+        console.error("Failed to parse stored lead contact", err);
+      }
+    }
+
+    const leadName = leadContact?.name?.trim() || "GCC Assessment Inquiry";
+    const leadEmail = leadContact?.email?.trim() || "assessment@vertaraglobal.com";
+    const leadCompany = leadContact?.company?.trim() || q1Sector || "Confidential";
+    const leadRole = leadContact?.role?.trim() || undefined;
+    const leadBusinessContext = leadContact?.businessContext?.trim() || "";
+
+    const messageParts = [];
+    if (leadBusinessContext) {
+      messageParts.push(`Business Context: ${leadBusinessContext}`);
+    }
+    if (q5CapabilityGap) {
+      messageParts.push(`Key Capability Gap: ${q5CapabilityGap}`);
+    }
+    if (q12Constraints) {
+      messageParts.push(`Constraints: ${q12Constraints}`);
+    }
+
     const fullPayload = {
-      name: "GCC Assessment Inquiry",
-      email: "assessment@vertaraglobal.com",
-      company: q1Sector || "Confidential",
+      name: leadName,
+      email: leadEmail,
+      company: leadCompany,
       intent: "GCC Feasibility Assessment",
       source: "gcc_assessment",
-      message: `Key Capability Gap: ${q5CapabilityGap}\nConstraints: ${q12Constraints}`,
+      message: messageParts.join("\n\n") || `Key Capability Gap: ${q5CapabilityGap}\nConstraints: ${q12Constraints}`,
       metadata: {
+        role: leadRole,
+        businessContext: leadBusinessContext || undefined,
+        leadContact: leadContact || undefined,
         assessmentAnswers: {
           q1_sector: q1Sector === "Other / not listed" ? `Other: ${q1Other}` : q1Sector,
           q2_stage: q2Stage,
@@ -263,6 +302,11 @@ export function GccAssessmentSection() {
       });
 
       if (!res.ok) throw new Error("Could not submit assessment. Please try again.");
+
+      if (typeof window !== "undefined") {
+        sessionStorage.removeItem("vertara_gcc_assessment_lead");
+      }
+
       setStatus("success");
       document.getElementById("gcc-assessment")?.scrollIntoView({ behavior: "smooth" });
     } catch (err: unknown) {

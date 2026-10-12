@@ -4,7 +4,6 @@ import { Reveal } from "@/components/ui/Reveal";
 import { FlowThreads } from "@/components/ui/FlowThreads";
 import { Button } from "@/components/ui/Button";
 import { ArrowRight } from "lucide-react";
-import { MobileAutoSlider } from "@/components/ui/MobileAutoSlider";
 import { Accordion } from "@/components/ui/Accordion";
 
 export const metadata = {
@@ -95,19 +94,14 @@ export default async function InsightsPage() {
 
           </div>
 
-          {/* Cards: Auto & Manual Slider on mobile (no arrows, dots only), 4-column Grid on desktop */}
-          <MobileAutoSlider
-            autoSlideInterval={3500}
-            desktopClassName="md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-6 lg:gap-6"
-            itemClassName="w-[85vw] max-w-[340px] shrink-0 snap-center md:w-auto md:max-w-none flex flex-col h-full"
-            dotTone="gold"
-          >
+          {/* Cards Grid: 2 cards in 1st row, 2 cards in 2nd row on mobile (2x2); 4 cards in 1 row on desktop with text in single line */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 md:gap-5 lg:gap-5 xl:gap-6 items-stretch">
             {/* Card 01: Nano GCC Intelligence */}
             <div
               id="card-nano-gcc-intelligence"
-              className="flex flex-col justify-center rounded-2xl border border-[#cddcd1] border-t-4 border-t-[#B59439] bg-white p-6 sm:p-7 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 h-full min-h-[120px]"
+              className="flex flex-col justify-center rounded-xl sm:rounded-2xl border border-[#cddcd1] border-t-[3.5px] sm:border-t-4 border-t-[#B59439] bg-white p-4 sm:p-5 md:p-6 lg:px-4 xl:px-6 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 min-h-[90px] sm:min-h-[110px] lg:min-h-[120px]"
             >
-              <h3 className="text-lg sm:text-xl font-bold text-[#101C30] leading-snug">
+              <h3 className="text-xs sm:text-sm md:text-base lg:text-[15px] xl:text-[17px] font-bold text-[#101C30] leading-snug lg:whitespace-nowrap text-center sm:text-left">
                 Nano GCC Intelligence
               </h3>
             </div>
@@ -115,9 +109,9 @@ export default async function InsightsPage() {
             {/* Card 02: Infrastructure Studies */}
             <div
               id="card-infrastructure-studies"
-              className="flex flex-col justify-center rounded-2xl border border-[#cddcd1] border-t-4 border-t-[#B59439] bg-white p-6 sm:p-7 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 h-full min-h-[120px]"
+              className="flex flex-col justify-center rounded-xl sm:rounded-2xl border border-[#cddcd1] border-t-[3.5px] sm:border-t-4 border-t-[#B59439] bg-white p-4 sm:p-5 md:p-6 lg:px-4 xl:px-6 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 min-h-[90px] sm:min-h-[110px] lg:min-h-[120px]"
             >
-              <h3 className="text-lg sm:text-xl font-bold text-[#101C30] leading-snug">
+              <h3 className="text-xs sm:text-sm md:text-base lg:text-[15px] xl:text-[17px] font-bold text-[#101C30] leading-snug lg:whitespace-nowrap text-center sm:text-left">
                 Infrastructure Studies
               </h3>
             </div>
@@ -125,9 +119,9 @@ export default async function InsightsPage() {
             {/* Card 03: GCC Strategy */}
             <div
               id="card-gcc-strategy"
-              className="flex flex-col justify-center rounded-2xl border border-[#cddcd1] border-t-4 border-t-[#B59439] bg-white p-6 sm:p-7 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 h-full min-h-[120px]"
+              className="flex flex-col justify-center rounded-xl sm:rounded-2xl border border-[#cddcd1] border-t-[3.5px] sm:border-t-4 border-t-[#B59439] bg-white p-4 sm:p-5 md:p-6 lg:px-4 xl:px-6 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 min-h-[90px] sm:min-h-[110px] lg:min-h-[120px]"
             >
-              <h3 className="text-lg sm:text-xl font-bold text-[#101C30] leading-snug">
+              <h3 className="text-xs sm:text-sm md:text-base lg:text-[15px] xl:text-[17px] font-bold text-[#101C30] leading-snug lg:whitespace-nowrap text-center sm:text-left">
                 GCC Strategy
               </h3>
             </div>
@@ -135,13 +129,13 @@ export default async function InsightsPage() {
             {/* Card 04: Short Client Guides */}
             <div
               id="card-short-client-guides"
-              className="flex flex-col justify-center rounded-2xl border border-[#cddcd1] border-t-4 border-t-[#B59439] bg-white p-6 sm:p-7 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 h-full min-h-[120px]"
+              className="flex flex-col justify-center rounded-xl sm:rounded-2xl border border-[#cddcd1] border-t-[3.5px] sm:border-t-4 border-t-[#B59439] bg-white p-4 sm:p-5 md:p-6 lg:px-4 xl:px-6 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 min-h-[90px] sm:min-h-[110px] lg:min-h-[120px]"
             >
-              <h3 className="text-lg sm:text-xl font-bold text-[#101C30] leading-snug">
+              <h3 className="text-xs sm:text-sm md:text-base lg:text-[15px] xl:text-[17px] font-bold text-[#101C30] leading-snug lg:whitespace-nowrap text-center sm:text-left">
                 Short Client Guides
               </h3>
             </div>
-          </MobileAutoSlider>
+          </div>
         </div>
       </section>
 
