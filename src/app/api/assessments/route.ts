@@ -11,6 +11,8 @@ const SubmitSchema = z.object({
   name: z.string().min(1),
   company: z.string().min(1),
   email: z.string().email(),
+  role: z.string().max(160).optional(),
+  businessContext: z.string().max(4000).optional(),
   submissionKey: z.string().min(8).max(120).optional(),
   answers: z.array(z.object({
     question: z.string(),

@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/Button";
 import { ArrowRight } from "lucide-react";
 import { MobileAutoSlider } from "@/components/ui/MobileAutoSlider";
 import { Accordion } from "@/components/ui/Accordion";
+import { getFaqs } from "@/lib/content";
+import { faqsForPage } from "@/lib/faq-pages";
 
 export const metadata = {
   title: "Insights",

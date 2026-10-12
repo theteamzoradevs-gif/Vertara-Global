@@ -4,7 +4,8 @@ const FaqSchema = new Schema(
   {
     question: { type: String, required: true },
     answer: { type: String, required: true },
-    category: { type: String, default: "Home" },
+    page: { type: String, default: "Home" },
+    category: { type: String, default: "The basics" },
     order: { type: Number, default: 0 },
     catalogVersion: { type: Number },
   },

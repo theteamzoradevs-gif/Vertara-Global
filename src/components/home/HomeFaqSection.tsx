@@ -3,9 +3,9 @@
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { Accordion } from "@/components/ui/Accordion";
 import { Button } from "@/components/ui/Button";
+import { resolveFaqPage } from "@/lib/faq-pages";
 
 export const FAQ_SUBHEADINGS = [
-  "Home",
   "The basics",
   "Working with Vertara",
   "Time, cost and cities",
@@ -19,8 +19,7 @@ export function normalizeFaqCategory(category?: string): FaqSubheading {
   const trimmed = category.trim();
   const lower = trimmed.toLowerCase();
 
-  if (lower === "home") return "Home";
-  if (lower === "the basics" || lower === "basics") return "The basics";
+  if (lower === "home" || lower === "the basics" || lower === "basics") return "The basics";
   if (lower === "working with vertara" || lower === "about us" || lower === "vertara") {
     return "Working with Vertara";
   }
@@ -60,10 +59,9 @@ interface HomeFaqSectionProps {
 }
 
 export function HomeFaqSection({ faqs, scope = "home" }: HomeFaqSectionProps) {
-  const source =
-    scope === "home"
-      ? faqs.filter((faq) => normalizeFaqCategory(faq.category) === "Home")
-      : faqs;
+  const source = faqs.filter(
+    (faq) => resolveFaqPage(faq) === (scope === "home" ? "Home" : "FAQ"),
+  );
 
   let displayedFaqs: FaqItem[];
   if (scope === "all" || source.length <= 5) {
@@ -89,13 +87,15 @@ export function HomeFaqSection({ faqs, scope = "home" }: HomeFaqSectionProps) {
     displayedFaqs = selected;
   }
 
-  // Group displayed FAQs by the 4 subheadings
-  const groups = FAQ_SUBHEADINGS.map((subheading) => ({
-    subheading,
-    items: displayedFaqs.filter(
-      (f) => normalizeFaqCategory(f.category) === subheading
-    ),
-  })).filter((group) => group.items.length > 0);
+  const groups =
+    scope === "home"
+      ? [{ subheading: "FAQs" as const, items: displayedFaqs }]
+      : FAQ_SUBHEADINGS.map((subheading) => ({
+          subheading,
+          items: displayedFaqs.filter(
+            (f) => normalizeFaqCategory(f.category) === subheading
+          ),
+        })).filter((group) => group.items.length > 0);
 
   return (
     <Section id="faq">

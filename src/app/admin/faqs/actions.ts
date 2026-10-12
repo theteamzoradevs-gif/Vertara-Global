@@ -4,6 +4,13 @@ import { revalidatePath } from "next/cache";
 import { connectDB } from "@/lib/db";
 import { Faq } from "@/models/Faq";
 import { canonicalFaqCategory, isFaqCategory } from "@/lib/faq-categories";
+import { canonicalFaqPage, isFaqPage } from "@/lib/faq-pages";
+
+const FAQ_PATHS = ["/", "/faq", "/about", "/insights", "/engage-with-us", "/services", "/industries", "/engagement-models", "/case-studies", "/contact", "/assessment", "/offerings", "/admin/faqs", "/admin/hero", "/admin"];
+
+function revalidateFaqPages() {
+  for (const path of FAQ_PATHS) revalidatePath(path);
+}
 
 export async function createFaqAction(formData: FormData) {
   try {
@@ -12,13 +19,21 @@ export async function createFaqAction(formData: FormData) {
       return { success: false, error: "Database connection unavailable." };
     }
 
-    const category = String(formData.get("category") || "Home").trim();
+    const page = canonicalFaqPage(String(formData.get("page") || "Home")) || "";
+    if (!isFaqPage(page)) {
+      return { success: false, error: "Choose a page for this FAQ." };
+    }
 
-    const categoryCount = await Faq.countDocuments({ category });
+    const category = canonicalFaqCategory(String(formData.get("category") || "The basics")) || String(formData.get("category") || "The basics").trim();
+    if (!isFaqCategory(category)) {
+      return { success: false, error: "Choose a category for this FAQ." };
+    }
+
+    const categoryCount = await Faq.countDocuments({ page, category });
     if (categoryCount >= 10) {
       return {
         success: false,
-        error: `Maximum limit reached. You can only create up to 10 FAQs in the '${category}' category.`,
+        error: `Maximum limit reached. You can only create up to 10 FAQs in '${category}' on ${page}.`,
       };
     }
 
@@ -37,14 +52,13 @@ export async function createFaqAction(formData: FormData) {
     await Faq.create({
       question,
       answer,
+      page,
       category,
       order,
+      catalogVersion: 4,
     });
 
-    revalidatePath("/faq");
-    revalidatePath("/admin/faqs");
-    revalidatePath("/admin/hero");
-    revalidatePath("/");
+    revalidateFaqPages();
 
     return { success: true, message: "FAQ created successfully!" };
   } catch (err: unknown) {
@@ -65,15 +79,23 @@ export async function updateFaqAction(formData: FormData) {
       return { success: false, error: "FAQ ID is missing." };
     }
 
-    const category = String(formData.get("category") || "Home").trim();
+    const page = canonicalFaqPage(String(formData.get("page") || "Home")) || "";
+    if (!isFaqPage(page)) {
+      return { success: false, error: "Choose a page for this FAQ." };
+    }
+
+    const category = canonicalFaqCategory(String(formData.get("category") || "The basics")) || String(formData.get("category") || "The basics").trim();
+    if (!isFaqCategory(category)) {
+      return { success: false, error: "Choose a category for this FAQ." };
+    }
 
     const existingFaq = await Faq.findById(id);
-    if (existingFaq && existingFaq.category !== category) {
-      const targetCategoryCount = await Faq.countDocuments({ category });
+    if (existingFaq && (existingFaq.category !== category || existingFaq.page !== page)) {
+      const targetCategoryCount = await Faq.countDocuments({ page, category, _id: { $ne: id } });
       if (targetCategoryCount >= 10) {
         return {
           success: false,
-          error: `Maximum limit reached. The '${category}' category already has 10 FAQs.`,
+          error: `Maximum limit reached. '${category}' on ${page} already has 10 FAQs.`,
         };
       }
     }
@@ -93,14 +115,13 @@ export async function updateFaqAction(formData: FormData) {
     await Faq.findByIdAndUpdate(id, {
       question,
       answer,
+      page,
       category,
       order,
+      catalogVersion: 4,
     });
 
-    revalidatePath("/faq");
-    revalidatePath("/admin/faqs");
-    revalidatePath("/admin/hero");
-    revalidatePath("/");
+    revalidateFaqPages();
 
     return { success: true, message: "FAQ updated successfully!" };
   } catch (err: unknown) {
@@ -118,10 +139,7 @@ export async function deleteFaqAction(id: string) {
 
     await Faq.findByIdAndDelete(id);
 
-    revalidatePath("/faq");
-    revalidatePath("/admin/faqs");
-    revalidatePath("/admin/hero");
-    revalidatePath("/");
+    revalidateFaqPages();
 
     return { success: true, message: "FAQ deleted successfully." };
   } catch (err: unknown) {

@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { GCC_ASSESSMENT_QUESTIONS } from "@/lib/gcc-assessment";
+import { useAssessmentSubmitter } from "@/components/engage/AssessmentSubmitter";
 import {
   CheckCircle2,
   ArrowRight,
@@ -103,6 +105,7 @@ const realityOptions = [
 ];
 
 export function GccAssessmentSection() {
+  const { submitter } = useAssessmentSubmitter();
   const [step, setStep] = useState<1 | 2 | 3>(1);
 
   // Phase 1 Answers
@@ -228,42 +231,62 @@ export function GccAssessmentSection() {
     if (!validateStep(3)) return;
 
     setStatus("loading");
+    const name = submitter.name.trim();
+    const email = submitter.email.trim();
+    const company = submitter.company.trim();
+    if (!name || !email || !company || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setStatus("error");
+      setServerError("Enter your name, work email, and company in the form above before submitting the assessment.");
+      document.getElementById("assessment-form")?.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+
+    setStatus("loading");
     setServerError("");
 
-    const fullPayload = {
-      name: "GCC Assessment Inquiry",
-      email: "assessment@vertaraglobal.com",
-      company: q1Sector || "Confidential",
-      intent: "GCC Feasibility Assessment",
-      source: "gcc_assessment",
-      message: `Key Capability Gap: ${q5CapabilityGap}\nConstraints: ${q12Constraints}`,
-      metadata: {
-        assessmentAnswers: {
-          q1_sector: q1Sector === "Other / not listed" ? `Other: ${q1Other}` : q1Sector,
-          q2_stage: q2Stage,
-          q3_size: q3Size,
-          q4_purpose: q4Purpose.map((p) => (p === "Other" ? `Other: ${q4Other}` : p)),
-          q5_capabilityGap: q5CapabilityGap,
-          q6_functions: q6Functions.map((f) => (f === "Other" ? `Other: ${q6Other}` : f)),
-          q7_localKnowledge: q7LocalKnowledge,
-          q8_regulated: q8Regulated,
-          q9_operatingModel: q9OperatingModel,
-          q10_timeline: q10Timeline,
-          q11_truth: q11Truth,
-          q12_constraints: q12Constraints,
-        },
-      },
-    };
+    const sectorAnswer = q1Sector === "Other / not listed" ? `Other: ${q1Other.trim()}` : q1Sector;
+    const purposeAnswer = q4Purpose.map((item) => (item === "Other" ? `Other: ${q4Other.trim()}` : item));
+    const functionAnswer = q6Functions.map((item) => (item === "Other" ? `Other: ${q6Other.trim()}` : item));
+    const constraintAnswer = q12Constraints.trim() || "No constraint stated";
+    const storageKey = "gcc-assessment-submission-key";
+    const existingKey = window.sessionStorage.getItem(storageKey);
+    const submissionKey = existingKey || crypto.randomUUID();
+    if (!existingKey) window.sessionStorage.setItem(storageKey, submissionKey);
+
+    const answers = [
+      { question: GCC_ASSESSMENT_QUESTIONS[0], answer: sectorAnswer },
+      { question: GCC_ASSESSMENT_QUESTIONS[1], answer: q2Stage },
+      { question: GCC_ASSESSMENT_QUESTIONS[2], answer: q3Size },
+      { question: GCC_ASSESSMENT_QUESTIONS[3], answer: purposeAnswer },
+      { question: GCC_ASSESSMENT_QUESTIONS[4], answer: q5CapabilityGap.trim() },
+      { question: GCC_ASSESSMENT_QUESTIONS[5], answer: functionAnswer },
+      { question: GCC_ASSESSMENT_QUESTIONS[6], answer: q7LocalKnowledge },
+      { question: GCC_ASSESSMENT_QUESTIONS[7], answer: q8Regulated },
+      { question: GCC_ASSESSMENT_QUESTIONS[8], answer: q9OperatingModel },
+      { question: GCC_ASSESSMENT_QUESTIONS[9], answer: q10Timeline },
+      { question: GCC_ASSESSMENT_QUESTIONS[10], answer: q11Truth },
+      { question: GCC_ASSESSMENT_QUESTIONS[11], answer: constraintAnswer },
+    ];
 
     try {
-      const res = await fetch("/api/leads", {
+      const res = await fetch("/api/assessments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(fullPayload),
+        body: JSON.stringify({
+          name,
+          email,
+          company,
+          role: submitter.role.trim() || undefined,
+          businessContext: submitter.businessContext.trim() || undefined,
+          submissionKey,
+          answers,
+        }),
       });
-
-      if (!res.ok) throw new Error("Could not submit assessment. Please try again.");
-      setStatus("success");
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(typeof data.error === "string" ? data.error : "Could not submit assessment. Please try again.");
+      }
+      window.sessionStorage.setItem(storageKey, crypto.randomUUID());
       document.getElementById("gcc-assessment")?.scrollIntoView({ behavior: "smooth" });
     } catch (err: unknown) {
       setStatus("error");
@@ -362,6 +385,7 @@ export function GccAssessmentSection() {
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
                         Which sector best describes your business? <span className="text-[#B59439]">*</span>
+                        {GCC_ASSESSMENT_QUESTIONS[0]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
                     <p className="mt-1 text-xs text-[#101C30]/60 pl-8">Single choice</p>
@@ -408,7 +432,7 @@ export function GccAssessmentSection() {
                         2
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        Where are you today with a capability centre? <span className="text-[#B59439]">*</span>
+                        {GCC_ASSESSMENT_QUESTIONS[1]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
                     <p className="mt-1 text-xs text-[#101C30]/60 pl-8">Single choice</p>
@@ -443,7 +467,7 @@ export function GccAssessmentSection() {
                         3
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        What size are you considering within three years? <span className="text-[#B59439]">*</span>
+                        {GCC_ASSESSMENT_QUESTIONS[2]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
                     <p className="mt-1 text-xs text-[#101C30]/60 pl-8">Single choice</p>
@@ -475,7 +499,7 @@ export function GccAssessmentSection() {
                         4
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        What is the main purpose of the centre? <span className="text-[#B59439]">*</span>
+                        {GCC_ASSESSMENT_QUESTIONS[3]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
                     <p className="mt-1 text-xs text-[#101C30]/60 pl-8">
@@ -565,7 +589,7 @@ export function GccAssessmentSection() {
                         5
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        In one or two lines, what must this centre be able to do that you can't do today? <span className="text-[#B59439]">*</span>
+                        {GCC_ASSESSMENT_QUESTIONS[4]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
 
@@ -592,7 +616,7 @@ export function GccAssessmentSection() {
                         6
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        Which functions do you want to move to the centre and grow there? <span className="text-[#B59439]">*</span>
+                        {GCC_ASSESSMENT_QUESTIONS[5]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
                     <p className="mt-1 text-xs text-[#101C30]/60 pl-8">Multi-select dropdown</p>
@@ -693,7 +717,7 @@ export function GccAssessmentSection() {
                         7
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        How much does the work depend on undocumented local knowledge or relationships? <span className="text-[#B59439]">*</span>
+                        {GCC_ASSESSMENT_QUESTIONS[6]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
                     <p className="mt-1 text-xs text-[#101C30]/60 pl-8">Single choice</p>
@@ -726,6 +750,7 @@ export function GccAssessmentSection() {
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
                         Is any of this work regulated, licensed or restricted from being done offshore? <span className="text-[#B59439]">*</span>
+                        {GCC_ASSESSMENT_QUESTIONS[7]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
                     <p className="mt-1 text-xs text-[#101C30]/60 pl-8">Single choice</p>
@@ -765,7 +790,7 @@ export function GccAssessmentSection() {
                         9
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        Do you have a preferred operating model today? <span className="text-[#B59439]">*</span>
+                        {GCC_ASSESSMENT_QUESTIONS[8]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
                     <p className="mt-1 text-xs text-[#101C30]/60 pl-8">Single choice</p>
@@ -797,7 +822,7 @@ export function GccAssessmentSection() {
                         10
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        How quickly must the first team be productive? <span className="text-[#B59439]">*</span>
+                        {GCC_ASSESSMENT_QUESTIONS[9]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
                     <p className="mt-1 text-xs text-[#101C30]/60 pl-8">Single choice</p>
@@ -833,6 +858,7 @@ export function GccAssessmentSection() {
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
                         Which of these is true today? <span className="text-[#B59439]">*</span>
+                        {GCC_ASSESSMENT_QUESTIONS[10]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
                     <p className="mt-1 text-xs text-[#101C30]/60 pl-8">Multi-select dropdown</p>
@@ -925,7 +951,7 @@ export function GccAssessmentSection() {
                         12
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        Is there a constraint, deadline or board condition we should design around?
+                        {GCC_ASSESSMENT_QUESTIONS[11]}
                       </label>
                     </div>
                     <p className="mt-1 text-xs text-[#101C30]/60 pl-8">Long text</p>

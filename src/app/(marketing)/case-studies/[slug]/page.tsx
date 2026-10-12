@@ -15,6 +15,7 @@ import {
   getClientLogos,
   getFaqs,
 } from "@/lib/content";
+import { faqsForPage } from "@/lib/faq-pages";
 
 export const metadata = {
   title: "About",
@@ -114,7 +115,7 @@ export default async function AboutPage() {
         </div>
       </Section>
 
-      {/* 8. FAQ Section */}
+      {faqsForPage(faqs, "Case Studies").length > 0 ? (
       <Section tone="muted">
         <SectionHeader
           eyebrow="FAQ"
@@ -122,7 +123,7 @@ export default async function AboutPage() {
           description="Timelines, ownership models, governance, and leadership answered upfront."
         />
         <Accordion
-          items={faqs.slice(0, 5).map((f) => ({
+          items={faqsForPage(faqs, "Case Studies").slice(0, 5).map((f) => ({
             id: f.question,
             title: f.question,
             content: f.answer,
@@ -134,6 +135,7 @@ export default async function AboutPage() {
           </Button>
         </div>
       </Section>
+      ) : null}
     </>
   );
 }

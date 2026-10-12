@@ -15,6 +15,7 @@ import {
   getFaqs,
   getCaseStudies,
 } from "@/lib/content";
+import { faqsForPage } from "@/lib/faq-pages";
 import {
   Cpu,
   FlaskConical,
@@ -263,7 +264,7 @@ export default async function IndustriesHubPage() {
         </div>
       </Section>
 
-      {/* 7. FAQ SECTION */}
+      {faqsForPage(faqs, "Industries").length > 0 ? (
       <Section>
         <SectionHeader
           eyebrow="FAQ"
@@ -271,7 +272,7 @@ export default async function IndustriesHubPage() {
           description="Regulatory compliance, air-gapped security perimeters, talent availability, and setup timelines across industries."
         />
         <Accordion
-          items={faqs.slice(0, 5).map((f) => ({
+          items={faqsForPage(faqs, "Industries").slice(0, 5).map((f) => ({
             id: f.question,
             title: f.question,
             content: f.answer,
@@ -283,6 +284,7 @@ export default async function IndustriesHubPage() {
           </Button>
         </div>
       </Section>
+      ) : null}
 
       {/* Gold Mandate Banner */}
       <HomeCtaBanner />

@@ -16,6 +16,7 @@ import {
   getFaqs,
   slugifyCaseStudy,
 } from "@/lib/content";
+import { faqsForPage } from "@/lib/faq-pages";
 
 export const metadata = {
   title: "Case Studies",
@@ -334,26 +335,29 @@ export default async function CaseStudiesPage() {
         </div>
       </Section>
 
-      {/* 3. FAQ SECTION */}
       <Section>
-        <SectionHeader
-          eyebrow="FAQ"
-          title="Frequently asked questions about GCC programmes"
-          description="Timelines, commercials, ownership models, and capability scaling answered upfront."
-        />
-        <Accordion
-          items={faqs.slice(0, 5).map((f) => ({
-            id: f.question,
-            title: f.question,
-            content: f.answer,
-          }))}
-        />
-        <div className="mt-6 flex justify-center sm:justify-start">
-          <Button href="/#faq" variant="primary">
-            View full FAQ
-          </Button>
-        </div>
-        <div className="mt-12">
+        {faqsForPage(faqs, "Case Studies").length > 0 ? (
+          <>
+            <SectionHeader
+              eyebrow="FAQ"
+              title="Frequently asked questions about GCC programmes"
+              description="Timelines, commercials, ownership models, and capability scaling answered upfront."
+            />
+            <Accordion
+              items={faqsForPage(faqs, "Case Studies").slice(0, 5).map((f) => ({
+                id: f.question,
+                title: f.question,
+                content: f.answer,
+              }))}
+            />
+            <div className="mt-6 flex justify-center sm:justify-start">
+              <Button href="/#faq" variant="primary">
+                View full FAQ
+              </Button>
+            </div>
+          </>
+        ) : null}
+        <div className={faqsForPage(faqs, "Case Studies").length > 0 ? "mt-12" : undefined}>
           <CTABand />
         </div>
       </Section>

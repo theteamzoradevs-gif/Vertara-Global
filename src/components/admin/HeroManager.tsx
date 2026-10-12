@@ -34,6 +34,7 @@ import {
 import type { Settings } from "@/lib/content/types";
 import type { Metric } from "@/data/seed-content";
 import { seedSettings, DEFAULT_LIBRARY_IMAGES } from "@/data/seed-content";
+import { resolveFaqPage } from "@/lib/faq-pages";
 
 export interface FaqItemData {
   _id?: string;

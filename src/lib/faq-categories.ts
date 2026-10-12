@@ -1,5 +1,4 @@
 export const FAQ_CATEGORIES = [
-  "Home",
   "The basics",
   "Working with Vertara",
   "Time, cost and cities",
@@ -8,7 +7,7 @@ export const FAQ_CATEGORIES = [
 
 export type FaqCategory = (typeof FAQ_CATEGORIES)[number];
 
-/** Groups the homepage picker uses before a record is marked Home. */
+/** The four FAQ topics. Page assignment, including Home, is stored separately. */
 export const FAQ_TOPIC_CATEGORIES = [
   "The basics",
   "Working with Vertara",
@@ -17,7 +16,6 @@ export const FAQ_TOPIC_CATEGORIES = [
 ] as const;
 
 const ALIASES: Record<string, FaqCategory> = {
-  home: "Home",
   basics: "The basics",
   "the basics": "The basics",
   "about us": "Working with Vertara",

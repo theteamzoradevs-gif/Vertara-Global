@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import {
   Search,
   Trash2,
@@ -46,6 +47,20 @@ interface LeadsManagerProps {
   hidePageHeader?: boolean;
 }
 
+/** Set to true to show the inquiry email action in the Actions column again. */
+const SHOW_INQUIRY_EMAIL_ACTION = false;
+
+/** Set to true to show the founder-email retry button in the Actions column again. */
+const SHOW_INQUIRY_EMAIL_RETRY = false;
+
+function formatReceivedDate(createdAt: string) {
+  return new Date(createdAt).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
 const SOURCE_LABELS: Record<string, { label: string; style: string }> = {
   contact: {
     label: "Contact Form",
@@ -70,6 +85,14 @@ const SOURCE_LABELS: Record<string, { label: string; style: string }> = {
   engagement_selector: {
     label: "Engagement Selector",
     style: "bg-purple-50 text-purple-700 border-purple-200",
+  },
+  engage_with_us: {
+    label: "Engage with Us",
+    style: "bg-amber-50 text-amber-800 border-amber-200",
+  },
+  assessment_page_form: {
+    label: "Assessment page inquiry",
+    style: "bg-teal-50 text-teal-800 border-teal-200",
   },
   hero_quick_call: {
     label: "Hero Quick Call",
@@ -98,6 +121,27 @@ function matchesSourceFilter(leadSource: string, filterValue: string) {
   return option.sources.includes(leadSource);
 }
 
+function isGccAssessmentInquiry(lead: LeadItemData) {
+  const source = lead.source.trim().toLowerCase();
+  const intent = (lead.intent || "").trim().toLowerCase();
+  return (
+    source === "assessment_page_form" ||
+    source === "gcc_assessment" ||
+    intent === "gcc assessment inquiry"
+  );
+}
+
+function linkedAssessmentId(lead: LeadItemData) {
+  const metadata = lead.metadata || {};
+  for (const key of ["assessmentId", "gccAssessmentId", "assessment_id"]) {
+    const value = metadata[key];
+    if (typeof value === "string" && /^[a-f0-9]{24}$/i.test(value.trim())) {
+      return value.trim();
+    }
+  }
+  return "";
+}
+
 function defaultEmailDraft(lead: LeadItemData) {
   const subject = "Re: your inquiry with Vertara Global";
   const lines = [`Hi ${lead.name},`, "", "Thank you for reaching out to Vertara Global."];
@@ -124,10 +168,50 @@ export function LeadsManager({
   isDbConnected,
   hidePageHeader = false,
 }: LeadsManagerProps) {
+  const router = useRouter();
   const [leads, setLeads] = useState<LeadItemData[]>(initialLeads);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [sourceFilter, setSourceFilter] = useState<string>("all");
+
+function LeadStatusSelect({
+  value,
+  disabled,
+  onChange,
+  compact = false,
+}: {
+  value: string;
+  disabled: boolean;
+  onChange: (status: string) => void;
+  compact?: boolean;
+}) {
+  const current = value === "contacted" || value === "archived" ? value : "new";
+  const tone =
+    current === "contacted"
+      ? "border-blue-200 bg-blue-50 text-blue-700"
+      : current === "archived"
+        ? "border-border bg-surface text-slate-600"
+        : "border-teal-200 bg-teal-50 text-teal-700";
+
+  return (
+    <select
+      aria-label="Inquiry status"
+      value={current}
+      disabled={disabled}
+      onChange={(event) => {
+        const next = event.target.value;
+        if (next !== current) onChange(next);
+      }}
+      className={`rounded-lg border font-semibold capitalize focus:border-accent focus:outline-none disabled:opacity-60 ${tone} ${
+        compact ? "px-2 py-0.5 text-[10px]" : "px-2.5 py-1 text-xs"
+      }`}
+    >
+      <option value="new">New</option>
+      <option value="contacted">Contacted</option>
+      {current === "archived" ? <option value="archived">Archived</option> : null}
+    </select>
+  );
+}
 
   // Modal states
   const [selectedLead, setSelectedLead] = useState<LeadItemData | null>(null);
@@ -135,6 +219,8 @@ export function LeadsManager({
   const [emailingLead, setEmailingLead] = useState<LeadItemData | null>(null);
   const [emailSubject, setEmailSubject] = useState("");
   const [retryingLeadId, setRetryingLeadId] = useState<string | null>(null);
+  const [assessmentLinkNote, setAssessmentLinkNote] = useState<string | null>(null);
+  const [openingAssessment, setOpeningAssessment] = useState(false);
 
   // Status message state
   const [toastMessage, setToastMessage] = useState<{
@@ -145,10 +231,62 @@ export function LeadsManager({
   const [isPending, startTransition] = useTransition();
 
   const showToast = (type: "success" | "error", text: string) => {
+    if (type === "error" && text.includes("SMTP is not configured")) return;
     setToastMessage({ type, text });
     setTimeout(() => {
       setToastMessage(null);
     }, 4000);
+  };
+
+  const openFullAssessment = async (lead: LeadItemData) => {
+    setAssessmentLinkNote(null);
+    setOpeningAssessment(true);
+    try {
+      const explicitId = linkedAssessmentId(lead);
+      if (explicitId) {
+        const direct = await fetch(`/api/admin/assessments/${explicitId}`);
+        if (direct.ok) {
+          router.push(`/admin/gcc-assessment?id=${explicitId}`);
+          return;
+        }
+        setAssessmentLinkNote("No completed GCC Assessment is linked to this inquiry.");
+        return;
+      }
+
+      const res = await fetch("/api/admin/assessments");
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(typeof data.error === "string" ? data.error : "Could not look up assessments.");
+      }
+      const email = (lead.email || "").trim().toLowerCase();
+      const name = (lead.name || "").trim().toLowerCase();
+      const rows = (Array.isArray(data.assessments) ? data.assessments : []) as {
+        _id: string;
+        email?: string;
+        name?: string;
+      }[];
+      const byEmail = email
+        ? rows.filter((row) => (row.email || "").trim().toLowerCase() === email)
+        : [];
+      let match = byEmail.length === 1 ? byEmail[0] : undefined;
+      if (!match && byEmail.length > 1) {
+        const byName = byEmail.filter((row) => (row.name || "").trim().toLowerCase() === name);
+        if (byName.length === 1) match = byName[0];
+      }
+      if (!match?._id) {
+        setAssessmentLinkNote(
+          byEmail.length > 1
+            ? "More than one GCC Assessment matches this inquiry, so none was opened."
+            : "No completed GCC Assessment is linked to this inquiry.",
+        );
+        return;
+      }
+      router.push(`/admin/gcc-assessment?id=${match._id}`);
+    } catch (err) {
+      setAssessmentLinkNote(err instanceof Error ? err.message : "Could not open the assessment.");
+    } finally {
+      setOpeningAssessment(false);
+    }
   };
 
   const retryFounderEmail = async (id: string) => {
@@ -400,31 +538,24 @@ export function LeadsManager({
               };
               return (
                 <div key={lead._id} className="p-3.5 space-y-2.5 transition hover:bg-surface/50">
-                  {/* Top: Name, Status indicator, Date */}
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-1.5">
-                        <span className="font-bold text-navy text-xs truncate">{lead.name}</span>
-                        {lead.status === "new" && (
-                          <span className="h-1.5 w-1.5 rounded-full bg-teal-500 ring-2 ring-teal-200 shrink-0" />
-                        )}
-                      </div>
-                      {lead.company && (
-                        <p className="text-[11px] text-slate-600 truncate flex items-center gap-1 mt-0.5">
-                          <Building className="h-3 w-3 text-slate-400 shrink-0" />
-                          <span>{lead.company}</span>
-                        </p>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-bold text-navy text-xs truncate">{lead.name}</span>
+                      {lead.status === "new" && (
+                        <span className="h-1.5 w-1.5 rounded-full bg-teal-500 ring-2 ring-teal-200 shrink-0" />
                       )}
                     </div>
-                    <span className="text-[10px] text-muted whitespace-nowrap shrink-0">
-                      {new Date(lead.createdAt).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </span>
+                    <p className="mt-0.5 text-[11px] text-muted">
+                      Received: {formatReceivedDate(lead.createdAt)}
+                    </p>
+                    {lead.company && (
+                      <p className="text-[11px] text-slate-600 truncate flex items-center gap-1 mt-0.5">
+                        <Building className="h-3 w-3 text-slate-400 shrink-0" />
+                        <span>{lead.company}</span>
+                      </p>
+                    )}
                   </div>
 
-                  {/* Email & Phone */}
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
                     {lead.email && (
                       <a
@@ -446,40 +577,21 @@ export function LeadsManager({
                     )}
                   </div>
 
-                  {/* Source & Intent */}
                   <div className="flex flex-wrap items-center gap-1.5">
                     <span
                       className={`inline-block rounded-md border px-2 py-0.5 text-[10px] font-bold ${sourceConfig.style}`}
                     >
                       {sourceConfig.label}
                     </span>
-                    {lead.intent && (
-                      <span className="inline-block rounded-md bg-slate-100 text-slate-700 px-2 py-0.5 text-[10px] font-medium truncate max-w-[200px]">
-                        {lead.intent}
-                      </span>
-                    )}
                   </div>
 
-                  {/* Status Toggle & Action Buttons */}
                   <div className="flex items-center justify-between pt-1 gap-2 border-t border-border/60">
-                    <div className="flex items-center gap-1">
-                      {(["new", "contacted"] as const).map((st) => (
-                        <button
-                          key={st}
-                          onClick={() => handleStatusUpdate(lead._id, st)}
-                          disabled={isPending}
-                          className={`rounded-md px-2 py-0.5 text-[10px] font-semibold capitalize transition ${
-                            lead.status === st
-                              ? st === "new"
-                                ? "bg-teal-600 text-white shadow-2xs"
-                                : "bg-blue-600 text-white shadow-2xs"
-                              : "bg-surface text-slate-500 border border-border"
-                          }`}
-                        >
-                          {st}
-                        </button>
-                      ))}
-                    </div>
+                    <LeadStatusSelect
+                      value={lead.status}
+                      disabled={isPending}
+                      compact
+                      onChange={(status) => handleStatusUpdate(lead._id, status)}
+                    />
 
                     <div className="flex items-center gap-1">
                       <button
@@ -489,7 +601,7 @@ export function LeadsManager({
                       >
                         <Eye className="h-3.5 w-3.5" />
                       </button>
-                      {lead.email && (
+                      {SHOW_INQUIRY_EMAIL_ACTION && lead.email && (
                         <button
                           onClick={() => openEmailComposer(lead)}
                           className="rounded-lg border border-border p-1.5 text-accent hover:bg-surface active:scale-95"
@@ -518,19 +630,17 @@ export function LeadsManager({
           <table className="w-full text-left text-sm text-slate">
             <thead className="border-b border-border bg-surface text-xs font-semibold uppercase tracking-wider text-muted">
               <tr>
-                <th className="px-5 py-3.5">Lead Name</th>
+                <th className="w-[24%] px-5 py-3.5">Lead Name</th>
                 <th className="px-5 py-3.5">Company / Email</th>
-                <th className="px-5 py-3.5">Source</th>
-                <th className="px-5 py-3.5">Intent</th>
-                <th className="px-5 py-3.5">Status</th>
-                <th className="px-5 py-3.5">Received</th>
-                <th className="px-5 py-3.5 text-right">Actions</th>
+                <th className="w-[22%] px-5 py-3.5">Source</th>
+                <th className="w-36 whitespace-nowrap px-5 py-3.5">Status</th>
+                <th className="w-40 whitespace-nowrap px-4 py-3.5 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
               {filteredLeads.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-5 py-12 text-center text-muted">
+                  <td colSpan={5} className="px-5 py-12 text-center text-muted">
                     <div className="flex flex-col items-center justify-center">
                       <Inbox className="h-10 w-10 text-slate-300" />
                       <p className="mt-3 text-base font-semibold text-navy">No inquiries found</p>
@@ -554,14 +664,16 @@ export function LeadsManager({
                       key={lead._id}
                       className="transition hover:bg-surface/50"
                     >
-                      {/* Name */}
                       <td className="px-5 py-4">
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-navy">{lead.name}</span>
+                        <div className="flex min-w-0 items-center gap-2">
+                          <span className="truncate font-bold text-navy">{lead.name}</span>
                           {lead.status === "new" && (
-                            <span className="h-2 w-2 rounded-full bg-teal-500 animate-pulse" />
+                            <span className="h-2 w-2 shrink-0 rounded-full bg-teal-500 animate-pulse" />
                           )}
                         </div>
+                        <p className="mt-0.5 text-xs text-muted">
+                          Received: {formatReceivedDate(lead.createdAt)}
+                        </p>
                         {lead.phone && (
                           <p className="text-xs text-muted mt-0.5 flex items-center gap-1">
                             <Phone className="h-3 w-3 text-slate-400" />
@@ -572,11 +684,11 @@ export function LeadsManager({
 
                       {/* Company & Email */}
                       <td className="px-5 py-4">
-                        <p className="font-semibold text-navy">{lead.company || "-"}</p>
+                        <p className="truncate font-semibold text-navy">{lead.company || "-"}</p>
                         {lead.email && (
-                          <p className="text-xs text-muted mt-0.5 flex items-center gap-1">
-                            <Mail className="h-3 w-3 text-slate-400" />
-                            {lead.email}
+                          <p className="mt-0.5 flex items-center gap-1 text-xs text-muted">
+                            <Mail className="h-3 w-3 shrink-0 text-slate-400" />
+                            <span className="truncate">{lead.email}</span>
                           </p>
                         )}
                       </td>
@@ -584,54 +696,24 @@ export function LeadsManager({
                       {/* Source */}
                       <td className="px-5 py-4">
                         <span
-                          className={`inline-block rounded-lg border px-2.5 py-1 text-xs font-bold ${sourceConfig.style}`}
+                          className={`inline-block max-w-full truncate rounded-lg border px-2.5 py-1 text-xs font-bold ${sourceConfig.style}`}
                         >
                           {sourceConfig.label}
                         </span>
                       </td>
 
-                      {/* Intent */}
-                      <td className="px-5 py-4">
-                        <span className="text-xs font-medium text-navy max-w-[200px] truncate block">
-                          {lead.intent || "-"}
-                        </span>
-                      </td>
-
-                      {/* Status Selector Pills */}
-                      <td className="px-5 py-4">
-                        <div className="flex items-center gap-1">
-                          {(["new", "contacted"] as const).map((st) => (
-                            <button
-                              key={st}
-                              onClick={() => handleStatusUpdate(lead._id, st)}
-                              disabled={isPending}
-                              className={`rounded-lg px-2.5 py-1 text-xs font-semibold capitalize transition ${
-                                lead.status === st
-                                  ? st === "new"
-                                    ? "bg-teal-600 text-white shadow-xs"
-                                    : "bg-blue-600 text-white shadow-xs"
-                                  : "bg-surface text-slate-500 hover:bg-surface-elevated hover:text-navy border border-border"
-                              }`}
-                            >
-                              {st}
-                            </button>
-                          ))}
-                        </div>
-                      </td>
-
-                      {/* Created At */}
-                      <td className="px-5 py-4 text-xs text-muted whitespace-nowrap">
-                        {new Date(lead.createdAt).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        })}
+                      <td className="whitespace-nowrap px-5 py-4">
+                        <LeadStatusSelect
+                          value={lead.status}
+                          disabled={isPending}
+                          onChange={(status) => handleStatusUpdate(lead._id, status)}
+                        />
                       </td>
 
                       {/* Actions */}
-                      <td className="px-5 py-4 text-right">
+                      <td className="whitespace-nowrap px-4 py-4 text-right">
                         <div className="flex items-center justify-end gap-1">
-                          {lead.notificationStatus === "failed" ? (
+                          {SHOW_INQUIRY_EMAIL_RETRY && lead.notificationStatus === "failed" ? (
                             <button
                               type="button"
                               title="Retry founder email"
@@ -645,23 +727,24 @@ export function LeadsManager({
                               )}
                             </button>
                           ) : null}
-                          {lead.email ? (
-                            <button
-                              type="button"
-                              onClick={() => openEmailComposer(lead)}
-                              title={`Email ${lead.email}`}
-                              className="rounded-lg p-1.5 text-slate-500 hover:bg-accent-soft hover:text-accent"
-                            >
-                              <Mail className="h-4 w-4" />
-                            </button>
-                          ) : (
-                            <span
-                              title="No email provided"
-                              className="rounded-lg p-1.5 text-slate-300 cursor-not-allowed"
-                            >
-                              <Mail className="h-4 w-4" />
-                            </span>
-                          )}
+                          {SHOW_INQUIRY_EMAIL_ACTION &&
+                            (lead.email ? (
+                              <button
+                                type="button"
+                                onClick={() => openEmailComposer(lead)}
+                                title={`Email ${lead.email}`}
+                                className="rounded-lg p-1.5 text-slate-500 hover:bg-accent-soft hover:text-accent"
+                              >
+                                <Mail className="h-4 w-4" />
+                              </button>
+                            ) : (
+                              <span
+                                title="No email provided"
+                                className="rounded-lg p-1.5 text-slate-300 cursor-not-allowed"
+                              >
+                                <Mail className="h-4 w-4" />
+                              </span>
+                            ))}
                           <button
                             onClick={() => setSelectedLead(lead)}
                             title="View inquiry"
@@ -796,31 +879,46 @@ export function LeadsManager({
                   {selectedLead.message || "No message recorded."}
                 </p>
               </div>
+              {selectedLead.metadata && Object.keys(selectedLead.metadata).length > 0 ? (
+                <div className="rounded-xl border border-border bg-surface p-3.5">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-muted">Details</p>
+                  <div className="mt-2 space-y-1 text-sm text-navy">
+                    {Object.entries(selectedLead.metadata).map(([key, value]) => (
+                      <p key={key}>
+                        <span className="font-semibold">{key}: </span>
+                        {typeof value === "string" ? value : JSON.stringify(value)}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+
+              {isGccAssessmentInquiry(selectedLead) ? (
+                <div>
+                  <button
+                    type="button"
+                    disabled={openingAssessment}
+                    onClick={() => void openFullAssessment(selectedLead)}
+                    className="inline-flex items-center rounded-xl bg-navy px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-60"
+                  >
+                    {openingAssessment ? "Opening assessment..." : "View Full GCC Assessment →"}
+                  </button>
+                  {assessmentLinkNote ? (
+                    <p className="mt-2 text-sm text-rose-700">{assessmentLinkNote}</p>
+                  ) : null}
+                </div>
+              ) : null}
 
               {/* Status Updater in Modal */}
               <div className="flex items-center justify-between border-t border-border pt-4">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-bold text-navy">Status:</span>
-                  <div className="flex items-center gap-1">
-                    {(["new", "contacted"] as const).map((st) => (
-                      <button
-                        key={st}
-                        onClick={() => handleStatusUpdate(selectedLead._id, st)}
-                        disabled={isPending}
-                        className={`rounded-lg px-3 py-1 text-xs font-semibold capitalize transition ${
-                          selectedLead.status === st
-                            ? st === "new"
-                              ? "bg-teal-600 text-white"
-                              : "bg-blue-600 text-white"
-                            : "bg-surface text-slate-500 hover:bg-surface-elevated hover:text-navy border border-border"
-                        }`}
-                      >
-                        {st}
-                      </button>
-                    ))}
-                  </div>
+                  <LeadStatusSelect
+                    value={selectedLead.status}
+                    disabled={isPending}
+                    onChange={(status) => handleStatusUpdate(selectedLead._id, status)}
+                  />
                 </div>
-
                 <button
                   type="button"
                   onClick={() => setSelectedLead(null)}
