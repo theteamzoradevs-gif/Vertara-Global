@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AlertCircle, ClipboardList, Eye, Loader2, RefreshCw, X } from "lucide-react";
 import { formatAssessmentAnswer } from "@/lib/gcc-assessment";
 
@@ -9,12 +9,26 @@ export type AssessmentListItem = {
   name: string;
   company: string;
   email: string;
+  role?: string;
+  businessContext?: string;
   status?: string;
   notificationStatus?: string;
   notificationError?: string;
   createdAt?: string;
+  reportDueAt?: string;
+  reviewer?: string;
+  reviewStartedAt?: string;
+  approvedAt?: string;
+  reportContent?: string;
+  reportReference?: string;
+  reportDeliveryStatus?: string;
+  reportDeliveryError?: string;
+  reportSentAt?: string;
   answers?: { question: string; answer: string | string[] }[];
 };
+
+/** Set to true to show the founder-email retry button in the Actions column again. */
+const SHOW_ASSESSMENT_EMAIL_RETRY = false;
 
 export function GccAssessmentsManager({
   initialAssessments,
@@ -31,12 +45,45 @@ export function GccAssessmentsManager({
   );
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [retryingId, setRetryingId] = useState<string | null>(null);
+  const [working, setWorking] = useState(false);
+  const [reviewerName, setReviewerName] = useState("");
+  const [reportContent, setReportContent] = useState("");
+  const [reportReference, setReportReference] = useState("");
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!initialOpenId) return;
+    const row = initialAssessments.find((item) => item._id === initialOpenId);
+    if (!row) {
+      setSelected(null);
+      setError("This GCC Assessment submission could not be found.");
+      return;
+    }
+    setError(null);
+    void openAssessment(initialOpenId);
+    // Open the submission named in the URL once, including its saved answers.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialOpenId]);
+
+  useEffect(() => {
+    if (!selected) return;
+    setReviewerName(selected.reviewer || "");
+    setReportContent(selected.reportContent || "");
+    setReportReference(selected.reportReference || "");
+  }, [selected?._id, selected?.status, selected?.reviewer, selected?.reportContent, selected?.reportReference]);
+
+  function remember(next: AssessmentListItem) {
+    setRows((prev) => prev.map((row) => (row._id === next._id ? { ...row, ...next } : row)));
+    setSelected(next);
+    setReviewerName(next.reviewer || "");
+    setReportContent(next.reportContent || "");
+    setReportReference(next.reportReference || "");
+  }
 
   async function openAssessment(id: string) {
     const cached = rows.find((row) => row._id === id && row.answers?.length);
     if (cached?.answers?.length) {
-      setSelected(cached);
+      remember(cached);
       return;
     }
     setLoadingId(id);
@@ -46,12 +93,35 @@ export function GccAssessmentsManager({
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Could not open this assessment.");
       const full = data.assessment as AssessmentListItem;
-      setRows((prev) => prev.map((row) => (row._id === id ? { ...row, ...full } : row)));
-      setSelected(full);
+      remember(full);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not open this assessment.");
     } finally {
       setLoadingId(null);
+    }
+  }
+
+  async function postWorkflow(id: string, path: string, body?: Record<string, string>) {
+    setWorking(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/admin/assessments/${id}/${path}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body || {}),
+      });
+      const data = await res.json();
+      if (!res.ok || data.ok === false) {
+        throw new Error(data.error || "The assessment could not be updated.");
+      }
+      const resDetail = await fetch(`/api/admin/assessments/${id}`);
+      const detail = await resDetail.json();
+      if (!resDetail.ok) throw new Error(detail.error || "The assessment could not be reloaded.");
+      remember(detail.assessment as AssessmentListItem);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "The assessment could not be updated.");
+    } finally {
+      setWorking(false);
     }
   }
 
@@ -171,7 +241,7 @@ export function GccAssessmentsManager({
                     </td>
                     <td className="px-5 py-4 text-right">
                       <div className="flex items-center justify-end gap-1">
-                        {row.notificationStatus === "failed" ? (
+                        {SHOW_ASSESSMENT_EMAIL_RETRY && row.notificationStatus === "failed" ? (
                           <button
                             type="button"
                             title="Retry founder email"
@@ -215,21 +285,98 @@ export function GccAssessmentsManager({
                 <h2 className="text-lg font-bold text-navy">{selected.name}</h2>
                 <p className="mt-1 text-sm text-muted">
                   {selected.company} · {selected.email}
+                  {selected.role ? ` · ${selected.role}` : ""}
                 </p>
+                {selected.businessContext ? (
+                  <p className="mt-2 text-sm text-slate">{selected.businessContext}</p>
+                ) : null}
               </div>
               <button type="button" onClick={() => setSelected(null)} className="text-slate-400">
                 <X className="h-5 w-5" />
               </button>
             </div>
+
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <label className="block text-xs font-semibold text-navy">
+                Practice expert
+                <input
+                  value={reviewerName}
+                  onChange={(e) => setReviewerName(e.target.value)}
+                  className="mt-1 w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm font-normal text-navy"
+                />
+              </label>
+              <div className="text-xs text-muted">
+                <p className="font-semibold uppercase tracking-wider">Review status</p>
+                <p className="mt-2 text-sm font-bold capitalize text-navy">
+                  {(selected.status || "new").replaceAll("_", " ")}
+                </p>
+                {selected.reportDueAt ? (
+                  <p className="mt-1">
+                    Report due{" "}
+                    {new Date(selected.reportDueAt).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </p>
+                ) : null}
+              </div>
+            </div>
+
+            <label className="mt-4 block text-xs font-semibold text-navy">
+              Feasibility report
+              <textarea
+                value={reportContent}
+                onChange={(e) => setReportContent(e.target.value)}
+                rows={5}
+                className="mt-1 w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm font-normal text-navy"
+              />
+            </label>
+            <label className="mt-3 block text-xs font-semibold text-navy">
+              Report reference
+              <input
+                value={reportReference}
+                onChange={(e) => setReportReference(e.target.value)}
+                className="mt-1 w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm font-normal text-navy"
+              />
+            </label>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              <button
+                type="button"
+                disabled={working}
+                onClick={() => void postWorkflow(selected._id, "review", { reviewer: reviewerName })}
+                className="rounded-xl bg-navy px-3 py-2 text-xs font-semibold text-white disabled:opacity-50"
+              >
+                Mark in review
+              </button>
+              <button
+                type="button"
+                disabled={working}
+                onClick={() =>
+                  void postWorkflow(selected._id, "approve", { reportContent, reportReference })
+                }
+                className="rounded-xl border border-border px-3 py-2 text-xs font-semibold text-navy disabled:opacity-50"
+              >
+                Approve report
+              </button>
+              <button
+                type="button"
+                disabled={working}
+                onClick={() => void postWorkflow(selected._id, "deliver")}
+                className="rounded-xl border border-border px-3 py-2 text-xs font-semibold text-navy disabled:opacity-50"
+              >
+                Send to submitter
+              </button>
+            </div>
+
             <div className="mt-5 space-y-4">
               {(selected.answers || []).map((row, index) => (
                 <div key={`${row.question}-${index}`} className="rounded-xl border border-border bg-surface p-3.5">
                   <p className="text-xs font-semibold text-navy">
                     {index + 1}. {row.question}
                   </p>
-                  <p className="mt-1 text-sm text-slate">
-                    {formatAssessmentAnswer(row.answer)}
-                  </p>
+                  <p className="mt-1 text-sm text-slate">{formatAssessmentAnswer(row.answer)}</p>
                 </div>
               ))}
             </div>

@@ -209,6 +209,7 @@ export async function getClientLogos(): Promise<ClientLogoItem[]> {
 
 const ORIGINAL_FAQ_CATEGORY: Record<string, (typeof FAQ_TOPIC_CATEGORIES)[number]> = {
   "What is a Global Capability Center (GCC)?": "The basics",
+  "What is a Global Capability Centre?": "The basics",
   "What roles can we hire through a GCC?": "The basics",
   "Can we own the GCC outright?": "Working with Vertara",
   "Do you provide a bridge while our entity is forming?": "Working with Vertara",
@@ -218,35 +219,28 @@ const ORIGINAL_FAQ_CATEGORY: Record<string, (typeof FAQ_TOPIC_CATEGORIES)[number
   "How do engagement models differ?": "Getting started",
 };
 
-async function syncFaqRecords() {
-  const initialized = await Faq.exists({ catalogVersion: 2 });
-  if (initialized) return;
+function topicCategoryFor(question: string, category: string) {
+  if (String(category || "").trim().toLowerCase() !== "home") return category || "The basics";
+  return ORIGINAL_FAQ_CATEGORY[question] || "The basics";
+}
 
-  await Faq.deleteOne({ question: "test", answer: "atoz" });
+async function syncFaqRecords() {
+  const needsFix = await Faq.exists({
+    $or: [{ catalogVersion: { $ne: 4 } }, { category: /^home$/i }],
+  });
+  if (!needsFix) return;
 
   const docs = await Faq.find().sort({ order: 1, createdAt: 1 });
   for (const doc of docs) {
-    const original = ORIGINAL_FAQ_CATEGORY[doc.question];
-    if (original) doc.category = original;
-  }
-
-  const selected: typeof docs = [];
-  for (const heading of FAQ_TOPIC_CATEGORIES) {
-    const item = docs.find(
-      (doc) => doc.category === heading && !selected.some((chosen) => chosen._id.equals(doc._id)),
-    );
-    if (item && selected.length < 5) selected.push(item);
-  }
-  for (const doc of docs) {
-    if (selected.length >= 5) break;
-    if (!selected.some((chosen) => chosen._id.equals(doc._id))) selected.push(doc);
-  }
-
-  for (const doc of docs) {
-    if (selected.some((chosen) => chosen._id.equals(doc._id))) {
-      doc.category = "Home";
+    const category = String(doc.category || "");
+    const categoryIsPageName = category.trim().toLowerCase() === "home";
+    if (!doc.page) {
+      doc.page = categoryIsPageName ? "Home" : "FAQ";
     }
-    doc.catalogVersion = 2;
+    if (categoryIsPageName) {
+      doc.category = topicCategoryFor(doc.question, category);
+    }
+    doc.catalogVersion = 4;
     await doc.save();
   }
 }

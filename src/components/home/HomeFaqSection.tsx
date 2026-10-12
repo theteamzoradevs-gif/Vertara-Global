@@ -2,6 +2,8 @@
 
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { Accordion } from "@/components/ui/Accordion";
+import { Button } from "@/components/ui/Button";
+import { resolveFaqPage } from "@/lib/faq-pages";
 
 export const FAQ_SUBHEADINGS = [
   "The basics",
@@ -58,10 +60,11 @@ interface HomeFaqSectionProps {
   scope?: "home" | "all";
 }
 
-export function HomeFaqSection({ faqs }: HomeFaqSectionProps) {
-  const displayedFaqs = faqs;
+export function HomeFaqSection({ faqs, scope = "home" }: HomeFaqSectionProps) {
+  const displayedFaqs = faqs.filter(
+    (faq) => resolveFaqPage(faq) === (scope === "home" ? "Home" : "FAQ"),
+  );
 
-  // Group displayed FAQs by the 4 subheadings
   const groups = FAQ_SUBHEADINGS.map((subheading) => ({
     subheading,
     items: displayedFaqs.filter(
@@ -97,6 +100,14 @@ export function HomeFaqSection({ faqs }: HomeFaqSectionProps) {
           </div>
         ))}
       </div>
+
+      {scope === "home" ? (
+        <div className="mt-8 sm:mt-10 flex justify-center sm:justify-start">
+          <Button href="/faq" variant="primary">
+            View full FAQ
+          </Button>
+        </div>
+      ) : null}
     </Section>
   );
 }

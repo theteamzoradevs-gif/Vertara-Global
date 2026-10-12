@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { CheckCircle2, Loader2, Send } from "lucide-react";
+import { useAssessmentSubmitter } from "@/components/engage/AssessmentSubmitter";
 
 export function AssessmentContactForm() {
   const [hasStoredLead, setHasStoredLead] = useState(false);
@@ -37,6 +38,7 @@ export function AssessmentContactForm() {
     "idle"
   );
   const [serverError, setServerError] = useState("");
+  const { setSubmitter } = useAssessmentSubmitter();
 
   function validate(fields: { name: string; email: string; company: string }) {
     const errs: { name?: string; email?: string; company?: string } = {};
@@ -166,6 +168,7 @@ export function AssessmentContactForm() {
                       value={name}
                       onChange={(e) => {
                         setName(e.target.value);
+                        setSubmitter({ name: e.target.value });
                         if (touched.name) {
                           setErrors(validate({ name: e.target.value, email, company }));
                         }
@@ -196,6 +199,7 @@ export function AssessmentContactForm() {
                       value={email}
                       onChange={(e) => {
                         setEmail(e.target.value);
+                        setSubmitter({ email: e.target.value });
                         if (touched.email) {
                           setErrors(validate({ name, email: e.target.value, company }));
                         }
@@ -228,6 +232,7 @@ export function AssessmentContactForm() {
                         value={company}
                         onChange={(e) => {
                           setCompany(e.target.value);
+                          setSubmitter({ company: e.target.value });
                           if (touched.company) {
                             setErrors(validate({ name, email, company: e.target.value }));
                           }
@@ -256,7 +261,10 @@ export function AssessmentContactForm() {
                       <input
                         type="text"
                         value={role}
-                        onChange={(e) => setRole(e.target.value)}
+                        onChange={(e) => {
+                          setRole(e.target.value);
+                          setSubmitter({ role: e.target.value });
+                        }}
                         placeholder="E.g. CTO, VP Operations"
                         className="mt-1.5 w-full rounded-xl border border-[#D8D2C0] bg-white px-4 py-2.5 sm:py-3 text-sm sm:text-base outline-none transition-colors focus:border-[#2F3F34]"
                       />
@@ -273,8 +281,11 @@ export function AssessmentContactForm() {
                     </label>
                     <textarea
                       value={businessContext}
-                      onChange={(e) => setBusinessContext(e.target.value)}
-                      placeholder='e.g. We&apos;re a 2,000-person engineering firm considering a 30-person team in India next year.'
+                      onChange={(e) => {
+                        setBusinessContext(e.target.value);
+                        setSubmitter({ businessContext: e.target.value });
+                      }}
+                      placeholder="e.g. We're a 2,000-person engineering firm considering a 30-person team in India next year."
                       className="mt-1.5 w-full flex-1 min-h-[140px] rounded-xl border border-[#D8D2C0] bg-white p-3.5 text-sm sm:text-base outline-none transition-colors focus:border-[#2F3F34] resize-none"
                     />
                   </div>

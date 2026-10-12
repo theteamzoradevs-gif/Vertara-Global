@@ -18,28 +18,26 @@ import {
   updateFaqAction,
   deleteFaqAction,
 } from "@/app/admin/faqs/actions";
+import { FAQ_TOPIC_CATEGORIES } from "@/lib/faq-categories";
+import { FAQ_PAGES, resolveFaqPage } from "@/lib/faq-pages";
 
 export interface FaqItemData {
   _id?: string;
   question: string;
   answer: string;
   category: string;
+  page?: string;
   order: number;
 }
 
-export const FAQ_CATEGORIES = [
-  "The basics",
-  "Working with Vertara",
-  "Time, cost and cities",
-  "Getting started",
-] as const;
+export const FAQ_CATEGORIES = FAQ_TOPIC_CATEGORIES;
 
 export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
-  const globalFaqs = initialFaqs.filter((f) => (f.category || "").toLowerCase() !== "home");
-  const homeCount = initialFaqs.filter((f) => (f.category || "").toLowerCase() === "home").length;
+  const homeCount = initialFaqs.filter((faq) => resolveFaqPage(faq) === "Home").length;
 
-  const [faqs, setFaqs] = useState<FaqItemData[]>(globalFaqs);
+  const [faqs, setFaqs] = useState<FaqItemData[]>(initialFaqs);
   const [search, setSearch] = useState("");
+  const [selectedPage, setSelectedPage] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState("all");
 
   // Modal States
@@ -52,22 +50,26 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
   const [formAnswer, setFormAnswer] = useState("");
   const [formOrder, setFormOrder] = useState<number>(1);
   const [formCategory, setFormCategory] = useState<string>("The basics");
+  const [formPage, setFormPage] = useState<string>("Home");
 
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   // Sync state when props update
   useEffect(() => {
-    setFaqs(initialFaqs.filter((f) => (f.category || "").toLowerCase() !== "home"));
+    setFaqs(initialFaqs);
   }, [initialFaqs]);
 
-  // Filter & Sort FAQs by order (ascending: 1, 2, 3...)
-  const filteredFaqs = faqs
+  const pageFaqs =
+    selectedPage === "all" ? faqs : faqs.filter((item) => resolveFaqPage(item) === selectedPage);
+
+  const filteredFaqs = pageFaqs
     .filter((item) => {
       const matchesSearch =
         item.question.toLowerCase().includes(search.toLowerCase()) ||
         item.answer.toLowerCase().includes(search.toLowerCase()) ||
-        item.category.toLowerCase().includes(search.toLowerCase());
+        item.category.toLowerCase().includes(search.toLowerCase()) ||
+        resolveFaqPage(item).toLowerCase().includes(search.toLowerCase());
 
       const matchesCat =
         selectedCategory === "all" ? true : item.category === selectedCategory;
@@ -80,8 +82,9 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
     setEditingItem(null);
     setFormQuestion("");
     setFormAnswer("");
-    setFormOrder((faqs.length || 0) + 1);
+    setFormOrder((pageFaqs.length || 0) + 1);
     setFormCategory(FAQ_CATEGORIES[0]);
+    setFormPage(selectedPage === "all" ? "Home" : selectedPage);
     setMessage(null);
     setIsModalOpen(true);
   };
@@ -91,7 +94,8 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
     setFormQuestion(item.question);
     setFormAnswer(item.answer);
     setFormOrder(item.order || 1);
-    setFormCategory(item.category || FAQ_CATEGORIES[0]);
+    setFormCategory(item.category && item.category !== "Home" ? item.category : FAQ_CATEGORIES[0]);
+    setFormPage(resolveFaqPage(item));
     setMessage(null);
     setIsModalOpen(true);
   };
@@ -219,20 +223,38 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
           />
         </div>
 
-        {/* Category Filter Dropdown */}
-        <div className="flex items-center gap-2">
-          <label className="text-xs text-muted font-medium whitespace-nowrap">Filter Category:</label>
+        <div className="flex flex-wrap items-center gap-2">
+          <label className="text-xs text-muted font-medium whitespace-nowrap">Page:</label>
+          <select
+            value={selectedPage}
+            onChange={(e) => setSelectedPage(e.target.value)}
+            className="rounded-xl border border-border bg-surface px-3 py-1.5 text-xs text-navy focus:border-accent focus:outline-none cursor-pointer font-medium"
+            aria-label="Filter by page"
+          >
+            <option value="all">All pages ({faqs.length})</option>
+            {FAQ_PAGES.map((page) => {
+              const count = faqs.filter((faq) => resolveFaqPage(faq) === page).length;
+              return (
+                <option key={page} value={page}>
+                  {page} ({count})
+                </option>
+              );
+            })}
+          </select>
+          <label className="text-xs text-muted font-medium whitespace-nowrap">Category:</label>
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
             className="rounded-xl border border-border bg-surface px-3 py-1.5 text-xs text-navy focus:border-accent focus:outline-none cursor-pointer font-medium"
+            aria-label="Filter by category"
           >
-            <option value="all">All Categories ({faqs.length})</option>
+            <option value="all">All Categories ({pageFaqs.length})</option>
             {FAQ_CATEGORIES.map((cat) => {
-              const count = faqs.filter((f) => f.category === cat).length;
+              const count = pageFaqs.filter((f) => f.category === cat).length;
+              const limitLabel = selectedPage === "all" ? String(count) : `${count}/10`;
               return (
                 <option key={cat} value={cat}>
-                  {cat} ({count}/10)
+                  {cat} ({limitLabel})
                 </option>
               );
             })}
@@ -248,6 +270,7 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
             <tr>
               <th className="px-5 py-3.5 w-16 text-center">Order</th>
               <th className="px-5 py-3.5">Question & Answer</th>
+              <th className="px-5 py-3.5 w-36">Page</th>
               <th className="px-5 py-3.5 w-32">Category</th>
               <th className="px-5 py-3.5 text-right w-24">Actions</th>
             </tr>
@@ -255,7 +278,7 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
           <tbody className="divide-y divide-border">
             {filteredFaqs.length === 0 ? (
               <tr>
-                <td colSpan={4} className="px-5 py-10 text-center text-muted">
+                <td colSpan={5} className="px-5 py-10 text-center text-muted">
                   <HelpCircle className="mx-auto h-7 w-7 text-slate/30 mb-2" />
                   <p className="font-medium">No FAQs found</p>
                 </td>
@@ -278,15 +301,19 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
                     </div>
                   </td>
 
-                  {/* Category Pill Tag */}
                   <td className="px-5 py-4 whitespace-nowrap">
                     <span className="inline-block rounded-md bg-slate-100 border border-slate-200/70 px-2.5 py-0.5 text-xs font-medium text-slate-700">
-                      {item.category || "Home"}
+                      {resolveFaqPage(item)}
                     </span>
                   </td>
 
-                  {/* Action Buttons */}
-                  <td className="px-5 py-4 whitespace-nowrap text-right">
+                  {/* Category Pill Tag */}
+                  <td className="px-5 py-4 whitespace-nowrap">
+                    <span className="inline-block rounded-md bg-slate-100 border border-slate-200/70 px-2.5 py-0.5 text-xs font-medium text-slate-700">
+                      {item.category || "The basics"}
+                    </span>
+                  </td>
+                  <td className="px-5 py-4 text-right">
                     <div className="flex items-center justify-end gap-1">
                       <button
                         onClick={() => openEditModal(item)}
@@ -295,7 +322,6 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
                       >
                         <Edit2 className="h-4 w-4" />
                       </button>
-
                       {item._id && (
                         <button
                           onClick={() => setDeleteConfirmId(item._id!)}
@@ -369,6 +395,21 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
               {/* Category & Order Grid */}
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
+                  <label className="block text-xs font-semibold text-navy mb-1">Page</label>
+                  <select
+                    name="page"
+                    value={formPage}
+                    onChange={(e) => setFormPage(e.target.value)}
+                    className="w-full rounded-xl border border-border px-3.5 py-2 text-xs text-navy focus:border-accent focus:outline-none bg-surface-elevated cursor-pointer font-medium"
+                  >
+                    {FAQ_PAGES.map((page) => (
+                      <option key={page} value={page}>
+                        {page}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
                   <label className="block text-xs font-semibold text-navy mb-1">Category</label>
                   <select
                     name="category"
@@ -378,7 +419,10 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
                   >
                     {FAQ_CATEGORIES.map((cat) => {
                       const count = faqs.filter(
-                        (f) => f.category === cat && (!editingItem || editingItem._id !== f._id)
+                        (f) =>
+                          resolveFaqPage(f) === formPage &&
+                          f.category === cat &&
+                          (!editingItem || editingItem._id !== f._id)
                       ).length;
                       return (
                         <option key={cat} value={cat} disabled={count >= 10}>
@@ -388,19 +432,19 @@ export function FaqsManager({ initialFaqs }: { initialFaqs: FaqItemData[] }) {
                     })}
                   </select>
                 </div>
+              </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-navy mb-1">Display Order</label>
-                  <input
-                    type="number"
-                    name="order"
-                    min={1}
-                    value={formOrder}
-                    onChange={(e) => setFormOrder(Number(e.target.value))}
-                    placeholder="1"
-                    className="w-full rounded-xl border border-border px-3.5 py-2 text-xs text-navy focus:border-accent focus:outline-none font-mono"
-                  />
-                </div>
+              <div>
+                <label className="block text-xs font-semibold text-navy mb-1">Order</label>
+                <input
+                  name="order"
+                  type="number"
+                  min={1}
+                  value={formOrder}
+                  onChange={(e) => setFormOrder(Number(e.target.value))}
+                  placeholder="1"
+                  className="w-full rounded-xl border border-border px-3.5 py-2 text-xs text-navy focus:border-accent focus:outline-none font-mono"
+                />
               </div>
 
               {/* Submit Buttons */}

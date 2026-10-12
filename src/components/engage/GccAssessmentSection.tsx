@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { GCC_ASSESSMENT_QUESTIONS } from "@/lib/gcc-assessment";
+import { useAssessmentSubmitter } from "@/components/engage/AssessmentSubmitter";
 import {
   CheckCircle2,
   ArrowRight,
@@ -103,6 +105,7 @@ const realityOptions = [
 ];
 
 export function GccAssessmentSection() {
+  const { submitter } = useAssessmentSubmitter();
   const [step, setStep] = useState<1 | 2 | 3>(1);
 
   // Phase 1 Answers
@@ -249,15 +252,51 @@ export function GccAssessmentSection() {
       }
     }
 
-    const leadName = leadContact?.name?.trim() || "GCC Assessment Inquiry";
-    const leadEmail = leadContact?.email?.trim() || "assessment@vertaraglobal.com";
-    const leadCompany = leadContact?.company?.trim() || q1Sector || "Confidential";
-    const leadRole = leadContact?.role?.trim() || undefined;
-    const leadBusinessContext = leadContact?.businessContext?.trim() || "";
+    const typedName = submitter.name.trim();
+    const typedEmail = submitter.email.trim();
+    const typedCompany = submitter.company.trim();
+    const name = typedName || leadContact?.name?.trim() || "";
+    const email = typedEmail || leadContact?.email?.trim() || "";
+    const company = typedCompany || leadContact?.company?.trim() || "";
+    const role = submitter.role.trim() || leadContact?.role?.trim() || "";
+    const businessContext =
+      submitter.businessContext.trim() || leadContact?.businessContext?.trim() || "";
+    const contactCameFromStoredLead = !typedName && !typedEmail && !typedCompany && Boolean(name);
+
+    if (!name || !email || !company || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setStatus("error");
+      setServerError("Enter your name, work email, and company in the form above before submitting the assessment.");
+      document.getElementById("assessment-form")?.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+
+    const sectorAnswer = q1Sector === "Other / not listed" ? `Other: ${q1Other.trim()}` : q1Sector;
+    const purposeAnswer = q4Purpose.map((item) => (item === "Other" ? `Other: ${q4Other.trim()}` : item));
+    const functionAnswer = q6Functions.map((item) => (item === "Other" ? `Other: ${q6Other.trim()}` : item));
+    const constraintAnswer = q12Constraints.trim() || "No constraint stated";
+    const storageKey = "gcc-assessment-submission-key";
+    const existingKey = window.sessionStorage.getItem(storageKey);
+    const submissionKey = existingKey || crypto.randomUUID();
+    if (!existingKey) window.sessionStorage.setItem(storageKey, submissionKey);
+
+    const answers = [
+      { question: GCC_ASSESSMENT_QUESTIONS[0], answer: sectorAnswer },
+      { question: GCC_ASSESSMENT_QUESTIONS[1], answer: q2Stage },
+      { question: GCC_ASSESSMENT_QUESTIONS[2], answer: q3Size },
+      { question: GCC_ASSESSMENT_QUESTIONS[3], answer: purposeAnswer },
+      { question: GCC_ASSESSMENT_QUESTIONS[4], answer: q5CapabilityGap.trim() },
+      { question: GCC_ASSESSMENT_QUESTIONS[5], answer: functionAnswer },
+      { question: GCC_ASSESSMENT_QUESTIONS[6], answer: q7LocalKnowledge },
+      { question: GCC_ASSESSMENT_QUESTIONS[7], answer: q8Regulated },
+      { question: GCC_ASSESSMENT_QUESTIONS[8], answer: q9OperatingModel },
+      { question: GCC_ASSESSMENT_QUESTIONS[9], answer: q10Timeline },
+      { question: GCC_ASSESSMENT_QUESTIONS[10], answer: q11Truth },
+      { question: GCC_ASSESSMENT_QUESTIONS[11], answer: constraintAnswer },
+    ];
 
     const messageParts = [];
-    if (leadBusinessContext) {
-      messageParts.push(`Business Context: ${leadBusinessContext}`);
+    if (businessContext) {
+      messageParts.push(`Business Context: ${businessContext}`);
     }
     if (q5CapabilityGap) {
       messageParts.push(`Key Capability Gap: ${q5CapabilityGap}`);
@@ -266,47 +305,69 @@ export function GccAssessmentSection() {
       messageParts.push(`Constraints: ${q12Constraints}`);
     }
 
-    const fullPayload = {
-      name: leadName,
-      email: leadEmail,
-      company: leadCompany,
-      intent: "GCC Feasibility Assessment",
-      source: "gcc_assessment",
-      message: messageParts.join("\n\n") || `Key Capability Gap: ${q5CapabilityGap}\nConstraints: ${q12Constraints}`,
-      metadata: {
-        role: leadRole,
-        businessContext: leadBusinessContext || undefined,
-        leadContact: leadContact || undefined,
-        assessmentAnswers: {
-          q1_sector: q1Sector === "Other / not listed" ? `Other: ${q1Other}` : q1Sector,
-          q2_stage: q2Stage,
-          q3_size: q3Size,
-          q4_purpose: q4Purpose.map((p) => (p === "Other" ? `Other: ${q4Other}` : p)),
-          q5_capabilityGap: q5CapabilityGap,
-          q6_functions: q6Functions.map((f) => (f === "Other" ? `Other: ${q6Other}` : f)),
-          q7_localKnowledge: q7LocalKnowledge,
-          q8_regulated: q8Regulated,
-          q9_operatingModel: q9OperatingModel,
-          q10_timeline: q10Timeline,
-          q11_truth: q11Truth,
-          q12_constraints: q12Constraints,
-        },
-      },
-    };
-
     try {
-      const res = await fetch("/api/leads", {
+      const res = await fetch("/api/assessments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(fullPayload),
+        body: JSON.stringify({
+          name,
+          email,
+          company,
+          role: role || undefined,
+          businessContext: businessContext || undefined,
+          submissionKey,
+          answers,
+        }),
       });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(typeof data.error === "string" ? data.error : "Could not submit assessment. Please try again.");
+      }
 
-      if (!res.ok) throw new Error("Could not submit assessment. Please try again.");
+      if (contactCameFromStoredLead) {
+        const leadRes = await fetch("/api/leads", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name,
+            email,
+            company,
+            intent: "GCC Feasibility Assessment",
+            source: "gcc_assessment",
+            message:
+              messageParts.join("\n\n") ||
+              `Key Capability Gap: ${q5CapabilityGap}\nConstraints: ${q12Constraints}`,
+            metadata: {
+              role: role || undefined,
+              businessContext: businessContext || undefined,
+              leadContact: leadContact || undefined,
+              assessmentId: typeof data.id === "string" ? data.id : undefined,
+              assessmentAnswers: {
+                q1_sector: sectorAnswer,
+                q2_stage: q2Stage,
+                q3_size: q3Size,
+                q4_purpose: purposeAnswer,
+                q5_capabilityGap: q5CapabilityGap,
+                q6_functions: functionAnswer,
+                q7_localKnowledge: q7LocalKnowledge,
+                q8_regulated: q8Regulated,
+                q9_operatingModel: q9OperatingModel,
+                q10_timeline: q10Timeline,
+                q11_truth: q11Truth,
+                q12_constraints: q12Constraints,
+              },
+            },
+          }),
+        });
+        if (!leadRes.ok) {
+          throw new Error("Could not submit assessment. Please try again.");
+        }
+      }
 
+      window.sessionStorage.setItem(storageKey, crypto.randomUUID());
       if (typeof window !== "undefined") {
         sessionStorage.removeItem("vertara_gcc_assessment_lead");
       }
-
       setStatus("success");
       document.getElementById("gcc-assessment")?.scrollIntoView({ behavior: "smooth" });
     } catch (err: unknown) {
@@ -405,7 +466,7 @@ export function GccAssessmentSection() {
                         1
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        Which sector best describes your business? <span className="text-[#B59439]">*</span>
+                        {GCC_ASSESSMENT_QUESTIONS[0]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
                     <p className="mt-1 text-xs text-[#101C30]/60 pl-8">Single choice</p>
@@ -452,7 +513,7 @@ export function GccAssessmentSection() {
                         2
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        Where are you today with a capability centre? <span className="text-[#B59439]">*</span>
+                        {GCC_ASSESSMENT_QUESTIONS[1]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
                     <p className="mt-1 text-xs text-[#101C30]/60 pl-8">Single choice</p>
@@ -487,7 +548,7 @@ export function GccAssessmentSection() {
                         3
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        What size are you considering within three years? <span className="text-[#B59439]">*</span>
+                        {GCC_ASSESSMENT_QUESTIONS[2]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
                     <p className="mt-1 text-xs text-[#101C30]/60 pl-8">Single choice</p>
@@ -519,7 +580,7 @@ export function GccAssessmentSection() {
                         4
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        What is the main purpose of the centre? <span className="text-[#B59439]">*</span>
+                        {GCC_ASSESSMENT_QUESTIONS[3]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
                     <p className="mt-1 text-xs text-[#101C30]/60 pl-8">
@@ -609,7 +670,7 @@ export function GccAssessmentSection() {
                         5
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        In one or two lines, what must this centre be able to do that you can't do today? <span className="text-[#B59439]">*</span>
+                        {GCC_ASSESSMENT_QUESTIONS[4]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
 
@@ -636,7 +697,7 @@ export function GccAssessmentSection() {
                         6
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        Which functions do you want to move to the centre and grow there? <span className="text-[#B59439]">*</span>
+                        {GCC_ASSESSMENT_QUESTIONS[5]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
                     <p className="mt-1 text-xs text-[#101C30]/60 pl-8">Multi-select dropdown</p>
@@ -737,7 +798,7 @@ export function GccAssessmentSection() {
                         7
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        How much does the work depend on undocumented local knowledge or relationships? <span className="text-[#B59439]">*</span>
+                        {GCC_ASSESSMENT_QUESTIONS[6]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
                     <p className="mt-1 text-xs text-[#101C30]/60 pl-8">Single choice</p>
@@ -769,7 +830,7 @@ export function GccAssessmentSection() {
                         8
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        Is any of this work regulated, licensed or restricted from being done offshore? <span className="text-[#B59439]">*</span>
+                        {GCC_ASSESSMENT_QUESTIONS[7]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
                     <p className="mt-1 text-xs text-[#101C30]/60 pl-8">Single choice</p>
@@ -809,7 +870,7 @@ export function GccAssessmentSection() {
                         9
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        Do you have a preferred operating model today? <span className="text-[#B59439]">*</span>
+                        {GCC_ASSESSMENT_QUESTIONS[8]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
                     <p className="mt-1 text-xs text-[#101C30]/60 pl-8">Single choice</p>
@@ -841,7 +902,7 @@ export function GccAssessmentSection() {
                         10
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        How quickly must the first team be productive? <span className="text-[#B59439]">*</span>
+                        {GCC_ASSESSMENT_QUESTIONS[9]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
                     <p className="mt-1 text-xs text-[#101C30]/60 pl-8">Single choice</p>
@@ -876,7 +937,7 @@ export function GccAssessmentSection() {
                         11
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        Which of these is true today? <span className="text-[#B59439]">*</span>
+                        {GCC_ASSESSMENT_QUESTIONS[10]} <span className="text-[#B59439]">*</span>
                       </label>
                     </div>
                     <p className="mt-1 text-xs text-[#101C30]/60 pl-8">Multi-select dropdown</p>
@@ -969,7 +1030,7 @@ export function GccAssessmentSection() {
                         12
                       </span>
                       <label className="text-base sm:text-lg font-bold text-[#101C30]">
-                        Is there a constraint, deadline or board condition we should design around?
+                        {GCC_ASSESSMENT_QUESTIONS[11]}
                       </label>
                     </div>
                     <p className="mt-1 text-xs text-[#101C30]/60 pl-8">Long text</p>
