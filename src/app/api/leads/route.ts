@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { auth } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
 import { Lead } from "@/models/Lead";
 import { ChatSession } from "@/models/ChatSession";
+import { notifyFounderOfLead } from "@/lib/founder-notification";
 
 const LeadSchema = z
   .object({
@@ -98,7 +100,14 @@ export async function POST(req: Request) {
       source,
       metadata: Object.keys(metadata).length ? metadata : undefined,
       email: parsed.data.email || undefined,
+      notificationStatus: "pending",
     });
+
+    try {
+      await notifyFounderOfLead(lead);
+    } catch (mailErr) {
+      console.error("[leads] founder email failed after save:", mailErr);
+    }
 
     if (sessionId && isChatSource(source)) {
       await ChatSession.findOneAndUpdate(
@@ -122,6 +131,10 @@ export async function POST(req: Request) {
 }
 
 export async function GET() {
+  const session = await auth();
+  if (!session?.user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   const conn = await connectDB();
   if (!conn) {
     return NextResponse.json({ leads: memoryLeads });

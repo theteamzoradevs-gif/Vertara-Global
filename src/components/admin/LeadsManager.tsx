@@ -18,6 +18,7 @@ import {
   Target,
   Copy,
   ExternalLink,
+  RefreshCw,
 } from "lucide-react";
 import {
   updateLeadStatusAction,
@@ -36,11 +37,13 @@ export interface LeadItemData {
   status: "new" | "contacted" | "archived" | string;
   createdAt: string;
   metadata?: Record<string, unknown>;
+  notificationStatus?: "pending" | "sent" | "failed" | string;
 }
 
 interface LeadsManagerProps {
   initialLeads: LeadItemData[];
   isDbConnected: boolean;
+  hidePageHeader?: boolean;
 }
 
 const SOURCE_LABELS: Record<string, { label: string; style: string }> = {
@@ -119,6 +122,7 @@ function gmailComposeUrl(to: string, subject: string, body: string) {
 export function LeadsManager({
   initialLeads,
   isDbConnected,
+  hidePageHeader = false,
 }: LeadsManagerProps) {
   const [leads, setLeads] = useState<LeadItemData[]>(initialLeads);
   const [searchQuery, setSearchQuery] = useState("");
@@ -130,6 +134,7 @@ export function LeadsManager({
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [emailingLead, setEmailingLead] = useState<LeadItemData | null>(null);
   const [emailSubject, setEmailSubject] = useState("");
+  const [retryingLeadId, setRetryingLeadId] = useState<string | null>(null);
 
   // Status message state
   const [toastMessage, setToastMessage] = useState<{
@@ -144,6 +149,29 @@ export function LeadsManager({
     setTimeout(() => {
       setToastMessage(null);
     }, 4000);
+  };
+
+  const retryFounderEmail = async (id: string) => {
+    setRetryingLeadId(id);
+    try {
+      const res = await fetch("/api/admin/notifications/retry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ kind: "lead", id }),
+      });
+      const data = await res.json();
+      if (!res.ok || data.ok === false) {
+        throw new Error(data.error || "Email could not be sent.");
+      }
+      setLeads((prev) =>
+        prev.map((row) => (row._id === id ? { ...row, notificationStatus: "sent" } : row)),
+      );
+      showToast("success", data.alreadySent ? "Founder email was already sent." : "Founder email sent.");
+    } catch (err) {
+      showToast("error", err instanceof Error ? err.message : "Email could not be sent.");
+    } finally {
+      setRetryingLeadId(null);
+    }
   };
 
   const openEmailComposer = (lead: LeadItemData) => {
@@ -274,15 +302,16 @@ export function LeadsManager({
         </div>
       )}
 
-      {/* Header & Metrics */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-navy">Inquiries</h1>
-          <p className="mt-1 text-sm text-muted">
-            Form and chat inquiries from the website.
-          </p>
+      {hidePageHeader ? null : (
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-navy">Inquiries</h1>
+            <p className="mt-1 text-sm text-muted">
+              Form and chat inquiries from the website.
+            </p>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Metrics Row */}
       <div className="grid gap-2 sm:gap-4 grid-cols-3">
@@ -602,6 +631,20 @@ export function LeadsManager({
                       {/* Actions */}
                       <td className="px-5 py-4 text-right">
                         <div className="flex items-center justify-end gap-1">
+                          {lead.notificationStatus === "failed" ? (
+                            <button
+                              type="button"
+                              title="Retry founder email"
+                              onClick={() => void retryFounderEmail(lead._id)}
+                              className="rounded-lg p-1.5 text-slate-500 hover:bg-accent-soft hover:text-accent"
+                            >
+                              {retryingLeadId === lead._id ? (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                              ) : (
+                                <RefreshCw className="h-4 w-4" />
+                              )}
+                            </button>
+                          ) : null}
                           {lead.email ? (
                             <button
                               type="button"

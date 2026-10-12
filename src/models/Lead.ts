@@ -18,6 +18,16 @@ const LeadSchema = new Schema(
       default: "new",
     },
     metadata: Schema.Types.Mixed,
+    notificationStatus: {
+      type: String,
+      enum: ["pending", "sent", "failed"],
+      default: "pending",
+    },
+    notificationError: String,
+    notificationAttempts: { type: Number, default: 0 },
+    lastNotificationAt: Date,
+    notificationClaim: String,
+    notificationClaimedAt: Date,
   },
   { timestamps: true },
 );

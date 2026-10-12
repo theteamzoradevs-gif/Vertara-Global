@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { Accordion } from "@/components/ui/Accordion";
 import { Button } from "@/components/ui/Button";
 
 export const FAQ_SUBHEADINGS = [
+  "Home",
   "The basics",
   "Working with Vertara",
   "Time, cost and cities",
@@ -19,14 +19,9 @@ export function normalizeFaqCategory(category?: string): FaqSubheading {
   const trimmed = category.trim();
   const lower = trimmed.toLowerCase();
 
-  if (lower === "the basics" || lower === "basics" || lower === "home") {
-    return "The basics";
-  }
-  if (
-    lower === "working with vertara" ||
-    lower === "about us" ||
-    lower === "vertara"
-  ) {
+  if (lower === "home") return "Home";
+  if (lower === "the basics" || lower === "basics") return "The basics";
+  if (lower === "working with vertara" || lower === "about us" || lower === "vertara") {
     return "Working with Vertara";
   }
   if (
@@ -40,11 +35,7 @@ export function normalizeFaqCategory(category?: string): FaqSubheading {
   ) {
     return "Time, cost and cities";
   }
-  if (
-    lower === "getting started" ||
-    lower === "insights" ||
-    lower === "start"
-  ) {
+  if (lower === "getting started" || lower === "insights" || lower === "start") {
     return "Getting started";
   }
 
@@ -65,20 +56,22 @@ interface FaqItem {
 
 interface HomeFaqSectionProps {
   faqs: FaqItem[];
+  scope?: "home" | "all";
 }
 
-export function HomeFaqSection({ faqs }: HomeFaqSectionProps) {
-  const [showAll, setShowAll] = useState(false);
+export function HomeFaqSection({ faqs, scope = "home" }: HomeFaqSectionProps) {
+  const source =
+    scope === "home"
+      ? faqs.filter((faq) => normalizeFaqCategory(faq.category) === "Home")
+      : faqs;
 
-  // When not showing all, display top 5 FAQs ensuring represented categories are visible
   let displayedFaqs: FaqItem[];
-  if (showAll || faqs.length <= 5) {
-    displayedFaqs = faqs;
+  if (scope === "all" || source.length <= 5) {
+    displayedFaqs = source;
   } else {
     const selected: FaqItem[] = [];
-    // 1. Pick the first FAQ from each category that has items
     for (const heading of FAQ_SUBHEADINGS) {
-      const item = faqs.find(
+      const item = source.find(
         (f) =>
           normalizeFaqCategory(f.category) === heading &&
           !selected.some((s) => (s._id && s._id === f._id) || s.question === f.question)
@@ -87,8 +80,7 @@ export function HomeFaqSection({ faqs }: HomeFaqSectionProps) {
         selected.push(item);
       }
     }
-    // 2. Fill remaining slots up to 5 from original order
-    for (const f of faqs) {
+    for (const f of source) {
       if (selected.length >= 5) break;
       if (!selected.some((s) => (s._id && s._id === f._id) || s.question === f.question)) {
         selected.push(f);
@@ -117,12 +109,14 @@ export function HomeFaqSection({ faqs }: HomeFaqSectionProps) {
       <div className="space-y-8 sm:space-y-10" style={{ fontFamily: "Calibri" }}>
         {groups.map((group) => (
           <div key={group.subheading} className="space-y-3 sm:space-y-4">
-            <h3
-              className="text-lg sm:text-xl md:text-[1.35rem] font-bold tracking-tight text-[#101C30]"
-              style={{ fontFamily: "Calibri" }}
-            >
-              {group.subheading}
-            </h3>
+            {scope !== "home" && (
+              <h3
+                className="text-lg sm:text-xl md:text-[1.35rem] font-bold tracking-tight text-[#101C30]"
+                style={{ fontFamily: "Calibri" }}
+              >
+                {group.subheading}
+              </h3>
+            )}
             <Accordion
               items={group.items.map((f, idx) => ({
                 id: f._id || f.id || f.question || `${group.subheading}-${idx}`,
@@ -134,17 +128,13 @@ export function HomeFaqSection({ faqs }: HomeFaqSectionProps) {
         ))}
       </div>
 
-      {faqs.length > 5 && (
+      {scope === "home" ? (
         <div className="mt-8 sm:mt-10 flex justify-center sm:justify-start">
-          <Button
-            type="button"
-            variant="primary"
-            onClick={() => setShowAll((prev) => !prev)}
-          >
-            {showAll ? "View less FAQ" : "View full FAQ"}
+          <Button href="/faq" variant="primary">
+            View full FAQ
           </Button>
         </div>
-      )}
+      ) : null}
     </Section>
   );
 }

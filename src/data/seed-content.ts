@@ -677,7 +677,7 @@ export const seedFaqs = [
     question: "What is a Global Capability Center (GCC)?",
     answer:
       "A GCC is a captive (or captive-bound) offshore centre that the parent enterprise owns and operates — typically in India — to deliver engineering, product, AI/ML, finance, analytics, or shared services. Unlike a pure vendor relationship, the goal is lasting capability, IP control, and cultural alignment with the parent.",
-    category: "The basics",
+    category: "Home",
     order: 1,
   },
   {
@@ -705,7 +705,7 @@ export const seedFaqs = [
     question: "What roles can we hire through a GCC?",
     answer:
       "Engineering, AI/ML, product, design, QA, DevOps, finance and accounting operations, analytics, customer operations, and specialist domain roles. India’s talent pools support both deep technical centres and multi-function hubs.",
-    category: "The basics",
+    category: "Home",
     order: 5,
   },
   {

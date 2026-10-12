@@ -14,8 +14,6 @@ type Props = {
   metrics?: Metric[];
   phone?: string;
   backgroundImage?: string;
-  rotatingEyebrow?: string;
-  rotatingLines?: { label: string; detail: string }[];
   primaryCta?: string;
   secondaryCta?: string;
   formEyebrow?: string;
