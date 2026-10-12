@@ -2,21 +2,20 @@ import Link from "next/link";
 
 const columns = [
   {
-    title: "Insights",
+    title: "OUR EXPERTISE",
     links: [
-      { href: "/insights#assessment", label: "Run Your GCC Assessment" },
-      { href: "/insights#market-research", label: "Market Research" },
-      { href: "/insights#workplace-strategy", label: "Workplace Strategy & Change Management" },
+      { href: "/assessment", label: "Run Your GCC Assessment" },
+      { href: "/services#build-model", label: "The Vertara GCC Build Model" },
+      { href: "/services#sectors", label: "Sector Expertise" },
     ],
   },
   {
     title: "Explore",
     links: [
-      { href: "/", label: "Home" },
+      { href: "/services", label: "Our Services" },
       { href: "/insights", label: "Insights" },
       { href: "/#faq", label: "FAQ" },
-      //{ href: "/industries", label: "Industries" },
-      //{ href: "/case-studies", label: "Case Studies" },
+
 
 
     ],
@@ -24,7 +23,7 @@ const columns = [
   {
     title: "Engage",
     links: [
-      //{ href: "/engagement-models", label: "Engagement models" },
+      { href: "/engage-with-us", label: "Engage with us" },
       { href: "/about", label: "About Us" },
       { href: "/contact", label: "Contact us" },
     ],
