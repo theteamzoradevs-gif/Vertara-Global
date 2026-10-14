@@ -23,9 +23,8 @@ export const practitionersTeam: Practitioner[] = [
     role: "Co-Founder, Former Big 4 Partner",
     initials: "NG",
     bio: "Namit brings more than 20 years of experience in GCC strategy and commercial transformation. During a long career with a Big 4 firm, he built and led a capability hub and supported more than ten GCC set-ups. His work spans business cases, location assessment, operating models, shared services and innovation-led centres of excellence. At Vertara, he leads the strategic and operating-model decisions that turn a GCC ambition into a scalable, governed business capability.",
-    image:
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=compress&cs=tinysrgb&w=800",
-    imagePosition: "object-[center_10%]",
+    image: "/teams/Namit.jpeg",
+    imagePosition: "object-center",
   },
   {
     name: "Erica Chapman, Esq., MCR",

@@ -1,6 +1,7 @@
 "use client";
 
 import { Reveal } from "@/components/ui/Reveal";
+import { cn } from "@/lib/utils";
 
 interface WhyUsPoint {
   title: string;
@@ -58,22 +59,25 @@ export function WhyUs() {
               </p>
             </div>
 
-            {/* 2-Column Horizontal Grid of Points with Gold Dots */}
-            <div className="mt-8 sm:mt-10 md:mt-12 grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-20 gap-y-7 sm:gap-y-9">
+            {/* All 5 points in a single horizontal row on desktop */}
+            <div className="mt-8 sm:mt-10 md:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 sm:gap-7 lg:gap-5 xl:gap-7">
               {points.map((point) => (
-                <div key={point.title} className="flex items-start gap-4 sm:gap-5">
+                <div
+                  key={point.title}
+                  className="flex items-start gap-3 sm:gap-3.5"
+                >
                   {/* Gold Dot (no numbering) */}
                   <span
-                    className="mt-1.5 h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0 rounded-full bg-[#B59439]"
+                    className="mt-1.5 h-2.5 w-2.5 sm:h-3 sm:w-3 shrink-0 rounded-full bg-[#B59439]"
                     aria-hidden="true"
                   />
 
                   {/* Content: Bold Title + Description */}
                   <div>
-                    <h3 className="text-lg sm:text-xl font-bold tracking-tight text-[#101C30] leading-snug">
+                    <h3 className="text-sm sm:text-base lg:text-[15px] xl:text-base font-bold tracking-tight text-[#101C30] leading-snug">
                       {point.title}
                     </h3>
-                    <p className="mt-1 text-sm sm:text-base leading-relaxed text-[#101C30]/75">
+                    <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-[#101C30]/75">
                       {point.description}
                     </p>
                   </div>
