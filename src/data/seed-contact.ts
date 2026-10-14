@@ -17,7 +17,7 @@ export const seedContactContent: ContactContentData = {
   description:
     "Tell us where you are exploring a Nano GCC pilot, building the full business case, or ready to launch and we’ll come to the first call with a point of view, not a pitch deck.",
   formTitle: "Send us a message",
-  formSubmitLabel: "Book a consultation",
+  formSubmitLabel: "Send message",
   companyName: "Vertara Global — GCC Enablement & Advisory",
   contactEmail: "hello@gccadvisor.com",
   contactPhone: "+91 80 4000 1200",

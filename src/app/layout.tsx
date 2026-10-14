@@ -17,12 +17,13 @@ export const metadata: Metadata = {
     "Enterprise GCC advisory and services: talent, workspace, business operations, and research & advisory — one connected system for India capability centers.",
   icons: {
     icon: [
-      { url: "/favicon.png", type: "image/png" },
+      { url: "/Vertara favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
       { url: "/favicon.ico" },
     ],
-    shortcut: "/favicon.png",
+    shortcut: "/Vertara favicon.svg",
     apple: [
-      { url: "/apple-icon.png", type: "image/png" },
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
     ],
   },
 };

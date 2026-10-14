@@ -6,6 +6,7 @@ import { connectDB } from "@/lib/db";
 import { Lead } from "@/models/Lead";
 import { ChatSession } from "@/models/ChatSession";
 import { notifyFounderOfLead } from "@/lib/founder-notification";
+import { verifyCaptchaChallenge } from "@/lib/captcha";
 
 const LeadSchema = z
   .object({
@@ -16,6 +17,8 @@ const LeadSchema = z
     intent: z.string().optional(),
     message: z.string().optional(),
     source: z.string().min(1).default("contact"),
+    captchaId: z.string().optional(),
+    captchaAnswer: z.string().optional(),
     metadata: z.record(z.string(), z.unknown()).optional(),
   })
   .refine((d) => Boolean(d.email?.trim()) || Boolean(d.phone?.trim()), {
@@ -53,6 +56,31 @@ export async function POST(req: Request) {
         ? metadata.sessionId.trim()
         : "";
 
+    // Extract client IP for anti-brute-force rate limiting
+    const clientIp =
+      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      req.headers.get("x-real-ip") ||
+      "unknown";
+
+    // Enforce CAPTCHA for contact/lead inquiries (rejects direct API calls without valid CAPTCHA)
+    if (!isChatSource(source)) {
+      const { captchaId, captchaAnswer } = parsed.data;
+      const verification = await verifyCaptchaChallenge(
+        captchaId,
+        captchaAnswer,
+        clientIp,
+      );
+
+      if (!verification.success) {
+        return NextResponse.json(
+          { error: verification.error || "CAPTCHA verification failed." },
+          { status: 400 },
+        );
+      }
+    }
+
+    const { captchaId: _cid, captchaAnswer: _cans, ...leadPayload } = parsed.data;
+
     const conn = await connectDB();
     if (!conn) {
       // Dedup chat leads in memory by sessionId
@@ -74,10 +102,10 @@ export async function POST(req: Request) {
       }
       const id = `mem-${Date.now()}`;
       memoryLeads.push({
-        ...parsed.data,
+        ...leadPayload,
         source,
         metadata,
-        email: parsed.data.email || undefined,
+        email: leadPayload.email || undefined,
         id,
       });
       return NextResponse.json({ ok: true, storage: "memory", id });
@@ -96,10 +124,10 @@ export async function POST(req: Request) {
     }
 
     const lead = await Lead.create({
-      ...parsed.data,
+      ...leadPayload,
       source,
       metadata: Object.keys(metadata).length ? metadata : undefined,
-      email: parsed.data.email || undefined,
+      email: leadPayload.email || undefined,
       notificationStatus: "pending",
     });
 

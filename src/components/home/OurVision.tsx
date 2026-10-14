@@ -18,7 +18,7 @@ export function OurVision({
                 Our story
               </h2>
               <p className="text-base sm:text-lg leading-relaxed text-[#101C30]/90 text-left">
-                Vertara Global was founded by GCC builders, not GCC advisors. Our founders led capability centre builds at a Big 4 firm and one of the world’s largest global mining companies standing up teams from a blank sheet of paper, not writing a recommendation for someone else to execute. That distinction shapes everything about how Vertara works we size engagements the way an operator would, price the way an accountable partner would, and stay past the launch date the way an owner would.
+                Vertara Global was founded by GCC builders, not GCC advisors. Our founders led capability centre builds at a Big 4 firm and one of the world’s largest global mining companies standing up teams from a blank sheet of paper, not writing a recommendation for someone else to execute. That distinction shapes everything about how Vertara works. We size engagements the way an operator would, price the way an accountable partner would, and stay past the launch date the way an owner would.
               </p>
             </div>
           </Reveal>
@@ -44,7 +44,7 @@ export function OurVision({
                 THE NAME
               </p>
               <p className="text-base sm:text-lg md:text-xl leading-relaxed text-[#101C30]/90 max-w-4xl">
-                Vertara draws from Vertex, the summit, the highest point of capability and Tara, the Sanskrit word for star, guide and to cross over.
+                Vertara draws inspiration from two words – &ldquo;<span className="font-bold underline underline-offset-2">Vertex</span>&rdquo;, the summit and the highest point of capability and &ldquo;<span className="font-bold underline underline-offset-2">Tara</span>&rdquo;, a Sanskrit word for star, guide to cross over.
               </p>
               <p className="text-sm sm:text-base leading-relaxed text-[#526171] max-w-4xl">
                 Together: The guiding summit, a partner that leads organizations to the peak of their GCC ambition.

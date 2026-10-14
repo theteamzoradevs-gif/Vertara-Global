@@ -38,7 +38,8 @@ export default async function ContactPage() {
             <ContactForm
               source="contact"
               title={content.formTitle}
-              submitLabel={content.formSubmitLabel}
+              submitLabel="Send message"
+              commitmentText="We'll reply within one business day"
               buttonVariant="gold"
               className="w-full max-w-[500px]"
             />
