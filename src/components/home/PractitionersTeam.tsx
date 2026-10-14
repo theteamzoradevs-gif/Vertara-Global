@@ -106,7 +106,7 @@ export function PractitionersTeam() {
                           alt={leader.name}
                           fill
                           className={cn(
-                            "object-cover",
+                            "object-cover grayscale",
                             leader.imagePosition || "object-[center_15%]"
                           )}
                           sizes="(max-width: 640px) 64px, 72px"

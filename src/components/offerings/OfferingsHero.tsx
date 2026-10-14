@@ -35,12 +35,6 @@ export function OfferingsHero() {
           >
             Discuss Your GCC Mandate
           </Link>
-          <a
-            href="#build-model"
-            className="inline-flex items-center justify-center rounded-lg border border-[#445b4c] bg-[#1E2922]/85 px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#152019] hover:border-[#B59439]/60"
-          >
-            See Build Model
-          </a>
         </div>
 
 

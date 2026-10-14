@@ -23,6 +23,16 @@ export interface SectorItem {
   route: string;
 }
 
+export interface ScopeItem {
+  number: string;
+  tag: string;
+  title: string;
+  description: string;
+  id: string;
+  linkHref?: string;
+  linkText?: string;
+}
+
 export const offeringsData = {
   hero: {
     eyebrow: "Capabilities & Practice",
@@ -35,7 +45,7 @@ export const offeringsData = {
     eyebrow: "Scale Scope",
     title: "Built for mid-market, focussing on establishing and scaling Nano GCCs ",
     intro:
-      "Vertara isn’t a Nano-only shop. We work the full mid-market range: a 20–100 person Nano GCC for companies proving a capability before committing further, and full mid-scale builds up to 400–500 people for companies ready to commit at scale from the outset. Both use the same six-stage build model and the same governance discipline sized to the mandate, never a generic template.",
+      "Vertara isn’t a Nano-only shop. We work the full mid-market range: a 20–100 person Nano GCC for companies proving a capability before committing further, and full mid-scale builds up to 400–500 people for companies ready to commit at scale from the outset. Both use Vertara’s six-stage focussed build model and rigorous governance discipline sized to the mandate, never a generic template.",
     researchNote:
       "Backed by our own research: see the Nano GCC paper series on Insights.",
     researchHref: "/insights",
@@ -56,32 +66,14 @@ export const offeringsData = {
           "A full capability hub built with the same leadership-first, right-sized-governance discipline, for companies ready to commit to scale from the start.",
         id: "mid-scale-gcc",
       },
-      {
-        number: "03",
-        tag: "BOTH SCOPES",
-        title: "Both scopes",
-        description:
-          "One to several functions proven and expanded, with a clear path to grow headcount without re-architecting the entity, governance or systems.",
-        id: "both-scopes",
-      },
-      {
-        number: "04",
-        tag: "RESEARCH",
-        title: "Backed by our own research",
-        description:
-          "See the Nano GCC paper series on Insights.",
-        linkHref: "/insights",
-        linkText: "Explore Insights →",
-        id: "research",
-      },
-    ],
+    ] as ScopeItem[],
   },
 
   buildModel: {
     eyebrow: "Operating Model",
     title: "The Vertara GCC build model",
     description:
-      "One integrated journey with clear ownership at every stage. Each stage has a named owner, defined deliverables and a clear handover into the next nothing moves forward until the gate is met. The same six stages apply whether the mandate is a 20-person Nano GCC pilot or a 500-person mid-scale build.",
+      "One integrated journey with clear ownership at every stage. Each stage has a named owner, defined deliverables and a clear handover before moving forward. The same six stages apply whether the mandate is a 20-person Nano GCC pilot or a 500-person mid-scale build.",
     stages: [
       {
         number: "01",
@@ -160,7 +152,7 @@ export const offeringsData = {
   },
 
   commercial: {
-    eyebrow: "Commercial Principles",
+    eyebrow: "Commercials",
     title: "Commercial principles",
     lead: "How we engage commercially flexes to where you are in the GCC journey from an advisory conversation through a full milestone-based build but the principles underneath stay fixed.",
     calloutQuote: "The engagement changes. The accountability doesn’t.",
@@ -186,7 +178,7 @@ export const offeringsData = {
   },
 
   sectors: {
-    eyebrow: "Sector Expertise",
+    eyebrow: "Sectors",
     title: "Sector expertise",
     description:
       "A closer look at where mid-market builds Nano through mid-scale are happening, sector by sector.",

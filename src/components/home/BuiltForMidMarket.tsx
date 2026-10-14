@@ -51,7 +51,7 @@ export function BuiltForMidMarket() {
             </p>
 
             <h2 className="mt-3 text-2xl font-bold tracking-tight text-[#101C30] sm:text-3xl lg:text-[1.875rem]">
-              Built for mid-market, focussing on establishing and scaling Nano GCCs
+              Built for the mid-market, with a focus on Nano GCCs
             </h2>
 
             <p className="mt-3 w-full text-base sm:text-lg leading-relaxed text-[#101C30]">
@@ -71,10 +71,10 @@ export function BuiltForMidMarket() {
             {points.map((item) => (
               <div
                 key={item.title}
-                className="group flex h-full flex-col justify-between rounded-2xl border border-[#cddcd1] bg-[#e5ebe6] p-6 sm:p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#2F3F34]/50 hover:shadow-md cursor-pointer"
+                className="flex h-full flex-col justify-between rounded-2xl border border-[#cddcd1] bg-[#e5ebe6] p-6 sm:p-7 shadow-sm cursor-default"
               >
                 <div>
-                  <h3 className="text-base sm:text-lg font-bold text-[#101C30] tracking-tight leading-snug group-hover:text-[#2F3F34] transition-colors">
+                  <h3 className="text-base sm:text-lg font-bold text-[#101C30] tracking-tight leading-snug">
                     {item.title}
                   </h3>
 

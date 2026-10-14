@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
 import { MobileAutoSlider } from "@/components/ui/MobileAutoSlider";
-import { offeringsData } from "../../data/offerings-data";
+import { offeringsData, type ScopeItem } from "../../data/offerings-data";
 
 export function OfferingsScope() {
   const { scope } = offeringsData;
@@ -37,17 +37,17 @@ export function OfferingsScope() {
           <div className="mt-10 sm:mt-12">
             <MobileAutoSlider
               autoSlideInterval={3500}
-              desktopClassName="md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6"
-              itemClassName="w-[84vw] max-w-[320px] shrink-0 snap-center md:w-auto md:max-w-none flex flex-col h-full min-h-[270px] sm:min-h-[280px]"
+              desktopClassName="md:grid md:grid-cols-2 gap-5 md:gap-6"
+              itemClassName="w-[84vw] max-w-[320px] shrink-0 snap-center md:w-auto md:max-w-none flex flex-col h-full"
               dotTone="gold"
             >
-              {scope.items.map((item) => (
+              {scope.items.map((item: ScopeItem) => (
                 <div
                   key={item.title}
                   id={item.id}
-                  className="group relative flex flex-col justify-between rounded-2xl border border-[#D8D2C0] bg-[#F9F8F5]/70 p-6 transition-all duration-300 hover:border-[#2F3F34] hover:bg-white hover:shadow-lg cursor-pointer h-full min-h-[270px] sm:min-h-[280px]"
+                  className="group relative flex flex-col justify-between rounded-2xl border border-[#D8D2C0] bg-[#F9F8F5]/70 p-6 sm:p-7 transition-all duration-300 hover:border-[#2F3F34] hover:bg-white hover:shadow-lg cursor-default h-full"
                 >
-                  <div className="flex-1 flex flex-col">
+                  <div className="flex flex-col">
                     {/* Top Bar: Number & Tag */}
                     <div className="flex items-center justify-between">
                       <span className="font-mono text-sm font-bold text-[#B59439]">
@@ -69,9 +69,8 @@ export function OfferingsScope() {
                     </p>
                   </div>
 
-                  {/* Bottom link without dividing line */}
-                  {item.linkHref ? (
-                    <div className="mt-auto pt-4">
+                  {item.linkHref && (
+                    <div className="mt-4 pt-2">
                       <Link
                         href={item.linkHref}
                         className="inline-flex items-center gap-1.5 text-xs font-bold text-[#2F3F34] hover:text-[#B59439] transition-colors"
@@ -79,8 +78,6 @@ export function OfferingsScope() {
                         <span>{item.linkText || "Explore Insights →"}</span>
                       </Link>
                     </div>
-                  ) : (
-                    <div className="mt-auto pt-4" />
                   )}
                 </div>
               ))}
