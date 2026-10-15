@@ -174,7 +174,7 @@ export default async function IndustriesHubPage() {
             return (
               <Link
                 key={item.id}
-                href={`/industries/${item.id}`}
+                href={`/${item.id}`}
                 className="group relative flex flex-col justify-between rounded-3xl border border-[#cddcd1] bg-[#edf5ef] p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1.5 hover:border-[#2F3F34] hover:bg-white hover:shadow-xl hover:shadow-[#2F3F34]/10 cursor-pointer"
               >
                 <div className="flex h-full flex-col">

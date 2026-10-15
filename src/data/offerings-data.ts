@@ -192,7 +192,7 @@ export const offeringsData = {
           "From CAD seats to real product ownership: systems architecture, embedded firmware and simulation-driven design, integrated with HQ systems from day one.",
         howVertaraHelps:
           "Enterprise-grade CAD/PLM/simulation talent (SolidWorks, CATIA, ANSYS, MATLAB/Simulink), compute sized for simulation and digital-twin workloads, IP protected from week one.",
-        route: "/industries/engineering-erd",
+        route: "/engineering-erd",
       },
       {
         id: "fmcg-retail",
@@ -203,7 +203,7 @@ export const offeringsData = {
           "From order processing to demand intelligence: demand forecasting, assortment planning and pricing analytics, integrated with POS, ERP and e-commerce in real time.",
         howVertaraHelps:
           "Category-management and RGM talent, SKU-and-store-level data infrastructure, consumer-data and loyalty-PII governance from day one.",
-        route: "/industries/fmcg-retail",
+        route: "/fmcg-retail",
       },
       {
         id: "healthcare-life-sciences",
@@ -214,7 +214,7 @@ export const offeringsData = {
           "From back-office support to regulatory-grade capability: regulatory affairs, biostatistics and pharmacovigilance, with HIPAA, GxP and 21 CFR Part 11 controls built in from the first hire.",
         howVertaraHelps:
           "Clinical data management and medical-writing capability, audit-ready validated systems, PHI/PII architecture sized to the real regulatory bar.",
-        route: "/industries/healthcare-life-sciences",
+        route: "/healthcare-life-sciences",
       },
       {
         id: "wealth-management-pe-insurance",
@@ -225,7 +225,7 @@ export const offeringsData = {
           "From back-office reconciliation to investment-grade operations: fund accounting, NAV and portfolio operations, reporting built for the frameworks that actually apply — IFRS 17, SEC/SOX, NAIC.",
         howVertaraHelps:
           "Actuarial and investment-research capability, LP/policyholder data segregated to a bulge-bracket bar, real-time system integration.",
-        route: "/industries/wealth-management-pe-insurance",
+        route: "/wealth-management-pe-insurance",
       },
       {
         id: "manufacturing",
@@ -236,7 +236,7 @@ export const offeringsData = {
           "From shop-floor support to production intelligence: OT-IT integration across plants, integrated with SCADA, MES and ERP without a custom build per facility.",
         howVertaraHelps:
           "SCADA/PLC integration and predictive-maintenance talent, ISO 9001 & IATF 16949 documentation that travels plant to plant, proof-on-one-plant-then-extend delivery.",
-        route: "/industries/manufacturing",
+        route: "/manufacturing",
       },
       {
         id: "mining-metals",
@@ -247,7 +247,7 @@ export const offeringsData = {
           "From site reporting to asset intelligence: asset analytics and reliability engineering, integrated with SCADA, fleet and asset systems (SAP EAM, Maximo).",
         howVertaraHelps:
           "GRI, SASB & ICMM reporting built in, one data layer across SCADA/fleet/EAM, procurement handled across remote, long-lead-time supply chains.",
-        route: "/industries/mining-metals",
+        route: "/mining-metals",
       },
       {
         id: "travel-leisure-hospitality",
@@ -258,7 +258,7 @@ export const offeringsData = {
           "From reservations processing to revenue intelligence: revenue management and channel distribution, integrated with PMS, channel managers and GDS/OTA platforms.",
         howVertaraHelps:
           "Guest personalization and loyalty analytics, revenue forecasting sized for a boutique portfolio, guest-data protection across markets from day one.",
-        route: "/industries/travel-leisure-hospitality",
+        route: "/travel-leisure-hospitality",
       },
       {
         id: "tech-ai-services",
@@ -269,7 +269,7 @@ export const offeringsData = {
           "From IT support to AI-grade infrastructure: GPU/compute and MLOps right-sized to real training and inference load, not hyperscaler capital intensity.",
         howVertaraHelps:
           "GenAI/LLM engineering and applied-research talent, MLOps pipelines tied to cloud strategy from day one, deliberate hybrid/multi-cloud cost governance.",
-        route: "/industries/technology-ai",
+        route: "/technology-ai",
       },
     ] as SectorItem[],
   },
