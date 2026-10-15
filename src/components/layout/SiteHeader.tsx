@@ -53,17 +53,17 @@ const insightLinks = [
 
 /* Kept for future re-enabling if needed:
 const industryCol1 = [
-  { href: "/industries/engineering-erd", label: "Engineering & ER&D", icon: Cpu },
-  { href: "/industries/healthcare-life-sciences", label: "Healthcare & Life Sciences", icon: FlaskConical },
-  { href: "/industries/fmcg-retail", label: "FMCG & Retail", icon: ShoppingBag },
-  { href: "/industries/manufacturing", label: "Manufacturing & Industrial IoT", icon: Factory },
+  { href: "/engineering-erd", label: "Engineering & ER&D", icon: Cpu },
+  { href: "/healthcare-life-sciences", label: "Healthcare & Life Sciences", icon: FlaskConical },
+  { href: "/fmcg-retail", label: "FMCG & Retail", icon: ShoppingBag },
+  { href: "/manufacturing", label: "Manufacturing & Industrial IoT", icon: Factory },
 ];
 
 const industryCol2 = [
-  { href: "/industries/wealth-management-pe-insurance", label: "Wealth Management, PE & Insurance", icon: Coins },
-  { href: "/industries/technology-ai", label: "Technology & AI", icon: Sparkles },
-  { href: "/industries/mining-metals", label: "Mining & Metals", icon: Pickaxe },
-  { href: "/industries/travel-leisure-hospitality", label: "Travel, Leisure, Hospitality", icon: Hotel },
+  { href: "/wealth-management-pe-insurance", label: "Wealth Management, PE & Insurance", icon: Coins },
+  { href: "/technology-ai", label: "Technology & AI", icon: Sparkles },
+  { href: "/mining-metals", label: "Mining & Metals", icon: Pickaxe },
+  { href: "/travel-leisure-hospitality", label: "Travel, Leisure, Hospitality", icon: Hotel },
 ];
 */
 
