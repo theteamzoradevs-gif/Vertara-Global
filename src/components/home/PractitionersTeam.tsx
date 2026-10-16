@@ -28,6 +28,24 @@ const openPositions = [
   },
 ];
 
+function LinkedInIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <rect width="24" height="24" rx="4" fill="#0A66C2" />
+      <path
+        d="M19 19H16.27V14.73C16.27 13.71 16.25 12.4 14.85 12.4C13.43 12.4 13.21 13.51 13.21 14.66V19H10.48V10.22H13.1V11.42H13.14C13.5 10.73 14.39 10 15.72 10C18.49 10 19 11.82 19 14.19V19ZM7.46 9.03C6.58 9.03 5.87 8.32 5.87 7.44C5.87 6.56 6.58 5.85 7.46 5.85C8.34 5.85 9.05 6.56 9.05 7.44C9.05 8.32 8.34 9.03 7.46 9.03ZM8.83 19H6.1V10.22H8.83V19Z"
+        fill="white"
+      />
+    </svg>
+  );
+}
+
 export function PractitionersTeam() {
   const [flippedCards, setFlippedCards] = useState<Record<number, boolean>>({});
 
@@ -120,9 +138,24 @@ export function PractitionersTeam() {
 
                     {/* Name & Role Header */}
                     <div className="mt-2.5 min-h-[3.1rem] sm:min-h-[3.3rem] flex flex-col justify-start text-center">
-                      <h3 className="text-base sm:text-lg font-bold tracking-tight text-white leading-snug">
-                        {leader.name}
-                      </h3>
+                      <div className="flex items-center justify-center gap-1.5 flex-wrap">
+                        <h3 className="text-base sm:text-lg font-bold tracking-tight text-white leading-snug">
+                          {leader.name}
+                        </h3>
+                        {leader.linkedin && (
+                          <a
+                            href={leader.linkedin}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="inline-flex shrink-0 items-center transition-transform duration-200 hover:scale-110"
+                            aria-label={`${leader.name} on LinkedIn`}
+                            title={`${leader.name} on LinkedIn`}
+                          >
+                            <LinkedInIcon className="h-4 w-4 sm:h-[18px] sm:w-[18px] rounded-[3px] shadow-xs" />
+                          </a>
+                        )}
+                      </div>
 
                       <p className="mt-0.5 text-xs sm:text-[13px] font-semibold italic text-[#B59439] leading-snug">
                         {leader.role}
@@ -154,9 +187,24 @@ export function PractitionersTeam() {
                       {/* Top Header on Back */}
                       <div className="flex items-start justify-between gap-2 pb-2.5 border-b border-[#3E5245]">
                         <div className="text-left">
-                          <h4 className="text-base font-bold text-white leading-snug">
-                            {leader.name}
-                          </h4>
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <h4 className="text-base font-bold text-white leading-snug">
+                              {leader.name}
+                            </h4>
+                            {leader.linkedin && (
+                              <a
+                                href={leader.linkedin}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                className="inline-flex shrink-0 items-center transition-transform duration-200 hover:scale-110"
+                                aria-label={`${leader.name} on LinkedIn`}
+                                title={`${leader.name} on LinkedIn`}
+                              >
+                                <LinkedInIcon className="h-3.5 w-3.5 rounded-[2.5px] shadow-xs" />
+                              </a>
+                            )}
+                          </div>
                           <p className="text-xs font-semibold italic text-[#B59439]">
                             {leader.role}
                           </p>
@@ -173,7 +221,7 @@ export function PractitionersTeam() {
 
                       {/* Full Bio text with normal spacing, fills the card body without visible scrollbar */}
                       <div className="mt-2.5 flex-1 overflow-y-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden pr-0.5">
-                        <p className="text-xs sm:text-sm leading-relaxed text-[#D8D2C0] text-left">
+                        <p className="text-xs sm:text-sm leading-relaxed text-[#D8D2C0] text-left whitespace-pre-line">
                           {leader.bio}
                         </p>
                       </div>

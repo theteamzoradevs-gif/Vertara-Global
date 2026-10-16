@@ -33,7 +33,7 @@ const columns = [
 export function SiteFooter({
   brandName = "Vertara Global",
   email = "hello@gccadvisor.com",
-  phone = "+91 80 4000 1200",
+  phone = "+91 95403 97444 / +91 99103 44485",
 }: {
   brandName?: string;
   email?: string;
@@ -57,8 +57,22 @@ export function SiteFooter({
             Helping enterprises set up, staff, and scale Global Capability
             Centers in India as one connected system.
           </p>
-          <p className="mt-4 text-sm text-white/90">{email}</p>
-          <p className="text-sm text-white/90">{phone}</p>
+          <div className="mt-4 space-y-1.5 text-sm text-white/90">
+            <p>
+              <a href={`mailto:${email}`} className="transition-colors hover:text-[#B59439]">
+                {email}
+              </a>
+            </p>
+            <p className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              <a href="tel:+919540397444" className="transition-colors hover:text-[#B59439]">
+                +91 95403 97444
+              </a>
+              <span className="text-white/40">/</span>
+              <a href="tel:+919910344485" className="transition-colors hover:text-[#B59439]">
+                +91 99103 44485
+              </a>
+            </p>
+          </div>
         </div>
         {columns.map((col) => (
           <div key={col.title}>
