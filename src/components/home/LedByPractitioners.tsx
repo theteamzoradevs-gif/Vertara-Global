@@ -3,6 +3,24 @@
 import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
 
+function LinkedInIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <rect width="24" height="24" rx="4" fill="#0A66C2" />
+      <path
+        d="M19 19H16.27V14.73C16.27 13.71 16.25 12.4 14.85 12.4C13.43 12.4 13.21 13.51 13.21 14.66V19H10.48V10.22H13.1V11.42H13.14C13.5 10.73 14.39 10 15.72 10C18.49 10 19 11.82 19 14.19V19ZM7.46 9.03C6.58 9.03 5.87 8.32 5.87 7.44C5.87 6.56 6.58 5.85 7.46 5.85C8.34 5.85 9.05 6.56 9.05 7.44C9.05 8.32 8.34 9.03 7.46 9.03ZM8.83 19H6.1V10.22H8.83V19Z"
+        fill="white"
+      />
+    </svg>
+  );
+}
+
 export function LedByPractitioners() {
   return (
     <section
@@ -34,9 +52,21 @@ export function LedByPractitioners() {
               <div className="flex items-start gap-3">
                 <span className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full bg-[#B59439]" aria-hidden="true" />
                 <div>
-                  <h3 className="text-base sm:text-lg font-bold text-[#101C30] leading-snug">
-                    Neha Chauhan
-                  </h3>
+                  <div className="flex items-center gap-1.5">
+                    <h3 className="text-base sm:text-lg font-bold text-[#101C30] leading-snug">
+                      Neha Chauhan
+                    </h3>
+                    <a
+                      href="https://www.linkedin.com/in/nehachauhan82?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex shrink-0 items-center transition-transform duration-200 hover:scale-110"
+                      aria-label="Neha Chauhan on LinkedIn"
+                      title="Neha Chauhan on LinkedIn"
+                    >
+                      <LinkedInIcon className="h-4 w-4 rounded-[3px] shadow-xs" />
+                    </a>
+                  </div>
                   <p className="text-xs sm:text-sm font-semibold text-[#8C7026]">
                     Co-Founder, Corporate Real Estate and Workplace Leader
                   </p>
@@ -47,9 +77,21 @@ export function LedByPractitioners() {
               <div className="flex items-start gap-3">
                 <span className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full bg-[#B59439]" aria-hidden="true" />
                 <div>
-                  <h3 className="text-base sm:text-lg font-bold text-[#101C30] leading-snug">
-                    Namit Ganjsinghani
-                  </h3>
+                  <div className="flex items-center gap-1.5">
+                    <h3 className="text-base sm:text-lg font-bold text-[#101C30] leading-snug">
+                      Namit Ganjsinghani
+                    </h3>
+                    <a
+                      href="https://www.linkedin.com/in/namit-ganjsinghani-219b343?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex shrink-0 items-center transition-transform duration-200 hover:scale-110"
+                      aria-label="Namit Ganjsinghani on LinkedIn"
+                      title="Namit Ganjsinghani on LinkedIn"
+                    >
+                      <LinkedInIcon className="h-4 w-4 rounded-[3px] shadow-xs" />
+                    </a>
+                  </div>
                   <p className="text-xs sm:text-sm font-semibold text-[#8C7026]">
                     Co-Founder, Former Big 4 Partner
                   </p>
