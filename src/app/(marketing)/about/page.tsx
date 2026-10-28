@@ -11,6 +11,7 @@ import {
   getTestimonials,
   getClientLogos,
   getFaqs,
+  getAboutContent,
 } from "@/lib/content";
 
 export const metadata = {
@@ -19,11 +20,12 @@ export const metadata = {
 };
 
 export default async function AboutPage() {
-  const [settings, testimonials, logos, faqs] = await Promise.all([
+  const [settings, testimonials, logos, faqs, aboutContent] = await Promise.all([
     getSettings(),
     getTestimonials(),
     getClientLogos(),
     getFaqs(),
+    getAboutContent(),
   ]);
 
   return (
@@ -54,8 +56,11 @@ export default async function AboutPage() {
       {/* 2. Our Story & Vision */}
       <OurVision />
 
-      {/* 3. Leadership Team */}
-      <PractitionersTeam />
+      {/* 3. Leadership & Bench Team */}
+      <PractitionersTeam
+        members={aboutContent.theTeam}
+        leadershipEnabled={aboutContent.leadershipEnabled !== false}
+      />
 
       {/* 4. Client Voices & Testimonials - disabled */}
       {/* <Section tone="muted">

@@ -89,7 +89,7 @@ export async function saveAboutContentAction(payload: AboutContentData) {
           .filter((item) => item.point)
       : [];
 
-    // Sanitize theTeam (name and bio required, role and image optional)
+    // Sanitize theTeam (name and bio required, role, image, linkedin optional)
     const sanitizedTheTeam = Array.isArray(payload.theTeam)
       ? payload.theTeam
           .map((member) => ({
@@ -97,6 +97,9 @@ export async function saveAboutContentAction(payload: AboutContentData) {
             role: String(member?.role || "").trim(),
             bio: String(member?.bio || "").trim(),
             image: String(member?.image || "").trim(),
+            linkedin: String(member?.linkedin || "").trim(),
+            initials: String(member?.initials || "").trim(),
+            imagePosition: String(member?.imagePosition || "").trim(),
           }))
           .filter((m) => m.name || m.bio)
       : [];
@@ -123,6 +126,7 @@ export async function saveAboutContentAction(payload: AboutContentData) {
         whatWeStandFor: sanitizedWhatWeStandFor,
         byTheNumbers: sanitizedByTheNumbers,
         theTeam: sanitizedTheTeam,
+        leadershipEnabled: payload.leadershipEnabled !== false,
         closingCta: {
           text: String(
             payload.closingCta?.text || "Let’s build the right GCC — and build it to last."

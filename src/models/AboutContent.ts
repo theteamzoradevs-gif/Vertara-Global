@@ -20,6 +20,9 @@ const TeamMemberSchema = new Schema(
     role: { type: String, default: "" },
     bio: { type: String, required: true },
     image: { type: String, default: "" },
+    linkedin: { type: String, default: "" },
+    initials: { type: String, default: "" },
+    imagePosition: { type: String, default: "" },
   },
   { _id: false }
 );
@@ -45,6 +48,7 @@ const AboutContentSchema = new Schema(
     whatWeStandFor: [WhatWeStandForSchema],
     byTheNumbers: [ByTheNumbersSchema],
     theTeam: [TeamMemberSchema],
+    leadershipEnabled: { type: Boolean, default: true },
     closingCta: {
       text: {
         type: String,

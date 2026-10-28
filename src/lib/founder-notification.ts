@@ -136,6 +136,10 @@ async function notifyFounder(
   id: string,
   subject: string,
   text: string,
+  options?: {
+    replyTo?: string;
+    fields?: Record<string, unknown>;
+  },
 ): Promise<FounderNoticeResult> {
   let claimed;
   try {
@@ -152,7 +156,12 @@ async function notifyFounder(
   }
 
   const claim = String(claimed.notificationClaim || "");
-  const result = await sendFounderEmail({ subject, text });
+  const result = await sendFounderEmail({
+    subject,
+    text,
+    replyTo: options?.replyTo,
+    fields: options?.fields,
+  });
   try {
     await finishNotification(model, id, claim, result.ok, result.ok ? undefined : result.error);
   } catch (err) {
@@ -163,13 +172,38 @@ async function notifyFounder(
 
 export async function notifyFounderOfLead(lead: LeadNotice & {
   _id: { toString(): string } | string;
+  metadata?: Record<string, unknown>;
 }): Promise<FounderNoticeResult> {
   const id = String(lead._id);
+  const fields: Record<string, unknown> = {
+    "Lead Name": lead.name || "—",
+    "Work Email": lead.email || "—",
+    "Phone Number": lead.phone || "—",
+    "Company": lead.company || "—",
+    "Engagement Intent": lead.intent || "—",
+    "Source Page": lead.source || "—",
+    "Message / Scope": lead.message || "—",
+    "Submitted At": stamp(lead.createdAt),
+    "Admin Link": `${siteOrigin()}/admin/inquiries${id ? `?id=${id}` : ""}`,
+  };
+
+  if (lead.metadata && typeof lead.metadata === "object") {
+    Object.entries(lead.metadata).forEach(([k, v]) => {
+      if (v && typeof v !== "object") {
+        fields[`Metadata (${k})`] = String(v);
+      }
+    });
+  }
+
   return notifyFounder(
     Lead as Model<NoticeDoc>,
     id,
-    `New inquiry: ${lead.name || "Website"}`,
+    `New Inquiry: ${lead.name || "Website"} (${lead.company || "Direct"})`,
     leadNotificationText(lead),
+    {
+      replyTo: lead.email || undefined,
+      fields,
+    },
   );
 }
 
@@ -182,10 +216,28 @@ export async function notifyFounderOfAssessment(assessment: {
   answers?: StoredAssessmentAnswer[];
 }): Promise<FounderNoticeResult> {
   const id = String(assessment._id);
+  const fields: Record<string, unknown> = {
+    "Candidate Name": assessment.name || "—",
+    "Company": assessment.company || "—",
+    "Email": assessment.email || "—",
+    "Submitted At": stamp(assessment.createdAt),
+    "Admin Assessment Link": assessmentAdminUrl(id),
+  };
+
+  if (assessment.answers?.length) {
+    assessment.answers.forEach((row, index) => {
+      fields[`Q${index + 1}: ${row.question}`] = formatAssessmentAnswer(row.answer);
+    });
+  }
+
   return notifyFounder(
     GccAssessment as Model<NoticeDoc>,
     id,
-    `GCC Assessment: ${assessment.name || "New submission"}`,
+    `New GCC Assessment: ${assessment.name || "Website"} (${assessment.company || "Direct"})`,
     assessmentNotificationText(assessment),
+    {
+      replyTo: assessment.email || undefined,
+      fields,
+    },
   );
 }

@@ -85,14 +85,18 @@ function mergeSettings(doc: Partial<Settings> | null): Settings {
     settings.showQuickCallForm = doc.showQuickCallForm;
   }
 
-  if (settings.brandName === "GCC Advisor") {
+  if (!settings.brandName || settings.brandName === "GCC Advisor" || settings.brandName.toLowerCase().includes("veratara")) {
     settings.brandName = "Vertara Global";
+  } else {
+    settings.brandName = settings.brandName.replace(/veratara/gi, "Vertara");
   }
-  if (settings.contactEmail === "hello@gccadvisor.com") {
-    settings.contactEmail = "hello@verataraglobal.com";
+  if (!settings.contactEmail || settings.contactEmail === "hello@gccadvisor.com" || settings.contactEmail === "hello@vertaraglobal.com" || settings.contactEmail.toLowerCase().includes("veratara")) {
+    settings.contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || "Namitg@vertaraglobal.com";
+  } else {
+    settings.contactEmail = settings.contactEmail.replace(/veratara/gi, "vertara");
   }
-  if (settings.aboutStory?.includes("GCC Advisor")) {
-    settings.aboutStory = settings.aboutStory.replace(/GCC Advisor/g, "Vertara Global");
+  if (settings.aboutStory) {
+    settings.aboutStory = settings.aboutStory.replace(/GCC Advisor/g, "Vertara Global").replace(/veratara/gi, "Vertara");
   }
   return settings;
 }
@@ -283,11 +287,14 @@ export async function getAboutContent(): Promise<AboutContentData> {
     // Safely parse theTeam
     let theTeam = seedAboutContent.theTeam;
     if (Array.isArray(parsed.theTeam) && parsed.theTeam.length > 0) {
-      // Check if it's the old team with Rajesh or missing full bio
+      // Check if it's the old team with Rajesh or placeholder "joining the team"
       const hasRajesh = (parsed.theTeam as Array<{ name?: string }>).some(
         (m) => m?.name?.toLowerCase().includes("rajesh")
       );
-      if (!hasRajesh) {
+      const hasPlaceholderJoining = (parsed.theTeam as Array<{ name?: string }>).some(
+        (m) => m?.name?.toLowerCase().includes("joining the team")
+      );
+      if (!hasRajesh && !hasPlaceholderJoining) {
         theTeam = parsed.theTeam as TeamMember[];
       }
     }
@@ -297,6 +304,10 @@ export async function getAboutContent(): Promise<AboutContentData> {
     const parsedOurVision = (parsed.ourVision || {}) as Partial<AboutContentData["ourVision"]>;
     const parsedTheName = (parsed.theName || {}) as Partial<AboutContentData["theName"]>;
     const parsedCta = (parsed.closingCta || {}) as Partial<AboutContentData["closingCta"]>;
+    const leadershipEnabled =
+      typeof parsed.leadershipEnabled === "boolean"
+        ? parsed.leadershipEnabled
+        : true;
 
     return {
       aboutUs: {
@@ -318,6 +329,7 @@ export async function getAboutContent(): Promise<AboutContentData> {
       whatWeStandFor,
       byTheNumbers,
       theTeam,
+      leadershipEnabled,
       closingCta: {
         text: parsedCta.text || seedAboutContent.closingCta.text,
       },

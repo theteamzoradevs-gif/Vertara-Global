@@ -46,7 +46,7 @@ export const seedSettings = {
   heroFormButton: "Get a quick call",
   heroFormSuccess: "Got it — we'll call you soon.",
   showQuickCallForm: true,
-  contactEmail: "hello@gccadvisor.com",
+  contactEmail: "Namitg@vertaraglobal.com",
   contactPhone: "+91 80 4000 1200",
   metrics: [
     { label: "GCCs established", value: 85, suffix: "+" },

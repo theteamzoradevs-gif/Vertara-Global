@@ -11,8 +11,8 @@ export async function saveSiteSettingsAction(formData: FormData) {
   try {
     const conn = await connectDB();
 
-    const brandName = String(formData.get("brandName") || "Vertara Global").trim();
-    const contactEmail = String(formData.get("contactEmail") || "hello@verataraglobal.com").trim();
+    const brandName = String(formData.get("brandName") || "Vertara Global").trim().replace(/veratara/gi, "Vertara");
+    const contactEmail = String(formData.get("contactEmail") || process.env.NEXT_PUBLIC_CONTACT_EMAIL || "Namitg@vertaraglobal.com").trim().replace(/veratara/gi, "vertara");
     const contactPhone = String(formData.get("contactPhone") || "+91 80 4000 1200").trim();
 
     if (conn) {
@@ -63,7 +63,7 @@ export async function updateAdminPasswordAction(formData: FormData) {
     }
 
     const conn = await connectDB();
-    const targetEmail = (session?.user?.email || "admin@verataraglobal.com").toLowerCase();
+    const targetEmail = (session?.user?.email || "admin@vertaraglobal.com").toLowerCase().replace(/veratara/gi, "vertara");
 
     if (conn) {
       const user = await AdminUser.findOne({ email: targetEmail });

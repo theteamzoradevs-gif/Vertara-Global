@@ -19,7 +19,7 @@ export const seedContactContent: ContactContentData = {
   formTitle: "Send us a message",
   formSubmitLabel: "Send message",
   companyName: "Vertara Global — GCC Enablement & Advisory",
-  contactEmail: "hello@gccadvisor.com",
+  contactEmail: "Namitg@vertaraglobal.com",
   contactPhone: "+91 80 4000 1200",
   officeAddress: "",
   calendlyUrl: "",

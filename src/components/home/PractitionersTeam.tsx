@@ -5,7 +5,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, ArrowUpRight, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { practitionersTeam } from "@/data/practitioners-team";
+import { practitionersTeam, type Practitioner } from "@/data/practitioners-team";
+import type { TeamMember } from "@/data/seed-about";
+
+interface PractitionersTeamProps {
+  members?: (TeamMember | Practitioner)[];
+  leadershipEnabled?: boolean;
+}
 
 const openPositions = [
   {
@@ -46,8 +52,13 @@ function LinkedInIcon({ className }: { className?: string }) {
   );
 }
 
-export function PractitionersTeam() {
+export function PractitionersTeam({
+  members,
+  leadershipEnabled = true,
+}: PractitionersTeamProps = {}) {
   const [flippedCards, setFlippedCards] = useState<Record<number, boolean>>({});
+
+  const teamList = members && members.length > 0 ? members : practitionersTeam;
 
   const toggleFlip = (index: number) => {
     setFlippedCards((prev) => ({
@@ -63,134 +74,99 @@ export function PractitionersTeam() {
       style={{ fontFamily: 'Calibri' }}
     >
       <div className="relative z-[1] mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="max-w-3xl text-left">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#B59439]">
-            Leadership
-          </p>
-          <h2 className="mt-3 text-2xl font-bold tracking-tight text-[#101C30] sm:text-3xl md:text-4xl">
-            Led by practitioners. Built to grow.
-          </h2>
-          <p className="mt-4 text-base leading-relaxed text-[#526171] sm:text-lg">
-            Strategy, GCC execution and shared services under one senior-led
-            platform with the bench expanding across practice areas.
-          </p>
-        </div>
+        {/* Leadership Section (Controlled by Admin toggle) */}
+        {leadershipEnabled && (
+          <div>
+            {/* Section Header */}
+            <div className="max-w-3xl text-left">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#B59439]">
+                Leadership
+              </p>
+              <h2 className="mt-3 text-2xl font-bold tracking-tight text-[#101C30] sm:text-3xl md:text-4xl">
+                Led by practitioners. Built to grow.
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-[#526171] sm:text-lg">
+                Strategy, GCC execution and shared services under one senior-led
+                platform with the bench expanding across practice areas.
+              </p>
+            </div>
 
-        {/* Uniform Height Cards Grid with 3D Flip & Centered Last Row */}
-        <div className="mt-12 sm:mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 sm:gap-8">
-          {practitionersTeam.map((leader, index) => {
-            const isFlipped = !!flippedCards[index];
-            const total = practitionersTeam.length;
-            const isLastRowTwoOnLg = total % 3 === 2;
-            const isFirstOfTwoOnLg = isLastRowTwoOnLg && index === total - 2;
-            const isLastSingleOnMd = total % 2 === 1 && index === total - 1;
+            {/* Uniform Height Cards Grid with 3D Flip & Centered Last Row */}
+            <div className="mt-12 sm:mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 sm:gap-8">
+              {teamList.map((leader, index) => {
+                const isFlipped = !!flippedCards[index];
+                const total = teamList.length;
+                const isLastRowTwoOnLg = total % 3 === 2;
+                const isFirstOfTwoOnLg = isLastRowTwoOnLg && index === total - 2;
+                const isLastSingleOnMd = total % 2 === 1 && index === total - 1;
+                const initials =
+                  leader.initials ||
+                  leader.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .filter(Boolean)
+                    .slice(0, 2)
+                    .join("")
+                    .toUpperCase() ||
+                  "VG";
+                const imagePosition = leader.imagePosition || "object-[center_15%]";
 
-            return (
-              <div
-                key={leader.name}
-                className={cn(
-                  "relative h-[310px] sm:h-[320px] w-full [perspective:1000px]",
-                  // On large screens (6-col grid): 3 cards per row (2 cols each).
-                  // If 2 cards in last row, the first starts at col 2 to perfectly center them.
-                  isFirstOfTwoOnLg ? "lg:[grid-column:2/span_2]" : "lg:col-span-2",
-                  // On tablet/medium screens (2-col grid): center single card in the last row
-                  isLastSingleOnMd
-                    ? "md:col-span-2 md:w-[calc(50%-1rem)] md:mx-auto lg:w-full lg:mx-0"
-                    : "md:col-span-1"
-                )}
-                onMouseLeave={() => {
-                  if (flippedCards[index]) {
-                    setFlippedCards((prev) => ({
-                      ...prev,
-                      [index]: false,
-                    }));
-                  }
-                }}
-              >
-                <div
-                  className={cn(
-                    "relative h-full w-full transition-transform duration-500 [transform-style:preserve-3d]",
-                    isFlipped && "[transform:rotateY(180deg)]"
-                  )}
-                >
-                  {/* FRONT FACE (Uniform Compact Height, 4 lines, Snug Bottom Spacing) */}
-                  <div className="absolute inset-0 flex h-full w-full flex-col justify-start rounded-2xl border border-[#3E5245] bg-[#2F3F34] px-5 pt-4 pb-3 sm:px-6 sm:pt-4.5 sm:pb-3.5 shadow-md [backface-visibility:hidden]">
-                    {/* Circular Photo Avatar */}
-                    <div className="relative mx-auto h-16 w-16 sm:h-18 sm:w-18 shrink-0 overflow-hidden rounded-full border-2 border-[#B59439]/60 shadow-xs bg-[#243329]">
-                      {leader.image ? (
-                        <Image
-                          src={leader.image}
-                          alt={leader.name}
-                          fill
-                          className={cn(
-                            "object-cover grayscale",
-                            leader.imagePosition || "object-[center_15%]"
-                          )}
-                          sizes="(max-width: 640px) 64px, 72px"
-                        />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center bg-[#243329] text-xl font-bold text-[#B59439]">
-                          {leader.initials}
-                        </div>
+                return (
+                  <div
+                    key={`${leader.name}-${index}`}
+                    className={cn(
+                      "relative h-[310px] sm:h-[320px] w-full [perspective:1000px]",
+                      // On large screens (6-col grid): 3 cards per row (2 cols each).
+                      // If 2 cards in last row, the first starts at col 2 to perfectly center them.
+                      isFirstOfTwoOnLg ? "lg:[grid-column:2/span_2]" : "lg:col-span-2",
+                      // On tablet/medium screens (2-col grid): center single card in the last row
+                      isLastSingleOnMd
+                        ? "md:col-span-2 md:w-[calc(50%-1rem)] md:mx-auto lg:w-full lg:mx-0"
+                        : "md:col-span-1"
+                    )}
+                    onMouseLeave={() => {
+                      if (flippedCards[index]) {
+                        setFlippedCards((prev) => ({
+                          ...prev,
+                          [index]: false,
+                        }));
+                      }
+                    }}
+                  >
+                    <div
+                      className={cn(
+                        "relative h-full w-full transition-transform duration-500 [transform-style:preserve-3d]",
+                        isFlipped && "[transform:rotateY(180deg)]"
                       )}
-                    </div>
+                    >
+                      {/* FRONT FACE (Uniform Compact Height, 4 lines, Snug Bottom Spacing) */}
+                      <div className="absolute inset-0 flex h-full w-full flex-col justify-start rounded-2xl border border-[#3E5245] bg-[#2F3F34] px-5 pt-4 pb-3 sm:px-6 sm:pt-4.5 sm:pb-3.5 shadow-md [backface-visibility:hidden]">
+                        {/* Circular Photo Avatar */}
+                        <div className="relative mx-auto h-16 w-16 sm:h-18 sm:w-18 shrink-0 overflow-hidden rounded-full border-2 border-[#B59439]/60 shadow-xs bg-[#243329]">
+                          {leader.image ? (
+                            <Image
+                              src={leader.image}
+                              alt={leader.name}
+                              fill
+                              className={cn(
+                                "object-cover grayscale",
+                                imagePosition
+                              )}
+                              sizes="(max-width: 640px) 64px, 72px"
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center bg-[#243329] text-xl font-bold text-[#B59439]">
+                              {initials}
+                            </div>
+                          )}
+                        </div>
 
-                    {/* Name & Role Header */}
-                    <div className="mt-2.5 min-h-[3.1rem] sm:min-h-[3.3rem] flex flex-col justify-start text-center">
-                      <div className="flex items-center justify-center gap-1.5 flex-wrap">
-                        <h3 className="text-base sm:text-lg font-bold tracking-tight text-white leading-snug">
-                          {leader.name}
-                        </h3>
-                        {leader.linkedin && (
-                          <a
-                            href={leader.linkedin}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="inline-flex shrink-0 items-center transition-transform duration-200 hover:scale-110"
-                            aria-label={`${leader.name} on LinkedIn`}
-                            title={`${leader.name} on LinkedIn`}
-                          >
-                            <LinkedInIcon className="h-4 w-4 sm:h-[18px] sm:w-[18px] rounded-[3px] shadow-xs" />
-                          </a>
-                        )}
-                      </div>
-
-                      <p className="mt-0.5 text-xs sm:text-[13px] font-semibold italic text-[#B59439] leading-snug">
-                        {leader.role}
-                      </p>
-                    </div>
-
-                    {/* Bio Clamped: 4 lines with normal word spacing (no text-justify) */}
-                    <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-[#D8D2C0] text-left line-clamp-4">
-                      {leader.bio}
-                    </p>
-
-                    {/* Read more button directly below text with compact bottom margin */}
-                    <div className="mt-2 sm:mt-2.5 flex justify-center">
-                      <button
-                        type="button"
-                        onClick={() => toggleFlip(index)}
-                        className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#B59439] hover:text-[#D4AF37] transition-colors cursor-pointer"
-                        aria-label={`Read full bio for ${leader.name}`}
-                      >
-                        <span>Read more</span>
-                        <ArrowRight className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* BACK FACE (Flipped: Full Complete Bio Text - auto returns on mouse leave) */}
-                  <div className="absolute inset-0 flex h-full w-full flex-col justify-between rounded-2xl border border-[#B59439]/70 bg-[#2F3F34] p-4 sm:p-5 shadow-lg [backface-visibility:hidden] [transform:rotateY(180deg)]">
-                    <div className="flex flex-col h-full overflow-hidden">
-                      {/* Top Header on Back */}
-                      <div className="flex items-start justify-between gap-2 pb-2.5 border-b border-[#3E5245]">
-                        <div className="text-left">
-                          <div className="flex items-center gap-1.5 flex-wrap">
-                            <h4 className="text-base font-bold text-white leading-snug">
+                        {/* Name & Role Header */}
+                        <div className="mt-2.5 min-h-[3.1rem] sm:min-h-[3.3rem] flex flex-col justify-start text-center">
+                          <div className="flex items-center justify-center gap-1.5 flex-wrap">
+                            <h3 className="text-base sm:text-lg font-bold tracking-tight text-white leading-snug">
                               {leader.name}
-                            </h4>
+                            </h3>
                             {leader.linkedin && (
                               <a
                                 href={leader.linkedin}
@@ -201,40 +177,91 @@ export function PractitionersTeam() {
                                 aria-label={`${leader.name} on LinkedIn`}
                                 title={`${leader.name} on LinkedIn`}
                               >
-                                <LinkedInIcon className="h-3.5 w-3.5 rounded-[2.5px] shadow-xs" />
+                                <LinkedInIcon className="h-4 w-4 sm:h-[18px] sm:w-[18px] rounded-[3px] shadow-xs" />
                               </a>
                             )}
                           </div>
-                          <p className="text-xs font-semibold italic text-[#B59439]">
+
+                          <p className="mt-0.5 text-xs sm:text-[13px] font-semibold italic text-[#B59439] leading-snug">
                             {leader.role}
                           </p>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => toggleFlip(index)}
-                          className="shrink-0 rounded-full p-1 text-[#D8D2C0]/70 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
-                          aria-label="Close"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
-                      </div>
 
-                      {/* Full Bio text with normal spacing, fills the card body without visible scrollbar */}
-                      <div className="mt-2.5 flex-1 overflow-y-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden pr-0.5">
-                        <p className="text-xs sm:text-sm leading-relaxed text-[#D8D2C0] text-left whitespace-pre-line">
+                        {/* Bio Clamped: 4 lines with normal word spacing (no text-justify) */}
+                        <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-[#D8D2C0] text-left line-clamp-4">
                           {leader.bio}
                         </p>
+
+                        {/* Read more button directly below text with compact bottom margin */}
+                        <div className="mt-2 sm:mt-2.5 flex justify-center">
+                          <button
+                            type="button"
+                            onClick={() => toggleFlip(index)}
+                            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#B59439] hover:text-[#D4AF37] transition-colors cursor-pointer"
+                            aria-label={`Read full bio for ${leader.name}`}
+                          >
+                            <span>Read more</span>
+                            <ArrowRight className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* BACK FACE (Flipped: Full Complete Bio Text - auto returns on mouse leave) */}
+                      <div className="absolute inset-0 flex h-full w-full flex-col justify-between rounded-2xl border border-[#B59439]/70 bg-[#2F3F34] p-4 sm:p-5 shadow-lg [backface-visibility:hidden] [transform:rotateY(180deg)]">
+                        <div className="flex flex-col h-full overflow-hidden">
+                          {/* Top Header on Back */}
+                          <div className="flex items-start justify-between gap-2 pb-2.5 border-b border-[#3E5245]">
+                            <div className="text-left">
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <h4 className="text-base font-bold text-white leading-snug">
+                                  {leader.name}
+                                </h4>
+                                {leader.linkedin && (
+                                  <a
+                                    href={leader.linkedin}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="inline-flex shrink-0 items-center transition-transform duration-200 hover:scale-110"
+                                    aria-label={`${leader.name} on LinkedIn`}
+                                    title={`${leader.name} on LinkedIn`}
+                                  >
+                                    <LinkedInIcon className="h-3.5 w-3.5 rounded-[2.5px] shadow-xs" />
+                                  </a>
+                                )}
+                              </div>
+                              <p className="text-xs font-semibold italic text-[#B59439]">
+                                {leader.role}
+                              </p>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => toggleFlip(index)}
+                              className="shrink-0 rounded-full p-1 text-[#D8D2C0]/70 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
+                              aria-label="Close"
+                            >
+                              <X className="h-4 w-4" />
+                            </button>
+                          </div>
+
+                          {/* Full Bio text with normal spacing, fills the card body without visible scrollbar */}
+                          <div className="mt-2.5 flex-1 overflow-y-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden pr-0.5">
+                            <p className="text-xs sm:text-sm leading-relaxed text-[#D8D2C0] text-left whitespace-pre-line">
+                              {leader.bio}
+                            </p>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Join Vertara & Open Positions */}
-        <div className="mt-16 sm:mt-20 pt-10 sm:pt-12">
+        <div className={cn(leadershipEnabled ? "mt-16 sm:mt-20 pt-10 sm:pt-12" : "pt-4 sm:pt-6")}>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
             {/* Left Column (5 cols on lg) */}
             <div className="lg:col-span-5">
