@@ -4,7 +4,7 @@ import {
   getNanoGccStudyBySlug,
   getNanoGccStudiesWithDetailPages,
 } from "@/data/nano-gcc-strategy";
-import { ArrowLeft, ArrowUpRight, Download } from "lucide-react";
+import { ArrowLeft, Download } from "lucide-react";
 
 export async function generateStaticParams() {
   const studies = getNanoGccStudiesWithDetailPages();
@@ -185,29 +185,6 @@ export default async function NanoGccStudyDetailPage({
             <ArrowLeft className="h-4 w-4 text-[#B59439]" />
             <span>Return to All 10 Nano GCC Strategic Perspectives</span>
           </Link>
-        </div>
-      </section>
-
-      {/* 3. FULL-WIDTH CTA BANNER */}
-      <section className="w-full overflow-hidden bg-[#B59439] py-12 sm:py-14 md:py-16 text-[#101C30] border-t border-b border-[#a6862f]">
-        <div className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl font-bold tracking-tight text-[#101C30] sm:text-3xl md:text-4xl leading-tight">
-            Let’s build the right GCC — and build it to last.
-          </h2>
-
-          <p className="mt-3 sm:mt-4 text-base sm:text-lg leading-relaxed text-[#101C30]/90 max-w-2xl mx-auto">
-            Discuss your India capability centre roadmap, operating model, and scale mandate directly with our advisory partners.
-          </p>
-
-          <div className="mt-6 sm:mt-8 flex items-center justify-center">
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 rounded-xl bg-[#2F3F34] px-7 py-3 sm:px-8 sm:py-3.5 text-base sm:text-lg font-bold text-white shadow-md transition-all duration-200 hover:bg-[#233027] hover:shadow-lg hover:-translate-y-0.5"
-            >
-              <span>Discuss Your GCC Mandate</span>
-              <ArrowUpRight className="h-5 w-5 stroke-[2.4]" />
-            </Link>
-          </div>
         </div>
       </section>
     </div>
