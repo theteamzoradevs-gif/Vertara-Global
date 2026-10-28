@@ -32,13 +32,15 @@ const columns = [
 
 export function SiteFooter({
   brandName = "Vertara Global",
-  email = "hello@gccadvisor.com",
+  email = "Namitg@vertaraglobal.com",
   phone = "+91 95403 97444 / +91 99103 44485",
 }: {
   brandName?: string;
   email?: string;
   phone?: string;
 }) {
+  const displayBrandName = (brandName || "Vertara Global").replace(/veratara/gi, "Vertara");
+  const displayEmail = (email || "Namitg@vertaraglobal.com").replace(/veratara/gi, "vertara");
   return (
     <footer
       className="border-t border-[#3c5243] bg-[#2F3F34] text-white font-sans"
@@ -59,8 +61,8 @@ export function SiteFooter({
           </p>
           <div className="mt-4 space-y-1.5 text-sm text-white/90">
             <p>
-              <a href={`mailto:${email}`} className="transition-colors hover:text-[#B59439]">
-                {email}
+              <a href={`mailto:${displayEmail}`} className="transition-colors hover:text-[#B59439]">
+                {displayEmail}
               </a>
             </p>
             <p className="flex flex-wrap items-center gap-x-2 gap-y-1">
@@ -97,7 +99,7 @@ export function SiteFooter({
         ))}
       </div>
       <div className="border-t border-white/10 bg-[#25332a] py-4 text-center text-xs text-white/60">
-        © {new Date().getFullYear()} {brandName}. All rights reserved.
+        © {new Date().getFullYear()} {displayBrandName}. All rights reserved.
       </div>
     </footer>
   );

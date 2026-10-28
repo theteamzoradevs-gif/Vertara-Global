@@ -96,47 +96,35 @@ export default async function InsightsPage() {
 
           </div>
 
-          {/* Cards Grid: 2 cards in 1st row, 2 cards in 2nd row on mobile (2x2); 4 cards in 1 row on desktop with text in single line */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 md:gap-5 lg:gap-5 xl:gap-6 items-stretch">
-            {/* Card 01: Nano GCC Intelligence */}
-            <div
-              id="card-nano-gcc-intelligence"
-              className="flex flex-col justify-center rounded-xl sm:rounded-2xl border border-[#cddcd1] border-t-[3.5px] sm:border-t-4 border-t-[#B59439] bg-white p-4 sm:p-5 md:p-6 lg:px-4 xl:px-6 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 min-h-[90px] sm:min-h-[110px] lg:min-h-[120px]"
-            >
-              <h3 className="text-xs sm:text-sm md:text-base lg:text-[15px] xl:text-[17px] font-bold text-[#101C30] leading-snug lg:whitespace-nowrap text-center sm:text-left">
-                Nano GCC Intelligence
-              </h3>
-            </div>
-
-            {/* Card 02: Infrastructure Studies */}
-            <div
+          {/* Cards Grid: 2 horizontal cards side-by-side */}
+          <div className="grid grid-cols-2 gap-3.5 sm:gap-4 md:gap-5 lg:gap-6 items-stretch">
+            {/* Card 01: Infrastructure Studies */}
+            <Link
+              href="/infrastructure-studies"
               id="card-infrastructure-studies"
-              className="flex flex-col justify-center rounded-xl sm:rounded-2xl border border-[#cddcd1] border-t-[3.5px] sm:border-t-4 border-t-[#B59439] bg-white p-4 sm:p-5 md:p-6 lg:px-4 xl:px-6 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 min-h-[90px] sm:min-h-[110px] lg:min-h-[120px]"
+              className="flex flex-col justify-center rounded-xl sm:rounded-2xl border border-[#cddcd1] border-t-[3px] sm:border-t-[3.5px] border-t-[#B59439] bg-white px-4 py-3 sm:px-6 sm:py-3.5 md:py-4 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 min-h-[64px] sm:min-h-[72px] group"
             >
-              <h3 className="text-xs sm:text-sm md:text-base lg:text-[15px] xl:text-[17px] font-bold text-[#101C30] leading-snug lg:whitespace-nowrap text-center sm:text-left">
-                Infrastructure Studies
+              <h3 className="text-xs sm:text-sm md:text-base lg:text-[16px] font-bold text-[#101C30] group-hover:text-[#B59439] transition-colors leading-snug">
+                Infrastructure Studies →
               </h3>
-            </div>
+              <p className="mt-1 text-[11px] sm:text-xs md:text-sm text-[#526171] leading-relaxed">
+                Research on locations, workspace and infrastructure for GCCs.
+              </p>
+            </Link>
 
-            {/* Card 03: GCC Strategy */}
-            <div
+            {/* Card 02: Nano GCC Strategy */}
+            <Link
+              href="/nano-gcc-strategy"
               id="card-gcc-strategy"
-              className="flex flex-col justify-center rounded-xl sm:rounded-2xl border border-[#cddcd1] border-t-[3.5px] sm:border-t-4 border-t-[#B59439] bg-white p-4 sm:p-5 md:p-6 lg:px-4 xl:px-6 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 min-h-[90px] sm:min-h-[110px] lg:min-h-[120px]"
+              className="flex flex-col justify-center rounded-xl sm:rounded-2xl border border-[#cddcd1] border-t-[3px] sm:border-t-[3.5px] border-t-[#B59439] bg-white px-4 py-3 sm:px-6 sm:py-3.5 md:py-4 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 min-h-[64px] sm:min-h-[72px] group"
             >
-              <h3 className="text-xs sm:text-sm md:text-base lg:text-[15px] xl:text-[17px] font-bold text-[#101C30] leading-snug lg:whitespace-nowrap text-center sm:text-left">
-                GCC Strategy
+              <h3 className="text-xs sm:text-sm md:text-base lg:text-[16px] font-bold text-[#101C30] group-hover:text-[#B59439] transition-colors leading-snug">
+                Nano GCC Strategy →
               </h3>
-            </div>
-
-            {/* Card 04: Short Client Guides */}
-            <div
-              id="card-short-client-guides"
-              className="flex flex-col justify-center rounded-xl sm:rounded-2xl border border-[#cddcd1] border-t-[3.5px] sm:border-t-4 border-t-[#B59439] bg-white p-4 sm:p-5 md:p-6 lg:px-4 xl:px-6 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#B59439]/50 scroll-mt-24 min-h-[90px] sm:min-h-[110px] lg:min-h-[120px]"
-            >
-              <h3 className="text-xs sm:text-sm md:text-base lg:text-[15px] xl:text-[17px] font-bold text-[#101C30] leading-snug lg:whitespace-nowrap text-center sm:text-left">
-                Short Client Guides
-              </h3>
-            </div>
+              <p className="mt-1 text-[11px] sm:text-xs md:text-sm text-[#526171] leading-relaxed">
+                Practical insights for building and scaling lean GCCs.
+              </p>
+            </Link>
           </div>
         </div>
       </section>

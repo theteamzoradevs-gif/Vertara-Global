@@ -54,8 +54,11 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
   const [byTheNumbers, setByTheNumbers] = useState<ByTheNumbersPoint[]>(
     initialContent.byTheNumbers || []
   );
-  // 7. The Team (3 entries)
+  // 7. Leadership Team
   const [theTeam, setTheTeam] = useState<TeamMember[]>(initialContent.theTeam || []);
+  const [leadershipEnabled, setLeadershipEnabled] = useState<boolean>(
+    initialContent.leadershipEnabled !== false
+  );
   // 8. Closing CTA
   const [closingCta, setClosingCta] = useState(initialContent.closingCta);
 
@@ -114,6 +117,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
         role: "",
         bio: "",
         image: "",
+        linkedin: "",
       },
     ]);
   };
@@ -160,6 +164,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
         whatWeStandFor,
         byTheNumbers,
         theTeam,
+        leadershipEnabled,
         closingCta,
       });
 
@@ -178,7 +183,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
     { id: "theName", label: "4. The Name", icon: Sparkles },
     { id: "standFor", label: "5. What We Stand For", icon: Award, count: whatWeStandFor.length },
     { id: "numbers", label: "6. By the Numbers", icon: Hash, count: byTheNumbers.length },
-    { id: "team", label: "7. The Team", icon: Users, count: theTeam.length },
+    { id: "team", label: "7. Leadership", icon: Users, count: theTeam.length },
     { id: "cta", label: "8. Closing CTA", icon: ArrowRight },
   ] as const;
 
@@ -463,11 +468,11 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
           </Section>
         )}
 
-        {/* 7. THE TEAM (Namit, Neha, Joining the Team) */}
+        {/* 7. LEADERSHIP (Led by practitioners. Built to grow.) */}
         {activeTab === "team" && (
           <Section
             icon={Users}
-            title="7. The Team (Namit, Neha, Joining the Team)"
+            title="7. Leadership (Led by practitioners. Built to grow.)"
             action={
               <button
                 type="button"
@@ -478,6 +483,53 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
               </button>
             }
           >
+            {/* Enable / Disable Leadership Section on Website */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl border border-border bg-white shadow-2xs">
+              <div>
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-bold text-navy">Leadership Section Visibility</p>
+                  <span
+                    className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-bold ${
+                      leadershipEnabled
+                        ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                        : "bg-slate-100 text-slate-600 border border-slate-200"
+                    }`}
+                  >
+                    <span
+                      className={`h-1.5 w-1.5 rounded-full ${
+                        leadershipEnabled ? "bg-emerald-600 animate-pulse" : "bg-slate-400"
+                      }`}
+                    />
+                    {leadershipEnabled ? "Enabled (Visible)" : "Disabled (Hidden)"}
+                  </span>
+                </div>
+                <p className="text-xs text-muted mt-1">
+                  Turn ON to show this section on the About Us page, or turn OFF to hide it completely.
+                </p>
+              </div>
+              <div className="flex items-center gap-3 shrink-0">
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={leadershipEnabled}
+                  onClick={() => setLeadershipEnabled(!leadershipEnabled)}
+                  className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                    leadershipEnabled ? "bg-[#2F3F34]" : "bg-slate-300"
+                  }`}
+                  title={leadershipEnabled ? "Click to disable section" : "Click to enable section"}
+                >
+                  <span
+                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                      leadershipEnabled ? "translate-x-5" : "translate-x-0"
+                    }`}
+                  />
+                </button>
+                <span className="text-xs font-bold text-navy">
+                  {leadershipEnabled ? "Section Visible" : "Section Hidden"}
+                </span>
+              </div>
+            </div>
+
             {theTeam.length === 0 ? (
               <p className="text-xs text-muted italic py-4">No team members added yet. Click &quot;Add Team Member&quot; above.</p>
             ) : (
@@ -509,7 +561,7 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
                           className={inputClass}
                           value={member.name}
                           onChange={(e) => updateTeamMember(index, { name: e.target.value })}
-                          placeholder="e.g. Namit Ganjisinghani"
+                          placeholder="e.g. Neha Chauhan"
                         />
                       </Field>
                       <Field label="Role (Optional)">
@@ -517,85 +569,99 @@ export function AboutUsManager({ initialContent }: { initialContent: AboutConten
                           className={inputClass}
                           value={member.role}
                           onChange={(e) => updateTeamMember(index, { role: e.target.value })}
-                          placeholder="e.g. Co-Founder, Former Big 4 Partner"
+                          placeholder="e.g. Co-Founder, Corporate Real Estate and Workplace Leader"
                         />
                       </Field>
                     </div>
 
-                    {/* Photo Upload / URL field */}
-                    <Field
-                      label="Photo (Optional)"
-                      hint="Paste an image URL or upload a file (JPG, PNG, WEBP, GIF up to 5MB)."
-                    >
-                      <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                        <div className="relative flex-1">
-                          <input
-                            className={inputClass}
-                            value={member.image || ""}
-                            onChange={(e) => updateTeamMember(index, { image: e.target.value })}
-                            placeholder="Paste photo URL or click Upload Photo"
-                          />
-                        </div>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <Field
+                        label="LinkedIn Profile URL (Optional)"
+                        hint="Paste full profile link (e.g. https://www.linkedin.com/in/...)"
+                      >
+                        <input
+                          className={inputClass}
+                          value={member.linkedin || ""}
+                          onChange={(e) => updateTeamMember(index, { linkedin: e.target.value })}
+                          placeholder="https://www.linkedin.com/in/..."
+                        />
+                      </Field>
 
-                        <label
-                          className={`inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-white px-4 py-2.5 text-xs font-semibold text-navy hover:border-accent hover:text-accent transition shadow-xs cursor-pointer shrink-0 ${
-                            uploadingIndex === index ? "opacity-60 pointer-events-none" : ""
-                          }`}
-                        >
-                          {uploadingIndex === index ? (
-                            <Loader2 className="h-4 w-4 animate-spin text-accent" />
-                          ) : (
-                            <Upload className="h-4 w-4 text-accent" />
-                          )}
-                          <span>{uploadingIndex === index ? "Uploading..." : "Upload Photo"}</span>
-                          <input
-                            type="file"
-                            accept="image/jpeg,image/png,image/webp,image/gif"
-                            className="hidden"
-                            disabled={uploadingIndex === index}
-                            onChange={(e) => {
-                              const file = e.target.files?.[0];
-                              if (file) void handlePhotoUpload(index, file);
-                              e.target.value = "";
-                            }}
-                          />
-                        </label>
-                      </div>
-
-                      {member.image ? (
-                        <div className="mt-3 flex items-center gap-3 p-2.5 rounded-xl bg-white border border-border w-fit shadow-2xs">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={member.image}
-                            alt={member.name || "Team member preview"}
-                            className="h-12 w-12 rounded-lg object-cover border border-border"
-                            onError={(e) => {
-                              (e.currentTarget as HTMLImageElement).style.display = "none";
-                            }}
-                          />
-                          <div className="text-left pr-2">
-                            <p className="text-[11px] font-semibold text-navy truncate max-w-[220px]">
-                              {member.image.split("/").pop() || "Photo preview"}
-                            </p>
-                            <button
-                              type="button"
-                              onClick={() => updateTeamMember(index, { image: "" })}
-                              className="text-[11px] text-red-600 hover:underline cursor-pointer font-medium"
-                            >
-                              Remove photo
-                            </button>
+                      {/* Photo Upload / URL field */}
+                      <Field
+                        label="Photo (Optional)"
+                        hint="Paste an image URL or upload a file (JPG, PNG, WEBP, GIF up to 5MB)."
+                      >
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                          <div className="relative flex-1">
+                            <input
+                              className={inputClass}
+                              value={member.image || ""}
+                              onChange={(e) => updateTeamMember(index, { image: e.target.value })}
+                              placeholder="Paste photo URL or click Upload Photo"
+                            />
                           </div>
-                        </div>
-                      ) : null}
-                    </Field>
 
-                    <Field label="Bio">
+                          <label
+                            className={`inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-white px-4 py-2.5 text-xs font-semibold text-navy hover:border-accent hover:text-accent transition shadow-xs cursor-pointer shrink-0 ${
+                              uploadingIndex === index ? "opacity-60 pointer-events-none" : ""
+                            }`}
+                          >
+                            {uploadingIndex === index ? (
+                              <Loader2 className="h-4 w-4 animate-spin text-accent" />
+                            ) : (
+                              <Upload className="h-4 w-4 text-accent" />
+                            )}
+                            <span>{uploadingIndex === index ? "Uploading..." : "Upload Photo"}</span>
+                            <input
+                              type="file"
+                              accept="image/jpeg,image/png,image/webp,image/gif"
+                              className="hidden"
+                              disabled={uploadingIndex === index}
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) void handlePhotoUpload(index, file);
+                                e.target.value = "";
+                              }}
+                            />
+                          </label>
+                        </div>
+
+                        {member.image ? (
+                          <div className="mt-3 flex items-center gap-3 p-2.5 rounded-xl bg-white border border-border w-fit shadow-2xs">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={member.image}
+                              alt={member.name || "Team member preview"}
+                              className="h-12 w-12 rounded-lg object-cover border border-border"
+                              onError={(e) => {
+                                (e.currentTarget as HTMLImageElement).style.display = "none";
+                              }}
+                            />
+                            <div className="text-left pr-2">
+                              <p className="text-[11px] font-semibold text-navy truncate max-w-[220px]">
+                                {member.image.split("/").pop() || "Photo preview"}
+                              </p>
+                              <button
+                                type="button"
+                                onClick={() => updateTeamMember(index, { image: "" })}
+                                className="text-[11px] text-red-600 hover:underline cursor-pointer font-medium"
+                              >
+                                Remove photo
+                              </button>
+                            </div>
+                          </div>
+                        ) : null}
+                      </Field>
+                    </div>
+
+                    <Field label="Description / Bio">
                       <textarea
                         className={inputClass}
                         rows={5}
                         value={member.bio}
                         onChange={(e) => updateTeamMember(index, { bio: e.target.value })}
-                        placeholder="Exact founder bio or practice description..."
+                        placeholder="Detailed practitioner bio / experience..."
                       />
                     </Field>
                   </div>

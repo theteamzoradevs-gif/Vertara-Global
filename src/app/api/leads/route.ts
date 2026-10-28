@@ -101,13 +101,23 @@ export async function POST(req: Request) {
         }
       }
       const id = `mem-${Date.now()}`;
-      memoryLeads.push({
+      const memoryLead = {
         ...leadPayload,
         source,
         metadata,
         email: leadPayload.email || undefined,
         id,
-      });
+        _id: id,
+        createdAt: new Date(),
+      };
+      memoryLeads.push(memoryLead);
+
+      try {
+        await notifyFounderOfLead(memoryLead);
+      } catch (mailErr) {
+        console.error("[leads] fallback founder email failed:", mailErr);
+      }
+
       return NextResponse.json({ ok: true, storage: "memory", id });
     }
 
